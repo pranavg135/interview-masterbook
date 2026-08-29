@@ -1,0 +1,793 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>Market Sizing Case Bank</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+
+  .caselist{ display:flex; flex-direction:column; gap:14px; }
+  details.case{ border:1px solid var(--line); border-radius:12px; background:var(--paper-raised); box-shadow:var(--shadow); overflow:hidden; }
+  details.case summary{ padding:16px 22px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.98rem; font-weight:600; }
+  details.case summary::-webkit-details-marker{ display:none; }
+  details.case summary .cnum{ font-family:"IBM Plex Mono"; font-size:.72rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:3px 9px; border-radius:6px; flex:0 0 auto; }
+  details.case summary .cdiff{ font-size:.66rem; font-weight:700; padding:3px 9px; border-radius:6px; flex:0 0 auto; text-transform:uppercase; letter-spacing:.03em; }
+  .cdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .cdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .cdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .cdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  details.case summary .cind{ font-size:.72rem; font-weight:500; color:var(--ink-faint); flex:0 0 auto; }
+  details.case summary .ctitle{ flex:1; }
+  .case-body{ padding:0 22px 24px; border-top:1px solid var(--line); }
+  .case-prompt{ margin:18px 0; padding:15px 18px; background:var(--paper-sunken); border-left:4px solid var(--ink-faint); border-radius:0 8px 8px 0; font-style:italic; font-size:.93rem; }
+  .case-sec{ margin-top:20px; }
+  .case-sec h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .case-sec h5::before{ content:""; width:14px; height:2px; background:var(--accent); display:inline-block; }
+  .case-sec p, .case-sec li{ font-size:.9rem; color:var(--ink-soft); margin:0 0 6px; }
+  .qa-pair{ margin-bottom:10px; padding:10px 14px; background:var(--paper-sunken); border-radius:8px; }
+  .qa-pair .q{ font-size:.88rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .qa-pair .a{ font-size:.87rem; color:var(--ink-soft); }
+  .case-sec ul{ margin:0; padding-left:20px; }
+  .case-sec .calc-block{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:14px 16px; font-family:"IBM Plex Mono"; font-size:.79rem; overflow-x:auto; line-height:1.65; white-space:pre; margin-top:4px; }
+  .case-sec .result-tag{ display:inline-block; margin-top:8px; font-family:"IBM Plex Mono"; font-size:.8rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:5px 11px; border-radius:6px; }
+  .synth-box{ margin-top:20px; padding:15px 18px; background:var(--accent-soft); border-radius:8px; border-left:4px solid var(--accent); }
+  .synth-box h5{ color:var(--accent-ink); }
+  .synth-box p{ color:var(--ink); font-weight:500; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <a class="backlink" href="stage14.html">← Stage 14 · Product Management</a>
+    <a class="backlink" href="stage15.html">← Stage 15 · Structured Problem Solving &amp; Frameworks</a>
+    <a class="backlink" href="stage16.html">← Stage 16 · Profitability Case Bank</a>
+    <a class="backlink" href="stage17.html">← Stage 17 · Market Entry Case Bank</a>
+    <a class="backlink" href="stage18.html">← Stage 18 · Growth Case Bank</a>
+    <a class="backlink" href="stage19.html">← Stage 19 · Pricing Case Bank</a>
+    <div class="stage-pill">● Stage 20 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#howtouse">How to Use This Case Bank</a></li>
+      <li><a href="#cases">The 10 Market Sizing Cases</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 22 (Product) is next, followed by Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part X · Stage 20 of 33</div>
+      <h1>Market Sizing Case Bank</h1>
+      <p class="lede">10 full market-sizing cases at full interview depth: bottom-up population sizing, top-down funnel sizing, supply-side/capacity sizing, two-sided marketplace sizing, sizing-by-analogy for nascent categories, attach-rate sizing, and multi-method triangulation for high-uncertainty markets — each solved with a genuine structural approach, worked math, and a real recommendation, walked through exactly as a real case interview runs, including interviewer pushback and model answers.</p>
+      <div class="statusbar">
+        <div class="statuschip">📐 <b>10</b> full market-sizing cases, zero compressed</div>
+        <div class="statuschip">🧮 Every case has a genuine worked sizing calculation</div>
+        <div class="statuschip">🗣️ Every case includes interviewer cross-questions with model answers</div>
+        <div class="statuschip">🔀 Spans consumer durables, EdTech, mobility, healthtech, B2B SaaS, and public infrastructure</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">Market sizing cases are the most structurally exposed case type in the whole Masterbook: there's nowhere to hide behind qualitative reasoning, because the entire answer is a number built from explicit, defensible assumptions. The discipline that separates a strong answer from a weak one isn't guessing a plausible-sounding figure — it's choosing the right sizing method for the situation (bottom-up population funnel, top-down category share, supply-side capacity, multi-sided marketplace, sizing-by-analogy for a category that barely exists yet, or triangulating multiple independent methods when the stakes are high enough to demand it), building the logic transparently, and being honest about which assumptions are load-bearing. This stage applies that discipline to 10 genuinely distinct sizing situations, from a straightforward consumer-durable bottom-up estimate to a full three-method triangulation for a fast-evolving global software category, so the underlying structural reasoning becomes second nature.</p>
+      </div>
+    </section>
+
+    <section id="howtouse">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>How to Use This Case Bank</h2>
+        <p>Every case follows the exact same 10-part structure, so you can drill any single part in isolation or run the whole case end to end.</p>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <div class="bridge-flow">
+          <span class="node">Prompt</span><span class="arrow">→</span>
+          <span class="node">Clarifying Qs</span><span class="arrow">→</span>
+          <span class="node">MECE Structure</span><span class="arrow">→</span>
+          <span class="node">Hypothesis</span><span class="arrow">→</span>
+          <span class="node">Data</span><span class="arrow">→</span>
+          <span class="node">Calculation</span><span class="arrow">→</span>
+          <span class="node">Insight</span><span class="arrow">→</span>
+          <span class="node">Recommendation</span><span class="arrow">→</span>
+          <span class="node">Risks</span><span class="arrow">→</span>
+          <span class="node">Cross-Qs</span><span class="arrow">→</span>
+          <span class="node">Synthesis</span>
+        </div>
+        <p style="margin:14px 0 0">Recommended drill: read only the <b>prompt</b>, pause the page, and try to pick your own sizing method (bottom-up population funnel, top-down from a known parent market, supply-side capacity, or multi-sided demand-and-supply) before expanding the rest. Market sizing cases especially reward being explicit about which assumptions are load-bearing and how you'd validate them with real data, since interviewers almost always push on the softest input in the chain. The 10 cases are tagged by difficulty (easier / medium / hard / expert) and filterable below the case list heading.</p>
+      </div>
+    </section>
+
+    <section id="cases">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>The 10 Market Sizing Cases</h2>
+        <p>Full quota, full depth — every case fully interactive, none compressed to structure-plus-answer-only.</p>
+      </div>
+      <div class="filterbar" id="casefilter">
+        <button class="active" data-diff="all">All (10)</button>
+        <button data-diff="easy">Easier</button>
+        <button data-diff="med">Medium</button>
+        <button data-diff="hard">Hard</button>
+        <button data-diff="expert">Expert</button>
+      </div>
+      <div class="caselist" id="caselist"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">None of these 10 companies or sizing situations are Pranav's own work experience, and none should ever be presented as such — they're deliberate practice cases. The honest bridge is the METHOD: building a defensible bottom-up or top-down estimate from explicit assumptions, cross-checking it against an independent method when the stakes justify it, and being transparent about which input is doing the most work is the same quantitative discipline behind the statistical and forecasting work in Stage 2 and Stage 10, and the structured-estimation habits used throughout the case bank. If an interviewer asks "have you sized a market before," the honest and strong answer is: "Not as a standalone market-sizing engagement, but I've built the quantitative habits — structuring an estimate from first principles, sanity-checking it against a second method, and being explicit about my assumptions rather than presenting a guess as fact — through real analytical work, and I've drilled a full bank of sizing cases across very different market structures to build the method-selection instinct (bottom-up, top-down, supply-side, sizing-by-analogy, triangulation) on top of that foundation."</p>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Mastery Checklist</h2>
+        <p>One item per case — check off once you can walk through that case's full structure, calculation, and synthesis cold, without re-reading it.</p>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  var cases = [
+  {
+    "diff": "easy",
+    "industry": "Consumer Durables — Electric Toothbrushes (India)",
+    "title": "How Many Electric Toothbrushes Are Sold in India Each Year?",
+    "prompt": "A consumer-durables company is deciding whether to enter the Indian electric toothbrush market. Before they build a business case, they want a sense check: how many electric toothbrushes are sold in India annually?",
+    "clarify": [
+      {
+        "q": "Are we sizing units sold per year, or the installed base of people who currently own one?",
+        "a": "Units sold per year — that's what a market-entry business case needs, since it covers both new adopters and replacement/repeat buyers."
+      },
+      {
+        "q": "Should this include only standalone electric toothbrushes, or also toothbrush heads/replacement parts sold separately?",
+        "a": "Just the toothbrush units (handle + starter head) for this estimate — replacement heads are a separate, smaller attach-on market we can size later if needed."
+      },
+      {
+        "q": "Are we sizing the whole country or just urban India, given most durable-goods adoption starts in cities?",
+        "a": "Whole country, but built up urban vs. rural since penetration will differ sharply between the two — don't just apply a national blended rate."
+      }
+    ],
+    "mece": "I'll build this bottom-up, top-down (population) working across three levers: (1) addressable population, (2) penetration rate — the share of that population who own or would buy an electric toothbrush, (3) annual purchase rate — how often units get bought (new adopters + replacements).\n\nL1 — Addressable population: split urban vs. rural, since electric toothbrushes are a premium/urban-skewed category so far.\nL1 — Penetration: what fraction of the addressable population currently owns or is likely to buy one, split further by income band since this is a price-sensitive premium category.\nL1 — Annual purchase rate: new adopters (first-time buyers entering the category) plus a replacement rate for existing owners (electric toothbrush handles typically get replaced every 2-3 years, heads more often but those are excluded here).\n\nI'll compute urban and rural separately, given the penetration gap, then sum.",
+    "hypothesis": "My working hypothesis is that this is currently a small, urban, premium-skewed market — likely in the single-digit millions of units per year — because electric toothbrushes carry a meaningful price premium (₹1,500-4,000+) over manual brushes (₹20-50) in a market where oral care spend is still heavily manual-brush dominated outside the top income tiers.",
+    "data": "India population ~1.43B, urban ~35% (~500M), rural ~65% (~930M). Urban household income distribution: roughly 15% of urban population sits in the 'upper-middle and above' band that can comfortably absorb a ₹2,000+ discretionary durable purchase. Rural electric-toothbrush penetration is negligible today (well under 1%) given price sensitivity and distribution gaps. Category replacement cycle for the handle: ~2.5 years on average (batteries/motor wear, plus upgrade cycles).",
+    "calc": "Urban addressable base = 500M × 15% (upper-middle+ income) = 75M people.\nOf this base, assume current penetration (owns or actively considering) = 8% → 6M current urban owners.\nRural: 930M × negligible (<0.5%) penetration ≈ 4-5M owners, mostly aspirational/gifted units in slightly better-off rural pockets — round to ~4M.\nTotal installed base ≈ 10M owners.\nAnnual replacement demand = installed base ÷ 2.5-year cycle ≈ 10M / 2.5 = 4M units/year.\nNew-adopter growth: category is growing — assume urban penetration is rising from 8% toward a longer-run ceiling of ~15-18% (similar early-stage curve to what smart-TVs or air purifiers saw before mainstreaming), implying roughly 1.5-2M new adopters/year at the current growth stage.\nTotal annual unit sales ≈ 4M (replacement) + 1.5-2M (new adopters) ≈ 5.5-6M units/year.",
+    "insight": "The market is real but still niche relative to India's toothbrush category overall (which sells several hundred million manual units a year) — electric toothbrushes are roughly 1-2% of total toothbrush unit volume today, concentrated almost entirely in urban upper-middle-income and above households, and replacement demand from the existing base already outweighs new-adopter growth, meaning the market is transitioning from pure land-grab to a retention/loyalty game for whoever is currently winning.",
+    "recommendation": "Enter, but position as a premium-but-accessible player targeting the next penetration tier (urban middle-income, not just upper-middle+) with a sub-₹1,500 price point and strong e-commerce/quick-commerce distribution, since the addressable base at that price point is 3-4x larger than the current premium-only base — and build a subscription/replacement-head revenue stream early, since replacement-cycle economics already dominate the category.",
+    "risks": [
+      "The 8% current urban penetration and 2.5-year replacement cycle are both estimates without a hard third-party data source — if the real replacement cycle is closer to 4 years (durable battery-based handles), annual unit demand could be 30-40% lower than estimated.",
+      "Rural penetration could grow faster than assumed if quick-commerce and EMI-based purchase options (already reshaping other durables categories) reach rural pin codes sooner than expected, understating the rural contribution.",
+      "New entrants (especially domestic D2C brands undercutting established players) could compress category ASPs, which doesn't change unit volume directly but would change the revenue size of the market materially versus a unit-count estimate."
+    ],
+    "cross": [
+      {
+        "q": "Your penetration and replacement-cycle numbers are both assumptions — how confident are you in this estimate as a number I can take to my board?",
+        "a": "I'd frame it as a range, not a point estimate — roughly 4.5-7M units annually — and flag the replacement cycle as the single biggest swing factor; I'd want to pressure-test it against retailer sell-through data or a category report before finalizing, but the order of magnitude (mid-single-digit millions, not tens of millions, not hundreds of thousands) should be directionally reliable."
+      },
+      {
+        "q": "Why did you use income band as your penetration filter instead of just using existing market-share/sales data from known players like Oral-B or Colgate?",
+        "a": "If reliable third-party sales data existed I'd anchor to it directly and use my structure only as a sanity check — I built it bottom-up because in a live interview I don't have that data available, so income-based penetration is the best proxy I have for who can afford a ₹1,500-4,000 discretionary durable; in the real world I'd triangulate both methods and reconcile any gap."
+      }
+    ],
+    "synthesis": "This case is a classic bottom-up population-times-penetration sizing exercise, and the discipline that matters most is separating the installed base (owners) from annual unit sales (new + replacement) — a common mistake is to size 'market size' as if it only means new adopters, which understates a maturing category where replacement demand already dominates."
+  },
+  {
+    "diff": "easy",
+    "industry": "Pet Care — Premium Pet Food (Urban India)",
+    "title": "Size the Market for Premium Pet Food Among Urban Pet-Owning Households in India",
+    "prompt": "A global pet-food company is evaluating whether to launch a premium (super-premium, vet-recommended) dog and cat food line in urban India. How large is this market today?",
+    "clarify": [
+      {
+        "q": "Are we sizing only dog food, or dogs and cats combined, since India's pet population skews heavily toward dogs?",
+        "a": "Combined, but I'd like you to show the dog vs. cat split explicitly since dogs are the dominant category and the answer should reflect that."
+      },
+      {
+        "q": "Does 'premium' mean strictly super-premium/vet-brand pricing, or does it include the broader 'branded packaged food' tier versus home-cooked/table scraps?",
+        "a": "Strictly the premium/super-premium branded tier — most Indian pets today still eat home-cooked food, and we're not sizing that segment, only the addressable packaged-premium opportunity."
+      },
+      {
+        "q": "Should this be an annual spend (₹ market size) or a household-count estimate?",
+        "a": "Annual spend in ₹, since that's what a business case for a food company needs."
+      }
+    ],
+    "mece": "I'll build this top-down from urban households, broken into three levers: (1) urban households that own a pet, (2) of those, the share who already buy branded/packaged food at all (vs. home-cooked), (3) of that packaged-food group, the share willing to pay premium/super-premium prices, times average annual premium spend per pet.\n\nL1 — Urban pet-owning households: urban household count × pet ownership rate.\nL1 — Packaged-food adoption: of pet-owning households, what fraction already buys any branded packaged food (this splits out households that will never be premium-addressable in the near term).\nL1 — Premium tier share and spend: of packaged-food buyers, the share who trade up to premium, times their average annual per-pet spend on premium food.",
+    "hypothesis": "I expect this to be a small but fast-growing market — low single-digit billions of ₹ today — because premium pet food requires two behavior shifts stacked on top of each other (moving from home-cooked to packaged, then trading up within packaged to premium), and India is still early on the first shift in most cities outside the top metros.",
+    "data": "Urban India has roughly 75-80M households. Pet (dog/cat) ownership in urban India is estimated around 8-10% of households, skewing heavily toward dogs (~85% of pet-owning households have a dog, ~15% cats, some overlap). Of pet-owning households, packaged/branded food adoption is estimated at roughly 30-35% (rest feed home-cooked or a mix) — this adoption is concentrated in metros and Tier-1 cities. Of packaged-food buyers, the premium/super-premium tier is a minority — roughly 20-25% — with average annual premium spend per pet around ₹15,000-20,000 (vs. ₹4,000-6,000 for mass-market packaged food).",
+    "calc": "Urban households = 78M. Pet-owning = 78M × 9% = ~7M households.\nPackaged-food adopters = 7M × 32% = ~2.24M households.\nPremium-tier buyers = 2.24M × 22% = ~493,000 households.\nAverage annual premium spend/household ≈ ₹17,500 (using a household, not per-pet, basis since most premium households have exactly one pet).\nMarket size ≈ 493,000 × ₹17,500 ≈ ₹8.6B (~$103M at ~₹83/$).",
+    "insight": "The premium pet food opportunity is real but currently gated by two sequential adoption curves rather than one — most of the near-term growth will come from converting existing packaged-food buyers up to premium (the second shift), which is a far smaller and more addressable near-term wedge than trying to win pet owners away from home-cooked food and straight into premium in one step.",
+    "recommendation": "Launch, but target the ~2.24M households already buying packaged food as the primary near-term wedge (a trade-up play, not a category-creation play), concentrated in the top 8-10 metro/Tier-1 cities where packaged-food adoption is already highest, and treat broader home-cooked-to-packaged conversion as a multi-year secondary tailwind rather than the basis for a launch-year business case.",
+    "risks": [
+      "Pet ownership rate (9%) and packaged-food adoption rate (32%) are both estimates that could be off by several percentage points — a 9% vs. 7% ownership swing alone moves the household base by over 20%.",
+      "Average premium spend of ₹17,500/year assumes sustained purchase — but premium pet food has real affordability limits in India relative to developed markets, and down-trading during economic stress could compress this materially.",
+      "This estimate excludes cat-specific dynamics (smaller base, different price sensitivity) by using a blended household figure — if the company's strategy leads with cat food specifically, this sizing would need to be redone with a cat-only cut."
+    ],
+    "cross": [
+      {
+        "q": "₹8.6B feels like a very specific number from a chain of soft percentage assumptions — how would you stress-test it?",
+        "a": "I'd run a sensitivity table flexing the three biggest levers — pet ownership rate, packaged-food adoption, and premium spend — across a plausible low/base/high range, which would likely put the real range somewhere between ₹5-13B; I'd present the base case with that range attached rather than a single number, and I'd prioritize getting real data on packaged-food adoption specifically, since that's the least-anchored of my three assumptions."
+      },
+      {
+        "q": "Why did you use household-level spend instead of per-pet spend, given some households own multiple pets?",
+        "a": "Multi-pet households are a minority in the premium urban segment I'm sizing, and per-pet spend data is harder to source reliably than household basket spend from retail/e-commerce data — but you're right that this slightly understates the market if multi-pet premium households are more common than I assumed; I'd flag that as a refinement to make with real purchase data rather than resolve it by further guessing."
+      }
+    ],
+    "synthesis": "This case shows why market sizing for a 'trade-up' product should be built as a funnel with sequential conversion gates (owns a pet → buys packaged food → buys premium) rather than a single blended penetration rate — collapsing the funnel into one number hides which gate is actually the growth bottleneck, and that's exactly the insight the business needs to decide where to spend its go-to-market effort first."
+  },
+  {
+    "diff": "easy",
+    "industry": "Consumer Goods — Reusable Water Bottles (US Gym-Goers)",
+    "title": "Size the Market for Premium Reusable Water Bottles Among US Gym-Goers",
+    "prompt": "A DTC brand sells a premium ($35-45) insulated reusable water bottle and is deciding whether to run a dedicated marketing campaign targeting gym-goers as a customer segment. How big is the US market for premium reusable water bottles bought by people who regularly go to the gym?",
+    "clarify": [
+      {
+        "q": "Are we sizing the number of people, or annual unit sales / revenue, since bottles aren't bought as frequently as, say, protein powder?",
+        "a": "Annual revenue, since that's what determines whether a dedicated campaign budget is justified."
+      },
+      {
+        "q": "Does 'gym-goers' mean people with an active gym membership, or should it include home-workout / boutique-fitness people too?",
+        "a": "Broaden it to 'regular exercisers' — gym membership, boutique studios, and serious home-workout routines — since the buying behavior (wanting a durable, visible, motivating bottle) is similar across all three."
+      },
+      {
+        "q": "Should I include only this brand's addressable price tier ($35-45), or the reusable bottle market overall?",
+        "a": "Just the $35-45 premium tier specifically, since that's this brand's actual competitive set."
+      }
+    ],
+    "mece": "Bottom-up from the US adult population, through three gates: (1) regular exercisers (gym + boutique + serious home workout), (2) of those, the share who buy a premium ($35-45) bottle at all (vs. a $10 basic bottle or free giveaway bottle), (3) purchase frequency/replacement rate at that price point.\n\nL1 — Regular exerciser population: US adult population × regular-exercise participation rate.\nL1 — Premium-bottle buyer share: of exercisers, what fraction actually buys in the $35-45 tier (many exercisers use a basic bottle or a hydration brand giveaway).\nL1 — Purchase frequency: premium bottles are durable and don't wear out like apparel, so this is mostly a first-purchase-plus-occasional-repeat dynamic, not an annual-replacement one.",
+    "hypothesis": "I expect a market in the low hundreds of millions of dollars annually, because premium hydration bottles are a discretionary, low-frequency purchase (people don't rebuy a $40 bottle every year) even though the addressable population of regular exercisers is large.",
+    "data": "US adult population ~260M. Regular exercise participation (gym membership + boutique fitness + serious structured home workouts, at least 3x/week) is estimated around 20% of adults, ~52M people. Of these, premium ($35+) bottle ownership/purchase intent is estimated at roughly 15% (most exercisers still default to a $10-15 bottle or a free branded one) — ~7.8M people. These are largely one-time-durable purchases with an estimated repeat/gifting rate adding roughly 20% incremental unit volume per year (buying a second one, replacing a lost one, or gifting).",
+    "calc": "Premium-bottle buyers (base) = 52M × 15% = 7.8M people.\nAssume this base doesn't all buy in the same year — spread as a stock of existing owners; new-purchase rate in a given year (first-time buyers + repeat/gift) ≈ 25% of the 7.8M addressable base actually transact in any given year ≈ 1.95M units.\nAverage price ≈ $40.\nAnnual market size ≈ 1.95M × $40 ≈ $78M.",
+    "insight": "Even though the addressable population (52M regular exercisers) sounds large, two multiplicative filters — willingness to pay premium (15%) and low annual purchase frequency (25% of the base transacts in a given year) — compress it down two orders of magnitude to a market that, while real, is closer to a solid niche ($78M) than a mass-market opportunity, meaning a dedicated gym-goer campaign should be sized and budgeted against a realistic $60-100M addressable pool, not the 52M headline population.",
+    "recommendation": "Run the campaign, but target it narrowly at the highest-propensity sub-segment — boutique fitness (Pilates/spin/CrossFit) members, who over-index on premium-branded gear as identity signaling — rather than the broad 'gym-goer' population, since that sub-segment likely converts at a meaningfully higher rate than the 15% blended average and will produce better campaign ROI per dollar spent.",
+    "risks": [
+      "The 15% premium-adoption rate is a rough estimate — if boutique-fitness-specific adoption is actually 30-40% (plausible, given how identity-driven that segment's purchases tend to be) versus a much lower rate among basic gym members, a blended 15% understates the addressable high-intent audience within this population.",
+      "This estimate doesn't account for bottles bought as gifts by non-exercisers for exercisers in their life, which could add meaningful incremental volume not captured in an exerciser-only funnel.",
+      "Repeat-purchase rate (25%) is a rough proxy — loyal customers of a specific brand may buy multiple colorways/sizes over time at a much higher rate than assumed, which would be a brand-specific upside not captured in a market-wide estimate."
+    ],
+    "cross": [
+      {
+        "q": "You landed on $78M — is that big enough to justify a dedicated marketing campaign for this brand?",
+        "a": "That depends on the brand's total revenue and typical customer acquisition cost — but as a sanity check, if this brand is doing single-digit millions in revenue today, an addressable pool of $78M just within gym-goers (a subset of their total addressable market) is more than enough headroom to justify a focused campaign; I'd want their current CAC and campaign budget to convert this into a go/no-go, not just the market size alone."
+      },
+      {
+        "q": "Where does your 20% regular-exercise participation rate come from, and how sensitive is your answer to it?",
+        "a": "It's a commonly cited range from fitness-industry participation surveys (roughly 18-22% for consistent 3x/week+ exercisers) — if I flex it to the low end (18%) the market drops to about $70M, and at the high end (22%) it rises to about $86M, so the estimate is only moderately sensitive to this particular input compared to the premium-adoption-rate assumption, which has a much wider plausible range and would move the answer more."
+      }
+    ],
+    "synthesis": "This case is a good illustration of why a large headline population doesn't guarantee a large market — a low-frequency, high-discretion purchase needs its funnel filters (willingness-to-pay tier, purchase frequency) taken just as seriously as the population size itself, and a good candidate should instinctively reach for those filters rather than stopping at population × price."
+  },
+  {
+    "diff": "med",
+    "industry": "EdTech — K-12 Online Tutoring (India)",
+    "title": "Size the Indian Market for Paid Online K-12 Tutoring",
+    "prompt": "An EdTech investor is evaluating a Series B check into an online K-12 tutoring platform in India. They want an independent market-size estimate for paid online tutoring (live, 1:1 or small-group, subject-tutoring — not full-curriculum schools) before committing.",
+    "clarify": [
+      {
+        "q": "Should this include full online schools (K-12 curriculum replacement) or just supplemental tutoring alongside regular school?",
+        "a": "Just supplemental tutoring — live online tutoring for specific subjects, not full curriculum replacement or online schools."
+      },
+      {
+        "q": "Are we sizing current market size (today) or a forward-looking 3-5 year projection, since this is a fast-growing category?",
+        "a": "Today's market size as the anchor, but flag directionally whether it's growing or plateauing, since that matters for a Series B decision."
+      },
+      {
+        "q": "Should this include test-prep tutoring (JEE/NEET coaching) as part of 'K-12 tutoring,' since that's a huge category in India?",
+        "a": "Good catch — keep it separate. Size only general subject tutoring (math, science, English, etc. for regular school curriculum), excluding competitive exam coaching, since that's a distinct market with different economics and competitors."
+      }
+    ],
+    "mece": "I'll build this bottom-up through a funnel: (1) addressable K-12 student population, (2) internet/device access needed for online tutoring, (3) share of that group whose families currently pay for any tutoring (online or offline), (4) of paying families, the share choosing online specifically over offline, times average annual spend per student on online tutoring.\n\nL1 — Addressable student population: total K-12 enrolled students, filtered to those with internet access at home.\nL1 — Tutoring-paying households: of internet-enabled students, the share whose families already pay for supplemental tutoring of any kind (a well-established behavior in India, historically offline/in-person).\nL1 — Online share and spend: of tutoring-paying families, the share opting for online vs. offline delivery, and the average annual spend per student on online tutoring specifically.",
+    "hypothesis": "I expect this to be a meaningful market — likely in the ₹80-150B range — because private tutoring is already a deeply entrenched behavior in Indian households regardless of online/offline, and the pandemic-era shift plus rising smartphone/broadband penetration means online has captured a real and durable share of that existing spend pool, not just a temporary bump.",
+    "data": "India has roughly 250M K-12 enrolled students. Internet-access-at-home rate among school-going children's households is estimated at ~45% (skews urban and semi-urban; rural connectivity still lags). Of internet-enabled households, private tutoring uptake (any form) is a well-established ~35-40% (India has one of the highest private-tutoring participation rates globally). Of tutoring-paying households, online-specific adoption is estimated at ~30% post-pandemic normalization (down from pandemic peaks but structurally higher than pre-2020 near-zero levels). Average annual spend per student on online tutoring is estimated at ₹15,000-20,000/year for regular subject tutoring (varies by grade/subject count).",
+    "calc": "Internet-enabled K-12 students = 250M × 45% = 112.5M.\nTutoring-paying households (of internet-enabled) = 112.5M × 37% = ~41.6M.\nOnline-tutoring households (of tutoring-paying) = 41.6M × 30% = ~12.5M.\nAverage annual spend/student ≈ ₹17,500.\nMarket size ≈ 12.5M × ₹17,500 ≈ ₹218.75B (~$2.6B).\n\nSanity check top-down: India's overall private-tutoring/shadow-education market is independently estimated in various industry reports at roughly ₹700-900B total (online + offline + test-prep); if online-general-subject tutoring is a meaningful sub-slice of that, a ₹200-250B figure is plausible as roughly a quarter of the total shadow-education economy, which feels directionally right given online's growing but still partial share.",
+    "insight": "The bottom-up (~₹219B) and top-down cross-check (a quarter of a ₹700-900B total shadow-education market) triangulate to a similar order of magnitude, which gives reasonable confidence in a ₹180-250B range — and the key strategic insight for the investor is that this market's growth is now gated less by 'will Indian families pay for tutoring' (already proven at massive scale) and more by 'will they choose online over their entrenched offline/local-tutor habit,' which is a distribution and trust problem, not a demand-creation problem.",
+    "recommendation": "This supports a positive Series B thesis on market size alone (₹180-250B is more than large enough to support a venture-scale outcome), but the diligence should shift from 'is the market big enough' to 'can this specific platform keep winning share away from offline tutoring and other online competitors' — i.e., unit economics, retention, and tutor-supply quality matter more than TAM at this stage.",
+    "risks": [
+      "The 30% online-share-of-tutoring-payers figure is a post-pandemic normalization estimate with real uncertainty — if in-person tutoring has rebounded more strongly than assumed as pandemic-era habits fade, online share could be materially lower (e.g., 20% instead of 30%), which would cut the market size by a third.",
+      "Average spend (₹15-20K/year) varies enormously by grade and number of subjects tutored — a household paying for one subject for a younger child spends far less than one paying for four subjects for a Class 10-12 student facing board exams, and a blended average could mask which sub-segment actually drives revenue.",
+      "This estimate treats 'internet-enabled' as a binary gate, but bandwidth/device quality (shared family device, unreliable connection) meaningfully affects whether a household can sustain live online tutoring — the true addressable base may be smaller than raw internet-access statistics suggest."
+    ],
+    "cross": [
+      {
+        "q": "You excluded test-prep coaching, but isn't the line between 'subject tutoring' and 'exam prep' blurry for a Class 10-12 student, especially in their board-exam years?",
+        "a": "That's a fair challenge — I drew the line at intent: subject tutoring is ongoing, curriculum-paced support, while test-prep is intensive, exam-specific coaching (JEE/NEET-style) with different pricing and providers; in practice there's overlap in the Class 10-12 board-exam years specifically, so I'd flag that as a gray zone that might add a modest upward adjustment to my estimate rather than treat the categories as perfectly clean."
+      },
+      {
+        "q": "Given this is a Series B check, what would make you materially change your market-size number, and how would you go get that information in a real diligence process?",
+        "a": "The single biggest lever is the online-share-of-tutoring-payers assumption (30%) — I'd want the target company's own cohort and market-share data, plus any recent third-party EdTech market reports (RedSeer, KPMG, or similar India-EdTech trackers), to replace that estimate with real data; if I could only pull one number to de-risk this case, that's the one I'd chase first."
+      }
+    ],
+    "synthesis": "This case demonstrates triangulation — using a bottom-up estimate and a rough top-down cross-check against an independently known 'parent market' figure (total shadow education spend) to sanity-check the answer — which is exactly the kind of self-correcting rigor that separates a credible market-sizing answer from a guess dressed up in a formula."
+  },
+  {
+    "diff": "med",
+    "industry": "EV Infrastructure — Public Charging Stations (India)",
+    "title": "How Many Public EV Charging Stations Does India Need by 2027?",
+    "prompt": "The Indian government's clean-energy task force wants an estimate of how many public EV charging stations the country will need by 2027 to support its growing electric-vehicle fleet, to guide infrastructure investment planning.",
+    "clarify": [
+      {
+        "q": "Are we sizing 'charging stations' (physical locations) or 'charging points/connectors' (individual plugs, since one station can have multiple)?",
+        "a": "Charging points/connectors specifically — that's the actual unit of charging capacity and what infrastructure planners actually budget against."
+      },
+      {
+        "q": "Should this cover all EVs (2-wheelers, 3-wheelers, cars, buses) or just passenger 4-wheelers, since 2-wheelers dominate India's current EV fleet and often charge at home?",
+        "a": "Focus on 4-wheelers (cars) for public charging specifically — 2-wheelers and most 3-wheelers overwhelmingly charge at home/depot in India and aren't the primary driver of public charging-point demand."
+      },
+      {
+        "q": "Does this need to account for fast (DC) vs. slow (AC) charging separately, since they serve very different use cases and have very different capacity/cost profiles?",
+        "a": "Yes — split the estimate by fast vs. slow, since that materially changes both the count needed and the investment required per point."
+      }
+    ],
+    "mece": "This is a supply-side (capacity) sizing problem, not a demand-population sizing problem — I need to work from expected EV fleet size, through charging demand (sessions needed), to the throughput each charging point can provide, in three levers: (1) projected EV car fleet by 2027, (2) total daily charging demand that fleet generates (in charging-sessions or kWh), (3) throughput capacity per charging point (how many vehicles one point can serve per day), split by fast vs. slow charging mix.\n\nL1 — Fleet size: current EV car fleet + projected annual sales × years to 2027, accounting for compounding EV adoption growth.\nL1 — Charging demand: not all charging happens at public stations — split into home/private charging (majority, for owners with home charging access) vs. public-charging-dependent demand (apartment dwellers, long-distance trips, no-home-charging owners).\nL1 — Throughput per point: a fast charger can serve multiple cars per day (30-45 min per session); a slow charger serves far fewer (multi-hour sessions), so point-count needed differs sharply by type even for the same total demand.",
+    "hypothesis": "I expect the answer to be driven far more by the public-vs-home-charging split and the fast/slow throughput assumption than by the raw fleet-size number itself, because in a country where a large share of EV owners can charge at home overnight, the actual public-infrastructure gap is a fraction of what a naive 'one charger per car' calculation would suggest.",
+    "data": "India's EV car fleet is currently roughly 1.5-2M and growing at a compounding annual rate of ~45-50% off a small base (reflecting early-stage but accelerating adoption, driven by falling battery costs and new model launches); this would put the 2027 fleet in the range of 6-9M cars. Of EV owners, an estimated 55-60% have access to home/private charging (own a house/bungalow or dedicated society charging) and rely primarily on that; the remaining 40-45% (apartment dwellers without dedicated charging, or those needing en-route/long-distance charging) are the primary drivers of public charging-point demand. A fast (DC) charging point can realistically serve roughly 8-10 vehicles/day accounting for session time, queuing, and uptime; a slow (AC) point serves roughly 2-3 vehicles/day given multi-hour sessions. Assume the public charging network needs to be roughly 30% fast / 70% slow (reflecting a mix of highway/rapid-turnaround locations and destination/workplace/mall slow-charging locations) to serve both trip-charging and daytime top-up use cases.",
+    "calc": "2027 EV car fleet (mid-estimate) ≈ 7.5M.\nPublic-charging-dependent share = 7.5M × 42% = ~3.15M cars.\nAssume each of these cars needs to charge publicly roughly every 3 days on average (accounting for range and usage patterns) → daily public-charging sessions needed = 3.15M / 3 ≈ 1.05M sessions/day.\nSplit 30% fast / 70% slow demand: fast sessions/day ≈ 315,000; slow sessions/day ≈ 735,000.\nFast points needed = 315,000 / 9 (mid-throughput) ≈ 35,000 fast points.\nSlow points needed = 735,000 / 2.5 (mid-throughput) ≈ 294,000 slow points.\nTotal public charging points needed by 2027 ≈ 329,000, of which ~35,000 fast and ~294,000 slow.",
+    "insight": "The infrastructure gap is dominated by slow-charging point count (roughly 9x the fast-point count), which has a very different investment profile — slow points are individually far cheaper to install but need to be deployed at massive scale across workplaces, malls, and residential-adjacent locations, while fast points are fewer in number but concentrated at high-capex highway/rapid-turnaround sites — meaning the policy conversation shouldn't be a single 'how many chargers' number but two very different infrastructure programs with different funding models.",
+    "recommendation": "Prioritize public-private partnerships that push slow-charging deployment into high-footfall daytime locations (malls, offices, residential societies) since that's where ~90% of the required point count sits and where private capital (mall operators, workplaces) can co-fund at lower government cost per point, while reserving direct government capital for the smaller but higher-capex fast-charging highway network, which is less commercially attractive to private developers on its own in the near term.",
+    "risks": [
+      "The 55-60% home-charging-access assumption is critical and could shift meaningfully with housing mix — if apartment/multi-unit housing grows faster than assumed in the cities where EV adoption concentrates, public-charging-dependent share (and thus total points needed) could be significantly higher than this estimate.",
+      "Throughput assumptions (8-10 fast, 2-3 slow vehicles/day per point) assume reasonable uptime and utilization — real-world charger reliability issues (a known problem in early-stage EV markets) could reduce effective throughput, requiring more physical points than this capacity-based math suggests.",
+      "The 45-50% compounding EV sales growth rate is the single largest lever in this entire calculation — a few points of difference compounds dramatically over the 2024-2027 window (e.g., 40% vs. 50% growth produces a materially different 2027 fleet size), so this estimate should be presented as a range tied explicitly to fleet-growth scenarios, not a single number."
+    ],
+    "cross": [
+      {
+        "q": "This is a capacity/supply-side sizing problem rather than a typical demand-population one — walk me through why you chose that framing instead of just estimating 'number of EV owners who want a public charger.'",
+        "a": "Because the real planning question isn't how many people want to charge publicly, it's how much charging capacity is needed to serve that demand without excessive queuing — so I needed to convert 'people who need public charging' into 'sessions per day' and then into 'physical points,' using a throughput-per-point assumption as the conversion factor; skipping that last step would leave the answer in the wrong units for an infrastructure investment decision."
+      },
+      {
+        "q": "Your total point estimate (~329,000) is a big number — does it match anything close to what India's actual EV infrastructure targets look like today?",
+        "a": "Directionally yes — India's stated public policy ambitions (across various ministry and industry projections) have been in the same order of magnitude, generally citing targets in the hundreds of thousands of public charging points by the mid-to-late 2020s, which gives me reasonable confidence my structure is producing a sane order-of-magnitude answer rather than being off by 10x in either direction; I'd want the exact current official target as a final cross-check rather than relying purely on my derivation."
+      }
+    ],
+    "synthesis": "This case is a good template for supply-side/infrastructure sizing: population-based demand estimation alone isn't enough — you have to carry the estimate one more step, through a throughput-per-unit-of-capacity conversion, to answer the actual planning question, and recognizing which of two very different sub-segments (fast vs. slow charging) drives the bulk of the count is often the real insight the audience needs, not just the total number."
+  },
+  {
+    "diff": "med",
+    "industry": "B2B SaaS — Expense Management Software (US)",
+    "title": "Size the US Total Addressable Market for B2B Expense Management Software",
+    "prompt": "A B2B SaaS company building expense-management software (think Expensify/Ramp-style tools) wants to know the total addressable market (TAM) in the US to include in their fundraising deck.",
+    "clarify": [
+      {
+        "q": "Are we sizing all US businesses, or only businesses above a certain size, since very small businesses may not need dedicated expense software?",
+        "a": "Include all business sizes, but segment by company-size band, since willingness to pay and ARPU will differ sharply between a 5-person business and a 5,000-person enterprise — don't apply one blended rate."
+      },
+      {
+        "q": "Should this include only stand-alone expense-management tools, or also expense modules bundled inside larger ERP/finance suites (like SAP Concur as part of a broader suite)?",
+        "a": "Include the broader spend-management category — stand-alone tools and expense modules within larger platforms both count, since they compete for the same underlying budget."
+      },
+      {
+        "q": "Is this a bottom-up or top-down TAM, and should I cross-check against any published market-size figures if I recall them?",
+        "a": "Bottom-up primarily, since that's more defensible and shows your reasoning — a rough top-down sanity check is a nice-to-have if you have a plausible anchor, but don't lean on unverified memorized figures as your primary method."
+      }
+    ],
+    "mece": "Bottom-up by company-size band, since ARPU varies enormously by segment: (1) total US businesses, segmented into small (1-49 employees), mid-market (50-999), and enterprise (1000+), (2) of each band, the addressable rate — the share of businesses with expense volume complex enough to need dedicated software (vs. using spreadsheets/manual processes, which is common for the smallest businesses), (3) average annual contract value (ACV) per band, reflecting per-seat or per-transaction pricing that scales with company size.\n\nL1 — Business count by size band: US Census/SBA-style segmentation of the business population.\nL1 — Addressable rate per band: not every business in a band is a realistic buyer — very small businesses often have too little expense volume to justify paid software.\nL1 — ACV per band: expense-management software typically prices per-user or per-transaction-volume, so ACV scales sharply with company size — a blended average would badly distort the TAM.",
+    "hypothesis": "I expect the TAM to be dominated by the mid-market and enterprise bands in dollar terms even though small businesses vastly outnumber them, because per-account ACV scales faster than the small-business population shrinks as a share of the total — this is a common pattern in B2B SaaS TAM math where a small number of large accounts contribute disproportionate revenue.",
+    "data": "The US has roughly 33M businesses total. Of these, roughly 90% are small (1-49 employees, ~29.7M), ~9% are mid-market (50-999 employees, ~3M), and under 1% are enterprise (1000+, ~200,000). Addressable rate (has enough expense complexity/volume to justify paid software) is estimated low for small businesses (~8%, since most sole proprietors and micro-businesses have minimal reimbursable expense volume), moderate for mid-market (~55%, where expense volume and compliance needs become real), and high for enterprise (~85%, where expense management is close to table-stakes). Average ACV: small-business-addressable tier ~$1,200/year, mid-market ~$18,000/year, enterprise ~$150,000/year (reflecting per-seat pricing at very different headcounts and feature/compliance requirements).",
+    "calc": "Small: 29.7M × 8% = 2.376M addressable accounts × $1,200 = $2.85B.\nMid-market: 3M × 55% = 1.65M addressable accounts × $18,000 = $29.7B.\nEnterprise: 200,000 × 85% = 170,000 addressable accounts × $150,000 = $25.5B.\nTotal US TAM ≈ $2.85B + $29.7B + $25.5B ≈ $58.05B.",
+    "insight": "Even though small businesses are 90% of the addressable-account count in the mid-market-and-below comparison, they contribute under 5% of total TAM dollars, while mid-market and enterprise combined — despite being under 10% of total business count — drive over 95% of the dollar opportunity, which means this company's fundraising narrative and go-to-market motion should almost certainly be built around a mid-market/enterprise-first strategy, with small-business as a longer-tail, lower-priority segment despite its intuitive numerical scale.",
+    "recommendation": "Present the TAM as ~$58B but lead the investor narrative with the ~$55B mid-market-plus-enterprise opportunity specifically, since that's both the largest and most defensible slice — and be prepared to defend the addressable-rate assumptions (55% mid-market, 85% enterprise) as the most scrutinized inputs, since investors will recognize those as the primary levers on the whole number.",
+    "risks": [
+      "The addressable-rate assumptions (8%/55%/85%) are estimates without a named source — if actual mid-market addressability is closer to 40% instead of 55% (a very plausible alternative given how many mid-market companies still get by on manual processes or bundled tools), the TAM would drop by several billion dollars.",
+      "ACV figures assume current market pricing norms; if the company's own pricing strategy differs meaningfully from category-average ACV (e.g., a bottom-up-motion company pricing well below the $18,000 mid-market average to win share fast), their serviceable market at their actual price point would look smaller than this blended-market TAM.",
+      "This TAM includes the full 'spend management' category (bundled ERP modules included) — if the company's product only competes credibly against stand-alone tools and not bundled ERP suites, their realistic serviceable addressable market (SAM) is meaningfully smaller than this TAM, and that distinction should be made explicit in the fundraising deck rather than presenting TAM alone as if it were immediately capturable."
+    ],
+    "cross": [
+      {
+        "q": "You've given me TAM — but for a fundraising deck, don't investors usually want to see SAM and SOM too? How would you narrow this down?",
+        "a": "Yes — SAM would filter this TAM down to the segment this specific company can realistically serve given their product maturity, pricing, and channel (e.g., if they only sell mid-market via inside sales today, SAM might be just the mid-market slice, ~$30B); SOM would further filter to a realistic 3-5 year capturable share of SAM based on their sales capacity and competitive position, probably low-single-digit percent of SAM in year one, growing from there — I'd build that as a second, more conservative layer on top of this TAM rather than present TAM alone as the opportunity."
+      },
+      {
+        "q": "Your enterprise ACV of $150,000 seems high — how did you get there and is that realistic?",
+        "a": "It's built off per-seat, per-feature-tier pricing common in enterprise SaaS spend-management deals, where large enterprises often need hundreds to low-thousands of licensed users plus premium compliance/audit/integration features that command significant per-seat premiums over mid-market pricing — that said, I'd treat this as the softest number in my model and want to validate it against real enterprise deal data (win/loss reports, competitor pricing pages, or analyst estimates) before using it in an actual fundraising deck, since a 20-30% miss here meaningfully moves the enterprise TAM slice."
+      }
+    ],
+    "synthesis": "This case highlights a core B2B TAM-sizing discipline: segment by company size before blending, because a single average ACV across wildly different customer sizes produces a number that's almost meaningless — and the real strategic insight (which segment actually drives the dollars) only becomes visible once you've done that segmentation, not before."
+  },
+  {
+    "diff": "hard",
+    "industry": "Mobility — Ride-Hailing Expansion (Tier-2 Indian Cities)",
+    "title": "Size the Market for a Ride-Hailing App Entering Tier-2 Indian Cities",
+    "prompt": "A ride-hailing company that currently operates only in India's top metros is considering expanding into Tier-2 cities (population 1-5M, like Coimbatore, Nagpur, or Bhopal). What is the addressable market size for ride-hailing across these cities?",
+    "clarify": [
+      {
+        "q": "Are we sizing all Tier-2 cities in India collectively, or should I pick a representative city and extrapolate?",
+        "a": "Size a representative Tier-2 city in detail first, then extrapolate to the full Tier-2 city set, so I can see both your unit-level reasoning and your scaling logic."
+      },
+      {
+        "q": "This is a two-sided marketplace — should I size only rider demand, or also think about driver-side supply as a constraint on the addressable market?",
+        "a": "Good instinct — size rider demand first, but then discuss how driver-side supply could cap or shape the realistically addressable market, since that's a real constraint in a two-sided marketplace."
+      },
+      {
+        "q": "Should this be gross bookings (total ride value) or the company's net revenue (their commission take-rate)?",
+        "a": "Gross bookings for the market-size question — we can apply a take-rate afterward if needed for a revenue-specific figure."
+      }
+    ],
+    "mece": "This is a two-sided market-sizing problem, so I need both a demand-side estimate (rider-side TAM) and a supply-side reality check (driver capacity), then reconcile them: (1) representative Tier-2 city population and its addressable ride-taking population, (2) ride frequency and average fare, giving demand-side gross bookings for one city, (3) extrapolation across the full set of Tier-2 cities, (4) supply-side check — whether enough drivers would realistically be available/willing to serve that demand at launch, since ride-hailing famously has cold-start/chicken-and-egg dynamics.\n\nL1 — City-level demand: population → smartphone/app-capable population → riders who'd actually use ride-hailing (vs. own vehicle, auto-rickshaw, public transit, which are strong incumbents in Tier-2 cities) → rides/month × average fare.\nL1 — Extrapolation: representative city × number of comparable Tier-2 cities, adjusted for city-size variance.\nL1 — Supply-side reality check: driver population needed to serve that ride volume at acceptable wait times, and whether that supply is realistically recruitable at launch given competing local options (auto-rickshaw driving, other gig work).",
+    "hypothesis": "I expect demand-side sizing to show a large headline opportunity, but I expect the supply-side driver-recruitment constraint to be the real gating factor on how much of that demand is actually capturable in the first 1-2 years, since ride-hailing in a new city faces a classic cold-start problem where too few drivers means bad wait times, which suppresses rider adoption regardless of underlying demand.",
+    "data": "Representative Tier-2 city (population ~2.5M): smartphone penetration ~65%, giving an app-capable population of ~1.6M. Of this, realistic ride-hailing addressable riders (excludes those with reliable personal vehicles or who strongly prefer autos/public transit for cost reasons) is estimated at ~20% — Tier-2 cities have much stronger incumbent options (cheap autos, two-wheeler ownership) than metros, so this rate is meaningfully lower than a metro's ~35-40%. That's ~320,000 addressable riders per city. Average ride frequency for an active rider in a Tier-2 city is estimated lower than metro (~3 rides/month vs. 8-10 in a metro, since trip use-cases like office commutes via cab are less common) with average fare ~₹90/ride (shorter average trip distances, lower base fares than metro pricing). India has roughly 40-50 cities that fit the 'Tier-2, population 1-5M' bracket. On the supply side, industry benchmarks suggest roughly 1 driver can realistically serve about 15-20 rides/day at acceptable utilization in a new-market launch phase.",
+    "calc": "Per representative city: 320,000 addressable riders × 3 rides/month × ₹90/ride = ₹86.4M gross bookings/month per city → ₹1.037B/year per city.\nAcross ~45 comparable Tier-2 cities (mid-point of the 40-50 range), scaling with a discount factor since not all Tier-2 cities are equally sized/attractive (assume effective average city delivers ~70% of the representative city's volume once you include smaller cities in the bracket): 45 × ₹1.037B × 0.70 ≈ ₹32.7B/year (~$390M) demand-side gross bookings across the full Tier-2 opportunity.\n\nSupply-side check for the representative city: total rides/year = 320,000 riders × 3/month × 12 = 11.52M rides/year ≈ 31,600 rides/day. At 17.5 rides/driver/day (mid-point), this requires ~1,800 active drivers per city just to meet demand at reasonable utilization — a meaningful recruitment target for a single-city launch, and one that must be hit fast enough to avoid a bad-wait-time death spiral that suppresses the demand-side number before it's ever realized.",
+    "insight": "The demand-side TAM (~₹32.7B/~$390M annually across Tier-2 cities) is a real and sizeable opportunity, but the more decision-relevant number for a launch plan is the per-city driver-supply requirement (~1,800 drivers/city) — because the actual constraint on how fast this company can capture the demand-side TAM isn't rider interest, it's how quickly they can recruit and retain enough drivers per city to keep wait times low enough that riders don't churn back to autos/two-wheelers after one bad experience.",
+    "recommendation": "Expand into Tier-2 cities, but sequence the rollout city-by-city rather than a simultaneous multi-city launch, prioritizing cities where driver supply can be seeded fastest (e.g., cities with an existing base of underemployed auto/taxi drivers open to converting), and treat the ~1,800-driver threshold per city as a hard gate before marketing spend ramps up in that city — spending demand-generation budget ahead of adequate driver supply would waste money and risk a negative first impression that's hard to reverse.",
+    "risks": [
+      "The 20% addressable-rider rate for Tier-2 (vs. 35-40% metro) is an estimate reflecting stronger incumbent alternatives — if this company's pricing can undercut autos more aggressively than assumed, actual adoption could run higher, understating true demand.",
+      "The 70% scaling discount applied across the 45-city extrapolation is a rough blended adjustment — the real variance between the largest Tier-2 cities (closer to 5M population) and the smallest (closer to 1M) is significant, and this estimate would benefit from bucketing cities into size tiers rather than one blended discount.",
+      "Driver-supply throughput (17.5 rides/driver/day) assumes reasonable route density and city layout — Tier-2 cities with more sprawl or worse traffic infrastructure than assumed could see lower realistic throughput per driver, requiring an even larger driver base than estimated to hit the same service level."
+    ],
+    "cross": [
+      {
+        "q": "You've given me two different numbers — a demand-side TAM and a supply-side driver requirement. Which one should actually drive the go/no-go decision here?",
+        "a": "Both, but for different purposes — the demand-side TAM (~$390M) tells you whether this opportunity is big enough to be worth pursuing at all, which it clearly is; the supply-side driver requirement tells you whether and how fast you can actually capture it, which should drive the phasing and city-sequencing decision, not the go/no-go decision itself — I'd frame it as 'yes, expand, but the supply constraint dictates the rollout speed, not whether to roll out.'"
+      },
+      {
+        "q": "Why did you assume Tier-2 ride frequency is lower than metro instead of just applying the same behavioral assumptions?",
+        "a": "Because the underlying use-case mix is genuinely different — metro ride-hailing usage is heavily driven by daily office commuting and traffic-avoidance, both of which are less pronounced in Tier-2 cities with shorter average commute distances and more affordable two-wheeler ownership; applying metro behavioral assumptions to a Tier-2 market would be a classic sizing mistake of assuming the new market behaves like the market you already know, rather than adjusting for genuinely different underlying conditions."
+      }
+    ],
+    "synthesis": "This case is a strong example of why two-sided marketplaces need a two-sided sizing answer — a demand-only estimate looks complete but is actually half the picture, and the discipline of following through to a supply-side capacity check (and recognizing that it's a sequencing constraint, not a market-size reducer) is exactly the kind of structural completeness that separates a strong candidate from one who stops at the first plausible-sounding number."
+  },
+  {
+    "diff": "hard",
+    "industry": "Healthtech — At-Home Genetic Testing (India, 5-Year Forecast)",
+    "title": "How Big Could the At-Home Genetic Testing Market in India Be in 5 Years?",
+    "prompt": "A healthtech startup is building a consumer at-home genetic testing kit (like 23andMe, but for the Indian market — ancestry, health-risk markers, and wellness insights). Since this category barely exists in India today, how big could this market realistically become in 5 years?",
+    "clarify": [
+      {
+        "q": "Since this category doesn't really exist yet in India, should I size it by analogy to a market where it's already established, like the US?",
+        "a": "Yes — using the US (or another comparable market) as an adoption-curve analogy is a reasonable approach here, as long as you explicitly adjust for reasons India might adopt faster or slower."
+      },
+      {
+        "q": "Should this include only consumer-direct genetic testing, or also genetic testing ordered through doctors/clinics for medical diagnostic purposes?",
+        "a": "Just direct-to-consumer — the kind a person buys and uses at home for ancestry/wellness/health-risk insight, not clinical diagnostic testing ordered by a physician for a specific medical condition."
+      },
+      {
+        "q": "What year should the 5-year projection target — starting from today, or from when the product actually launches?",
+        "a": "5 years from today, treating that as roughly when this company might realistically be launched and scaling, not from an unspecified future launch date."
+      }
+    ],
+    "mece": "Since there's no current India-specific base rate, I'll build this via analogy-and-adjustment: (1) establish the US direct-to-consumer genetic testing market as a reference adoption curve (penetration rate and how long it took to reach that level), (2) identify structural factors that would make India's adoption faster or slower than the US's historical curve, (3) apply an adjusted, compressed-or-extended timeline to estimate where India's penetration might realistically sit 5 years out, (4) convert that penetration rate into a market size using India's addressable (urban, digitally-engaged, discretionary-income) population and expected price point.\n\nL1 — Reference market: what penetration rate did the US reach in DTC genetic testing, and over what timeframe, as a base rate to adjust from.\nL1 — Adjustment factors: India-specific accelerants (large existing digital-health/wellness-app adoption, price-sensitive but growing middle class, strong 'testing/diagnostics' culture around health) and decelerants (privacy/data concerns, lower awareness of genetic testing as a category, potentially lower disposable income for a purely discretionary wellness product) relative to the US's historical adoption path.\nL1 — Convert to market size: addressable population × adjusted 5-year penetration rate × price point.",
+    "hypothesis": "I expect India's 5-year penetration to land well below the US's current mature-market penetration (since the US had a decade-plus head start and different cultural/privacy dynamics), but the market could still be meaningful in absolute dollar terms given India's large urban digitally-engaged population — likely landing in the low-to-mid hundreds of millions of dollars range, not billions, at the 5-year mark.",
+    "data": "The US DTC genetic testing market reached an estimated cumulative penetration of roughly 12-15% of the adult population having ever taken a DTC genetic test, built up over approximately 12-15 years since the category's mainstream emergence (~2007-2010 onward). India's urban, digitally-engaged, discretionary-income-capable population (a reasonable proxy for who'd realistically buy this in the near term) is roughly 100-120M people (drawing on the same 'upper-middle and above' urban income framing used in other consumer categories). Adjustment factors: India has faster digital-health adoption momentum today than the US did in 2007 (smartphone-first digital health apps already have large India user bases), which could accelerate awareness-building; but privacy concerns around genetic/health data (amplified by general data-privacy sensitivity in India) and a nascent trust environment for a completely new category could slow actual purchase conversion even where awareness exists. Net assessment: India might compress the awareness-building phase but not the trust-building phase, suggesting a 5-year penetration meaningfully below the US's multi-decade cumulative rate — estimate 5-year cumulative penetration at roughly 1.5-2.5% of the addressable base (vs. the US's 12-15% over a much longer window).",
+    "calc": "Addressable base = 110M (mid-point of 100-120M).\n5-year cumulative penetration estimate = 2% (mid-point of 1.5-2.5%).\nCumulative buyers over 5 years ≈ 110M × 2% = 2.2M people.\nAverage price per kit ≈ ₹6,000-8,000 (positioned as an accessible-premium wellness product, lower than the ~$100-200 US price point in absolute terms but comparable in local purchasing-power terms) — use ₹7,000 mid-point.\nCumulative 5-year market value ≈ 2.2M × ₹7,000 ≈ ₹15.4B (~$185M) cumulative over 5 years.\nAnnual run-rate by year 5 (assuming adoption is back-loaded, growing each year rather than flat, with year 5 representing maybe 30-35% of the cumulative total as the market is still accelerating) ≈ ₹15.4B × 32% ≈ ₹4.9B (~$59M) annual revenue run-rate by year 5.",
+    "insight": "The most important number for a startup's business plan isn't the cumulative 5-year figure (₹15.4B/$185M) but the year-5 annual run-rate (₹4.9B/$59M), since that's what determines whether the business will be a venture-scale outcome at maturity — and the entire estimate hinges on a single, hard-to-verify assumption (2% five-year penetration) that was itself derived by analogy rather than direct data, meaning this number should be presented with wide error bars and revisited annually as real adoption data (from this company or early competitors) becomes available.",
+    "recommendation": "Proceed cautiously — treat this as a real but genuinely uncertain opportunity, and structure the go-to-market to actively test the core assumption (will Indian consumers overcome privacy hesitancy to buy this category) with a smaller initial cohort/city launch before committing to nationwide scale-up spend, since the single biggest risk isn't market size in the abstract, it's whether the trust-and-privacy barrier compresses on the accelerated timeline this estimate assumes or turns out to be stickier than expected.",
+    "risks": [
+      "This entire estimate is anchored on a US analogy adjusted by qualitative judgment calls (faster awareness, slower trust) rather than any India-specific data point, since the category barely exists yet — the 2% five-year penetration figure could very plausibly be off by 2x in either direction, and the business plan should treat it as a scenario range (roughly $30-120M year-5 run-rate), not a point estimate.",
+      "Regulatory risk is a major unmodeled factor — genetic/health data regulation in India is still evolving, and a stricter regulatory regime (limiting how genetic data can be stored, used, or monetized) could meaningfully suppress both supply-side willingness to launch and demand-side trust, independent of the market-sizing math itself.",
+      "The price point assumption (₹7,000) assumes the company can achieve US-comparable purchasing-power-adjusted pricing — if lab/sequencing costs don't localize as favorably as assumed (e.g., if key reagents/sequencing capacity must still be imported), the achievable price point (and therefore margin, though not necessarily market size in unit terms) could be worse than assumed."
+    ],
+    "cross": [
+      {
+        "q": "Using the US as your reference market is a reasonable starting point, but the US, UK, and other DTC genetic testing markets all have very different regulatory and privacy environments from India — how much does that worry you about your estimate?",
+        "a": "It's genuinely the biggest wildcard in this whole case — I tried to capture it qualitatively by assuming India's trust-building phase would be slower than its awareness-building phase, which is why I landed on a 2% five-year penetration far below the US's cumulative rate; but I'll be honest that this adjustment is a judgment call, not a derived number, and if I were doing this for a real investment decision I'd want primary research — surveys or focus groups gauging actual Indian consumer sentiment on genetic testing and data privacy — before trusting this estimate with real capital."
+      },
+      {
+        "q": "Given how uncertain this estimate is, is 'market sizing by analogy' even a valid method to use in a case interview, or should a candidate flag that they'd refuse to give a confident number here?",
+        "a": "I think it's valid as long as it's presented honestly — the goal isn't false precision, it's demonstrating a sound structure for reasoning through genuine uncertainty; a candidate who refuses to produce any number at all is less useful to a decision-maker than one who produces a clearly-labeled, wide-range estimate with the key assumptions called out explicitly, which is what I tried to do by giving a scenario range rather than pretending ₹4.9B is a precise, defensible figure."
+      }
+    ],
+    "synthesis": "This case tests comfort with genuine uncertainty — when there's no existing market to size directly, the right move is disciplined analogy (borrow a reference curve, then explicitly adjust it for known structural differences) rather than either refusing to estimate or presenting a borrowed number with false confidence, and clearly separating 'what I'm confident about' from 'what I'm guessing' is itself part of a strong answer."
+  },
+  {
+    "diff": "hard",
+    "industry": "Consumer Electronics — Extended Warranty Attach (Smartphones, India)",
+    "title": "Size the Market for Extended Warranty Attach on Smartphone Sales in India",
+    "prompt": "An insurtech company sells extended warranty and screen-protection plans that get attached at the point of smartphone purchase (both online and in-store). What is the addressable market size for this attach-on product in India?",
+    "clarify": [
+      {
+        "q": "Are we sizing the total smartphone market and applying an attach rate, or something narrower — like only premium smartphones, where warranty attach is more common?",
+        "a": "Size it across the full smartphone market but segment by price tier, since attach rate and plan pricing both scale with device price — don't apply one blended attach rate."
+      },
+      {
+        "q": "Should this include only new smartphone sales, or also the used/refurbished smartphone market, which is large in India?",
+        "a": "New smartphone sales only for this estimate — used-phone warranty attach is a smaller, structurally different market we can address separately."
+      },
+      {
+        "q": "Is 'extended warranty' just extended coverage beyond the manufacturer's standard 1-year warranty, or does it include accidental damage/screen protection plans too?",
+        "a": "Include both — bundle them into one 'protection plan' category for this sizing, since they're typically sold and priced together as a single attach-on product in practice."
+      }
+    ],
+    "mece": "This is an attach-rate sizing problem layered on top of an existing base market (smartphone unit sales), segmented by price tier since both attach rate and plan price scale with device price: (1) total annual smartphone unit sales in India, segmented into budget, mid-range, and premium price bands, (2) attach rate per band — the share of buyers in each band who purchase a protection plan at time of sale, (3) average protection-plan price per band, which scales with device value (plans are typically priced as a function of the device's replacement/repair cost).\n\nL1 — Unit sales by price band: total annual smartphone sales, split by budget (<₹15,000), mid-range (₹15,000-30,000), and premium (₹30,000+).\nL1 — Attach rate by band: budget-phone buyers are highly price-sensitive and rarely buy add-on protection; premium-phone buyers, having just spent significantly more, are far more likely to protect that investment.\nL1 — Plan price by band: protection-plan pricing typically runs at a percentage of device value, so premium-band plans cost meaningfully more per unit even before considering attach-rate differences.",
+    "hypothesis": "I expect this market to be heavily concentrated in the premium and upper-mid-range segments, both because attach rate is much higher there and because plan price scales with device value — meaning a relatively small share of total smartphone unit volume (premium-tier units) likely drives a disproportionate share of total protection-plan revenue.",
+    "data": "India sells roughly 150M smartphones annually. Price-band split: budget (<₹15,000) ~55% of units (~82.5M), mid-range (₹15,000-30,000) ~30% (~45M), premium (₹30,000+) ~15% (~22.5M). Attach rate estimates: budget ~3% (most budget buyers view the device itself as low-stakes enough not to insure), mid-range ~12%, premium ~30% (premium buyers, especially of flagship devices, protect their higher-value purchase at a much higher rate, often influenced by in-store/online upsell prompts at the point of sale). Average annual protection-plan price: budget ~₹400, mid-range ~₹1,200, premium ~₹3,500 (scaling with device replacement/repair cost).",
+    "calc": "Budget: 82.5M × 3% = 2.475M plans × ₹400 = ₹0.99B.\nMid-range: 45M × 12% = 5.4M plans × ₹1,200 = ₹6.48B.\nPremium: 22.5M × 30% = 6.75M plans × ₹3,500 = ₹23.6B.\nTotal market size ≈ ₹0.99B + ₹6.48B + ₹23.6B ≈ ₹31.1B (~$375M) annually.",
+    "insight": "Premium-tier attach, despite representing only 15% of total smartphone unit volume, generates roughly 76% of total protection-plan market value (₹23.6B of ₹31.1B) — this is an even sharper concentration than the unit-volume split alone would suggest, because both the attach-rate advantage (30% vs. 3-12%) and the price-per-plan advantage compound together in the premium segment, meaning a go-to-market strategy focused narrowly on premium-device retail and online channels would capture the large majority of addressable value with a fraction of the operational complexity of chasing budget-segment attach.",
+    "recommendation": "Focus distribution partnerships on premium and flagship mid-range device retailers and e-commerce premium-phone categories first (where per-unit revenue and attach rate are both highest), rather than spreading sales/marketing effort evenly across all price bands — the budget segment, despite its huge unit volume, is a low-priority, low-margin opportunity given both low attach rate and low plan price, and pursuing it aggressively would likely cost more in acquisition/channel effort than it returns.",
+    "risks": [
+      "Attach rates (3%/12%/30%) are estimated based on general industry patterns rather than India-specific verified data — if premium attach is actually closer to 20% rather than 30% (a plausible lower estimate, since India's insurance/protection-plan attach culture is less mature than some Western markets), the premium-segment revenue (the dominant driver of the total) would drop meaningfully.",
+      "This estimate assumes attach happens primarily at point-of-sale — but a growing share of protection-plan attach could shift to post-purchase, app-based upsell (buying a plan a few weeks after purchase, once a customer engages with a retailer's app), which this point-of-sale-centric model doesn't explicitly capture and could mean the true addressable market is somewhat larger than estimated.",
+      "Price-band unit splits (55%/30%/15%) shift over time as India's smartphone market matures and average selling prices rise — if premium-tier unit share grows faster than assumed (a documented trend in recent years as 5G and mid-premium devices gain share), this market-size estimate would understate the near-future opportunity."
+    ],
+    "cross": [
+      {
+        "q": "You found that premium-tier attach drives ~76% of market value from just 15% of units — does that mean the company should basically ignore the budget and mid-range segments entirely?",
+        "a": "Not entirely ignore, but clearly deprioritize in initial go-to-market — the mid-range segment still contributes a meaningful ₹6.48B and has a growing attach-rate trajectory as more affordable devices creep into higher price points, so I'd treat it as a phase-two expansion opportunity once the company has proven its model and channel relationships in premium; budget-tier at 3% attach and ₹400 price is genuinely not worth dedicated go-to-market investment given the operational cost of servicing that much lower-value volume."
+      },
+      {
+        "q": "How would you sanity-check your attach-rate assumptions against something more concrete than 'industry patterns'?",
+        "a": "I'd want to look at attach-rate disclosures or estimates from comparable public companies in adjacent geographies (e.g., how carriers or retailers in more mature protection-plan markets report attach rates by device tier), and ideally get real point-of-sale data from a retail partner this company already works with, even if just for one product category as a calibration point — that would let me replace at least one of my three estimated attach rates with an actual data point and re-derive more confidently from there."
+      }
+    ],
+    "synthesis": "This case shows how a compounding-advantage structure — where a smaller segment wins on both attach rate AND price-per-unit simultaneously — can concentrate a market's value far more sharply than either factor would alone, and spotting that compounding effect (rather than just reporting the blended total) is what turns a sizing exercise into an actual strategic recommendation about where to focus."
+  },
+  {
+    "diff": "expert",
+    "industry": "Enterprise Software — AI Coding Assistants (Global, 3-Year Forecast)",
+    "title": "Size the Global Market for AI-Powered Coding Assistants Over the Next 3 Years, Triangulating Three Independent Methods",
+    "prompt": "A venture capital firm is evaluating an investment in an AI coding-assistant startup (competing with tools like GitHub Copilot). They want a rigorous 3-year global market-size forecast, and specifically want you to use more than one independent method and reconcile any gaps between them, since this is a fast-evolving, high-uncertainty category with limited historical data.",
+    "clarify": [
+      {
+        "q": "Should this cover only individual-developer subscription tools, or also enterprise-wide licensing deals and embedded/platform-level AI coding features (e.g., built into an IDE or cloud platform by default)?",
+        "a": "Cover the full category — individual subscriptions, team/enterprise licenses, and embedded platform features that generate attributable revenue — since all of these compete for the same underlying 'AI-assisted coding' budget and use-case."
+      },
+      {
+        "q": "You mentioned using multiple methods — should I pick which methods to use, or is there a specific set you want me to apply?",
+        "a": "Your choice — but I want to see at least a demand-side (developer-population-based) method and a supply-side (vendor-revenue-based) method, since those approach the problem from genuinely independent angles and give a real triangulation, not just two variations of the same logic."
+      },
+      {
+        "q": "Should the 3-year forecast assume continuation of current adoption trends, or should I explicitly flag if there's a plausible discontinuity (like a step-change in capability or pricing) that could break a simple trend extrapolation?",
+        "a": "Explicitly flag any plausible discontinuity — trend extrapolation alone would be too naive for a category evolving this fast, and I want to see you reason about that risk, not just extrapolate a curve."
+      }
+    ],
+    "mece": "I'll use three genuinely independent methods and reconcile them, rather than relying on one: (1) demand-side, bottom-up from the global developer population and expected paid-seat penetration and pricing; (2) supply-side, bottom-up from known/estimated vendor revenues and disclosed or inferred growth rates, summed across major players; (3) top-down analogy, using the broader developer-tools/DevOps software market as an anchor and estimating what share of it AI-coding-assistant spend could represent within 3 years, drawing on how quickly other step-change developer-tool categories (e.g., cloud IDEs, CI/CD platforms) captured share historically.\n\nI'll compute each method independently, then reconcile the resulting range and explicitly discuss what would explain any gap between methods, plus flag the discontinuity risk (a capability or pricing step-change that breaks smooth extrapolation) as a fourth qualitative overlay on the final range.",
+    "hypothesis": "I expect the demand-side and supply-side methods to converge reasonably well if built carefully (since they're really measuring the same underlying transactions from two different angles), while the top-down analogy method will likely produce the widest range, since 'share of a broader software category' is inherently the most approximate approach of the three — and I expect the real 3-year number to be meaningfully higher than a naive trend extrapolation would suggest, given the plausible discontinuity of foundation-model capability improvements materially increasing both willingness-to-pay and expansion into adjacent use-cases (not just autocomplete, but broader agentic coding tasks) within the forecast window.",
+    "data": "Global professional software developer population is estimated at roughly 28-30M. Current AI-coding-assistant paid-seat penetration is estimated at roughly 25-30% of professional developers today (a category that scaled unusually fast post-2021 given low adoption friction and clear individual productivity value), with a 3-year expectation this could rise to 55-65% as the category matures from 'early majority' toward 'late majority' adoption, aided by increasing enterprise-wide procurement (vs. today's more individual/team-level adoption) — average annual price per seat currently ~$180-240/year (individual/team tier) trending toward a blended $250-350/year as enterprise tiers with more capability/security features gain share. On the supply side, the known market leader's disclosed run-rate revenue and a small number of other major disclosed or credibly estimated players collectively suggest a current global market of roughly $3-4B annually, growing at a still-high but decelerating rate as the category matures (from >100% early growth toward a more moderate but still strong 45-55% CAGR as the base grows). The broader global DevOps/developer-tools software market is estimated at roughly $15-20B annually; AI-coding-assistant spend is a rapidly growing sub-category within it, currently roughly 15-20% of that broader market and plausibly reaching 35-45% share within 3 years as AI-assisted coding becomes a default expectation within most developer toolchains rather than an add-on.",
+    "calc": "METHOD 1 (Demand-side): Year-3 paid seats = 29M developers (mid-point) × 60% (mid-point of 55-65%) = 17.4M paid seats. Blended price/seat (year 3) ≈ $300. Year-3 market size ≈ 17.4M × $300 ≈ $5.22B.\n\nMETHOD 2 (Supply-side): Current market ≈ $3.5B (mid-point of $3-4B). Applying a blended ~50% CAGR (mid-point of 45-55%) compounded over 3 years: $3.5B × (1.50)^3 ≈ $3.5B × 3.375 ≈ $11.8B.\n\nMETHOD 3 (Top-down analogy): Broader developer-tools market ≈ $17.5B (mid-point of $15-20B), growing modestly itself (assume ~12%/year as the overall category grows) to roughly $24.6B in 3 years. AI-coding-assistant share reaching 40% (mid-point of 35-45%) of that broader market in year 3: $24.6B × 40% ≈ $9.84B.\n\nRECONCILIATION: The three methods produce $5.2B, $11.8B, and $9.8B — a genuinely wide range (roughly 2.3x between the low and high estimate), with Method 1 (demand-side) notably lower than the other two. This gap is informative: Method 1's price/seat assumption ($300 blended) is likely too conservative if enterprise adoption accelerates as fast as Methods 2 and 3 imply, since enterprise deals typically carry meaningfully higher effective per-seat economics (bundled features, expansion revenue, minimum-seat commitments) than the individual/team pricing my demand-side estimate anchored to. Adjusting Method 1's blended price upward to account for faster-than-assumed enterprise mix (e.g., to $420/seat blended) would bring it to ~$7.3B, closing roughly half the gap to the other two methods — suggesting a reconciled 3-year estimate in the $8-11B range, with $9-10B as a reasonable central case.",
+    "insight": "The real value of triangulating three methods here isn't landing on one 'correct' number — it's that the gap between methods reveals exactly which assumption is most likely wrong (the demand-side method's price-per-seat, which underweighted the enterprise-mix shift that the other two methods effectively baked in) — and for a VC evaluating an investment, that diagnostic (enterprise mix and pricing power will likely be the single biggest driver of how big this market actually gets) is more decision-useful than any single point estimate would have been.",
+    "recommendation": "Present the reconciled range ($8-11B by year 3, central case ~$9-10B) to the investment committee rather than a single figure, and make the enterprise-adoption-and-pricing-mix assumption the explicit key question to validate in diligence — specifically, pressure-test the target company's own enterprise pipeline and average contract value trajectory, since that's the single lever most likely to determine whether the real market (and this company's achievable share of it) lands closer to the low or high end of the reconciled range.",
+    "risks": [
+      "All three methods share a common blind spot: none of them explicitly models a plausible discontinuity where AI coding assistants expand beyond 'autocomplete/co-pilot' into more autonomous agentic development work with fundamentally different pricing (e.g., outcome-based or usage-based pricing tied to tasks completed rather than flat per-seat fees) — if that shift happens within the 3-year window, it could invalidate the per-seat pricing assumption underlying all three methods and produce a market size meaningfully different from this entire range in either direction.",
+      "The supply-side method (Method 2) relies on a compounding growth-rate assumption (50% CAGR) applied uniformly for 3 years — real markets rarely grow at a smooth compounding rate, and a deceleration (from competitive price pressure or market saturation among the earliest, most eager adopters) could mean this method's $11.8B is an overestimate if growth decelerates faster than modeled.",
+      "The top-down method's 'AI-coding share of broader developer-tools market' figure (40% in year 3) is the softest input of the entire analysis — it's an analyst-style category-share estimate without a rigorous derivation, and should be treated as the least reliable of the three methods despite landing in a plausible middle position relative to the other two."
+    ],
+    "cross": [
+      {
+        "q": "You've given me a $2.3x range between your lowest and highest method — for a VC investment decision, isn't that too wide to be useful?",
+        "a": "I'd push back gently on that — a $2.3x range across three independently-derived methods is actually a meaningful result, not a failure of the analysis, because it tells the investment committee something real: the market's size 3 years out is genuinely uncertain and highly sensitive to the enterprise-pricing-mix question, which is exactly the kind of insight that should shape diligence priorities; presenting a single false-precision number instead would hide that real uncertainty rather than inform the decision, and I'd rather the committee know where the real risk sits than be given artificial confidence."
+      },
+      {
+        "q": "Which of your three methods do you personally trust the most, and why?",
+        "a": "The supply-side method (Method 2), because it's anchored to actual current market revenue rather than a chain of population and adoption-rate assumptions — its main weakness is the compounding growth-rate assumption over 3 years, but that's a single, well-understood type of uncertainty (growth-rate extrapolation) rather than the multiple stacked behavioral assumptions the demand-side method requires; I'd weight my final reconciled estimate somewhat toward Method 2 and Method 3's convergence zone ($9.8-11.8B) over Method 1's lower estimate, which is what drove my $9-10B central case rather than a simple three-way average."
+      }
+    ],
+    "synthesis": "This case is the clearest illustration in the case bank of why true triangulation — genuinely independent methods, not the same logic run through slightly different inputs — is valuable specifically because of what the disagreement between methods reveals, not despite it; a strong candidate treats convergence and divergence between methods as data in themselves, using the gap to diagnose which assumption is weakest rather than averaging blindly or picking whichever method produces the most convenient number."
+  }
+];
+} catch (err) { console.error('Stage 20 data error:', err); }
+</script>
+<script>
+try {
+  var diffLabel = {easy:"Easier", med:"Medium", hard:"Hard", expert:"Expert"};
+
+  function renderCases(list){
+    var wrap = document.getElementById('caselist');
+    wrap.innerHTML = '';
+    list.forEach(function(c, i){
+      var det = document.createElement('details');
+      det.className = 'case';
+      det.id = 'case-' + (i+1);
+
+      var clarifyHtml = c.clarify.map(function(qa){
+        return '<div class="qa-pair"><div class="q">Q: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
+      }).join('');
+
+      var risksHtml = '<ul>' + c.risks.map(function(r){ return '<li>' + esc(r) + '</li>'; }).join('') + '</ul>';
+
+      var crossHtml = c.cross.map(function(qa){
+        return '<div class="qa-pair"><div class="q">Interviewer: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
+      }).join('');
+
+      det.innerHTML =
+        '<summary><span class="cnum">Case ' + (i+1) + '</span>' +
+        '<span class="cdiff ' + c.diff + '">' + diffLabel[c.diff] + '</span>' +
+        '<span class="cind">' + esc(c.industry) + '</span>' +
+        '<span class="ctitle">' + esc(c.title) + '</span></summary>' +
+        '<div class="case-body">' +
+          '<div class="case-prompt">"' + esc(c.prompt) + '"</div>' +
+          '<div class="case-sec"><h5>Clarifying Questions &amp; Answers</h5>' + clarifyHtml + '</div>' +
+          '<div class="case-sec"><h5>MECE Structure</h5><div class="calc-block">' + esc(c.mece) + '</div></div>' +
+          '<div class="case-sec"><h5>Hypothesis</h5><p>' + esc(c.hypothesis) + '</p></div>' +
+          '<div class="case-sec"><h5>Data &amp; Exhibits</h5><div class="calc-block">' + esc(c.data) + '</div></div>' +
+          '<div class="case-sec"><h5>Calculation</h5><div class="calc-block">' + esc(c.calc) + '</div></div>' +
+          '<div class="case-sec"><h5>Insight</h5><p>' + esc(c.insight) + '</p></div>' +
+          '<div class="case-sec"><h5>Recommendation</h5><p>' + esc(c.recommendation) + '</p></div>' +
+          '<div class="case-sec"><h5>Risks &amp; Caveats</h5>' + risksHtml + '</div>' +
+          '<div class="case-sec"><h5>Interviewer Cross-Questions</h5>' + crossHtml + '</div>' +
+          '<div class="synth-box"><h5>Synthesis</h5><p>' + esc(c.synthesis) + '</p></div>' +
+        '</div>';
+      wrap.appendChild(det);
+    });
+  }
+
+  renderCases(cases);
+
+  document.getElementById('casefilter').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if(!btn) return;
+    document.querySelectorAll('#casefilter button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var diff = btn.getAttribute('data-diff');
+    var filtered = diff === 'all' ? cases : cases.filter(function(c){ return c.diff === diff; });
+    renderCases(filtered);
+  });
+
+  var masteryItems = cases.map(function(c, i){ return 'Case ' + (i+1) + ' — ' + c.title + ': I can walk through the full structure, calculation, and synthesis cold.'; });
+  var STORE = 'masterbook-s20-mastery';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var mBox = document.getElementById('masteryBox');
+  mBox.innerHTML = masteryItems.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+esc(t)+'</span></div>';
+  }).join('');
+  mBox.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 500){ backtop.classList.add('show'); } else { backtop.classList.remove('show'); }
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 20 loaded — cases:', cases.length);
+} catch (err) { console.error('Stage 20 render error:', err); }
+</script>

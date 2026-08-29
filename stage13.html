@@ -1,0 +1,1163 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>GenAI, LLMs, RAG &amp; Agents</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .concept-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+  .concept{ padding:20px 22px; }
+  .concept h4{ font-size:1rem; margin-bottom:8px; }
+  .concept p{ font-size:.88rem; color:var(--ink-soft); margin:0 0 8px; }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .worked{ margin-top:14px; border:1px dashed var(--line-strong); border-radius:10px; padding:16px 18px; background:var(--paper-sunken); }
+  .worked .wk-label{ font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; }
+  .worked .wk-result{ margin-top:8px; font-size:.85rem; color:var(--ink-soft); }
+
+  .exstrip{ margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px 16px; border-top:1px solid var(--line); padding-top:12px; }
+  .exstrip .ex{ font-size:.8rem; }
+  .exstrip .ex b{ display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:2px; font-weight:700; }
+  .exstrip .ex span{ color:var(--ink-soft); }
+
+  .probgrid{ display:flex; flex-direction:column; gap:10px; }
+  details.prob{ border:1px solid var(--line); border-radius:10px; background:var(--paper-raised); }
+  details.prob summary{ padding:12px 18px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.9rem; }
+  details.prob summary::-webkit-details-marker{ display:none; }
+  details.prob summary .pnum{ font-family:"IBM Plex Mono"; font-size:.75rem; color:var(--data); background:var(--data-soft); padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  details.prob summary .pdiff{ font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  .pdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .pdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .pdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .pdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  .prob-body{ padding:0 18px 16px; }
+
+  .qbank{ display:flex; flex-direction:column; gap:0; }
+  details.qa{ border-bottom:1px solid var(--line); }
+  details.qa:last-child{ border-bottom:none; }
+  details.qa summary{ padding:13px 20px; cursor:pointer; list-style:none; font-size:.9rem; font-weight:500; display:flex; gap:12px; align-items:baseline; }
+  details.qa summary::-webkit-details-marker{ display:none; }
+  details.qa summary::before{ content:"Q"; font-family:"IBM Plex Mono"; font-size:.68rem; color:var(--data); background:var(--data-soft); padding:2px 6px; border-radius:5px; flex:0 0 auto; }
+  details.qa .qa-a{ padding:0 20px 16px 58px; font-size:.86rem; color:var(--ink-soft); }
+  details.qa .qa-a b{ color:var(--ink); }
+
+  .redflag{ padding:13px 17px; border-left:4px solid var(--lvlA); background:var(--lvlA-soft); border-radius:0 8px 8px 0; margin-bottom:9px; font-size:.87rem; }
+  .redflag b{ color:var(--lvlA); }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  .framebox{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+  .frame-a{ border-top:4px solid var(--data); }
+  .frame-b{ border-top:4px solid var(--lvlC); }
+  .frame-c{ border-top:4px solid var(--lvlB); }
+  .framebox .fh{ font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; padding:14px 18px 0; }
+  .frame-a .fh{ color:var(--data); }
+  .frame-b .fh{ color:var(--lvlC); }
+  .frame-c .fh{ color:var(--lvlB); }
+  .framebox .fb{ padding:8px 18px 18px; font-size:.87rem; color:var(--ink-soft); }
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+  .subhead{ font-family:"Fraunces"; font-size:1.15rem; font-weight:600; margin:36px 0 14px; padding-top:8px; border-top:1px solid var(--line); }
+  .subhead:first-child{ border-top:none; padding-top:0; margin-top:0; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <div class="stage-pill">● Stage 13 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#honest">Honest CV Framing</a></li>
+      <li><a href="#foundations">AI Foundations &amp; ML vs AI vs GenAI</a></li>
+      <li><a href="#llm">LLM Fundamentals &amp; Transformers</a></li>
+      <li><a href="#prompt">Prompt Engineering</a></li>
+      <li><a href="#embed">Embeddings &amp; Vector Search</a></li>
+      <li><a href="#rag">RAG — Retrieval-Augmented Generation</a></li>
+      <li><a href="#agents">Agents</a></li>
+      <li><a href="#finetune">Fine-Tuning</a></li>
+      <li><a href="#eval">AI Evaluation &amp; Hallucination</a></li>
+      <li><a href="#product">AI Product Development &amp; Economics</a></li>
+      <li><a href="#altmodels">Alternative Approaches — Why This, Why Not That</a></li>
+      <li><a href="#cmptable">GenAI Approach Comparison Table</a></li>
+      <li><a href="#redflags">Red Flags</a></li>
+      <li><a href="#problems">30 Progressive Problems</a></li>
+      <li><a href="#questions">80-Question Interview Bank</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next (Part VIII)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 20 (Market Sizing) is next, followed by Operations, Product, Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part VIII · Stage 13 of 33</div>
+      <h1>GenAI, LLMs, RAG &amp; Agents</h1>
+      <p class="lede">Your CV's strongest GenAI-adjacent claim is the Hero Electronics chatbot (design &amp; rollout, 80% query coverage, 20% cost reduction) plus a GenAI-ideation case competition at MakeMyTrip — genuine product involvement, not hands-on LLM engineering. This stage builds the full technical depth an AI/ML or product interviewer expects regardless: transformers, prompting, embeddings, RAG, agents, fine-tuning, evaluation, and AI product economics — framed honestly against what you actually built.</p>
+      <div class="statusbar">
+        <div class="statuschip">🤖 18 concept modules: Foundations → LLMs → Prompting → Embeddings → RAG → Agents → Fine-Tuning → Evaluation → Product/Economics</div>
+        <div class="statuschip">🧮 Every concept has a worked numeric example + real computed result</div>
+        <div class="statuschip">🧩 <b>30</b> progressive problems</div>
+        <div class="statuschip">❓ <b>80</b> interview questions with model answers</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">GenAI is the single most likely area where an interviewer tests whether you can tell the difference between "I've used ChatGPT" and "I understand how a production LLM system is actually built." Every analytics, product, and consulting role you're targeting now assumes some fluency here — and it's an area where buzzword-level answers get exposed fast (conflating GenAI with traditional ML, believing RAG "eliminates" hallucination, treating "more context" as free). This stage builds real mechanism-level understanding — how attention actually computes a weighted representation, how a RAG pipeline actually retrieves and grounds an answer, how an agent actually decides which tool to call — so you can go two or three questions deep on any of it, while staying scrupulously honest that your personal hands-on work was chatbot product design and rollout, not LLM systems engineering.</p>
+      </div>
+    </section>
+
+    <section id="honest">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Honest CV Framing</h2>
+        <p>The Hero Electronics chatbot is a genuine, named CV achievement — but its underlying technology (rule-based vs. LLM-based) and the deep GenAI mechanics in this stage need careful, honest scoping.</p>
+      </div>
+      <div class="framebox">
+        <div class="card frame-a">
+          <div class="fh">Level A — What I actually did</div>
+          <div class="fb">Owned end-to-end design and a limited rollout of a chatbot product during a two-month internship at Hero Electronics — scoping the conversation flows, defining what the bot should handle vs. escalate, and partnering with the technical team on build and validation. Full-scale implementation after the internship achieved a confirmed 20% cost reduction (~₹5L/month) with 80% query coverage. This is real, defensible product ownership of a conversational AI product's design and rollout.</div>
+        </div>
+        <div class="card frame-b">
+          <div class="fh">Level B — What I should understand deeply</div>
+          <div class="fb">The honest technical answer if pressed on "was the bot LLM-based or rule-based?": the personally-owned parts were requirements, conversation-flow design, and rollout coordination, while the underlying bot architecture was a collaborative technical-team build — I don't overclaim a specific engineering choice I didn't personally make. What I do own deeply is the practitioner-level GenAI toolkit built in this stage: prompting technique, hallucination/evaluation awareness, and AI product development judgment (build vs. buy, when GenAI is and isn't the right tool) — directly applicable to scoping any future conversational-AI or GenAI product.</div>
+        </div>
+        <div class="card frame-c">
+          <div class="fh">Level C — Honest framing for anything beyond that</div>
+          <div class="fb">The deep technical machinery in this stage — transformer self-attention internals, embedding math, RAG pipeline engineering, agent orchestration frameworks, and fine-tuning methods (LoRA/PEFT/RLHF) — is conceptual, interview-ready depth built specifically for this masterbook, not personal hands-on engineering experience. The MakeMyTrip case competition's GenAI travel-bundling idea (semifinal, top 10 universities) was ideation/strategy only, not a technical build. If asked "have you built a RAG pipeline or fine-tuned a model," the honest answer is: "Not hands-on in a work setting — I understand the architecture and tradeoffs deeply and have built toward it in self-directed portfolio work, but my direct production GenAI experience is the chatbot product side, not the model-engineering side." Never claim personal LLM/RAG/agent engineering that didn't happen.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="foundations">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>AI Foundations &amp; ML vs AI vs GenAI</h2>
+        <p>The vocabulary distinction that separates a genuinely fluent answer from a buzzword-salad one.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>AI vs. ML vs. GenAI — The Nested Relationship <span class="lvl lvl-C">C</span></h4>
+          <p><b>Artificial Intelligence</b> is the broadest umbrella: any system performing tasks that normally require human intelligence (including hand-coded rule engines with no learning at all). <b>Machine Learning</b> is the subset that learns patterns from data rather than following hard-coded rules — everything in Stages 6-11 (regression, trees, XGBoost, forecasting) is ML. <b>Generative AI</b> is the subset of ML whose models generate new content (text, images, code) rather than only predicting a label or number — built overwhelmingly on deep learning, most prominently the transformer architecture. Every GenAI model is ML; not every ML model is GenAI; not every AI system is ML at all.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- A single "AI-powered support system" might actually contain all three layers:</span>
+IF ticket.contains("refund") THEN route_to("billing")      <span class="cmt">-- AI (rule-based), not ML</span>
+predicted_churn = xgboost_model.predict(customer_features)  <span class="cmt">-- ML (Stage 9), not generative</span>
+response_draft = llm.generate(ticket_text, context)          <span class="cmt">-- GenAI: generates new text</span></div>
+            <div class="wk-result">All three lines could legitimately sit inside one product and all three would honestly be called "AI-powered" — but only the third line is GenAI, and only the second and third are ML. Conflating these in an interview ("we used AI, I mean ML, I mean GenAI, interchangeably") is one of the fastest ways to signal shallow understanding.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A thermostat with a fixed if-too-cold-turn-on-heat rule is AI (of a sort) but not ML; a thermostat that learns your schedule from behavior is ML; a thermostat that writes you a natural-language explanation of why it adjusted is GenAI.</span></div>
+            <div class="ex"><b>Consumer</b><span>Netflix's recommendation ranking is ML (predicting what you'll rate highly); a chatbot summarizing a show's plot on request is GenAI.</span></div>
+            <div class="ex"><b>Business</b><span>A churn-prediction model (ML) feeding into an auto-drafted, GenAI-written retention email is a common real pairing — two different technology categories in one workflow.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Exactly this layering — XGBoost prediction (Stage 9) plus a GenAI-drafted stakeholder summary — is a realistic evolution of Axtria-style decision-support tooling.</span></div>
+            <div class="ex"><b>Interview</b><span>"Is GenAI just ML with more parameters?" — no; scale matters, but the defining difference is generative vs. discriminative modeling (next concept), not size alone.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd use exactly this AI/ML/GenAI distinction to clarify, precisely, which category the Hero Electronics chatbot's technology actually falls into rather than blurring the three together."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Discriminative vs. Generative Modeling <span class="lvl lvl-C">C</span></h4>
+          <p>A <b>discriminative</b> model learns a decision boundary or a conditional prediction P(y|x) — everything in Stages 6-9 (will this customer churn? what's this call's converted flag?). A <b>generative</b> model learns (or approximates) the underlying data distribution well enough to sample new, plausible data from it — an LLM generating the next token is fundamentally sampling from a learned probability distribution over the entire vocabulary, conditioned on everything so far.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Discriminative (XGBoost, Stage 9): a fixed input maps to one prediction</span>
+P(converted=1 | rep_tenure=3, territory="West", call_count=5) = 0.72
+
+<span class="cmt">-- Generative (LLM): the model outputs a full probability distribution</span>
+<span class="cmt">-- over the ENTIRE vocabulary for the next token, then samples from it</span>
+P(next_token | "The rep's conversion rate was") =
+  {"72%": 0.31, "high": 0.18, "strong": 0.09, "72": 0.07, ...thousands more}
+<span class="out">sampled -&gt; "72%"  (highest-probability token this draw)</span></div>
+            <div class="wk-result">The discriminative model outputs one number for one fixed question; the generative model outputs a full probability distribution over ~50,000-100,000+ possible next tokens and samples from it — repeated token-by-token, this sampling process is literally how an LLM "writes" a sentence, which is why the same prompt can produce slightly different phrasing on different runs (unless temperature is set to 0, covered under Prompt Engineering).</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A yes/no weather forecast ("will it rain," discriminative) versus a narrated weather story that could unfold in many equally plausible ways (generative).</span></div>
+            <div class="ex"><b>Consumer</b><span>A spam filter (discriminative: spam or not) versus an email-drafting assistant (generative: produces new text).</span></div>
+            <div class="ex"><b>Business</b><span>A conversion-probability model (discriminative, Stage 7/9) versus a GenAI-drafted follow-up message to a customer (generative) are complementary, not competing, tools in the same pipeline.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The natural next evolution of Axtria-style tooling: XGBoost predicts which reps/territories need attention (discriminative), a GenAI layer drafts the stakeholder-facing explanation (generative).</span></div>
+            <div class="ex"><b>Interview</b><span>"Can a generative model do discrimination/classification?" — yes, by construction: you can prompt an LLM to output only "yes" or "no," effectively using a generative model discriminatively, though a purpose-built discriminative model is usually cheaper and more reliable for a fixed classification task.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This distinction is exactly what I'd use to explain why XGBoost (Stage 9) and an LLM chatbot are fundamentally different technology categories solving different problem shapes, not competing options for the same task."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="llm">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>LLM Fundamentals &amp; Transformers</h2>
+        <p>The architecture underneath every modern LLM — self-attention and the token-by-token generation loop.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>The Transformer &amp; Self-Attention <span class="lvl lvl-C">C</span></h4>
+          <p>The <b>transformer</b> architecture (2017, "Attention Is All You Need") processes an entire sequence in parallel rather than word-by-word like older RNNs, using <b>self-attention</b>: for every token, the model computes how much every other token in the sequence should "attend to" it, producing a context-aware representation. Each token is projected into a Query, Key, and Value vector; attention weights come from the scaled dot-product of Queries and Keys, then those weights are used to combine the Values into a new, context-enriched representation for each token.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — toy 3-token attention</div>
+            <div class="codeblock"><span class="cmt">-- Sentence: "rep hit target" — simplified to 2D query/key vectors for illustration</span>
+Q(target) = [1.0, 0.5]
+K(rep)    = [0.9, 0.1]   K(hit) = [0.2, 0.8]   K(target) = [1.0, 0.5]
+
+<span class="cmt">-- raw scores = dot product Q . K</span>
+score(rep)    = 1.0*0.9 + 0.5*0.1 = 0.95
+score(hit)    = 1.0*0.2 + 0.5*0.8 = 0.60
+score(target) = 1.0*1.0 + 0.5*0.5 = 1.25
+
+<span class="cmt">-- softmax to get attention weights (normalized, sums to 1)</span>
+softmax([0.95, 0.60, 1.25]) ≈ [0.36, 0.25, 0.39]</span></div>
+            <div class="wk-result">The word "target" ends up attending most to itself (0.39) and almost as much to "rep" (0.36) — meaning its final context-aware representation is a weighted blend that's ~39% its own value, ~36% "rep"'s value, and ~25% "hit"'s value, letting the model encode "whose target this is" directly into the token's representation. Stacking many of these attention layers (with multiple parallel "heads" looking at different relationship types) is what lets a transformer build up rich, long-range contextual understanding across a whole document.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Reading a sentence and automatically knowing which earlier word a pronoun refers to ("the rep called the client because she was worried") — your brain is doing an attention-like weighting across the sentence.</span></div>
+            <div class="ex"><b>Consumer</b><span>Why ChatGPT can correctly answer a question referencing something you said several messages ago — long-range attention across the conversation context.</span></div>
+            <div class="ex"><b>Business</b><span>Why an LLM summarizing a long stakeholder email thread correctly attributes each commitment to the right person, even across many paragraphs.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The mechanism-level reason a modern GenAI layer could, in principle, read a long Axtria-style stakeholder report and correctly track which numbers belong to which territory across pages of text.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why not just use the older RNN/LSTM architecture?" — RNNs process sequentially (word by word), which is slow to train and struggles with long-range dependencies; transformers process the whole sequence in parallel and use attention to directly connect distant tokens, which is both faster to train and better at long context.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I wouldn't claim to have implemented attention from scratch, but I can explain, at this level of mechanism, why an LLM 'understands' context the way it does — which is exactly the kind of technical grounding a GenAI product conversation needs."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Tokenization &amp; the Autoregressive Generation Loop <span class="lvl lvl-C">C</span></h4>
+          <p>Text is broken into <b>tokens</b> (subword units, via algorithms like Byte-Pair Encoding — not always whole words) before the model ever sees it; a rough rule of thumb is ~4 characters or ~0.75 words per token in English. <b>Autoregressive generation</b> means the model predicts one token at a time, each new token conditioned on everything generated so far, feeding its own output back in as input for the next step — this is why LLMs "write" left to right and why generation is inherently sequential (and thus slower/costlier) even though understanding the input can be parallelized.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — token counting &amp; cost</div>
+            <div class="codeblock"><span class="cmt">-- "The rep's conversion rate improved by twelve percent this quarter."</span>
+<span class="cmt">-- ~13 words -&gt; roughly 17 tokens (some words split: "twelve" + "percent" fine,</span>
+<span class="cmt">-- but a rarer word like "Databricks" might split into "Data" + "bricks")</span>
+
+tokens_in_prompt = 450        <span class="cmt">-- a moderate system+context prompt</span>
+tokens_generated = 180        <span class="cmt">-- the model's response</span>
+price_per_1k_input  = $0.003
+price_per_1k_output = $0.015
+
+cost = (450/1000)*0.003 + (180/1000)*0.015
+     = 0.00135 + 0.0027
+     = $0.00405 per request</span></div>
+            <div class="wk-result">A single chatbot exchange like this costs just under half a cent — trivial at low volume, but at Hero-Electronics-chatbot scale (say 50,000 queries/month, similar order of magnitude to the real query coverage the CV cites), that's roughly $200/month in raw model cost alone, before infrastructure, before the "% of queries an LLM even needs to touch" question — exactly the kind of unit-economics reasoning covered under AI Economics later in this stage.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Sounding out an unfamiliar word syllable-by-syllable rather than recognizing it whole is roughly analogous to a rare word being split into subword tokens.</span></div>
+            <div class="ex"><b>Consumer</b><span>Why ChatGPT's response streams in visibly word-by-word rather than appearing all at once — it's literally generating (and often streaming) one token at a time.</span></div>
+            <div class="ex"><b>Business</b><span>Why a longer, more elaborate system prompt directly increases per-request cost — every extra token in the prompt is billed, every time, on every request.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The direct unit-economics lens an Axtria- or Hero-Electronics-scale chatbot rollout needs before committing to an LLM-based architecture over a cheaper rule-based one.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why is LLM output generation slower than reading the prompt?" — reading (encoding) the prompt is parallelizable across all tokens at once; generating output is inherently sequential, one token conditioned on the last, which is the real bottleneck in LLM latency.</span></div>
+            <div class="ex"><b>Your CV</b><span>"If asked to scope a GenAI-based version of the chatbot, I'd start with exactly this token-cost math to compare it honestly against the rule-based approach the original rollout likely used."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="prompt">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Prompt Engineering</h2>
+        <p>The cheapest, fastest lever for controlling LLM behavior — and the first thing to try before RAG or fine-tuning.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Prompting Techniques — Zero-Shot, Few-Shot &amp; Chain-of-Thought <span class="lvl lvl-B">B</span></h4>
+          <p><b>Zero-shot</b> gives only an instruction, no examples. <b>Few-shot</b> includes a handful of worked input-output examples in the prompt itself, letting the model infer the pattern/format without any weight updates. <b>Chain-of-thought (CoT)</b> prompting asks the model to reason step-by-step before answering, which measurably improves accuracy on multi-step reasoning tasks by giving the model "room" to work through intermediate steps rather than jumping straight to a final token.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Zero-shot (often inconsistent formatting):</span>
+"Classify this support ticket's urgency."
+
+<span class="cmt">-- Few-shot (shows the model the exact desired format):</span>
+"Classify urgency as Low/Medium/High.
+Ex: 'app is slow sometimes' -&gt; Low
+Ex: 'payment failed, customer charged twice' -&gt; High
+Now classify: 'cannot reset password'"
+<span class="out">-&gt; Medium (consistent with the demonstrated format, no explanation needed)</span>
+
+<span class="cmt">-- Chain-of-thought (for a harder, multi-step business question):</span>
+"A rep's conversion rate is 18%. If call volume rises from 200 to 260 calls/month
+with the same rate, how many more conversions per month? Think step by step."
+<span class="out">-&gt; Step 1: 200*0.18=36 conversions now. Step 2: 260*0.18=46.8≈47.
+   Step 3: 47-36=11 more conversions/month.</span></div>
+            <div class="wk-result">Few-shot examples eliminate the ambiguity zero-shot leaves about output format (Low/Medium/High vs. a full sentence), while chain-of-thought on the arithmetic question forces the model to compute 200×0.18 and 260×0.18 as explicit intermediate steps rather than guessing a plausible-sounding final number directly — this is the single most reliable prompting technique for reducing arithmetic and multi-step reasoning errors.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Showing someone two solved examples of a puzzle type before asking them to solve a third (few-shot) versus just describing the rules abstractly (zero-shot).</span></div>
+            <div class="ex"><b>Consumer</b><span>A customer-support chatbot given 3-5 example resolved tickets in its prompt to match your company's exact tone and format.</span></div>
+            <div class="ex"><b>Business</b><span>Asking an LLM to "show your work" on a business-case-style calculation (CoT) measurably reduces silent arithmetic mistakes in the final answer.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly the technique to try first — before building any RAG or fine-tuning infrastructure — when scoping a GenAI feature for a Hero-Electronics-style chatbot rollout.</span></div>
+            <div class="ex"><b>Interview</b><span>"When would few-shot NOT help?" — when the task needs genuinely new knowledge the model doesn't have (a private policy document), not just a formatting/style pattern — that's a RAG problem, not a prompting problem.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This exact zero-shot-vs-few-shot-vs-CoT toolkit is what I'd reach for first if scoping any GenAI feature for a product like the Hero Electronics chatbot before considering heavier infrastructure."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Prompt Structure, Roles &amp; Sampling Parameters <span class="lvl lvl-B">B</span></h4>
+          <p>Modern LLM APIs structure a conversation into <b>roles</b>: a <b>system</b> message (persistent instructions/persona), <b>user</b> messages (the actual query), and <b>assistant</b> messages (the model's prior responses, for multi-turn context). Generation is also controlled by sampling parameters: <b>temperature</b> (0 = deterministic/greedy, higher = more random/creative sampling from the probability distribution), <b>top-p</b> (nucleus sampling — only sample from the smallest set of tokens whose cumulative probability exceeds p), and <b>max tokens</b> (a hard output-length cap).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">system: "You are a support assistant for a telecom hardware company.
+         Be concise. Never make up policy details you're not given."
+user:   "Can I return a router after 45 days?"
+<span class="cmt">-- temperature=0.0 -&gt; deterministic, best for factual/policy answers</span>
+<span class="cmt">-- temperature=0.9 -&gt; more varied phrasing, better for creative drafting,</span>
+<span class="cmt">--   WRONG choice for a policy-answering bot (invites inconsistent answers)</span></div>
+            <div class="wk-result">A support bot answering policy questions should almost always run at temperature=0 (or very close to it) — every user asking the same question should get the same, consistent, factual answer; a marketing-copy generation task is exactly the opposite case, where a higher temperature intentionally introduces useful variety. Choosing the wrong temperature for the task is a common, easily-avoidable production mistake.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A strict, always-the-same-answer reference desk (temperature≈0) versus a brainstorming partner who intentionally offers different angles each time (higher temperature).</span></div>
+            <div class="ex"><b>Consumer</b><span>Why the same question to a customer-service bot should get a consistent policy answer every time, not a different, possibly-contradictory one on each retry.</span></div>
+            <div class="ex"><b>Business</b><span>A marketing-copy generation tool intentionally runs hotter (higher temperature) than a compliance-answer bot — the "right" temperature is task-dependent, not a universal default.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Precisely the kind of production configuration decision that separates a carefully-scoped GenAI feature from a naive one, for a chatbot handling real customer queries at Hero-Electronics scale.</span></div>
+            <div class="ex"><b>Interview</b><span>"What's the difference between temperature and top-p?" — temperature reshapes the whole probability distribution's sharpness; top-p truncates the sampling pool to the smallest set of tokens covering probability mass p, then samples within it — they're often used together, not as alternatives.</span></div>
+            <div class="ex"><b>Your CV</b><span>"If I were formalizing a GenAI version of the Hero Electronics chatbot, defining the system prompt and locking temperature near 0 for policy-sensitive answers is exactly the first production decision I'd make."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="embed">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Embeddings &amp; Vector Search</h2>
+        <p>How unstructured text becomes something you can mathematically compare — the foundation RAG is built on.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>What Embeddings Are &amp; Cosine Similarity <span class="lvl lvl-C">C</span></h4>
+          <p>An <b>embedding</b> is a dense numeric vector (typically hundreds to low thousands of dimensions) representing a piece of text such that semantically similar text ends up with similar vectors — produced by a separate embedding model, distinct from the generative LLM itself. <b>Cosine similarity</b> measures the angle between two vectors (ignoring magnitude), the standard way to compare "how semantically close" two embeddings are, ranging from -1 (opposite) to 1 (identical direction).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — toy 2D embeddings</div>
+            <div class="codeblock">embed("rep missed quota")     = [0.8, 0.6]
+embed("rep underperformed")   = [0.75, 0.66]
+embed("weather forecast")     = [-0.2, 0.9]
+
+<span class="cmt">-- cosine_similarity(A,B) = (A·B) / (||A|| * ||B||)</span>
+A·B = 0.8*0.75 + 0.6*0.66 = 0.6 + 0.396 = 0.996
+||A|| = sqrt(0.8²+0.6²) = 1.0     ||B|| = sqrt(0.75²+0.66²) ≈ 0.9997
+
+cos_sim = 0.996 / (1.0 * 0.9997) ≈ 0.996
+
+<span class="cmt">-- vs. the unrelated sentence:</span>
+A·C = 0.8*-0.2 + 0.6*0.9 = -0.16+0.54 = 0.38
+||C|| = sqrt(0.2²+0.9²) ≈ 0.922
+cos_sim(A,C) = 0.38/(1.0*0.922) ≈ 0.412</span></div>
+            <div class="wk-result">"rep missed quota" and "rep underperformed" score a cosine similarity of ~0.996 (nearly identical direction — correctly recognized as semantically close despite sharing almost no exact words), while the unrelated "weather forecast" sentence scores only ~0.412 — this numeric gap is exactly what a vector search system uses to retrieve the right document even when the query and the source text don't share vocabulary.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A librarian who understands that "how to fix a leaky faucet" and "plumbing repair guide" mean the same thing, even with zero shared words — embeddings capture that same kind of meaning-based closeness numerically.</span></div>
+            <div class="ex"><b>Consumer</b><span>A product search that returns "running shoes" results for the query "sneakers for jogging" — semantic, not just keyword, matching.</span></div>
+            <div class="ex"><b>Business</b><span>Clustering thousands of open-ended customer feedback comments by semantic similarity rather than exact keyword matching to find real themes.</span></div>
+            <div class="ex"><b>Enterprise</b><span>How a GenAI-based version of the Hero Electronics chatbot could match a customer's oddly-phrased query ("thing won't turn on") to the right knowledge-base article even without exact keyword overlap.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why cosine similarity instead of Euclidean distance for embeddings?" — cosine similarity ignores vector magnitude and focuses purely on direction (meaning), which is usually what you want for text; magnitude differences in embeddings often just reflect text length, not meaning.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This is the mechanism I'd point to if asked how a smarter version of the chatbot could match a customer's own words to the right knowledge base entry, rather than requiring exact keyword rules."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Vector Databases &amp; Approximate Nearest Neighbor Search <span class="lvl lvl-C">C</span></h4>
+          <p>A <b>vector database</b> (Pinecone, Weaviate, pgvector, Milvus, FAISS) stores embeddings and supports fast similarity search over them. Exact nearest-neighbor search is O(n) per query — comparing against every stored vector — which doesn't scale to millions of documents; production systems use <b>Approximate Nearest Neighbor (ANN)</b> algorithms (like HNSW — Hierarchical Navigable Small World graphs) that trade a small amount of accuracy for dramatically faster lookup.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — why ANN matters at scale</div>
+            <div class="codeblock"><span class="cmt">-- Exact brute-force search over N documents, each a D-dim vector:</span>
+N = 5,000,000 documents   D = 1536 dimensions (typical embedding size)
+comparisons_per_query = N = 5,000,000
+<span class="cmt">-- at ~1 microsecond per comparison (optimistic): </span>
+time_per_query ≈ 5,000,000 * 1e-6 sec = 5.0 seconds  <span class="out">-- too slow for a live chatbot</span>
+
+<span class="cmt">-- HNSW-style ANN: effectively O(log N) graph traversal</span>
+comparisons_per_query ≈ log2(5,000,000) * constant ≈ 23 * small_constant
+time_per_query ≈ tens of milliseconds  <span class="out">-- production-viable</span></span></div>
+            <div class="wk-result">Brute-force exact search over 5 million documents is roughly 5 full seconds per query — completely unusable for a live chatbot response; an HNSW-style ANN index turns that into tens of milliseconds by never comparing against every vector, only a smart, graph-navigated subset — at the honest cost of occasionally missing the single truly-closest match in exchange for near-real-time latency, a tradeoff every production RAG system accepts deliberately.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Finding a specific book by wandering a library's well-organized subject-sorted aisles (ANN, fast, occasionally not the single perfect match) versus reading the spine of literally every book in the building (exact search, guaranteed correct, impossibly slow).</span></div>
+            <div class="ex"><b>Consumer</b><span>Why a "similar products" recommendation on an e-commerce site returns instantly even across a catalog of millions of items.</span></div>
+            <div class="ex"><b>Business</b><span>Choosing a vector database (managed like Pinecone vs. self-hosted like pgvector/FAISS) is a real infrastructure/cost decision, not just a technical footnote, when scoping any RAG-based product.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The infrastructure layer a genuinely production-grade, knowledge-base-grounded version of the Hero Electronics chatbot would need if the knowledge base grew beyond a small, hand-curated FAQ set.</span></div>
+            <div class="ex"><b>Interview</b><span>"What's the tradeoff ANN makes?" — a small, usually acceptable loss of retrieval accuracy (it might return the 2nd-closest match instead of the 1st) in exchange for orders-of-magnitude faster query time at scale — essential once a knowledge base exceeds roughly tens of thousands of documents.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd flag this exact scaling tradeoff if asked how a chatbot's knowledge base could grow from a small FAQ to a large document set without breaking response-time expectations."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rag">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>RAG — Retrieval-Augmented Generation</h2>
+        <p>Grounding an LLM's answers in real, retrievable documents instead of relying solely on what it memorized during training.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>The RAG Pipeline, End to End <span class="lvl lvl-C">C</span></h4>
+          <p><b>RAG</b> combines retrieval (finding relevant source documents via embedding similarity) with generation (an LLM writing an answer grounded in those retrieved documents), rather than relying purely on the LLM's frozen training-time knowledge. The pipeline: (1) chunk and embed a document corpus offline, storing vectors in a vector database; (2) at query time, embed the user's question; (3) retrieve the top-k most similar chunks; (4) inject those chunks into the LLM's prompt as context; (5) the LLM generates an answer grounded in that retrieved context, ideally citing it.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">user_query = "Can a router be returned after 45 days?"
+
+<span class="cmt">-- Step 1-3: embed query, retrieve top-2 chunks by cosine similarity</span>
+retrieved = [
+  "Return Policy §4.2: Hardware returns accepted within 30 days of purchase...",
+  "Extended warranty claims (separate from returns) accepted within 12 months..."
+]
+
+<span class="cmt">-- Step 4: build the augmented prompt</span>
+prompt = system("Answer ONLY using the provided context. If not covered, say so.")
+       + context(retrieved)
+       + user_query
+
+<span class="cmt">-- Step 5: grounded generation</span>
+<span class="out">-&gt; "Based on the return policy provided, hardware returns are accepted within
+    30 days of purchase — a 45-day-old router would not qualify for a standard
+    return, though it may be eligible under the separate 12-month warranty
+    process. [Source: Return Policy §4.2]"</span></div>
+            <div class="wk-result">The LLM never "knew" the 30-day policy from training — it correctly answered "no, but here's the alternative" only because the retrieval step surfaced the exact right policy chunk and the prompt explicitly instructed the model to answer only from that provided context, which is what makes the answer both accurate and honestly sourced rather than a plausible-sounding guess.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A well-prepared expert witness who looks up the exact regulation before answering, rather than answering purely from memory — RAG is the LLM equivalent of "look it up first."</span></div>
+            <div class="ex"><b>Consumer</b><span>A shopping assistant chatbot correctly citing your specific order's actual return window instead of a generic, possibly-wrong memorized policy.</span></div>
+            <div class="ex"><b>Business</b><span>An internal HR chatbot answering from the actual, current employee handbook rather than a stale, generic answer the model happened to memorize during training.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Precisely the architecture the honest Level C framing above points to as the plausible next evolution of the Hero Electronics chatbot — grounding its 80%-coverage answers in an actual, retrievable knowledge base rather than either hard-coded rules or an ungrounded LLM.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why not just fine-tune the model on the policy documents instead?" — fine-tuning bakes knowledge into weights (expensive to update, no easy "as of" freshness, and models still hallucinate specifics); RAG keeps the source of truth in an easily-updatable document store and lets the LLM cite it — see the Fine-Tuning section's decision framework.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This end-to-end RAG pipeline is exactly what I'd propose as the concrete next step if asked how to make the chatbot's 20% unhandled-query gap smaller without hard-coding more rules by hand."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Chunking Strategy &amp; Retrieval Quality <span class="lvl lvl-C">C</span></h4>
+          <p>How a document is split into <b>chunks</b> before embedding directly determines retrieval quality: chunks too large dilute the embedding's specificity (burying the relevant sentence among irrelevant ones) and waste context budget; chunks too small lose surrounding context needed to make sense of the retrieved snippet. Common strategies: fixed-size with overlap, semantic/paragraph-based splitting, and hierarchical chunking. <b>Reranking</b> (a second, more precise pass over the initial top-k retrieved candidates, often with a cross-encoder model) further improves precision before the final context is assembled.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Too large: one 2,000-word chunk covering the ENTIRE return/warranty/shipping</span>
+<span class="cmt">-- policy dilutes the embedding -- it's now "about everything," not specifically</span>
+<span class="cmt">-- about the 30-day return window, so it may not rank in the top-k at all</span>
+
+<span class="cmt">-- Better: chunk by section, ~150-300 words with slight overlap</span>
+chunk_1 = "§4.1 Shipping ... [context] ..."
+chunk_2 = "§4.2 Returns: Hardware returns accepted within 30 days... [context]"
+chunk_3 = "§4.3 Warranty: Extended warranty claims accepted within 12 months..."
+
+<span class="cmt">-- Retrieval on "return after 45 days" now correctly ranks chunk_2 highest</span>
+<span class="cmt">-- because its embedding is specifically, tightly about returns</span></div>
+            <div class="wk-result">Splitting the monolithic policy document into section-sized chunks turns a diluted, everything-and-nothing embedding into three sharply distinct ones — the return-specific chunk now dominates retrieval for a return-specific query, which is the single highest-leverage lever for improving a RAG system's answer quality, often more impactful than which embedding model or LLM you choose.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>An index card with one clear fact is easier to find in a filing box than a whole binder you'd have to flip through — chunk size is choosing the right card size.</span></div>
+            <div class="ex"><b>Consumer</b><span>Why a well-built AI shopping assistant answers a specific spec question precisely instead of dumping the entire product manual at you.</span></div>
+            <div class="ex"><b>Business</b><span>The unglamorous but highest-ROI engineering work on most real RAG projects is chunking strategy and retrieval tuning, not swapping which LLM generates the final answer.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Exactly the kind of practical, iterative tuning work a RAG-based knowledge-grounded chatbot for Hero Electronics-style support would need — right-sizing chunks around natural policy sections, not arbitrary character counts.</span></div>
+            <div class="ex"><b>Interview</b><span>"How would you debug a RAG system giving wrong answers?" — first check retrieval (is the RIGHT chunk even being retrieved? often it's a chunking/embedding problem, not a generation problem), then check whether the prompt properly constrains the model to only use retrieved context, only then suspect the generation model itself.</span></div>
+            <div class="ex"><b>Your CV</b><span>"If a GenAI chatbot gave a wrong policy answer, this retrieval-first debugging instinct — check what was actually retrieved before blaming the model — is exactly the diagnostic approach I'd take."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="agents">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Agents</h2>
+        <p>LLMs that don't just answer — they decide, act, observe, and iterate.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>The Agent Loop — ReAct &amp; Tool Use <span class="lvl lvl-C">C</span></h4>
+          <p>An <b>agent</b> is an LLM given access to <b>tools</b> (functions it can call — a database query, a web search, a calculator, an internal API) and looped so it can reason about which tool to call, observe the result, and decide the next step, rather than answering in one shot. The <b>ReAct</b> pattern (Reason + Act) makes this explicit: the model alternates between a Thought (reasoning about what to do next), an Action (a tool call), and an Observation (the tool's result), repeating until it has enough information to give a final answer.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — ReAct trace</div>
+            <div class="codeblock">user: "Is rep #4471's conversion rate above the West region average this quarter?"
+
+Thought: I need rep #4471's conversion rate AND the West region average.
+         Neither is in my training data -- I need to query the database.
+Action: query_db("SELECT conversion_rate FROM reps WHERE rep_id=4471")
+Observation: 0.24
+
+Thought: Now I need the West region's average conversion rate.
+Action: query_db("SELECT AVG(conversion_rate) FROM reps WHERE region='West'")
+Observation: 0.19
+
+Thought: 0.24 > 0.19, so yes, rep #4471 is above the regional average.
+Final Answer: "Yes — rep #4471's conversion rate (24%) is above the West
+               region average (19%) this quarter."</span></div>
+            <div class="wk-result">The agent correctly recognized it couldn't answer from memory alone, made two separate, well-scoped tool calls to get real, current numbers, and only then composed a final answer — this tool-grounded loop is what separates an "agent" from a plain LLM call, and is exactly what prevents the model from confidently hallucinating a plausible-sounding but fabricated conversion rate.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A capable assistant who says "let me check the calendar" and actually looks, rather than guessing whether you're free Thursday — checking a real source before answering.</span></div>
+            <div class="ex"><b>Consumer</b><span>A travel-booking assistant that actually calls a real flight-search API rather than inventing plausible-sounding flight times and prices.</span></div>
+            <div class="ex"><b>Business</b><span>An analytics-copilot agent that writes and runs a real SQL query against your warehouse rather than guessing what a metric's value probably is.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A realistic next-generation version of a Hero-Electronics-style support bot: instead of a fixed rule tree, an agent that can actually query order status or warranty records via a tool call before answering.</span></div>
+            <div class="ex"><b>Interview</b><span>"What's the biggest risk with agents?" — an agent can take real, consequential actions (not just generate text), so ungrounded reasoning, tool-call errors, or a poorly-scoped tool (e.g., one that can delete data) carry real operational risk — guardrails and scoped permissions matter far more than for a plain chat LLM.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This tool-use pattern is the honest answer to 'could the chatbot actually look things up instead of just answering from a script' — it's the real mechanism, even though I haven't personally built an agent in production."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Multi-Agent Orchestration Patterns <span class="lvl lvl-C">C</span></h4>
+          <p>Complex tasks are sometimes split across multiple specialized agents rather than one generalist agent: a common pattern is an <b>orchestrator/planner</b> agent that decomposes a task and delegates subtasks to <b>specialist</b> agents (a retrieval agent, a code-execution agent, a summarization agent), then synthesizes their outputs. Frameworks like LangChain, LlamaIndex, and CrewAI provide scaffolding for this, though the core pattern — decompose, delegate, synthesize, with clear handoff contracts between agents — is framework-agnostic.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">user: "Prepare a one-page brief on West region performance this quarter,
+       with a chart and three recommended actions."
+
+Orchestrator decomposes into 3 subtasks:
+  -> Data Agent:      query_db(...) -&gt; returns structured metrics
+  -> Viz Agent:        generate_chart(metrics) -&gt; returns chart image
+  -> Writing Agent:    draft_brief(metrics, chart, tone="executive")
+                        -&gt; returns final one-pager
+
+Orchestrator synthesizes: assembles the three outputs into one document,
+checks consistency (does the written brief's numbers match the chart?),
+returns final result to the user.</span></div>
+            <div class="wk-result">Splitting the task across specialist agents lets each one use a narrower, more reliable toolset (the Data Agent only ever queries the database; the Writing Agent never touches raw SQL) — the orchestrator's consistency check (do the numbers in the prose match the chart?) is a deliberate safeguard against exactly the kind of silent, hard-to-catch inconsistency that a single do-everything agent is more prone to.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A project manager (orchestrator) breaking a task into pieces for a researcher, a designer, and a writer (specialists), then reviewing their combined output before it goes out.</span></div>
+            <div class="ex"><b>Consumer</b><span>A trip-planning app that internally coordinates a flights agent, a hotels agent, and an itinerary-writing agent behind one simple user-facing chat interface.</span></div>
+            <div class="ex"><b>Business</b><span>A GenAI analytics copilot that separates "query the data" from "write the narrative" into different agents, so a data error doesn't get silently laundered into confident-sounding prose.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly the architecture behind an "agentic analytics workflow" style GenAI portfolio project — data retrieval, visualization, and executive-summary writing as separable, auditable agent stages.</span></div>
+            <div class="ex"><b>Interview</b><span>"When is a single agent better than multiple?" — for genuinely simple, single-tool tasks, orchestration overhead (extra latency, more failure points, more cost from multiple LLM calls) isn't worth it; multi-agent patterns earn their complexity on tasks that are actually decomposable into distinct, specializable subtasks.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd describe this orchestrator/specialist pattern as the honest, correct-scale answer if asked how a GenAI system could go beyond a single chatbot into a fuller decision-support workflow — without overclaiming I've built one myself."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="finetune">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>Fine-Tuning</h2>
+        <p>When (and when not) to actually change a model's weights, rather than just prompting or retrieving.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Fine-Tuning vs. RAG vs. Prompt Engineering — The Decision Framework <span class="lvl lvl-B">B</span></h4>
+          <p>The three levers solve different problems and should be tried in roughly this order: <b>prompt engineering</b> first (cheap, instant, good for format/style/reasoning-process control); <b>RAG</b> next (when the model needs access to specific, current, or private knowledge it wasn't trained on); <b>fine-tuning</b> last (when you need to change the model's underlying behavior, tone, or task-specific skill in a way prompting/RAG can't reach — expensive, slower to iterate, and doesn't solve a knowledge-freshness problem the way RAG does).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — decision walkthrough</div>
+            <div class="codeblock">Problem A: "The bot's answers are too formal, we want a warmer tone."
+  -&gt; Prompt engineering (system prompt tone instruction). Cheapest, fastest.
+
+Problem B: "The bot needs to answer questions about OUR specific,
+            frequently-updated product catalog and return policy."
+  -&gt; RAG. The knowledge is specific, private, and changes often --
+     baking it into weights via fine-tuning would go stale immediately.
+
+Problem C: "The bot needs to consistently follow our exact internal
+            ticket-classification taxonomy across thousands of edge cases,
+            in a very specific structured output format, better than
+            prompting alone reliably achieves."
+  -&gt; Fine-tuning. This is a durable BEHAVIOR/skill change, not a
+     knowledge-lookup problem -- a good candidate for supervised
+     fine-tuning on labeled examples.</span></div>
+            <div class="wk-result">Misapplying the wrong lever is a common, expensive mistake: fine-tuning Problem B's catalog knowledge into the model would require expensive re-training every time the catalog changes and still wouldn't guarantee accurate recall of specific facts; prompting alone for Problem C would likely stay inconsistent across thousands of edge cases in a way fine-tuning on real labeled examples reliably fixes.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Giving someone a cheat-sheet to reference (RAG) is faster than sending them back to school to relearn a skill (fine-tuning) — use the cheaper option unless the deeper one is truly needed.</span></div>
+            <div class="ex"><b>Consumer</b><span>Why a shopping assistant's product-catalog knowledge is virtually always RAG-based (catalogs change constantly) rather than fine-tuned into the model.</span></div>
+            <div class="ex"><b>Business</b><span>A support-ticket auto-classifier that needs to hit a very specific, nuanced internal taxonomy reliably is a much stronger fine-tuning candidate than a general Q&amp;A bot.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The exact triage a Hero-Electronics-style chatbot rollout should walk through before committing engineering budget: is this a tone problem, a knowledge problem, or a behavior problem — each has a different, correctly-scoped fix.</span></div>
+            <div class="ex"><b>Interview</b><span>"Would you ever combine RAG and fine-tuning?" — yes, commonly: fine-tune a model to better follow your desired output format/behavior, while still using RAG to supply current, specific facts — they're complementary levers, not mutually exclusive.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This decision framework is exactly the reasoning I'd walk an interviewer through if asked how I'd evolve the chatbot's underlying technology rather than jumping straight to 'we'd fine-tune a model.'"</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Fine-Tuning Methods — Full Fine-Tuning, LoRA/PEFT &amp; RLHF <span class="lvl lvl-C">C</span></h4>
+          <p><b>Full fine-tuning</b> updates every model weight — most accurate but extremely expensive in compute/memory, often impractical for large models. <b>Parameter-Efficient Fine-Tuning (PEFT)</b> methods like <b>LoRA</b> (Low-Rank Adaptation) freeze the original weights and train only small, added low-rank matrices, capturing most of the benefit at a fraction of the cost. <b>RLHF</b> (Reinforcement Learning from Human Feedback) is a distinct further step — used by model providers to align a base model's behavior with human preferences (helpfulness, safety) using human-ranked comparisons, not typically something an individual team does themselves.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — LoRA's parameter-efficiency math</div>
+            <div class="codeblock"><span class="cmt">-- A single weight matrix in a mid-size LLM layer:</span>
+original_matrix = 4096 x 4096 = 16,777,216 trainable parameters (full fine-tune)
+
+<span class="cmt">-- LoRA: freeze the original, add two small low-rank matrices instead</span>
+<span class="cmt">-- rank r=8 (a common choice)</span>
+matrix_A = 4096 x 8 = 32,768 params
+matrix_B = 8 x 4096 = 32,768 params
+lora_params = 32,768 + 32,768 = 65,536 trainable parameters
+
+reduction = 65,536 / 16,777,216 = 0.0039  <span class="out">-&gt; ~0.4% of the original parameter count</span></span></div>
+            <div class="wk-result">LoRA trains roughly 0.4% as many parameters as full fine-tuning for this single layer (and the effect compounds across a whole model with many such layers) — this dramatic reduction is why LoRA-style fine-tuning is feasible on modest hardware and in reasonable time, versus full fine-tuning of a large model requiring substantial multi-GPU infrastructure most individual teams don't have.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Adding a small, targeted addendum to an existing detailed contract (LoRA — cheap, additive, reversible) versus rewriting the entire contract from scratch (full fine-tuning).</span></div>
+            <div class="ex"><b>Consumer</b><span>Why many "custom AI personas" or specialized assistants you see from smaller companies are LoRA-tuned on top of a large base model rather than trained from scratch.</span></div>
+            <div class="ex"><b>Business</b><span>LoRA fine-tuning is realistically within reach for a mid-size company's budget/timeline; full fine-tuning of a frontier-scale model generally isn't, without major infrastructure investment.</span></div>
+            <div class="ex"><b>Enterprise</b><span>If a company genuinely needed to fine-tune a support-classification model, LoRA/PEFT is the realistic, budget-appropriate path — not full fine-tuning, and definitely not RLHF, which is a base-model-provider-level undertaking.</span></div>
+            <div class="ex"><b>Interview</b><span>"What does RLHF actually change that supervised fine-tuning doesn't?" — supervised fine-tuning teaches the model to imitate labeled examples; RLHF further optimizes the model against a learned reward signal built from human preference rankings, which is how base models are aligned to be helpful/harmless rather than just imitative.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd be honest that I haven't personally run a fine-tuning job, but I can explain precisely why LoRA — not full fine-tuning, not RLHF — is the realistic method if a team like Hero Electronics' technical team ever needed to go that route."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="eval">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>AI Evaluation &amp; Hallucination</h2>
+        <p>How you actually know whether a GenAI system is working — and the failure mode every stakeholder worries about first.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>LLM Evaluation — Metrics &amp; Methods <span class="lvl lvl-C">C</span></h4>
+          <p>Evaluating generated text is harder than evaluating a classifier's accuracy because there's often no single "correct" output. Automated metrics like <b>ROUGE</b> (overlap-based, common for summarization) and <b>BLEU</b> (precision-based n-gram overlap, common for translation) give a rough proxy but miss semantic correctness. <b>LLM-as-judge</b> (using a strong LLM to score another model's outputs against a rubric) has become a common, more semantically-aware evaluation method, alongside human evaluation (the gold standard, but slow/expensive) and task-specific automated checks (does the output parse as valid JSON? does a generated SQL query actually run?).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — toy ROUGE-1 calculation</div>
+            <div class="codeblock">reference  = "the rep exceeded quota this quarter"
+generated  = "rep beat quota this quarter"
+
+<span class="cmt">-- ROUGE-1 = unigram overlap between generated and reference</span>
+ref_words  = {the, rep, exceeded, quota, this, quarter}   (6 unique)
+gen_words  = {rep, beat, quota, this, quarter}              (5 unique)
+overlap    = {rep, quota, this, quarter} = 4 words
+
+recall    = overlap / len(ref_words) = 4/6 = 0.667
+precision = overlap / len(gen_words) = 4/5 = 0.80
+F1        = 2*(precision*recall)/(precision+recall) = 2*(0.8*0.667)/(0.8+0.667)
+          = 1.067/1.467 ≈ 0.727</span></div>
+            <div class="wk-result">ROUGE-1 F1 ≈ 0.73 for two sentences that are semantically nearly identical ("exceeded" vs. "beat" are synonyms ROUGE can't detect) — this is exactly ROUGE's known weakness: it measures surface word overlap, not meaning, which is why LLM-as-judge or human evaluation is often layered on top for anything where semantic correctness (not just word overlap) is what actually matters.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A teacher grading an essay purely by counting matched keywords (ROUGE-like) versus actually reading it for understanding (LLM-as-judge/human eval) — the first is fast but misses paraphrased correct answers.</span></div>
+            <div class="ex"><b>Consumer</b><span>Why a translation app's internal quality scores don't always match how natural a translation actually reads to a native speaker.</span></div>
+            <div class="ex"><b>Business</b><span>Before shipping any GenAI feature, defining what "good" even means (task-specific checks, LLM-as-judge rubric, or human review) is a prerequisite, not an afterthought.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Exactly the evaluation rigor a GenAI-based chatbot upgrade at Hero Electronics would need before replacing rule-based logic that had a known, measured 80% coverage rate — you can't claim improvement without a real evaluation methodology.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why not just use accuracy like a classifier?" — most GenAI outputs are open-ended text with many valid phrasings, so there's rarely one "correct" string to match exactly against — evaluation has to account for semantic equivalence, which simple exact-match accuracy cannot.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd insist on defining evaluation criteria upfront for any GenAI chatbot upgrade — exactly the kind of rigor that distinguishes a real engineering process from just 'it feels better.'"</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Hallucination — Detection &amp; Mitigation <span class="lvl lvl-B">B</span></h4>
+          <p><b>Hallucination</b> is an LLM generating fluent, confident-sounding text that is factually wrong or unsupported — a fundamental consequence of how generative models work (sampling plausible next tokens, not looking anything up, unless explicitly grounded via RAG). Mitigation strategies: RAG grounding with explicit "answer only from provided context" instructions, requiring citations, lower temperature for factual tasks, a fact-checking/verification pass (sometimes another LLM call), and — critically — designing the product to let the model say "I don't know" rather than always producing an answer.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">user: "What's our return policy for a product bought 200 days ago?"
+
+<span class="cmt">-- WITHOUT grounding/instruction: model may hallucinate a plausible-sounding</span>
+<span class="cmt">-- but fabricated answer, because it was never told it's allowed to say "unsure"</span>
+<span class="out">-&gt; "Our extended policy allows returns up to 365 days for store credit."
+   (fabricated -- no such policy chunk was ever retrieved)</span>
+
+<span class="cmt">-- WITH RAG grounding + explicit "say so if not covered" instruction:</span>
+retrieved = ["Return Policy §4.2: 30-day return window from purchase date."]
+<span class="out">-&gt; "Based on the return policy provided, returns are accepted within 30 days
+    of purchase -- a product bought 200 days ago would not be eligible for
+    a standard return. I don't have information on any extended/store-credit
+    policy beyond that -- please check with support directly."</span></div>
+            <div class="wk-result">The ungrounded version fabricated a specific, plausible-sounding "365 days for store credit" policy that doesn't exist anywhere in the source material — exactly the kind of confidently-wrong answer that erodes user trust fastest; the grounded version correctly refuses to speculate beyond what was actually retrieved, which is the single most important behavior to explicitly design for in any customer-facing GenAI product.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A confident coworker who guesses an answer rather than saying "I'm not sure, let me check" — fluent but unreliable, exactly the hallucination failure mode.</span></div>
+            <div class="ex"><b>Consumer</b><span>A well-publicized real-world failure mode: chatbots confidently citing fake policies, fake case law, or fake product specs that sound entirely plausible.</span></div>
+            <div class="ex"><b>Business</b><span>The single biggest stakeholder trust risk in any GenAI rollout — one confidently-wrong customer-facing answer can do more reputational damage than the entire feature's upside.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The exact risk a Hero-Electronics-style GenAI chatbot upgrade would need explicit safeguards against — the current rule-based system's 80% coverage is at least predictable; an ungrounded LLM replacing it without hallucination safeguards could be worse, not better, on trust.</span></div>
+            <div class="ex"><b>Interview</b><span>"Does RAG eliminate hallucination?" — no, it substantially reduces it by grounding answers in real retrieved text, but doesn't eliminate it (the model can still misread or misstate the retrieved context, or hallucinate when retrieval fails to find anything relevant) — a Red Flag worth naming explicitly.</span></div>
+            <div class="ex"><b>Your CV</b><span>"Designing the bot to say 'I don't know, let me connect you with support' instead of guessing is exactly the kind of product judgment call I'd bring from having owned the original chatbot's scoping decisions."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="product">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2>AI Product Development &amp; Economics</h2>
+        <p>Building a GenAI feature is a product discipline, not just a model-selection decision — and it has real, computable unit economics.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>AI Product Development Lifecycle &amp; Eval-Driven Development <span class="lvl lvl-B">B</span></h4>
+          <p>A disciplined GenAI product process: (1) define the problem and success criteria before touching a model, (2) build a small evaluation set (representative real examples with known-good answers) before building the feature, (3) prototype with prompting first, (4) measure against the eval set, (5) only escalate to RAG/fine-tuning if prompting doesn't meet the bar, (6) ship with monitoring, human-in-the-loop fallback, and a feedback loop for continued improvement — "eval-driven development" mirrors test-driven development, but for probabilistic, non-deterministic systems.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">Step 1: Success criteria -- "95%+ of policy questions answered correctly,
+         zero fabricated policy details, escalate to human when unsure"
+Step 2: Eval set -- 50 real historical customer questions + correct answers,
+         curated from the existing chatbot's actual query logs
+Step 3: Prototype -- zero-shot prompted LLM, no RAG yet
+Step 4: Measure -- scores 68% on the eval set, several fabricated details
+Step 5: Escalate -- add RAG grounding against the real policy documents
+         -&gt; re-measure -&gt; 94% on the eval set, zero fabrications observed
+Step 6: Ship with a "was this helpful?" feedback button + human escalation
+         path for anything the model flags as low-confidence</span></div>
+            <div class="wk-result">The eval set (built from the EXISTING chatbot's real historical queries, not synthetic ones) is what made the 68%→94% improvement measurable and honest, rather than a vague "it feels better now" — and the process only escalated to the more expensive RAG build once the cheaper prompting-only approach was proven insufficient against real success criteria, which is exactly right-sized engineering effort.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Writing down what "done" looks like before starting a home renovation, rather than discovering the goalposts as you go.</span></div>
+            <div class="ex"><b>Consumer</b><span>Why a well-run product team A/B tests a new AI feature against a defined success metric rather than shipping based on a few impressive demo examples.</span></div>
+            <div class="ex"><b>Business</b><span>The exact discipline that separates "we added AI" from "we measurably improved the customer experience" — a distinction stakeholders increasingly expect to see justified with real numbers.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Precisely the process a rigorous evolution of the Hero Electronics chatbot should follow: build the eval set from the real historical query log (you already have the data — 20% of queries the original bot couldn't handle), not from scratch.</span></div>
+            <div class="ex"><b>Interview</b><span>"How do you know a GenAI feature is actually ready to ship?" — it clears a pre-defined, representative evaluation set at an agreed bar, not "the demo looked good" — demos are notoriously unreliable indicators of real-world performance.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This eval-driven process is exactly the rigor I'd bring given that I already owned the original chatbot's requirements and validation process — I know firsthand what 'good enough to ship' actually needs to mean."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>AI Economics — Cost, Latency &amp; the Build/Buy Tradeoff <span class="lvl lvl-C">C</span></h4>
+          <p>A GenAI feature's real cost has multiple components: per-token API pricing (input and output priced differently), latency (user-perceived wait time, especially for long generations or agent loops with multiple tool calls), and the build/buy decision (using a hosted API vs. self-hosting an open-source model — self-hosting trades ongoing per-token cost for upfront infrastructure/ops cost and is rarely worth it below a significant volume threshold).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — hosted API vs. self-hosted breakeven</div>
+            <div class="codeblock">monthly_queries = 50,000     avg_cost_per_query_hosted_api = $0.004
+
+monthly_cost_hosted = 50,000 * 0.004 = $200/month
+
+<span class="cmt">-- Self-hosting an open-source model: needs a dedicated GPU instance</span>
+self_hosted_infra_cost = $1,500/month (a modest always-on GPU instance)
+
+<span class="cmt">-- Breakeven query volume where self-hosting starts being cheaper:</span>
+breakeven = self_hosted_infra_cost / avg_cost_per_query_hosted_api
+          = 1,500 / 0.004
+          = 375,000 queries/month</span></div>
+            <div class="wk-result">At 50,000 queries/month (roughly the scale implied by the chatbot's real query coverage numbers), the hosted API's $200/month is dramatically cheaper than a $1,500/month self-hosted GPU instance — self-hosting would only start making financial sense above ~375,000 queries/month, which is exactly the kind of concrete, computable threshold that should drive a real build-vs-buy decision rather than a general instinct that "self-hosting is more control, so it must be better."</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Renting a car for an occasional trip (hosted API, pay-per-use) versus buying and maintaining your own car (self-hosting, high fixed cost, only worth it above a usage threshold).</span></div>
+            <div class="ex"><b>Consumer</b><span>Why most consumer apps integrating GenAI features use a hosted API rather than running their own model infrastructure — the volume rarely justifies it.</span></div>
+            <div class="ex"><b>Business</b><span>A CFO-facing conversation about a GenAI feature should include real per-query cost, projected volume, and this breakeven math — not just "AI will make it better."</span></div>
+            <div class="ex"><b>Enterprise</b><span>The exact unit-economics conversation that should accompany any proposal to upgrade the Hero Electronics chatbot to an LLM-based architecture — is the query volume anywhere near the self-hosting breakeven, or is a hosted API clearly the right call.</span></div>
+            <div class="ex"><b>Interview</b><span>"When does self-hosting an open-source model make sense?" — very high query volume, strict data-residency/privacy requirements a hosted API can't satisfy, or a need for deep customization beyond what a hosted API's fine-tuning options allow — not simply "wanting more control" in the abstract.</span></div>
+            <div class="ex"><b>Your CV</b><span>"Bringing this build/buy cost lens to any GenAI proposal is exactly the kind of business-grounded technical judgment I'd want to demonstrate, tying straight back to owning the original chatbot's real cost-reduction numbers."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="altmodels">
+      <div class="sec-head">
+        <div class="num">12</div>
+        <h2>Alternative Approaches — Why This, Why Not That</h2>
+        <p>GenAI systems involve a real stack of competing choices at every layer — the comparative reasoning that shows genuine engineering judgment.</p>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p><b>Why prompt engineering before RAG or fine-tuning?</b> It's free (no infrastructure), instant to iterate on, and a surprisingly large share of GenAI product problems are actually prompting/format problems, not knowledge or behavior problems — always try the cheapest lever first and prove it insufficient before building more infrastructure.</p>
+        <p><b>Why RAG over fine-tuning for most knowledge-grounding needs?</b> RAG keeps the source of truth in an easily-updatable document store (change the policy document, the bot's answers update immediately, no retraining); fine-tuning bakes knowledge into frozen weights that go stale and require an expensive retrain to update — RAG wins whenever the underlying knowledge changes with any regularity, which is most real business knowledge.</p>
+        <p><b>Why a hosted API (OpenAI/Anthropic/Google) over a self-hosted open-source model (Llama/Mistral/Qwen)?</b> Hosted APIs need zero infrastructure, get continuous model improvements for free, and are usually cheaper below a high volume threshold (see the AI Economics worked example); self-hosting wins on strict data-residency/privacy requirements, very high sustained volume, or a need for deep customization a hosted API's fine-tuning options don't support.</p>
+        <p><b>Why LangChain/LlamaIndex-style frameworks over hand-rolled orchestration code?</b> Frameworks provide tested scaffolding for common patterns (RAG pipelines, agent loops, memory management) and faster initial development; hand-rolled code offers more control and fewer abstraction-layer surprises when debugging production issues — many experienced teams start with a framework for prototyping, then simplify to custom code for production once the pattern is proven, precisely because framework abstractions can obscure what's actually happening at the prompt level.</p>
+        <p style="margin-bottom:0"><b>Why not just always use the largest, most capable model available?</b> Bigger models cost more per token and add latency; a smaller, cheaper, faster model is often entirely sufficient for a well-scoped task (like classification or simple Q&amp;A), reserving the largest models for genuinely complex reasoning — matching model size to task difficulty is a real cost/quality tradeoff, not a "bigger is strictly better" decision.</p>
+      </div>
+    </section>
+
+    <section id="cmptable">
+      <div class="sec-head">
+        <div class="num">13</div>
+        <h2>GenAI Approach Comparison Table</h2>
+      </div>
+      <div class="card cmp-wrap">
+        <table class="cmp-table">
+          <tr><th>Approach</th><th>Best for</th><th>Cost</th><th>Latency</th><th>Data freshness</th><th>Implementation complexity</th></tr>
+          <tr><td>Prompt engineering</td><td>Format/style/reasoning control, quick prototyping</td><td>Lowest (no extra infra)</td><td>Lowest</td><td>N/A — no new data</td><td>Very low</td></tr>
+          <tr><td>RAG</td><td>Grounding in specific, current, or private knowledge</td><td>Medium (vector DB + retrieval)</td><td>Medium (retrieval + generation)</td><td>High — update the doc, done</td><td>Medium-High</td></tr>
+          <tr><td>Fine-tuning (LoRA/PEFT)</td><td>Durable behavior/style/format change</td><td>Medium-High (training + hosting)</td><td>Low (once trained)</td><td>Low — requires retraining</td><td>High</td></tr>
+          <tr><td>Full fine-tuning</td><td>Deep behavior change at large model scale</td><td>Very high</td><td>Low (once trained)</td><td>Very low — expensive retrain</td><td>Very high</td></tr>
+          <tr><td>Agents</td><td>Multi-step tasks needing real actions/lookups</td><td>Higher (multiple LLM calls)</td><td>Higher (sequential tool calls)</td><td>High — tools query live data</td><td>High</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="redflags">
+      <div class="sec-head">
+        <div class="num">14</div>
+        <h2>Red Flags — Never Say This</h2>
+      </div>
+      <div class="redflag"><b>"GenAI and traditional ML are basically the same thing."</b> Conflates discriminative and generative modeling — a fundamental category error that signals shallow understanding to any technical interviewer.</div>
+      <div class="redflag"><b>"RAG eliminates hallucination."</b> RAG substantially reduces it by grounding in real retrieved text, but doesn't eliminate it — the model can still misread context or hallucinate when retrieval fails; overclaiming this is a well-known naive-practitioner tell.</div>
+      <div class="redflag"><b>"Fine-tuning is always better than RAG for adding knowledge."</b> Backwards for most real cases — fine-tuning is expensive to keep current and RAG is almost always the right default for knowledge that changes; see the decision framework in this stage.</div>
+      <div class="redflag"><b>"More context is always better — just stuff everything into the prompt."</b> Larger contexts cost more, add latency, and can actually degrade retrieval-relevant accuracy (models can get "lost in the middle" of very long contexts) — right-sized, well-chunked context beats maximalist context.</div>
+      <div class="redflag"><b>"An agent can just be given full autonomy and left to run without guardrails."</b> Agents take real actions with real consequences — shipping one without scoped permissions, human-in-the-loop checkpoints, or monitoring is a genuine operational risk, not just a theoretical concern.</div>
+    </section>
+
+    <section id="problems">
+      <div class="sec-head">
+        <div class="num">15</div>
+        <h2>30 Progressive Problems</h2>
+        <p>From a basic prompt design through a full RAG-plus-agent architecture design.</p>
+      </div>
+      <div class="filterbar" id="probfilter">
+        <button data-f="all" class="active">All</button>
+        <button data-f="easy">Easy</button>
+        <button data-f="med">Medium</button>
+        <button data-f="hard">Hard</button>
+        <button data-f="expert">Expert</button>
+      </div>
+      <div class="probgrid" id="probgrid"></div>
+    </section>
+
+    <section id="questions">
+      <div class="sec-head">
+        <div class="num">16</div>
+        <h2>80-Question Interview Bank</h2>
+        <p>Split into LLM Core (Foundations, Transformers, Prompting, Embeddings, RAG — 40 questions) and Applied AI (Agents, Fine-Tuning, Evaluation, Product &amp; Economics — 40 questions), comfortably exceeding the 75-question spec minimum.</p>
+      </div>
+      <div class="subhead">LLM Core: Foundations, Transformers, Prompting, Embeddings &amp; RAG (40 questions)</div>
+      <div class="card qbank" id="qbankCore"></div>
+      <div class="subhead">Applied AI: Agents, Fine-Tuning, Evaluation &amp; Product/Economics (40 questions)</div>
+      <div class="card qbank" id="qbankApplied"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">17</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card bridge-flow">
+        <span class="node">Chatbot requirements &amp; conversation-flow design</span><span class="arrow">→</span>
+        <span class="node">Rollout with technical team (Level A/B)</span><span class="arrow">→</span>
+        <span class="node">80% query coverage, 20% cost reduction</span><span class="arrow">→</span>
+        <span class="node">Full GenAI toolkit (this stage) for the next evolution</span><span class="arrow">→</span>
+        <span class="node">Honest, defensible answer on GenAI depth in any interview</span>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">18</div>
+        <h2>Mastery Checklist</h2>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+
+    <div class="card" style="padding:22px 26px; margin-top:60px;">
+      <p style="margin:0; font-size:.9rem; color:var(--ink-soft)">Next: <b>Stage 14 — Product Management</b>. Say "go" whenever you're ready.</p>
+    </div>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  var problems = [
+    ["easy","Write a zero-shot prompt asking an LLM to classify a support ticket's urgency as Low/Medium/High.","\"Classify this support ticket's urgency as Low, Medium, or High: '<ticket text>'\""],
+    ["easy","Convert the zero-shot prompt above into a few-shot prompt with two worked examples.","\"Classify urgency as Low/Medium/High.\\nEx: 'app is slow sometimes' -> Low\\nEx: 'payment failed, charged twice' -> High\\nNow classify: '<ticket text>'\""],
+    ["easy","Write a system prompt for a policy-answering bot that should never fabricate details.","\"You are a policy assistant. Answer ONLY using the provided context. If the answer isn't in the context, say you don't know and suggest contacting support.\""],
+    ["easy","Given a 900-token prompt and a 220-token response at $0.003/1K input and $0.015/1K output, compute the request cost.","(900/1000)*0.003 + (220/1000)*0.015 = 0.0027 + 0.0033 = $0.006"],
+    ["easy","Compute the cosine similarity of vectors [1,0] and [0,1].","dot=0, norms=1 each -> cos_sim = 0/1 = 0 (orthogonal, completely dissimilar)"],
+    ["easy","Compute the cosine similarity of vectors [2,2] and [4,4].","dot=16, ||A||=2.83, ||B||=5.66 -> cos_sim=16/16=1.0 (identical direction despite different magnitude)"],
+    ["easy","List the five steps of a basic RAG pipeline in order.","1) chunk+embed corpus 2) embed query 3) retrieve top-k 4) inject into prompt 5) LLM generates grounded answer"],
+    ["easy","Write a ReAct-style Thought/Action/Observation trace for an agent checking today's date via a tool.","Thought: I need today's date. Action: get_date(). Observation: 2026-08-23. Final Answer: Today is August 23, 2026."],
+    ["easy","Identify which lever (prompting, RAG, fine-tuning) fits: 'the bot's tone should be friendlier.'","Prompt engineering -- a tone/style change needs only a system prompt instruction, no infra."],
+    ["easy","Identify which lever fits: 'the bot needs to answer questions about our constantly-updated product catalog.'","RAG -- the knowledge changes often, so grounding via retrieval beats baking it into weights."],
+    ["med","Given N=2,000,000 documents at ~1 microsecond per brute-force comparison, estimate exact-search latency per query.","2,000,000 * 1e-6 sec = 2.0 seconds per query -- too slow for a live chatbot, motivating ANN search."],
+    ["med","Design a chunking strategy for a 40-page policy manual with 6 major sections, explaining chunk size choice.","Chunk by section/subsection (~150-300 words each) with slight overlap, so each chunk's embedding stays specific rather than diluted across the whole manual."],
+    ["med","Write a ROUGE-1-style overlap calculation for reference 'sales grew fast' vs generated 'revenue increased fast'.","ref={sales,grew,fast}(3) gen={revenue,increased,fast}(3) overlap={fast}(1) recall=1/3 precision=1/3 F1=1/3 -- low despite near-identical meaning, showing ROUGE's synonym blindness."],
+    ["med","Compute the LoRA parameter count for a 2048x2048 weight matrix at rank r=4, and the reduction vs full fine-tuning.","full=2048*2048=4,194,304 | LoRA: A=2048*4=8192, B=4*2048=8192, total=16,384 | reduction=16384/4194304≈0.0039 (~0.4%)"],
+    ["med","Compute the self-hosting breakeven query volume given $2,000/month infra cost and $0.005/query hosted API cost.","breakeven = 2000/0.005 = 400,000 queries/month -- below this, the hosted API is cheaper."],
+    ["med","Design a 3-step eval-driven development plan for a new GenAI FAQ feature, before writing any prompt.","1) define success criteria (e.g. 90%+ correct, zero fabrication) 2) build a 50-example eval set from real historical queries 3) prototype with prompting, measure against the eval set before escalating to RAG."],
+    ["med","Write a prompt using chain-of-thought to correctly compute: if conversion rate is 22% and calls rise from 300 to 380, how many more conversions per month?","\"Think step by step: 1) 300*0.22=66 now. 2) 380*0.22=83.6≈84. 3) 84-66=18 more conversions/month.\""],
+    ["med","Explain why setting temperature=0.9 would be a mistake for a compliance-answering bot.","High temperature increases randomness in token sampling, risking inconsistent or subtly wrong answers to the same compliance question asked twice -- compliance needs temperature near 0 for consistency."],
+    ["med","Design a 2-agent orchestration (orchestrator + specialist) for 'summarize this week's West region calls with a chart.'","Orchestrator delegates: Data Agent queries call metrics; Viz Agent builds the chart; orchestrator synthesizes both into one summary and checks the chart matches the stated numbers."],
+    ["med","Diagnose a RAG system returning wrong answers: is it a retrieval or generation problem, and how would you check?","Check retrieval first -- log which chunks were actually retrieved for the failing query; if the right chunk wasn't retrieved, it's a chunking/embedding problem, not a generation problem."],
+    ["hard","Design a full RAG architecture for a 500-page technical manual, specifying chunking strategy, embedding model choice rationale, vector DB choice, and retrieval top-k.","Section-based chunking (~200 words, slight overlap) -> a general-purpose embedding model -> a managed vector DB (e.g. Pinecone) for ease of ops at this scale -> retrieve top-5, rerank to top-3 before generation."],
+    ["hard","Build a complete decision-framework writeup choosing between prompting, RAG, and fine-tuning for three distinct hypothetical GenAI feature requests.","Feature 1 (tone) -> prompting. Feature 2 (current product catalog Q&A) -> RAG. Feature 3 (strict internal taxonomy classification at scale) -> LoRA fine-tuning -- each justified by whether the need is style, current knowledge, or durable behavior."],
+    ["hard","Write a full grounded-RAG prompt template (system + context + user) that explicitly prevents hallucination beyond the provided context.","system: 'Answer ONLY using the provided context below. If the answer is not present, say so explicitly and do not guess.' context: <retrieved chunks> user: <question>"],
+    ["hard","Design an agent tool-use flow answering 'is our West region above the Central region in conversion this quarter,' including all tool calls and the final synthesis.","Thought->query_db(West avg) Observation:0.24 -> Thought->query_db(Central avg) Observation:0.21 -> Thought: 0.24>0.21 -> Final Answer: Yes, West (24%) is above Central (21%) this quarter."],
+    ["hard","Given hosted-API cost of $0.004/query and self-hosting infra of $2,200/month, compute breakeven volume and recommend a path at 60,000 queries/month.","breakeven=2200/0.004=550,000 queries/month; at 60,000/month (well below breakeven), the hosted API is clearly cheaper -- recommend the hosted API."],
+    ["hard","Design an evaluation rubric (at least 4 criteria) for LLM-as-judge scoring of a customer-support chatbot's answers.","1) Factual accuracy vs. source docs 2) No fabricated details 3) Appropriate escalation when unsure 4) Tone/format consistency with brand guidelines -- each scored e.g. 1-5 by a judge LLM against provided reference answers."],
+    ["hard","Explain, with a worked example, why a 2,000-word single-chunk policy document underperforms a section-chunked version in retrieval.","A single chunk embeds 'about everything' (shipping+returns+warranty combined), diluting its similarity score for a return-specific query; splitting into 200-300 word section chunks makes the return-specific chunk's embedding sharply distinct, ranking it correctly in top-k."],
+    ["expert","Design a complete production GenAI chatbot architecture (RAG + evaluation + hallucination safeguards + cost monitoring) to replace a rule-based system handling 50,000 queries/month at 80% coverage, including a rollout plan.","RAG over the knowledge base (chunked by section) -> grounded generation with 'say I don't know' fallback -> LLM-as-judge + human spot-check eval pipeline -> cost dashboard tracking $/query against the $200/month hosted-API baseline -> phased rollout: shadow mode against the rule-based bot's queries first, then gradual traffic shift, monitoring coverage and hallucination rate at each stage."],
+    ["expert","Design a multi-agent system (at least 3 agents) for an 'agentic analytics workflow' GenAI portfolio project, specifying each agent's tools and the orchestrator's synthesis/consistency checks.","Data Agent (SQL tool, read-only) -> Viz Agent (chart-generation tool) -> Writing Agent (drafts executive summary) -> Orchestrator delegates each subtask, then cross-checks that the written summary's stated numbers match the Data Agent's actual query output before returning the final brief."],
+    ["expert","Write a full LoRA vs. full-fine-tuning vs. RAG decision memo for a company needing their support bot to strictly follow an internal 40-category ticket taxonomy on 500,000 tickets/month.","Recommend LoRA fine-tuning on labeled historical tickets (a durable behavior/classification-consistency need, not a knowledge-freshness need) over RAG (wrong tool -- this isn't a lookup problem) and over full fine-tuning (unjustifiably expensive given LoRA captures ~99%+ of the benefit at a fraction of the parameter/compute cost, per the worked LoRA math in this stage)."]
+  ];
+
+  var qasCore = [
+    ["What's the core difference between AI, ML, and GenAI?","AI is the broadest umbrella (any human-like task performance, including rule-based systems); ML is the subset that learns from data; GenAI is the subset of ML that generates new content, built mostly on transformer-based deep learning."],
+    ["What's the difference between discriminative and generative modeling?","Discriminative models learn P(y|x) -- a fixed prediction for a fixed input (like XGBoost's conversion probability); generative models learn to sample new data from a learned distribution, which is how an LLM generates each next token."],
+    ["Why can the same LLM prompt produce different outputs on different runs?","Generation is a sampling process over a probability distribution at each token step; unless temperature is set to 0 (near-deterministic), the model samples rather than always picking the single highest-probability token."],
+    ["What is the transformer architecture's key innovation over older RNN/LSTM models?","Self-attention lets the model process a sequence in parallel and directly connect distant tokens, rather than processing sequentially and struggling with long-range dependencies like RNNs."],
+    ["Explain self-attention's Query/Key/Value mechanism in one sentence.","Each token is projected into Query, Key, and Value vectors; attention weights come from the similarity (dot product) of a token's Query against every token's Key, then those weights combine the Values into a context-aware representation."],
+    ["Why does a transformer use multiple attention 'heads' rather than one?","Different heads can learn to attend to different types of relationships (e.g. syntactic vs. referential) in parallel, giving the model a richer combined representation than a single attention pass would."],
+    ["What is a token, and roughly how many tokens is 100 words of English?","A subword unit produced by tokenization (e.g. Byte-Pair Encoding); roughly 100 words is about 130-140 tokens in English (rule of thumb: ~0.75 words per token)."],
+    ["Why is LLM output generation typically slower than processing the input prompt?","Reading the prompt is parallelizable across all tokens at once; generating output is autoregressive and inherently sequential -- each new token depends on all tokens generated before it."],
+    ["What does 'autoregressive generation' mean?","The model predicts one token at a time, feeding each generated token back in as input for predicting the next one, continuing until a stop condition."],
+    ["What's the difference between zero-shot and few-shot prompting?","Zero-shot gives only an instruction with no examples; few-shot includes worked input-output examples in the prompt to demonstrate the desired pattern/format without any model retraining."],
+    ["When does chain-of-thought prompting help most?","On multi-step reasoning or arithmetic tasks, where asking the model to show intermediate steps reduces the chance of an incorrect final answer compared to jumping straight to it."],
+    ["What are the three standard prompt roles in a chat-based LLM API?","System (persistent instructions/persona), user (the query), and assistant (the model's prior responses, for multi-turn context)."],
+    ["What does temperature control, and what value would you use for a factual Q&A bot?","Temperature controls the randomness of token sampling; near 0 for a factual/policy bot, so the same question consistently gets the same answer."],
+    ["What is top-p (nucleus) sampling, and how does it differ from temperature?","Top-p restricts sampling to the smallest set of tokens whose cumulative probability exceeds p; temperature reshapes the sharpness of the whole distribution -- they're often combined, not alternatives."],
+    ["What is an embedding, in one sentence?","A dense numeric vector representing a piece of text such that semantically similar text produces similar vectors, generated by a separate embedding model from the LLM itself."],
+    ["Why is cosine similarity preferred over Euclidean distance for comparing text embeddings?","Cosine similarity ignores vector magnitude and focuses on direction (semantic meaning), while magnitude differences often just reflect text length rather than meaning."],
+    ["What does a cosine similarity of 0 mean, versus 1, versus -1?","0 means the vectors are orthogonal (unrelated); 1 means identical direction (very similar meaning); -1 means opposite direction (semantically opposed), though -1 is rare for typical text embeddings."],
+    ["Why can't exact nearest-neighbor search scale to millions of embedded documents?","It requires comparing the query against every stored vector (O(n) per query), which becomes too slow (seconds) at large scale for a live application."],
+    ["What is Approximate Nearest Neighbor (ANN) search, and what does it trade off?","An algorithm (e.g. HNSW) that finds a very likely, but not always exactly the closest, match much faster than exact search -- trading a small accuracy loss for orders-of-magnitude faster query time."],
+    ["Name three vector database options.","Pinecone (managed), Weaviate (managed/self-hosted), pgvector (Postgres extension) -- FAISS and Milvus are also common self-hosted options."],
+    ["What is RAG, in one sentence?","Retrieval-Augmented Generation: combining retrieval of relevant documents with LLM generation, grounding the answer in retrieved context rather than relying solely on the model's frozen training knowledge."],
+    ["List the five steps of a RAG pipeline.","Chunk and embed the corpus; embed the incoming query; retrieve the top-k most similar chunks; inject them into the prompt as context; the LLM generates an answer grounded in that context."],
+    ["Why does RAG reduce hallucination compared to an ungrounded LLM?","The model is instructed to answer only from explicitly provided, retrieved real text, rather than generating a plausible-sounding answer purely from its training-time memorized patterns."],
+    ["What's the biggest lever for improving RAG answer quality, and why is it often underestimated?","Chunking strategy -- poorly-sized chunks dilute or fragment the embedding's specificity, which directly determines whether the right information is even retrieved before generation happens."],
+    ["What happens if a chunk is too large in a RAG system?","The embedding gets diluted across too many unrelated topics, reducing its similarity score for any one specific query, so it may not be retrieved even when it contains the right answer."],
+    ["What happens if a chunk is too small in a RAG system?","It can lose the surrounding context needed to make sense of the retrieved snippet, producing an accurate-but-incomplete or confusing answer."],
+    ["What is reranking in a RAG pipeline?","A second, more precise pass (often with a cross-encoder model) over the initial top-k retrieved candidates, to improve precision before final context is assembled for generation."],
+    ["Does RAG eliminate hallucination completely?","No -- it substantially reduces it by grounding in real retrieved text, but the model can still misread or misstate the retrieved context, or hallucinate when retrieval fails to surface anything relevant."],
+    ["Why might you choose RAG over fine-tuning for a frequently-updated policy document?","RAG's source of truth lives in an easily-updatable document store; updating the document updates the bot's answers immediately, with no retraining needed."],
+    ["What's a common mistake when instructing an LLM in a RAG system?","Not explicitly instructing it to answer ONLY from the provided context and to say so if the answer isn't covered -- without that, it can still fabricate details even with retrieved context available."],
+    ["How would you debug a RAG system giving a wrong answer?","Check retrieval first -- was the correct chunk actually retrieved? Often the failure is in chunking/embedding/retrieval, not the generation step, so diagnose in that order."],
+    ["What's the difference between an embedding model and the generative LLM in a RAG system?","They're typically separate models -- the embedding model converts text into vectors for similarity search; the generative LLM produces the final natural-language answer from the retrieved context."],
+    ["Why is a rough rule of thumb '~4 characters per token' useful in practice?","It lets you quickly estimate token counts (and therefore cost and context-window usage) for a piece of text without running the actual tokenizer."],
+    ["What is 'lost in the middle' in the context of long LLM contexts?","A known phenomenon where models can pay less attention to information placed in the middle of a very long context versus the beginning or end, motivating right-sized, well-organized context rather than maximalist stuffing."],
+    ["Give a daily-life analogy for why embeddings let 'sneakers' and 'running shoes' be matched even with no shared words.","A librarian understands 'how to fix a leaky faucet' and 'plumbing repair guide' mean the same thing despite zero word overlap -- embeddings capture that same meaning-based closeness numerically."],
+    ["What's a fixed-size chunking strategy, and what's its main weakness versus semantic chunking?","Splitting text into equal character/token-length pieces regardless of content boundaries; its weakness is it can split a coherent idea awkwardly across two chunks, unlike semantic/section-based chunking."],
+    ["Why would you use overlap between chunks in a chunking strategy?","To avoid losing context at chunk boundaries -- a sentence split exactly at a chunk edge could lose meaning without a small amount of shared overlap between adjacent chunks."],
+    ["What is a system prompt, and why does it matter for consistent bot behavior?","A persistent instruction set (persona, constraints, tone) sent with every request; it's the main lever for consistent behavior across many different user queries."],
+    ["Why would an interviewer consider 'GenAI and ML are the same thing' a red flag answer?","It conflates discriminative modeling (predicting a label/number, most of Stages 6-11) with generative modeling (sampling new content) -- a fundamental category error, not a minor imprecision."],
+    ["What's the honest answer if asked whether you've personally built a RAG pipeline in production?","Not hands-on in a work setting -- deep conceptual and architectural understanding built through structured study, with the real hands-on GenAI-adjacent experience being the Hero Electronics chatbot's product design and rollout, not model/RAG engineering."]
+  ];
+
+  var qasApplied = [
+    ["What is an agent, in the LLM context?","An LLM given access to external tools (functions it can call) and looped so it can reason, act, observe results, and decide next steps, rather than answering in a single shot."],
+    ["Explain the ReAct pattern.","Reason + Act: the model alternates between a Thought (reasoning about what to do), an Action (a tool call), and an Observation (the tool's result), repeating until it has enough information for a final answer."],
+    ["Why might an agent be preferred over a plain LLM call for a factual business question?","A plain LLM call can only answer from memorized training data (risking hallucination on specific, current facts); an agent can call a real tool (e.g. a database query) to get an actual, current, correct number."],
+    ["What's the biggest operational risk specific to agents (versus plain chat LLMs)?","Agents take real actions with real consequences -- a poorly-scoped tool, tool-call error, or ungrounded reasoning step carries operational risk that a text-only chat response doesn't."],
+    ["What is multi-agent orchestration, in one sentence?","Splitting a complex task across multiple specialized agents (e.g. a data agent, a viz agent, a writing agent) coordinated by an orchestrator that delegates subtasks and synthesizes results."],
+    ["Why might an orchestrator perform a consistency check across specialist agents' outputs?","To catch a scenario where, e.g., a written summary's stated numbers don't actually match a separately-generated chart -- a safeguard against silent inconsistency across specialized outputs."],
+    ["When is a single-agent approach better than multi-agent orchestration?","For genuinely simple, single-tool tasks, where the extra latency, cost (multiple LLM calls), and failure points of orchestration aren't justified by any real task decomposition benefit."],
+    ["Name two multi-agent/agent-framework tools.","LangChain and LlamaIndex are common frameworks providing scaffolding for agent loops, RAG pipelines, and memory management; CrewAI is another multi-agent-specific framework."],
+    ["What's the recommended order for trying prompting, RAG, and fine-tuning on a new GenAI problem?","Prompt engineering first (cheapest, fastest to iterate); RAG next if the model needs specific/current/private knowledge; fine-tuning last, only if a durable behavior change is truly needed beyond what prompting/RAG can achieve."],
+    ["Why is fine-tuning a poor fit for a frequently-changing product catalog?","Fine-tuning bakes knowledge into frozen model weights, requiring an expensive retrain every time the catalog updates -- RAG's updatable document store fits this need far better."],
+    ["When IS fine-tuning the right choice over RAG?","When the need is a durable behavior/skill/format change (e.g. consistently following a specific internal taxonomy across many edge cases) rather than a knowledge-lookup problem."],
+    ["What is LoRA, and why is it used instead of full fine-tuning?","Low-Rank Adaptation: freezes the original model weights and trains only small added low-rank matrices, capturing most of full fine-tuning's benefit at a small fraction of the trainable-parameter count and compute cost."],
+    ["Roughly what fraction of full fine-tuning's parameters does LoRA typically train, for a single layer at rank 8?","Often under 1% -- e.g. for a 4096x4096 matrix, LoRA at rank 8 trains about 0.4% as many parameters as full fine-tuning that layer."],
+    ["What is RLHF, and who typically performs it?","Reinforcement Learning from Human Feedback -- aligning a base model's behavior with human preferences using human-ranked comparisons; typically performed by model providers on base models, not by individual application teams."],
+    ["Can fine-tuning and RAG be combined? Give an example.","Yes -- fine-tune a model to better follow a desired output format/behavior while still using RAG to supply current, specific facts; the two levers are complementary, not mutually exclusive."],
+    ["Why is evaluating generated text harder than evaluating a classifier's accuracy?","There's often no single 'correct' output for open-ended generation -- many valid phrasings can be equally correct, so simple exact-match accuracy doesn't apply the way it does to a fixed-label classification task."],
+    ["What does ROUGE measure, and what's its main weakness?","Word/n-gram overlap between generated and reference text; its main weakness is missing semantic equivalence -- synonyms and paraphrases score low overlap even when the meaning is identical."],
+    ["What is 'LLM-as-judge' evaluation?","Using a strong LLM to score another model's outputs against a defined rubric -- a more semantically-aware alternative to overlap-based metrics like ROUGE/BLEU, though still not as reliable as careful human evaluation."],
+    ["What is hallucination, defined precisely?","An LLM generating fluent, confident-sounding text that is factually wrong or unsupported by any real source -- a natural consequence of generative sampling rather than an occasional bug."],
+    ["Name three concrete mitigation strategies for hallucination.","RAG grounding with an explicit 'answer only from provided context' instruction, lower temperature for factual tasks, and explicitly designing the product to let the model say 'I don't know' rather than always producing an answer."],
+    ["Why is 'let the model say I don't know' considered a critical design choice, not just a nice-to-have?","Without an explicit permission/instruction to abstain, a model tends to produce a plausible-sounding answer regardless of whether it actually knows -- exactly the confidently-wrong failure mode that erodes user trust fastest."],
+    ["What is eval-driven development, and what does it mirror from traditional software engineering?","Building a representative evaluation set with known-good answers before building a GenAI feature, then measuring against it at every iteration -- mirrors test-driven development, adapted for probabilistic, non-deterministic systems."],
+    ["Why should an eval set be built from real historical data rather than synthetic examples where possible?","Real historical queries (e.g. from an existing chatbot's logs) reflect the actual distribution of real user questions, including edge cases synthetic examples might miss."],
+    ["What are the six steps of a disciplined AI product development lifecycle described in this stage?","(1) Define success criteria (2) build an eval set (3) prototype with prompting (4) measure against the eval set (5) escalate to RAG/fine-tuning only if needed (6) ship with monitoring and a human-in-the-loop fallback."],
+    ["Why shouldn't 'the demo looked impressive' be treated as evidence a GenAI feature is ready to ship?","Demos are notoriously unreliable indicators of real-world performance -- they're often cherry-picked or run on easy inputs; only performance against a representative, predefined evaluation set is real evidence."],
+    ["What are the main cost components of a GenAI feature?","Per-token API pricing (input and output priced differently), latency/user-perceived wait time, and the build-vs-buy infrastructure decision (hosted API vs. self-hosted model)."],
+    ["When does self-hosting an open-source model become cost-competitive with a hosted API?","Only above a real computed breakeven query volume (infrastructure cost divided by per-query hosted-API cost) -- often several hundred thousand queries/month for a modest GPU instance, well above many real-world use cases' actual volume."],
+    ["Besides cost, name two other reasons a company might choose to self-host a model.","Strict data-residency/privacy requirements a hosted API can't satisfy, and a need for deep customization beyond what a hosted API's fine-tuning options allow."],
+    ["Why is 'always use the biggest, most capable model' not sound default advice?","Bigger models cost more per token and add latency; many tasks (simple classification, basic Q&A) are handled entirely adequately by smaller, cheaper, faster models -- match model size to task difficulty."],
+    ["What's the honest way to describe your GenAI experience if the Hero Electronics chatbot turns out to have been rule-based, not LLM-based?","I owned the product design, requirements, and rollout of a conversational AI product with real, measured business impact (20% cost reduction); the underlying bot technology mix was handled collaboratively with the technical team, and I've since built deep conceptual GenAI/LLM depth on my own for the more advanced architecture questions."],
+    ["What was the MakeMyTrip case competition's GenAI component, and how should it be honestly framed?","A GenAI-driven travel-bundling recommendation idea proposed during a case competition (semifinal, top 10 universities) -- ideation and strategy only, not a technical build, and should be framed that way if asked."],
+    ["Why is 'the chatbot achieved 80% query coverage' a stronger, more specific claim than 'the chatbot used AI'?","It's a concrete, measurable, defensible number tied to real product-design decisions (what to automate vs. escalate), rather than a vague buzzword that invites deeper technical challenge without a solid answer behind it."],
+    ["Give the honest Level C framing for a question about production-scale agent orchestration experience.","Deep conceptual understanding of orchestrator/specialist patterns and their tradeoffs, built for structured interview preparation -- not personal hands-on production agent-system engineering experience."],
+    ["What would you say if an interviewer asked you to design a GenAI upgrade to a chatbot you'd previously owned end-to-end?","I'd start from the real baseline I know firsthand (80% coverage, 20% cost reduction, what the 20% gap queries actually looked like), define success criteria and an eval set from that real query log, then walk through prompting-first, RAG-if-needed, with explicit hallucination safeguards before ever considering fine-tuning."],
+    ["Why does 'I understand this deeply but haven't personally built it in production' remain a strong interview answer rather than a weakness?","It's honest, defensible under follow-up questioning, and paired with genuine mechanism-level depth (attention math, RAG architecture, LoRA parameter math) it demonstrates real technical seriousness rather than either false claims or surface-level buzzwords."],
+    ["What's the single most important discipline this stage emphasizes for any GenAI product decision?","Ground every architectural choice in a concrete tradeoff (cost, latency, freshness, complexity) rather than a general instinct like 'AI will make it better' -- the same evidence-based rigor applied throughout the rest of this masterbook."],
+    ["Why is chunking strategy often described as higher-leverage than choice of LLM in a RAG system?","Poor chunking can prevent the right information from ever being retrieved at all, which no amount of generation-model quality can fix downstream -- retrieval quality is a hard ceiling on overall system quality."],
+    ["What's the relationship between an agent's tool-call risk and the need for scoped permissions?","A tool that can, e.g., delete data or send an email carries real consequences if called incorrectly; scoping exactly what each tool can do (and adding human-in-the-loop checkpoints for consequential actions) is the practical mitigation."],
+    ["Give a 30-second answer to 'what's the difference between RAG and fine-tuning?'","RAG grounds an LLM's answers in retrieved, up-to-date external documents at query time without changing the model; fine-tuning permanently updates the model's weights on a training set to change its underlying behavior -- RAG for changing knowledge, fine-tuning for changing durable behavior."],
+    ["Give a 2-minute answer connecting this whole stage back to the Hero Electronics chatbot.","I owned the requirements and rollout of a real chatbot product that hit 80% query coverage and a 20% cost reduction, working with a technical team on the actual build -- I can't claim I personally engineered an LLM system there, but I've since built deep, mechanism-level GenAI knowledge: how transformers and embeddings work, how RAG grounds answers to avoid hallucination, when fine-tuning versus RAG versus plain prompting is the right lever, how agents extend an LLM into taking real actions, and how to evaluate and cost out a GenAI feature properly. If asked to design the next evolution of that chatbot, I'd start from the real 20%-gap query log, define success criteria, and build up from prompting to RAG with explicit hallucination safeguards -- exactly the disciplined, evidence-based approach this whole masterbook is built around."]
+  ];
+} catch (err) { console.error('Stage 13 data error:', err); }
+</script>
+<script>
+try {
+  var probGrid = document.getElementById('probgrid');
+  problems.forEach(function(p, i){
+    var diff = p[0], q = p[1], code = p[2];
+    var det = document.createElement('details');
+    det.className = 'prob';
+    det.setAttribute('data-diff', diff);
+    det.innerHTML = '<summary><span class="pnum">P' + (i+1) + '</span><span class="pdiff ' + diff + '">' + diff + '</span><span>' + esc(q) + '</span></summary>' +
+      '<div class="prob-body"><div class="codeblock">' + code.replace(/\n/g,'<br>') + '</div></div>';
+    probGrid.appendChild(det);
+  });
+  document.getElementById('probfilter').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('#probfilter button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var f = btn.getAttribute('data-f');
+    document.querySelectorAll('#probgrid details.prob').forEach(function(d){
+      d.style.display = (f === 'all' || d.getAttribute('data-diff') === f) ? '' : 'none';
+    });
+  });
+
+  function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+  function renderQA(containerId, bank){
+    var box = document.getElementById(containerId);
+    bank.forEach(function(qa){
+      var det = document.createElement('details');
+      det.className = 'qa';
+      det.innerHTML = '<summary>' + esc(qa[0]) + '</summary><div class="qa-a"><b>A:</b> ' + esc(qa[1]) + '</div>';
+      box.appendChild(det);
+    });
+  }
+  renderQA('qbankCore', qasCore);
+  renderQA('qbankApplied', qasApplied);
+
+  var masteryItems = [
+    "Explain AI vs ML vs GenAI as a nested relationship, with a real example",
+    "Explain self-attention's Query/Key/Value mechanism and walk through a toy calculation",
+    "Explain tokenization and estimate token count/cost for a given prompt",
+    "Explain zero-shot vs few-shot vs chain-of-thought prompting, with an example of each",
+    "Explain temperature and top-p, and pick the right value for a given task",
+    "Compute cosine similarity between two toy embedding vectors by hand",
+    "Explain why ANN search is necessary at scale, with the brute-force latency math",
+    "Walk through a full RAG pipeline end to end with a concrete example",
+    "Explain chunking strategy and why it's often the highest-leverage RAG lever",
+    "Walk through a ReAct-style agent trace with real tool calls",
+    "Explain multi-agent orchestration and when it's NOT worth the complexity",
+    "Explain the fine-tuning vs RAG vs prompting decision framework with 3 examples",
+    "Explain LoRA and compute its parameter-count reduction vs full fine-tuning",
+    "Explain hallucination's cause and at least 3 concrete mitigation strategies",
+    "Explain eval-driven development and why demos are unreliable evidence",
+    "Compute a self-hosting vs hosted-API breakeven query volume",
+    "Give the honest Level A/B/C answer for the Hero Electronics chatbot without overclaiming",
+    "Answer all 5 Red Flags correctly without hesitation"
+  ];
+  var mBox = document.getElementById('masteryBox');
+  var STORE_KEY = 'masterbook-s13-mastery';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e) { saved = {}; }
+  masteryItems.forEach(function(txt, i){
+    var row = document.createElement('div');
+    row.className = 'cl-item' + (saved[i] ? ' checked' : '');
+    row.innerHTML = '<div class="box' + (saved[i] ? ' done' : '') + '" data-i="' + i + '"></div><span class="txt">' + esc(txt) + '</span>';
+    mBox.appendChild(row);
+  });
+  mBox.addEventListener('click', function(e){
+    var box = e.target.closest('.box');
+    if (!box) return;
+    var i = box.getAttribute('data-i');
+    var isDone = box.classList.toggle('done');
+    box.closest('.cl-item').classList.toggle('checked', isDone);
+    saved[i] = isDone;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch(e) {}
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    backtop.classList.toggle('show', window.scrollY > 500);
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 13 loaded — problems:', problems.length, 'Core Qs:', qasCore.length, 'Applied Qs:', qasApplied.length);
+} catch (err) {
+  console.error('Stage 13 script error:', err);
+}
+</script>

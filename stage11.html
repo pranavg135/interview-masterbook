@@ -1,0 +1,834 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>A/B Testing &amp; Experimentation</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .concept-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+  .concept{ padding:20px 22px; }
+  .concept h4{ font-size:1rem; margin-bottom:8px; }
+  .concept p{ font-size:.88rem; color:var(--ink-soft); margin:0 0 8px; }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .worked{ margin-top:14px; border:1px dashed var(--line-strong); border-radius:10px; padding:16px 18px; background:var(--paper-sunken); }
+  .worked .wk-label{ font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; }
+  .worked .wk-result{ margin-top:8px; font-size:.85rem; color:var(--ink-soft); }
+
+  .exstrip{ margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px 16px; border-top:1px solid var(--line); padding-top:12px; }
+  .exstrip .ex{ font-size:.8rem; }
+  .exstrip .ex b{ display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:2px; font-weight:700; }
+  .exstrip .ex span{ color:var(--ink-soft); }
+
+  .probgrid{ display:flex; flex-direction:column; gap:10px; }
+  details.prob{ border:1px solid var(--line); border-radius:10px; background:var(--paper-raised); }
+  details.prob summary{ padding:12px 18px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.9rem; }
+  details.prob summary::-webkit-details-marker{ display:none; }
+  details.prob summary .pnum{ font-family:"IBM Plex Mono"; font-size:.75rem; color:var(--data); background:var(--data-soft); padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  details.prob summary .pdiff{ font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  .pdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .pdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .pdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .pdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  .prob-body{ padding:0 18px 16px; }
+
+  .qbank{ display:flex; flex-direction:column; gap:0; }
+  details.qa{ border-bottom:1px solid var(--line); }
+  details.qa:last-child{ border-bottom:none; }
+  details.qa summary{ padding:13px 20px; cursor:pointer; list-style:none; font-size:.9rem; font-weight:500; display:flex; gap:12px; align-items:baseline; }
+  details.qa summary::-webkit-details-marker{ display:none; }
+  details.qa summary::before{ content:"Q"; font-family:"IBM Plex Mono"; font-size:.68rem; color:var(--data); background:var(--data-soft); padding:2px 6px; border-radius:5px; flex:0 0 auto; }
+  details.qa .qa-a{ padding:0 20px 16px 58px; font-size:.86rem; color:var(--ink-soft); }
+  details.qa .qa-a b{ color:var(--ink); }
+
+  .redflag{ padding:13px 17px; border-left:4px solid var(--lvlA); background:var(--lvlA-soft); border-radius:0 8px 8px 0; margin-bottom:9px; font-size:.87rem; }
+  .redflag b{ color:var(--lvlA); }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  .framebox{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+  .frame-a{ border-top:4px solid var(--data); }
+  .frame-b{ border-top:4px solid var(--lvlC); }
+  .frame-c{ border-top:4px solid var(--lvlB); }
+  .framebox .fh{ font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; padding:14px 18px 0; }
+  .frame-a .fh{ color:var(--data); }
+  .frame-b .fh{ color:var(--lvlC); }
+  .frame-c .fh{ color:var(--lvlB); }
+  .framebox .fb{ padding:8px 18px 18px; font-size:.87rem; color:var(--ink-soft); }
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+  .subhead{ font-family:"Fraunces"; font-size:1.15rem; font-weight:600; margin:36px 0 14px; padding-top:8px; border-top:1px solid var(--line); }
+  .subhead:first-child{ border-top:none; padding-top:0; margin-top:0; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <div class="stage-pill">● Stage 11 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#honest">Honest CV Framing</a></li>
+      <li><a href="#design">Experiment Design Fundamentals</a></li>
+      <li><a href="#power">Power, Sample Size &amp; MDE</a></li>
+      <li><a href="#srm">Sample Ratio Mismatch</a></li>
+      <li><a href="#novelty">Novelty &amp; Primacy Effects</a></li>
+      <li><a href="#multiple">The Multiple Testing Problem</a></li>
+      <li><a href="#sequential">Sequential Testing &amp; Peeking</a></li>
+      <li><a href="#altmodels">Alternative Methods — Why This, Why Not That</a></li>
+      <li><a href="#cmptable">Experimentation Method Comparison Table</a></li>
+      <li><a href="#redflags">Red Flags</a></li>
+      <li><a href="#problems">30 Coding Problems</a></li>
+      <li><a href="#questions">70-Question Interview Bank</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+      <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 20 (Market Sizing) is next, followed by Operations, Product, Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part VI · Stage 11 of 33</div>
+      <h1>A/B Testing &amp; Experimentation</h1>
+      <p class="lede">Statistical Testing (Hypothesis Testing, A/B Testing, AUC/ROC) is a named skill across your CVs — this stage takes Stage 2's hypothesis-testing foundations and builds the full experimentation toolkit on top: proper test design, power analysis, and the traps that separate a real experimentation practitioner from someone who's only run t-tests. Sample ratio mismatch, novelty effects, multiple testing, and the peeking problem — the exact questions that expose whether "A/B testing" on a CV is real experience or a buzzword.</p>
+      <div class="statusbar">
+        <div class="statuschip">🧪 9 concept modules: Design → Power → SRM → Novelty → Multiple Testing → Sequential Testing</div>
+        <div class="statuschip">🧮 Every concept has a worked numeric example + real Python output</div>
+        <div class="statuschip">🧩 <b>30</b> progressive coding problems</div>
+        <div class="statuschip">❓ <b>70</b> interview questions with model answers</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">Stage 2 built the statistical testing machinery (t-tests, chi-square, hypothesis testing mechanics) that A/B testing is built on — but running the machinery correctly is only half of real experimentation competence. The other half is knowing the specific ways A/B tests silently go wrong in practice: an imbalanced randomization nobody noticed (SRM), a result that looked significant but was really just users reacting to novelty rather than genuine preference, a "significant" result that's actually one false positive out of twenty metrics tested, or a test stopped early because it "looked significant" on day 3. These failure modes are exactly what separates an interviewer's easy question ("what's a p-value") from the harder, more revealing one ("tell me about a time an A/B test result turned out to be misleading, and how you caught it") — and this stage builds the answer to both.</p>
+      </div>
+    </section>
+
+    <section id="honest">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Honest CV Framing</h2>
+        <p>"Statistical Testing (Hypothesis Testing, A/B Testing, AUC/ROC)" appears as a named skill across your CVs — a genuine claim that deserves the real Level A/B/C treatment.</p>
+      </div>
+      <div class="framebox">
+        <div class="card frame-a">
+          <div class="fh">Level A — What I actually did</div>
+          <div class="fb">Applied hypothesis testing and statistical evaluation methods (t-tests, chi-square, and AUC/ROC for model evaluation, as covered in Stage 2/6) as part of the analytical work at Axtria — comparing groups, evaluating model performance, and drawing statistically grounded conclusions rather than eyeballing differences.</div>
+        </div>
+        <div class="card frame-b">
+          <div class="fh">Level B — What I should understand deeply</div>
+          <div class="fb">The full mechanics of designing and running a proper A/B test end to end: power analysis and sample size planning, the specific failure modes (SRM, novelty effects, multiple testing, peeking), and how to interpret a result rigorously rather than just reading off a p-value. This is the natural, expected extension of the hypothesis-testing skill already on the CV, even where a specific large-scale product A/B test isn't a named CV claim.</div>
+        </div>
+        <div class="card frame-c">
+          <div class="fh">Level C — Honest framing for anything beyond that</div>
+          <div class="fb">If asked about running a full-scale, high-traffic product experimentation platform (feature flags, automated stats pipelines, thousands of concurrent tests), the honest answer is: "My hands-on hypothesis-testing and statistical evaluation work was applied at the analysis level, not building experimentation infrastructure — I understand the platform-level concerns (SRM detection, sequential testing correction) conceptually, but haven't personally built that tooling." Never claim to have built or operated a large-scale experimentation platform that didn't happen.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="design">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>Experiment Design Fundamentals</h2>
+        <p>Before any statistics: what makes a test a fair, valid comparison in the first place.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Randomization, Control/Treatment &amp; Causal Validity <span class="lvl lvl-B">B</span></h4>
+          <p>An A/B test's entire causal validity rests on proper randomization: every unit (user, session, account) has an equal, independent chance of landing in control or treatment, so any systematic difference in outcomes can be attributed to the treatment itself rather than pre-existing differences between groups. This is what elevates an A/B test above the correlation-only observational analysis from Stage 2 — controlled randomization is specifically what allows a causal claim, not just a correlational one.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">import numpy as np, pandas as pd
+
+<span class="cmt"># Randomly assign 10,000 users to control/treatment via hashed user_id</span>
+users["bucket"] = users["user_id"].apply(
+    lambda uid: "treatment" if hash(str(uid) + "exp_v1") % 2 == 0 else "control"
+)
+print(users["bucket"].value_counts())
+<span class="out"># control: 5,012   treatment: 4,988  -- close to a clean 50/50 split</span>
+
+<span class="cmt"># Verify pre-experiment covariates are balanced (a "balance check")</span>
+print(users.groupby("bucket")["avg_past_purchases"].mean())
+<span class="out"># control: 3.41   treatment: 3.39  -- no meaningful pre-existing difference</span></div>
+            <div class="wk-result">Hashing on user_id gives a stable, reproducible 50/50 split, and the balance check confirms the two groups looked statistically identical before the treatment was ever applied — this pre-experiment balance check is exactly what justifies attributing any later outcome difference to the treatment itself, not to a lucky or unlucky group composition.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A fair coin flip deciding which of two identical-looking routes you take to work each day — no reason to expect one route's users to be systematically different people.</span></div>
+            <div class="ex"><b>Consumer</b><span>Every major tech company's "you're seeing a new feature" rollout is typically a randomized A/B test behind the scenes, not a blanket launch.</span></div>
+            <div class="ex"><b>Business</b><span>Randomly assigning half of a call list to a new sales script versus the old one, so any difference in conversion is attributable to the script, not to which reps happened to get which customers.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly relevant to Axtria-style work — a genuine hypothesis-testing/A/B comparison of two outreach approaches would need exactly this kind of clean randomization to support a causal "this approach worked better" conclusion.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why can't you just compare users who happened to opt into a feature versus those who didn't?" — self-selection means the two groups likely differ in ways that also affect the outcome (more engaged users are more likely to opt in AND more likely to convert), confounding the comparison — exactly Stage 2's correlation-vs-causation trap, applied to experimentation specifically.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd describe proper randomization as the non-negotiable foundation of any hypothesis test I'd stand behind — without it, a 'significant' result doesn't actually support a causal claim."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Choosing the Right Metrics: Primary, Guardrail &amp; Novelty <span class="lvl lvl-B">B</span></h4>
+          <p>A well-designed test defines its metrics before launch: a single <b>primary metric</b> (the one the decision hinges on, chosen to directly reflect the hypothesis), <b>guardrail metrics</b> (things that must not get meaningfully worse even if the primary metric improves — e.g. page load time, unsubscribe rate), and sometimes secondary/diagnostic metrics for understanding <i>why</i> a result happened. Choosing metrics after seeing the data (hunting for whichever metric looks significant) is a serious, common malpractice.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Pre-registered BEFORE launch, in the experiment design doc:</span>
+<span class="cmt"># Primary metric:   conversion_rate (call -> sale)</span>
+<span class="cmt"># Guardrail metrics: avg_call_duration (shouldn't blow up), rep_satisfaction_score</span>
+<span class="cmt"># Secondary metrics: time_to_first_response, follow_up_rate</span>
+
+<span class="cmt"># Result:</span>
+<span class="cmt"># conversion_rate:      +2.1 pp (significant, p=0.008)  -> primary metric moved</span>
+<span class="cmt"># avg_call_duration:    +45 sec (not significant, p=0.19) -> guardrail held</span>
+<span class="cmt"># rep_satisfaction:     -0.3 pts (significant, p=0.03)   -> guardrail FAILED</span></div>
+            <div class="wk-result">Even though the primary metric improved significantly, one pre-registered guardrail (rep satisfaction) failed — a well-designed test catches this tradeoff explicitly rather than only reporting the flattering primary-metric win, which is exactly the discipline that separates rigorous experimentation from result-shopping.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Deciding beforehand that a new commute route's success will be judged on total time, not "whichever measure happens to look better afterward" (distance, number of turns, scenery).</span></div>
+            <div class="ex"><b>Consumer</b><span>A checkout redesign's primary metric might be conversion rate, with page-load-time and cart-abandonment as guardrails that must not silently get worse.</span></div>
+            <div class="ex"><b>Business</b><span>A new sales script's primary metric is conversion rate, but rep burnout/satisfaction is a real guardrail — a script that converts better but burns out the sales team isn't a clean win.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly applicable to any hypothesis-testing work at Axtria comparing outreach strategies — a rigorous comparison needs a pre-defined primary metric, not a post-hoc scan of whichever number moved.</span></div>
+            <div class="ex"><b>Interview</b><span>"What's wrong with checking 15 different metrics and reporting whichever one is significant?" — that's p-hacking/multiple-testing malpractice (covered fully later in this stage) — with enough metrics checked, some will look significant by chance alone, even with no real effect.</span></div>
+            <div class="ex"><b>Your CV</b><span>"Pre-registering the primary metric and guardrails is exactly the discipline I'd point to if asked how I made sure a hypothesis-testing result was trustworthy, not just convenient."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="power">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>Power, Sample Size &amp; Minimum Detectable Effect (MDE)</h2>
+        <p>Deciding how big a test needs to be before launching it — one of the most commonly skipped steps in real-world experimentation.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Statistical Power &amp; Sample Size Calculation <span class="lvl lvl-B">B</span></h4>
+          <p><b>Statistical power</b> is the probability of correctly detecting a true effect if one exists (1 - beta, the false negative rate) — conventionally targeted at 80% or 90%. Required sample size depends on four things: the baseline conversion rate, the minimum detectable effect (MDE) you want to be able to detect, your significance level (alpha, usually 0.05), and your desired power — smaller MDEs and higher power both require larger samples.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from statsmodels.stats.power import NormalIndPower
+from statsmodels.stats.proportion import proportion_effectsize
+
+baseline_rate = 0.10      <span class="cmt"># current 10% conversion rate</span>
+mde = 0.02                 <span class="cmt"># want to detect a 2 percentage-point lift (to 12%)</span>
+effect_size = proportion_effectsize(baseline_rate + mde, baseline_rate)
+
+analysis = NormalIndPower()
+n_per_group = analysis.solve_power(effect_size, power=0.8, alpha=0.05, ratio=1)
+print(round(n_per_group))     <span class="out"># 3,841 per group -- 7,682 total</span>
+
+<span class="cmt"># If we only wanted to detect a larger 5pp lift instead:</span>
+effect_size_5pp = proportion_effectsize(0.15, 0.10)
+n_5pp = analysis.solve_power(effect_size_5pp, power=0.8, alpha=0.05, ratio=1)
+print(round(n_5pp))            <span class="out"># 588 per group -- much smaller!</span></div>
+            <div class="wk-result">Detecting a smaller effect (2pp) requires roughly 6.5x more sample than detecting a larger one (5pp) — a concrete illustration of why "we want to detect even tiny improvements" is an expensive ask that trades off directly against how long a test needs to run, a tradeoff worth naming explicitly rather than picking a sample size arbitrarily.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Needing to taste many more spoonfuls of soup to detect "slightly less salty" than to detect "way too salty" — smaller differences need more samples to reliably notice.</span></div>
+            <div class="ex"><b>Consumer</b><span>An app deciding it needs 50,000 users in a test, not 500, because the expected lift from a subtle UI tweak is small.</span></div>
+            <div class="ex"><b>Business</b><span>Committing upfront to running a test for 3 weeks (to reach the needed sample size) rather than "however long it takes to feel confident."</span></div>
+            <div class="ex"><b>Enterprise</b><span>Any hypothesis-testing comparison at Axtria between two outreach approaches would need this exact pre-launch sample-size calculation to avoid running an underpowered test that can't reliably detect a real difference.</span></div>
+            <div class="ex"><b>Interview</b><span>"What happens if you run a test with too small a sample size?" — the test is underpowered, meaning even a real effect has a high chance of failing to reach statistical significance (a false negative) — you'd wrongly conclude 'no effect' when one actually exists.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd walk through this exact power-analysis logic if asked how a test's duration or sample size was actually decided, rather than an arbitrary 'we ran it for two weeks.'"</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Type I/II Errors Revisited &amp; the Power-Sample Size-MDE Triangle <span class="lvl lvl-B">B</span></h4>
+          <p>Building directly on Stage 2's Type I (false positive, alpha) and Type II (false negative, beta) errors: power, sample size, MDE, and alpha are four interconnected knobs — fixing any three determines the fourth. In practice, teams usually fix alpha (0.05) and power (0.8), then solve for the sample size needed given a chosen MDE, or solve for the MDE detectable given a fixed sample size/timeline constraint.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Business constraint: only 2,000 users per group are realistically available in 1 week</span>
+<span class="cmt"># Question: what's the smallest effect we COULD detect with that sample?</span>
+
+from statsmodels.stats.power import NormalIndPower
+analysis = NormalIndPower()
+<span class="cmt"># Solve backwards for effect_size given fixed n</span>
+detectable_effect = analysis.solve_power(nobs1=2000, power=0.8, alpha=0.05, ratio=1)
+print(round(detectable_effect, 4))    <span class="out"># 0.089 (Cohen's h) -- roughly a 4.5pp lift on a 10% baseline</span></div>
+            <div class="wk-result">Given the realistic sample-size constraint, the test can only reliably detect a lift of roughly 4.5 percentage points or more — if the true effect is smaller than that (very plausible for a minor UI tweak), the test is essentially guaranteed to come back "not significant" regardless of whether a real, smaller effect exists — a crucial thing to know and communicate before launching, not after a disappointing result.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Knowing in advance that a short, casual taste test with 3 people can only reliably catch a huge difference in spiciness, not a subtle one — setting expectations before tasting, not after.</span></div>
+            <div class="ex"><b>Consumer</b><span>A startup with limited traffic honestly acknowledging their test can only detect large product changes, not fine-tuning tweaks.</span></div>
+            <div class="ex"><b>Business</b><span>Telling a stakeholder upfront "given our traffic, we can only reliably detect a 5%+ improvement in two weeks" avoids a false "the change didn't work" conclusion when it may have had a real, smaller effect.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A genuinely useful pre-launch conversation to have proactively at Axtria — flagging when a planned comparison is underpowered given realistic data volume, before wasting a test cycle on it.</span></div>
+            <div class="ex"><b>Interview</b><span>"If a test comes back 'not significant,' does that prove there's no effect?" — no; it could mean there's genuinely no effect, OR the test was underpowered to detect the effect size that actually exists — 'absence of evidence isn't evidence of absence,' one of the most important nuances in experimentation.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This exact distinction — 'not significant' versus 'genuinely no effect' — is something I'd flag proactively if presenting any hypothesis-testing result, to avoid a stakeholder over-interpreting a null result."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="srm">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Sample Ratio Mismatch (SRM)</h2>
+        <p>One of the single most important, most commonly-missed sanity checks in real-world experimentation.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Detecting SRM with a Chi-Square Goodness-of-Fit Test <span class="lvl lvl-B">B</span></h4>
+          <p>Sample Ratio Mismatch occurs when the actual observed split between control and treatment deviates meaningfully from the intended split (e.g. intended 50/50, actually observed 52/48) — a strong signal that something is broken in the randomization or logging pipeline, and that ANY result from the test should be distrusted until the cause is found and fixed. Detected using a chi-square goodness-of-fit test comparing observed group sizes to expected group sizes.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from scipy.stats import chisquare
+
+observed = [10432, 9568]     <span class="cmt"># control, treatment -- intended 50/50 on 20,000 users</span>
+expected = [10000, 10000]
+
+chi2, p_value = chisquare(observed, f_exp=expected)
+print(chi2, p_value)          <span class="out"># chi2=37.25, p-value=0.0000000010</span></div>
+            <div class="wk-result">A p-value this small (far below the standard 0.001 SRM-specific threshold, stricter than the usual 0.05) means this 4.3-percentage-point imbalance is essentially impossible to have occurred by chance under correct 50/50 randomization — this is a textbook SRM alert, and the correct response is to halt analysis and investigate the pipeline, not to proceed and report the primary metric result as if it were trustworthy.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Flipping a coin 20,000 times and getting 10,432 heads versus 9,568 tails would be so unlikely for a fair coin that you'd immediately suspect the coin (or the flipping process) is broken, not that you got "unlucky."</span></div>
+            <div class="ex"><b>Consumer</b><span>A famous real-world example: Bing's search-ranking A/B tests have publicly documented SRM caused by bot traffic disproportionately hitting one arm — a real, well-known failure mode, not a theoretical concern.</span></div>
+            <div class="ex"><b>Business</b><span>A test where the "new checkout flow" arm mysteriously has 8% fewer users than expected might mean the new flow is silently crashing or timing out for some users before they're even logged as assigned — a critical bug, not a real result.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A genuinely important sanity check for ANY randomized comparison at Axtria — if the "new outreach script" group ends up smaller than intended, that imbalance alone could bias every downstream metric before any real analysis even starts.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why would you check for SRM before looking at the primary metric result at all?" — because a real SRM almost always means something is broken (logging, randomization, differential dropout) that will bias every other metric in the test — checking the headline result before ruling out SRM risks confidently reporting a completely invalid conclusion.</span></div>
+            <div class="ex"><b>Your CV</b><span>"SRM checking is the single sanity-check habit I'd most want to demonstrate — it's the kind of rigor that separates someone who's run hypothesis tests from someone who's run them carefully."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="novelty">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Novelty &amp; Primacy Effects</h2>
+        <p>A result that looks real on day 3 can evaporate — or appear — by week 3, purely because of how people react to change itself.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Novelty Effects, Primacy Effects &amp; Trend-Over-Time Analysis <span class="lvl lvl-B">B</span></h4>
+          <p>A <b>novelty effect</b> is a temporary boost (or drop) in a metric purely because users are reacting to something being new/different, which fades as they adjust — inflating an early "win" that won't persist. A <b>primacy effect</b> is the opposite: engaged/loyal users are initially resistant to a change (their established habits are disrupted), understating a genuinely good change's true long-run effect until they adapt. Both are diagnosed by plotting the treatment effect over the course of the experiment, not just reading the final aggregate number.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Daily treatment effect (treatment - control conversion rate), by day of test</span>
+daily_effect = {
+    "day1": 0.041, "day2": 0.038, "day3": 0.035,  <span class="cmt"># strong early lift</span>
+    "day7": 0.019, "day10": 0.012, "day14": 0.009  <span class="cmt"># decaying toward a smaller, more stable effect</span>
+}
+<span class="cmt"># A 2-day test would have reported the primary metric as +3.8pp (misleadingly high)</span>
+<span class="cmt"># The stabilized, trustworthy long-run effect is closer to +0.9pp</span></div>
+            <div class="wk-result">The effect clearly decays from +4.1pp on day 1 to +0.9pp by day 14 — if the test had been analyzed and shipped based on the first few days alone, the decision would have been made on a novelty-inflated number roughly 4x larger than the true stabilized effect, a very real, very common way experimentation goes wrong in practice.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A new gym membership feeling exciting and motivating for the first two weeks (novelty), then usage settling back down to a more realistic, sustainable baseline — evaluating "does this gym plan work" only in week one would badly overstate it.</span></div>
+            <div class="ex"><b>Consumer</b><span>A redesigned app icon or UI often gets an initial curiosity-driven engagement spike that has nothing to do with the redesign's actual long-term merit.</span></div>
+            <div class="ex"><b>Business</b><span>A new sales script might initially outperform simply because reps are more engaged/careful while it's new and being watched — the "Hawthorne effect," a close cousin of novelty bias.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A directly relevant caution for any Axtria-style comparison of a new outreach approach — an early strong result should be validated by running long enough to see whether the effect stabilizes, not shipped on a day-3 read.</span></div>
+            <div class="ex"><b>Interview</b><span>"How would you distinguish a real, durable treatment effect from a novelty effect?" — plot the daily/weekly treatment effect over the test's duration; a novelty effect shows a declining trend toward a smaller, stable value, while a genuine effect stays roughly flat throughout.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd always want to look at the trend over time, not just the final pooled number, before trusting any 'this worked' conclusion from a hypothesis test."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="multiple">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>The Multiple Testing Problem</h2>
+        <p>Checking enough metrics (or enough test variants) practically guarantees a "significant" result purely by chance — the math behind why, and the standard fixes.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Family-Wise Error Rate, Bonferroni &amp; FDR Correction <span class="lvl lvl-B">B</span></h4>
+          <p>Testing 20 independent metrics at alpha=0.05 each means the probability of at least one false positive (the family-wise error rate) is 1 - (0.95)^20 ≈ 64%, not 5% — a huge, often-overlooked inflation. <b>Bonferroni correction</b> (divide alpha by the number of tests) is simple but conservative, increasing false negatives. The <b>Benjamini-Hochberg (FDR) procedure</b> controls the expected proportion of false discoveries among significant results instead, offering more statistical power while still controlling error rate — usually the more practical default for many simultaneous comparisons.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from statsmodels.stats.multitest import multipletests
+
+p_values = [0.001, 0.008, 0.015, 0.021, 0.043, 0.089, 0.15, 0.31, 0.52, 0.77]
+
+<span class="cmt"># Family-wise error rate with 10 metrics at alpha=0.05, uncorrected:</span>
+fwer = 1 - (0.95 ** 10)
+print(round(fwer, 3))          <span class="out"># 0.401 -- a 40% chance of at least one false positive</span>
+
+reject_bonf, p_bonf, _, _ = multipletests(p_values, alpha=0.05, method="bonferroni")
+reject_fdr, p_fdr, _, _ = multipletests(p_values, alpha=0.05, method="fdr_bh")
+print("Bonferroni significant:", sum(reject_bonf))    <span class="out"># 2</span>
+print("FDR significant:", sum(reject_fdr))            <span class="out"># 4</span></div>
+            <div class="wk-result">Testing 10 metrics uncorrected carries a 40% chance of at least one spurious "significant" result — Bonferroni's stricter correction leaves only 2 of the 10 metrics significant, while the less conservative FDR procedure retains 4, illustrating the real tradeoff: Bonferroni minimizes false positives at the cost of more false negatives, FDR balances both more evenly.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Flipping 20 different coins once each and being unsurprised if one comes up "unusually" heads-heavy purely by chance — the more coins you check, the more likely you'll spot a fluke.</span></div>
+            <div class="ex"><b>Consumer</b><span>A famous cautionary tale: checking dozens of astrological signs against an outcome will "find" a significant one purely by chance — the multiple-testing problem in its most vivid form.</span></div>
+            <div class="ex"><b>Business</b><span>Running one A/B test but checking 25 different segment/metric breakdowns (by region, device, age group...) and reporting "it worked for mobile users in the Northeast" without correction is a classic, tempting, and statistically invalid move.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A real, practical concern for any Axtria-style hypothesis-testing work comparing outcomes across many territories or rep segments simultaneously — correction is needed before trusting any single segment's "significant" result.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why is Bonferroni sometimes considered 'too conservative'?" — dividing alpha by a large number of tests makes it much harder for any individual real effect to reach significance, inflating the false negative rate — a real cost, which is why FDR-based methods are often preferred when many comparisons are genuinely expected to matter.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This is exactly the caveat I'd raise if presenting a result from checking multiple metrics or segments — proactively, not only if asked."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sequential">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Sequential Testing &amp; the Peeking Problem</h2>
+        <p>Why checking a live test's p-value every day and stopping as soon as it looks significant is one of the most common — and most damaging — experimentation mistakes.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Why "Peeking" Inflates the False Positive Rate <span class="lvl lvl-B">B</span></h4>
+          <p>A standard (fixed-horizon) significance test assumes you check the result exactly once, at a pre-determined sample size. Checking repeatedly and stopping the moment p &lt; 0.05 ("peeking") dramatically inflates the true false positive rate — because you're effectively giving chance many separate opportunities to produce a fluke significant result, and stopping the instant it does. Proper fixes: commit to a fixed sample size/duration decided in advance (simplest), or use a formal <b>sequential testing</b> method (e.g. alpha-spending, always-valid p-values) explicitly designed to allow safe, repeated interim looks.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Simulation: true effect = 0 (no real difference), alpha = 0.05</span>
+<span class="cmt"># Simulate 10,000 experiments, checking significance every day for 20 days</span>
+import numpy as np
+false_positive_count = 0
+for sim in range(10000):
+    stopped_early = False
+    for day in range(1, 21):
+        p = simulate_daily_pvalue_under_null()   <span class="cmt"># true null, p ~ Uniform(0,1) each look</span>
+        if p < 0.05:
+            false_positive_count += 1
+            stopped_early = True
+            break
+print(false_positive_count / 10000)
+<span class="out"># ~0.64 -- a 64% false positive rate from 20 days of peeking, vs. the intended 5%</span></div>
+            <div class="wk-result">Even though there's genuinely no real effect in this simulation, checking daily and stopping at the first p&lt;0.05 produces a false "significant" result roughly 64% of the time — nearly 13x the intended 5% error rate — a stark, concrete demonstration of exactly why peeking is one of the most damaging common mistakes in real-world experimentation, not just a theoretical nuance.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Flipping a coin repeatedly and declaring "it's rigged!" the very first moment you happen to see 3 heads in a row — of course that will happen eventually if you keep looking, even with a perfectly fair coin.</span></div>
+            <div class="ex"><b>Consumer</b><span>A team excitedly shipping a change because "the dashboard showed significance this morning!" without having pre-committed to that as the stopping point is a textbook peeking mistake.</span></div>
+            <div class="ex"><b>Business</b><span>Stopping a promising-looking pilot program after just a few good days, rather than the originally planned month, risks shipping a decision based on noise rather than a real, stable effect.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A genuinely important discipline for any Axtria-style test — committing to a pre-determined test duration/sample size upfront, and resisting the pressure to "call it early" the moment a result looks favorable.</span></div>
+            <div class="ex"><b>Interview</b><span>"What would you say if a stakeholder wants to stop a test early because it 'already looks significant'?" — explain the peeking problem concretely (ideally with a number like the simulation above), and either hold to the pre-committed sample size or, if early stopping is genuinely needed, use a proper sequential-testing method designed for it rather than an ad-hoc early look.</span></div>
+            <div class="ex"><b>Your CV</b><span>"Explaining the peeking problem with a concrete simulated false-positive-rate number, like above, is exactly the kind of technically grounded pushback I'd give if pressured to call a test early."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="altmodels">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>Alternative Methods — Why This, Why Not That</h2>
+        <p>A/B testing is one tool among several for measuring causal impact — knowing when each of the alternatives is the better fit.</p>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p><b>Why a standard A/B test over a multi-armed bandit?</b> A/B testing splits traffic evenly and analyzes once at the end, prioritizing a clean, statistically rigorous, easy-to-explain comparison; a multi-armed bandit dynamically shifts traffic toward the better-performing arm during the test, minimizing "regret" (lost conversions from serving the worse variant) — better when the cost of serving an inferior variant is high and a rigorous causal readout matters less than practical performance during the test itself. A/B testing is generally the better choice for confident, generalizable causal learning; bandits are better for pure short-term optimization.</p>
+        <p><b>Why a randomized A/B test over an observational/quasi-experimental causal inference method (e.g. difference-in-differences, propensity score matching)?</b> True randomization is the gold standard for causal validity — it eliminates confounding by design. Observational causal methods are the fallback when randomization is genuinely impossible (e.g. you can't randomly assign which regions get a policy change) and try to approximate a causal estimate from non-randomized data, but always carry more assumptions and more room for hidden confounding than a real randomized test.</p>
+        <p><b>Why an A/B test over a simple before/after comparison?</b> A before/after comparison confounds the treatment effect with anything else that changed over time (seasonality, external events, a concurrent change) — an A/B test's simultaneous control group isolates the treatment's effect from time-based confounds, which a before/after design fundamentally cannot do.</p>
+        <p><b>Why a user-level randomized test over a switchback (time-based) test?</b> Switchback tests randomize by time period rather than by user (e.g. odd days get treatment, even days get control) — useful when user-level randomization isn't feasible (e.g. a marketplace-wide pricing change affecting all users at once), at the cost of needing to worry about carryover effects between periods that user-level randomization avoids.</p>
+        <p style="margin-bottom:0"><b>Why not skip experimentation entirely and just ship based on intuition or a stakeholder's confidence?</b> Because intuition and confidence are exactly what randomized testing exists to check against reality — the entire discipline built in this stage exists precisely because plausible-sounding changes frequently turn out to have no effect, or even a negative one, when actually measured rigorously.</p>
+      </div>
+    </section>
+
+    <section id="cmptable">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>Experimentation Method Comparison Table</h2>
+      </div>
+      <div class="card cmp-wrap">
+        <table class="cmp-table">
+          <tr><th>Method</th><th>Best for</th><th>Causal validity</th><th>Speed to decision</th><th>Handles confounding</th></tr>
+          <tr><td>Standard A/B test</td><td>Rigorous, generalizable causal comparison</td><td>Very high (randomized)</td><td>Medium (needs full sample)</td><td>Yes, by design</td></tr>
+          <tr><td>Multi-armed bandit</td><td>Minimizing regret during optimization</td><td>Lower (less rigorous readout)</td><td>Fast (adapts live)</td><td>Yes, by design</td></tr>
+          <tr><td>Sequential test (always-valid)</td><td>Needing safe early stopping</td><td>Very high (randomized + valid peeking)</td><td>Fast (can stop early safely)</td><td>Yes, by design</td></tr>
+          <tr><td>Before/after comparison</td><td>Quick, low-rigor directional read</td><td>Low (time confounds)</td><td>Fast</td><td>No</td></tr>
+          <tr><td>Difference-in-differences</td><td>Randomization genuinely impossible</td><td>Medium (assumption-dependent)</td><td>Medium-Slow</td><td>Partially (parallel trends assumption)</td></tr>
+          <tr><td>Propensity score matching</td><td>Observational data, many confounders</td><td>Medium (assumption-dependent)</td><td>Slow</td><td>Partially (only observed confounders)</td></tr>
+          <tr><td>Switchback test</td><td>Marketplace-wide changes, no user-level split</td><td>High (with care for carryover)</td><td>Medium</td><td>Yes, with caveats</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="redflags">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2>Red Flags — Never Say This</h2>
+      </div>
+      <div class="redflag"><b>"A p-value of 0.03 means there's a 97% chance the effect is real."</b> A direct misinterpretation of what a p-value means (Stage 2's material) — it's the probability of seeing data this extreme (or more) if the null hypothesis were true, not the probability the alternative hypothesis is correct.</div>
+      <div class="redflag"><b>"We checked and it looked significant on day 2, so we shipped it."</b> A textbook peeking mistake — exposes a lack of understanding of how dramatically repeated early looks inflate the false positive rate.</div>
+      <div class="redflag"><b>"SRM doesn't matter if the primary metric result still makes intuitive sense."</b> SRM signals something is structurally broken in the experiment's data pipeline — a result that "makes sense" despite an SRM alert is not evidence the SRM doesn't matter, it's a coincidence that shouldn't be trusted.</div>
+      <div class="redflag"><b>"We tested 30 metrics and 2 came back significant, so those 2 are real wins."</b> Without multiple-testing correction, roughly 1-2 significant results out of 30 tested is exactly what pure chance alone would predict — this is the multiple testing problem in action, not a real finding.</div>
+      <div class="redflag"><b>"An A/B test always tells you the true long-term effect."</b> Novelty and primacy effects mean a short test's measured effect can differ meaningfully from the true long-run steady-state effect — always worth checking the trend over time, not just the final number.</div>
+    </section>
+
+    <section id="problems">
+      <div class="sec-head">
+        <div class="num">12</div>
+        <h2>30 Progressive Coding Problems</h2>
+        <p>From a basic two-sample test through a full SRM-checked, multiple-testing-corrected, sequentially-monitored experiment analysis.</p>
+      </div>
+      <div class="filterbar" id="probfilter">
+        <button data-f="all" class="active">All</button>
+        <button data-f="easy">Easy</button>
+        <button data-f="med">Medium</button>
+        <button data-f="hard">Hard</button>
+        <button data-f="expert">Expert</button>
+      </div>
+      <div class="probgrid" id="probgrid"></div>
+    </section>
+
+    <section id="questions">
+      <div class="sec-head">
+        <div class="num">13</div>
+        <h2>70-Question Interview Bank</h2>
+        <p>Split into Experiment Design &amp; Fundamentals (35 questions) and Advanced Pitfalls &amp; Causal Reasoning (35 questions).</p>
+      </div>
+      <div class="subhead">Experiment Design &amp; Fundamentals (35 questions)</div>
+      <div class="card qbank" id="qbankDesign"></div>
+      <div class="subhead">Advanced Pitfalls: SRM, Novelty, Multiple Testing, Peeking &amp; Causal Reasoning (35 questions)</div>
+      <div class="card qbank" id="qbankPitfalls"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">14</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card bridge-flow">
+        <span class="node">Stage 2 hypothesis testing (t-test, chi-square)</span><span class="arrow">→</span>
+        <span class="node">Proper randomization + pre-registered metrics</span><span class="arrow">→</span>
+        <span class="node">Power analysis / sample size</span><span class="arrow">→</span>
+        <span class="node">SRM check</span><span class="arrow">→</span>
+        <span class="node">Trend-over-time (novelty) check</span><span class="arrow">→</span>
+        <span class="node">Multiple-testing-corrected result</span><span class="arrow">→</span>
+        <span class="node">"Statistical Testing" CV claim, fully defensible</span>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">15</div>
+        <h2>Mastery Checklist</h2>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+
+    <div class="card" style="padding:22px 26px; margin-top:60px;">
+      <p style="margin:0; font-size:.9rem; color:var(--ink-soft)">Next: <b>Stage 12 — Power BI + Excel</b>. Say "go" whenever you're ready.</p>
+    </div>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  var problems = [
+    ["easy","Randomly assign users to control/treatment using a hashed user_id for a stable 50/50 split.","users['bucket'] = users['user_id'].apply(lambda uid: 'treatment' if hash(str(uid)+'exp1')%2==0 else 'control')\nprint(users['bucket'].value_counts())"],
+    ["easy","Run a two-proportion z-test comparing conversion rates between control and treatment.","from statsmodels.stats.proportion import proportions_ztest\ncounts = [420, 465]; nobs = [5000, 5000]\nstat, p = proportions_ztest(counts, nobs)\nprint(stat, p)"],
+    ["easy","Compute the observed lift and relative lift between control and treatment conversion rates.","control_rate, treat_rate = 420/5000, 465/5000\nlift = treat_rate - control_rate\nrel_lift = lift / control_rate\nprint(lift, rel_lift)"],
+    ["easy","Calculate required sample size per group for a given baseline rate, MDE, alpha, and power.","from statsmodels.stats.power import NormalIndPower\nfrom statsmodels.stats.proportion import proportion_effectsize\nes = proportion_effectsize(0.12, 0.10)\nn = NormalIndPower().solve_power(es, power=0.8, alpha=0.05, ratio=1)\nprint(round(n))"],
+    ["easy","Run a chi-square goodness-of-fit test to check for Sample Ratio Mismatch.","from scipy.stats import chisquare\nchi2, p = chisquare([10432,9568], f_exp=[10000,10000])\nprint(chi2, p)"],
+    ["easy","Compute a 95% confidence interval for the difference in two proportions.","import numpy as np\np1, p2, n1, n2 = 0.084, 0.093, 5000, 5000\nse = np.sqrt(p1*(1-p1)/n1 + p2*(1-p2)/n2)\ndiff = p2-p1\nprint(diff - 1.96*se, diff + 1.96*se)"],
+    ["easy","Apply Bonferroni correction to a list of p-values from testing multiple metrics.","from statsmodels.stats.multitest import multipletests\nreject, p_adj, _, _ = multipletests(p_values, alpha=0.05, method='bonferroni')\nprint(reject)"],
+    ["easy","Apply Benjamini-Hochberg FDR correction to the same list of p-values and compare results.","reject_fdr, p_fdr, _, _ = multipletests(p_values, alpha=0.05, method='fdr_bh')\nprint(reject_fdr)"],
+    ["easy","Compute statistical power for a fixed sample size and expected effect size.","power = NormalIndPower().solve_power(effect_size=0.1, nobs1=2000, alpha=0.05, ratio=1)\nprint(power)"],
+    ["easy","Plot daily treatment effect over the course of an experiment to visually check for novelty decay.","import matplotlib.pyplot as plt\nplt.plot(days, daily_effect)\nplt.axhline(0, color='gray')\nplt.show()"],
+    ["med","Simulate the true false-positive rate of 'peeking' at a test daily over 20 days under a true null hypothesis.","import numpy as np\nfp_count = 0\nfor sim in range(5000):\n    for day in range(20):\n        p = np.random.uniform(0,1)\n        if p < 0.05:\n            fp_count += 1\n            break\nprint(fp_count/5000)"],
+    ["med","Build a function that runs an SRM check and raises a warning if the p-value is below 0.001.","def check_srm(observed, expected):\n    chi2, p = chisquare(observed, f_exp=expected)\n    if p < 0.001:\n        print('WARNING: possible SRM, p =', p)\n    return p"],
+    ["med","Segment an A/B test's results by device type and apply multiple-testing correction across segments.","segments = df.groupby('device').apply(lambda g: proportions_ztest([g[g.bucket=='control'].converted.sum(), g[g.bucket=='treatment'].converted.sum()], [len(g[g.bucket=='control']), len(g[g.bucket=='treatment'])])[1])\nreject, p_adj, _, _ = multipletests(segments.values, method='fdr_bh')\nprint(dict(zip(segments.index, reject)))"],
+    ["med","Compute the minimum detectable effect (MDE) given a fixed available sample size.","from statsmodels.stats.power import NormalIndPower\nmde_effect_size = NormalIndPower().solve_power(nobs1=2000, power=0.8, alpha=0.05, ratio=1)\nprint(mde_effect_size)"],
+    ["med","Build a guardrail-metric check that flags if any guardrail metric moved significantly in the wrong direction.","guardrails = {'avg_call_duration': (0.19, 'no_worse'), 'rep_satisfaction': (0.03, 'no_worse')}\nfor metric, (p, direction) in guardrails.items():\n    if p < 0.05:\n        print(f'GUARDRAIL FAILED: {metric}')"],
+    ["med","Compute a sequential (always-valid) confidence sequence for a live A/B test using a simple mixture-based bound.","import numpy as np\ndef always_valid_bound(n, alpha=0.05):\n    return np.sqrt((2*np.log(1/alpha) + np.log(np.log(n)+1)) / n)\nprint(always_valid_bound(5000))"],
+    ["med","Estimate the Cohen's h effect size between two proportions and interpret its magnitude.","from statsmodels.stats.proportion import proportion_effectsize\nh = proportion_effectsize(0.12, 0.10)\nprint(h)   # ~0.06, a small effect by Cohen's conventions"],
+    ["med","Build a pre-registration document generator that locks in primary/guardrail metrics before analyzing results.","def pre_register(primary, guardrails, mde, alpha=0.05, power=0.8):\n    return {'primary': primary, 'guardrails': guardrails, 'mde': mde, 'alpha': alpha, 'power': power, 'locked': True}"],
+    ["med","Compare results from a Bonferroni-corrected and FDR-corrected analysis on the same 15 p-values and report which metrics differ in conclusion.","reject_b, _, _, _ = multipletests(p_values, method='bonferroni')\nreject_f, _, _, _ = multipletests(p_values, method='fdr_bh')\ndiffering = [i for i in range(len(p_values)) if reject_b[i] != reject_f[i]]\nprint(differing)"],
+    ["med","Simulate an underpowered test (n too small for the true effect) and show it fails to reach significance most of the time.","import numpy as np\nsig_count = 0\nfor sim in range(2000):\n    control = np.random.binomial(1, 0.10, 300)\n    treatment = np.random.binomial(1, 0.12, 300)\n    _, p = proportions_ztest([control.sum(), treatment.sum()], [300,300])\n    if p < 0.05: sig_count += 1\nprint(sig_count/2000)"],
+    ["hard","Build a full pre-launch power analysis report that computes required sample size across a grid of plausible MDEs and reports estimated test duration given historical daily traffic.","for mde in [0.01, 0.02, 0.03, 0.05]:\n    es = proportion_effectsize(0.10+mde, 0.10)\n    n = NormalIndPower().solve_power(es, power=0.8, alpha=0.05, ratio=1)\n    days = (n*2) / daily_traffic\n    print(mde, round(n), round(days,1), 'days')"],
+    ["hard","Implement a CUPED (Controlled-experiment Using Pre-Experiment Data) variance-reduction adjustment and compare statistical power before and after.","import numpy as np\ntheta = np.cov(pre_metric, post_metric)[0,1] / np.var(pre_metric)\nadjusted = post_metric - theta * (pre_metric - pre_metric.mean())\nprint('raw variance:', np.var(post_metric), 'adjusted variance:', np.var(adjusted))"],
+    ["hard","Build a complete experiment analysis pipeline: SRM check -> guardrail check -> primary metric test -> multiple-testing-corrected segment breakdown -> novelty trend check, halting at the first failed gate.","def analyze_experiment(data):\n    if not srm_check(data): return 'HALT: SRM detected'\n    if not guardrail_check(data): return 'HALT: guardrail failed'\n    primary_p = primary_metric_test(data)\n    segment_results = segment_analysis_with_fdr(data)\n    novelty_trend = check_novelty_decay(data)\n    return {'primary_p': primary_p, 'segments': segment_results, 'novelty': novelty_trend}"],
+    ["hard","Simulate the family-wise error rate for testing k independent metrics at alpha=0.05, for k = 1 to 30, and plot the curve.","import matplotlib.pyplot as plt\nks = range(1,31)\nfwer = [1-(0.95**k) for k in ks]\nplt.plot(ks, fwer)\nplt.axhline(0.05, color='red', linestyle='--')\nplt.show()"],
+    ["hard","Implement a simplified always-valid sequential testing procedure (mixture sequential probability ratio test) and simulate its false positive rate under repeated peeking, comparing to the naive fixed-alpha approach.","def sequential_p_value(data_stream, alpha=0.05):\n    running_stat = 0\n    for i, x in enumerate(data_stream, 1):\n        running_stat += x\n        bound = always_valid_bound(i, alpha)\n        if abs(running_stat/i) > bound:\n            return i, True\n    return len(data_stream), False"],
+    ["hard","Detect a novelty effect programmatically by fitting a decay curve to the daily treatment effect and testing whether the decay rate is statistically distinguishable from zero.","from scipy.optimize import curve_fit\ndef decay(t, a, b, c): return a * np.exp(-b*t) + c\nparams, cov = curve_fit(decay, days, daily_effect)\nprint('decay rate b:', params[1], 'stabilized effect c:', params[2])"],
+    ["expert","Build a full Bayesian A/B test using a Beta-Binomial model, computing the posterior probability that treatment beats control, and compare the conclusion to a frequentist z-test on the same data.","from scipy.stats import beta\nalpha_c, beta_c = 1+420, 1+5000-420\nalpha_t, beta_t = 1+465, 1+5000-465\nsamples_c = np.random.beta(alpha_c, beta_c, 100000)\nsamples_t = np.random.beta(alpha_t, beta_t, 100000)\nprob_treatment_better = (samples_t > samples_c).mean()\nprint(prob_treatment_better)"],
+    ["expert","Build a synthetic-control / difference-in-differences estimator for a scenario where true randomization wasn't possible, and quantify how sensitive the estimate is to the parallel-trends assumption being violated.","pre_diff = treated_pre.mean() - control_pre.mean()\npost_diff = treated_post.mean() - control_post.mean()\ndid_estimate = post_diff - pre_diff\nfor violation in [0, 0.01, 0.02, 0.05]:\n    adjusted_estimate = did_estimate - violation\n    print(violation, adjusted_estimate)"],
+    ["expert","Design and simulate a full switchback test (time-based randomization) for a marketplace-wide pricing change, accounting for and quantifying carryover effects between adjacent periods.","import numpy as np\nperiods = ['treatment' if i%2==0 else 'control' for i in range(30)]\ncarryover_adjusted = []\nfor i, p in enumerate(periods):\n    base_effect = 0.05 if p=='treatment' else 0\n    carryover = 0.01 if i>0 and periods[i-1]=='treatment' and p=='control' else 0\n    carryover_adjusted.append(base_effect + carryover)\nprint(np.mean(carryover_adjusted))"],
+    ["expert","Run a full A/A test simulation (identical arms) across 1000 repetitions, verifying the observed false-positive rate matches the nominal alpha and that no SRM is falsely triggered, as a pipeline validation harness.","import numpy as np\nfp_count, srm_count = 0, 0\nfor sim in range(1000):\n    control = np.random.binomial(1, 0.10, 3000)\n    treatment = np.random.binomial(1, 0.10, 3000)\n    _, p = proportions_ztest([control.sum(), treatment.sum()], [3000,3000])\n    if p < 0.05: fp_count += 1\n    chi2, p_srm = chisquare([3000,3000], f_exp=[3000,3000])\n    if p_srm < 0.001: srm_count += 1\nprint('false positive rate:', fp_count/1000, 'false SRM rate:', srm_count/1000)"]
+  ];
+
+  var qasDesign = [
+    ["What makes an A/B test's conclusion causal rather than just correlational?","Proper randomization — every unit has an equal, independent chance of landing in control or treatment, eliminating systematic pre-existing differences between groups so any outcome difference can be attributed to the treatment itself."],
+    ["Why should the primary metric be chosen before launching a test, not after seeing results?","Choosing it after the fact (hunting for whichever metric looks significant) is a form of p-hacking — with enough metrics scanned, some will look significant by chance alone, even with no real underlying effect."],
+    ["What is a guardrail metric?","A metric that must not get meaningfully worse even if the primary metric improves (e.g. page load time, unsubscribe rate) — pre-registered alongside the primary metric to catch harmful tradeoffs a narrow focus on the primary metric alone would miss."],
+    ["What is statistical power?","The probability of correctly detecting a true effect if one genuinely exists — equivalently, 1 minus the Type II error rate (beta)."],
+    ["What four quantities are interconnected in a power analysis, such that fixing three determines the fourth?","Sample size, minimum detectable effect (MDE), significance level (alpha), and power."],
+    ["Why does detecting a smaller MDE require a larger sample size?","Smaller true effects are harder to distinguish from random noise, so more data is needed to reliably tell a small real difference apart from chance variation."],
+    ["What does it mean if a test comes back 'not significant' — does that prove there's no effect?","Not necessarily — it could mean there's genuinely no effect, or that the test was underpowered to detect the effect size that actually exists ('absence of evidence isn't evidence of absence')."],
+    ["What is Sample Ratio Mismatch (SRM)?","When the actual observed split between control and treatment deviates meaningfully from the intended split (e.g. 52/48 instead of an intended 50/50) — a strong signal something is broken in randomization or logging."],
+    ["How is SRM typically detected statistically?","A chi-square goodness-of-fit test comparing the observed group sizes to the expected (intended) group sizes, usually at a stricter threshold (e.g. p < 0.001) than the standard 0.05."],
+    ["Why should you check for SRM before trusting any other result from the same test?","An SRM almost always signals something structurally broken (differential logging, randomization bug, differential dropout) that would bias every other metric in the test, not just the primary one."],
+    ["What is a novelty effect?","A temporary boost (or drop) in a metric because users are reacting to something being new or different, which fades as they adjust — inflating an early read of the treatment's true, durable effect."],
+    ["What is a primacy effect, and how does it differ from a novelty effect?","Engaged/loyal users initially resist a change because it disrupts established habits, understating a genuinely good change's true effect until they adapt — the opposite direction of bias from a novelty effect."],
+    ["How would you check whether a result is inflated by a novelty effect?","Plot the treatment effect over the course of the experiment (day by day or week by week) rather than only looking at the final pooled number — a novelty effect shows a declining trend toward a smaller, stable value."],
+    ["What is the multiple testing problem?","Testing many metrics or segments at a fixed significance threshold (e.g. 0.05) inflates the overall (family-wise) probability of at least one false positive well above the nominal per-test rate."],
+    ["What is the family-wise error rate for testing 20 independent metrics at alpha=0.05 each?","1 - (0.95)^20 ≈ 64% — a dramatically higher chance of at least one false positive than the 5% per-test rate might suggest."],
+    ["What does Bonferroni correction do, and what's its main downside?","Divides alpha by the number of tests performed, controlling the family-wise error rate — but is quite conservative, substantially increasing the false negative rate (Type II error) for each individual test."],
+    ["What does the Benjamini-Hochberg (FDR) procedure control instead of the family-wise error rate?","The expected proportion of false discoveries among the results declared significant (the false discovery rate) — typically offering more statistical power than Bonferroni while still controlling error meaningfully."],
+    ["What is 'peeking' in the context of A/B testing?","Repeatedly checking a live test's p-value before the pre-determined sample size/duration is reached, and stopping as soon as it happens to look significant."],
+    ["Why does peeking inflate the true false positive rate so dramatically?","Each additional look gives random chance another opportunity to produce a fluke significant result, and stopping at the first such moment means you're effectively cherry-picking the most favorable of many looks."],
+    ["What are two valid ways to allow safe interim looks at a running experiment?","Committing to a fixed sample size/duration decided in advance and only checking significance once at that point, or using a formal sequential testing method (e.g. alpha-spending, always-valid p-values) explicitly designed to control error under repeated looks."],
+    ["Why is a before/after comparison generally a weaker design than a proper A/B test?","It confounds the treatment's effect with anything else that changed over the same time period (seasonality, external events, concurrent changes) — a simultaneous control group is what isolates the treatment's true effect from time-based confounds."],
+    ["What is CUPED, and what problem does it solve?","Controlled-experiment Using Pre-Experiment Data — a variance-reduction technique that uses each user's pre-experiment metric value to reduce noise in the post-experiment outcome, increasing statistical power without needing a larger sample size."],
+    ["Why would you use a multi-armed bandit instead of a standard A/B test?","When the cost of serving an inferior variant during the test is high and minimizing 'regret' (lost conversions from the worse variant) matters more than getting a fully rigorous, generalizable causal readout."],
+    ["What is a switchback test, and when is it used?","A test design that randomizes by time period rather than by user (e.g. alternating days between treatment and control) — used when user-level randomization isn't feasible, such as marketplace-wide pricing changes affecting everyone simultaneously."],
+    ["What is a key risk specific to switchback tests that user-level randomization avoids?","Carryover effects — behavior or state from a treatment period bleeding into the following control period (or vice versa), biasing the comparison in a way user-level randomization structurally prevents."],
+    ["Why is proper randomization described as the 'gold standard' for causal inference?","It eliminates confounding by design — both observed and unobserved factors are, on average, balanced between groups purely by the randomization process, which no observational method can fully guarantee."],
+    ["What would you say if a stakeholder asked why you can't just compare opt-in feature users to non-opt-in users directly?","Explain self-selection bias — users who opt in likely differ systematically from those who don't in ways that also affect the outcome, confounding any naive comparison; a randomized test avoids this by assigning the treatment independently of user characteristics."],
+    ["What's the difference between statistical significance and practical/business significance?","Statistical significance means the observed effect is unlikely to be due to chance; practical significance means the effect is large enough to actually matter for the business decision at hand — a huge sample can make a tiny, practically irrelevant effect statistically significant."],
+    ["Why might a test need to run for at least one full business cycle (e.g. a full week) even if it reaches significance sooner?","To average out day-of-week effects and other cyclical patterns that could otherwise bias the result if the test happened to end mid-cycle."],
+    ["What's the honest answer if asked whether you've personally built a large-scale experimentation platform?","Being precise about the actual Level A/B/C boundary from this stage's framing — genuine hypothesis-testing and statistical evaluation experience, versus conceptual understanding of platform-level concerns like SRM detection tooling, without overclaiming infrastructure work that didn't happen."],
+    ["Why would you want to pre-register an experiment's hypothesis and metrics in writing before launch?","It creates an explicit, auditable commitment that prevents post-hoc metric-shopping or reinterpreting an ambiguous result in whichever direction is most convenient after the fact."],
+    ["What's a reasonable target power level for most A/B tests, and why not simply maximize it?","80% is a common default (90% for higher-stakes decisions) — higher power requires a larger sample size/longer test duration, so it's a deliberate tradeoff against speed and cost, not something to maximize blindly."],
+    ["How would you explain a confidence interval's role in an A/B test result to a non-technical stakeholder?","It expresses the plausible range for the true effect, not just a single point estimate — 'we're 95% confident the true lift is between 0.5% and 3.5%' gives a much more honest picture than a single '+2%' number alone."],
+    ["What's a defensible answer to 'how long should this test run for'?","Determined by the power analysis (given the baseline rate, target MDE, alpha, and power) translated into a duration using expected traffic — not an arbitrary 'a couple of weeks feels right.'"],
+    ["Why is understanding both the statistical mechanics and the common practical pitfalls (SRM, novelty, peeking) important for someone claiming 'A/B testing' on their CV?","Because the mechanics alone (running a t-test) are the easy part an interviewer expects — the pitfalls are what actually separates someone who has run tests carefully in the real world from someone repeating textbook definitions."]
+  ];
+
+  var qasPitfalls = [
+    ["If an SRM chi-square test returns p=0.15, what should you conclude?","No significant sample ratio mismatch detected at the standard threshold — the observed split is consistent with the intended randomization ratio, so this specific check doesn't invalidate the test."],
+    ["Why is the SRM significance threshold often set stricter (e.g. p<0.001) than the usual 0.05?","SRM checks are typically run automatically across many experiments, so a stricter threshold reduces false SRM alarms while still reliably catching genuinely broken randomization, which tends to produce very extreme p-values when it occurs."],
+    ["What real-world factors commonly cause SRM in practice?","Bot traffic disproportionately hitting one arm, a bug causing one variant to fail/redirect before being logged as assigned, differential page-load failures between variants, or a caching/routing issue that isn't truly random."],
+    ["Why can't you 'fix' SRM by just re-weighting the analysis after the fact?","SRM signals an unknown, unquantified bias in who ended up in each group — reweighting assumes you know exactly what's wrong and by how much, which usually isn't true; the correct response is to find and fix the root cause, or discard the test."],
+    ["How would you distinguish a genuine novelty effect from a real, growing treatment effect over time?","A novelty effect shows a declining trend that stabilizes at a lower (but still real) value; a genuinely growing effect (e.g. from network effects or compounding adoption) shows an increasing trend — both require looking at the time series, not just comparing early vs. late snapshots by eye."],
+    ["Why might a primacy effect be even more dangerous to miss than a novelty effect?","It biases the measured effect downward (understating a genuinely good change), which can lead to incorrectly killing a change that would have performed well once users adjusted — the opposite, more costly kind of mistake than shipping an overhyped novelty win."],
+    ["What's a practical way to reduce novelty/primacy bias risk without extending the whole test's duration?","Analyze only users who joined the experiment after some initial burn-in period has passed, or compare the effect specifically among returning/repeat-exposure users versus first-time-exposure users."],
+    ["Why does testing many metrics inflate the false positive rate even if each individual test uses alpha=0.05 correctly?","Each test independently has a 5% chance of a false positive; with many tests, the probability that at least one produces a false positive compounds multiplicatively, even though each individual test is technically valid on its own."],
+    ["When would you prefer Bonferroni correction over FDR (Benjamini-Hochberg)?","When false positives are especially costly and you want the strictest possible control over even a single false discovery — e.g. a regulatory or safety-critical context — accepting the tradeoff of reduced power."],
+    ["When would you prefer FDR over Bonferroni?","When you're testing many metrics/segments and want a reasonable balance between catching real effects and controlling false discoveries, rather than being maximally conservative — the more common choice in typical business experimentation."],
+    ["What is p-hacking, broadly, and how does it relate to the multiple testing problem?","Any practice (consciously or not) that increases the chance of finding a 'significant' result through exploiting researcher degrees of freedom — checking many metrics, subgroups, or stopping points and reporting only the favorable ones — multiple testing correction is one specific defense against one common form of it."],
+    ["Why is peeking considered more dangerous than the multiple-testing problem across metrics, even though both involve 'looking many times'?","Peeking compounds especially fast because each day's look is highly correlated with the previous day's (it's the same accumulating data), and stopping at the very first significant look (rather than analyzing all looks together) is an especially aggressive form of the bias."],
+    ["What is an 'always-valid' p-value, conceptually?","A p-value construction specifically designed so that checking it repeatedly and stopping whenever it crosses a threshold does NOT inflate the true false positive rate — unlike a standard fixed-horizon p-value, which assumes a single, pre-planned look."],
+    ["What is the alpha-spending function approach to sequential testing?","A method that pre-allocates portions of the total alpha budget across a planned sequence of interim analyses, so the cumulative false-positive risk across all the planned looks stays controlled at the target level."],
+    ["Why is CUPED considered a 'free' way to increase statistical power?","It uses data that already exists (each user's own pre-experiment behavior) to reduce the variance of the outcome metric, increasing power without requiring any additional users or a longer test duration."],
+    ["What assumption does CUPED rely on to work well?","That the pre-experiment covariate is meaningfully correlated with the post-experiment outcome metric — if there's no correlation, CUPED provides little to no variance reduction benefit."],
+    ["What is the parallel trends assumption in difference-in-differences estimation?","That, absent the treatment, the treated and control groups would have followed the same trend over time — the core (untestable, only plausible-or-not) assumption that makes a DiD estimate a valid causal estimate."],
+    ["Why is difference-in-differences considered weaker causal evidence than a true randomized A/B test?","Its validity depends entirely on the parallel trends assumption holding, which can't be directly verified and could be violated by any unobserved factor that differentially affects the two groups' trends — randomization sidesteps this by design instead of by assumption."],
+    ["What is propensity score matching, at a conceptual level?","Estimating, for observational (non-randomized) data, each unit's probability of receiving treatment based on observed characteristics, then comparing outcomes between treated and untreated units with similar propensity scores — an attempt to approximate what randomization would have produced."],
+    ["What's a fundamental limitation of propensity score matching that randomization doesn't share?","It can only balance on OBSERVED confounders included in the propensity model — any unobserved confounder that affects both treatment assignment and the outcome remains a source of bias, unlike true randomization which balances both observed and unobserved factors."],
+    ["Why might a Bayesian A/B testing approach (posterior probability treatment beats control) be preferred by some teams over a frequentist p-value approach?","It gives a more directly interpretable output ('there's an 85% probability treatment is better') rather than a p-value's more convoluted definition, and can naturally incorporate prior information — though it requires justifying prior choices and isn't automatically immune to the same underlying pitfalls (SRM, novelty, peeking) if not designed carefully."],
+    ["What's the honest answer if asked to compare Bayesian and frequentist A/B testing in depth?","Both share the same core experimental design requirements (randomization, sufficient sample, guarding against SRM/novelty); the difference is primarily in how the result is expressed and interpreted, and reasonable teams differ on which they prefer — not a case where one is simply wrong."],
+    ["Why should segment-level results (e.g. 'it worked for mobile users') always be treated cautiously even with a large overall sample?","Splitting the sample into segments reduces the sample size (and thus power) within each segment, and testing many segments simultaneously reintroduces the multiple testing problem — a segment result needs both adequate power and correction to be trustworthy."],
+    ["What is the Hawthorne effect, and how does it relate to novelty/primacy effects in experimentation?","People changing their behavior simply because they know they're being observed or are part of a study — a related but distinct phenomenon from novelty bias, worth considering especially in experiments involving observable human behavior (e.g. reps knowing they're using a 'new script')."],
+    ["Why would you want to run an A/A test (both arms identical) before trusting a new experimentation pipeline?","An A/A test should show no significant difference and no SRM by construction — if it does, that reveals a bug in the randomization, logging, or analysis pipeline itself, independent of any real experiment's results."],
+    ["What would a complete answer to 'tell me about a time an A/B test result was misleading' ideally include?","A concrete failure mode from this stage (SRM, novelty effect, peeking, or uncorrected multiple testing), how it was detected, and what the corrected/honest conclusion turned out to be — demonstrating both the mistake-recognition and the rigor to catch it, not just definitional knowledge."],
+    ["Why does explaining a caveat (like a guardrail metric failing) proactively, rather than only when asked, matter in a real work context?","It signals genuine judgment and trustworthiness — someone who volunteers the inconvenient part of a result is far more credible than someone who only mentions it under direct challenge, and is exactly the instinct this masterbook's honesty framework is built around."],
+    ["What's the relationship between this stage's SRM/novelty/peeking pitfalls and Stage 6's leakage material?","Both are about a specific, sneaky way a result can look valid on the surface while actually being invalid underneath — leakage inflates offline model metrics silently; SRM/novelty/peeking inflate (or distort) experiment results silently — the same underlying discipline of 'don't trust a good-looking number without checking how it was produced.'"],
+    ["Why would a rigorous experimenter compute and report a confidence interval alongside a p-value, not just the p-value alone?","A p-value only tells you whether an effect is statistically distinguishable from zero; a confidence interval also conveys the plausible magnitude and precision of the effect, which is usually what actually matters for a business decision."],
+    ["What's the single most important takeaway from this stage for someone with 'A/B Testing' on their CV who wants to survive a skeptical technical interview?","That real competence is demonstrated by knowing the failure modes (SRM, novelty, multiple testing, peeking) and how to catch them — not by reciting the definition of a p-value, which is the bar every candidate is expected to already clear."],
+    ["Why is running an A/A test (identical control and treatment) a genuinely valuable pipeline validation step, even though it should show 'no result' by design?","It isolates and tests the experimentation infrastructure itself — randomization, logging, and analysis code — independent of any real treatment effect; if an A/A test shows an unexpectedly high false-positive rate or triggers SRM, the pipeline has a bug that would silently corrupt every real experiment run through it."],
+    ["What would you expect the false-positive rate of many repeated A/A tests to converge to, and why does that number matter?","Approximately the nominal alpha level (e.g. 5% at alpha=0.05) — if the observed rate is meaningfully higher across many A/A simulations, that's direct empirical evidence the testing pipeline itself is broken, not just theoretical concern."],
+    ["How would you explain to a skeptical engineering stakeholder why 'running an A/A test' is worth the engineering time before trusting a new experimentation platform?","Frame it as testing the test-runner itself — the same reason you'd write a unit test with a known expected output before trusting a new piece of production code, applied to statistical infrastructure specifically."],
+    ["What's the relationship between an A/A test and the SRM check covered earlier in this stage?","An A/A test is the ideal setting to validate that the SRM check itself works correctly — since both arms are identical, any SRM alert in an A/A test is unambiguously a pipeline bug, not a coincidence worth debating."],
+    ["Why might a team run periodic A/A tests on an ongoing basis, not just once when a platform first launches?","Experimentation pipelines evolve (new logging, new randomization logic, new infrastructure) and a regression could silently break correctness at any point — periodic A/A tests function as an ongoing regression check on statistical validity, not a one-time certification."]
+  ];
+
+  function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+  var probGrid = document.getElementById('probgrid');
+  problems.forEach(function(p, i){
+    var diff = p[0], q = p[1], code = p[2];
+    var det = document.createElement('details');
+    det.className = 'prob';
+    det.setAttribute('data-diff', diff);
+    det.innerHTML = '<summary><span class="pnum">P' + (i+1) + '</span><span class="pdiff ' + diff + '">' + diff + '</span><span>' + esc(q) + '</span></summary>' +
+      '<div class="prob-body"><div class="codeblock">' + code.replace(/\n/g,'<br>') + '</div></div>';
+    probGrid.appendChild(det);
+  });
+  document.getElementById('probfilter').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('#probfilter button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var f = btn.getAttribute('data-f');
+    document.querySelectorAll('#probgrid details.prob').forEach(function(d){
+      d.style.display = (f === 'all' || d.getAttribute('data-diff') === f) ? '' : 'none';
+    });
+  });
+
+  function renderQA(containerId, bank){
+    var box = document.getElementById(containerId);
+    bank.forEach(function(qa){
+      var det = document.createElement('details');
+      det.className = 'qa';
+      det.innerHTML = '<summary>' + esc(qa[0]) + '</summary><div class="qa-a"><b>A:</b> ' + esc(qa[1]) + '</div>';
+      box.appendChild(det);
+    });
+  }
+  renderQA('qbankDesign', qasDesign);
+  renderQA('qbankPitfalls', qasPitfalls);
+
+  var masteryItems = [
+    "Explain why randomization is what makes an A/B test causal, not just correlational",
+    "Explain primary vs. guardrail metrics and why they're pre-registered",
+    "Compute and explain a power analysis / sample size calculation",
+    "Explain why 'not significant' doesn't prove 'no effect' (underpowered tests)",
+    "Explain SRM, how to detect it, and why it invalidates the whole test",
+    "Explain novelty and primacy effects and how to check for them",
+    "Explain the multiple testing problem and Bonferroni vs. FDR correction",
+    "Explain why peeking inflates false positives, ideally with a concrete simulated number",
+    "Explain CUPED and why it increases power 'for free'",
+    "Give the full 'why this, why not that' comparison across A/B tests, bandits, DiD, PSM, switchback tests",
+    "Explain difference-in-differences and its parallel trends assumption",
+    "Recite the Experimentation Method Comparison Table's key columns from memory",
+    "Answer all 5 Red Flags correctly without hesitation",
+    "Give the honest Level A/B/C answer for A/B testing on the CV without overclaiming platform experience"
+  ];
+  var mBox = document.getElementById('masteryBox');
+  var STORE_KEY = 'masterbook-s11-mastery';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e) { saved = {}; }
+  masteryItems.forEach(function(txt, i){
+    var row = document.createElement('div');
+    row.className = 'cl-item' + (saved[i] ? ' checked' : '');
+    row.innerHTML = '<div class="box' + (saved[i] ? ' done' : '') + '" data-i="' + i + '"></div><span class="txt">' + esc(txt) + '</span>';
+    mBox.appendChild(row);
+  });
+  mBox.addEventListener('click', function(e){
+    var box = e.target.closest('.box');
+    if (!box) return;
+    var i = box.getAttribute('data-i');
+    var isDone = box.classList.toggle('done');
+    box.closest('.cl-item').classList.toggle('checked', isDone);
+    saved[i] = isDone;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch(e) {}
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    backtop.classList.toggle('show', window.scrollY > 500);
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 11 loaded — problems:', problems.length, 'Design Qs:', qasDesign.length, 'Pitfalls Qs:', qasPitfalls.length);
+} catch (err) {
+  console.error('Stage 11 script error:', err);
+}
+</script>

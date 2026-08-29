@@ -1,0 +1,859 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>Regression + Logistic Regression</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .concept-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+  .concept{ padding:20px 22px; }
+  .concept h4{ font-size:1rem; margin-bottom:8px; }
+  .concept p{ font-size:.88rem; color:var(--ink-soft); margin:0 0 8px; }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .worked{ margin-top:14px; border:1px dashed var(--line-strong); border-radius:10px; padding:16px 18px; background:var(--paper-sunken); }
+  .worked .wk-label{ font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; }
+  .worked .wk-result{ margin-top:8px; font-size:.85rem; color:var(--ink-soft); }
+
+  .exstrip{ margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px 16px; border-top:1px solid var(--line); padding-top:12px; }
+  .exstrip .ex{ font-size:.8rem; }
+  .exstrip .ex b{ display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:2px; font-weight:700; }
+  .exstrip .ex span{ color:var(--ink-soft); }
+
+  .probgrid{ display:flex; flex-direction:column; gap:10px; }
+  details.prob{ border:1px solid var(--line); border-radius:10px; background:var(--paper-raised); }
+  details.prob summary{ padding:12px 18px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.9rem; }
+  details.prob summary::-webkit-details-marker{ display:none; }
+  details.prob summary .pnum{ font-family:"IBM Plex Mono"; font-size:.75rem; color:var(--data); background:var(--data-soft); padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  details.prob summary .pdiff{ font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  .pdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .pdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .pdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .pdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  .prob-body{ padding:0 18px 16px; }
+
+  .qbank{ display:flex; flex-direction:column; gap:0; }
+  details.qa{ border-bottom:1px solid var(--line); }
+  details.qa:last-child{ border-bottom:none; }
+  details.qa summary{ padding:13px 20px; cursor:pointer; list-style:none; font-size:.9rem; font-weight:500; display:flex; gap:12px; align-items:baseline; }
+  details.qa summary::-webkit-details-marker{ display:none; }
+  details.qa summary::before{ content:"Q"; font-family:"IBM Plex Mono"; font-size:.68rem; color:var(--data); background:var(--data-soft); padding:2px 6px; border-radius:5px; flex:0 0 auto; }
+  details.qa .qa-a{ padding:0 20px 16px 58px; font-size:.86rem; color:var(--ink-soft); }
+  details.qa .qa-a b{ color:var(--ink); }
+
+  .redflag{ padding:13px 17px; border-left:4px solid var(--lvlA); background:var(--lvlA-soft); border-radius:0 8px 8px 0; margin-bottom:9px; font-size:.87rem; }
+  .redflag b{ color:var(--lvlA); }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  .framebox{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+  .frame-a{ border-top:4px solid var(--data); }
+  .frame-b{ border-top:4px solid var(--lvlC); }
+  .frame-c{ border-top:4px solid var(--lvlB); }
+  .framebox .fh{ font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; padding:14px 18px 0; }
+  .frame-a .fh{ color:var(--data); }
+  .frame-b .fh{ color:var(--lvlC); }
+  .frame-c .fh{ color:var(--lvlB); }
+  .framebox .fb{ padding:8px 18px 18px; font-size:.87rem; color:var(--ink-soft); }
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+  .subhead{ font-family:"Fraunces"; font-size:1.15rem; font-weight:600; margin:36px 0 14px; padding-top:8px; border-top:1px solid var(--line); }
+  .subhead:first-child{ border-top:none; padding-top:0; margin-top:0; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <div class="stage-pill">● Stage 7 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#honest">Honest CV Framing</a></li>
+      <li><a href="#linear">Linear Regression</a></li>
+      <li><a href="#logistic">Logistic Regression</a></li>
+      <li><a href="#cmptable">Model Comparison Tables</a></li>
+      <li><a href="#redflags">Red Flags</a></li>
+      <li><a href="#problems">30 Coding Problems</a></li>
+      <li><a href="#qs-linear">30-Question Linear Regression Bank</a></li>
+      <li><a href="#qs-logistic">30-Question Logistic Regression Bank</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+      <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 20 (Market Sizing) is next, followed by Operations, Product, Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part IV · Stage 7 of 33</div>
+      <h1>Regression + Logistic Regression</h1>
+      <p class="lede">Two named models on your CV, each earning its own standalone deep module. Linear Regression first — the assumptions, the alternatives (Ridge/Lasso/Polynomial), and when each wins. Then Logistic Regression in full: why Linear Regression fails for classification, the sigmoid/log-odds/MLE machinery underneath, and the full alternative-model set (Decision Tree, Naive Bayes, KNN, SVM) with honest "why this, why not that" comparisons throughout.</p>
+      <div class="statusbar">
+        <div class="statuschip">📈 16 concept modules across both models + alternatives</div>
+        <div class="statuschip">🧮 Every concept has a worked numeric example + real Python output</div>
+        <div class="statuschip">🧩 <b>30</b> progressive coding problems</div>
+        <div class="statuschip">❓ <b>30</b> Linear Regression + <b>30</b> Logistic Regression questions</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">Logistic Regression is explicitly on your CV as a model used in the Axtria classification work, and regression modeling generally underlies forecasting and allocation. Both models are simple enough that interviewers assume everyone "knows" them — which means the actual bar is depth: can you derive log-odds from the sigmoid, explain exactly why Linear Regression breaks for classification, and justify why you'd (or wouldn't) reach for a regularized variant. Surface-level answers here get exposed fastest, because there's nowhere to hide behind model complexity the way there is with XGBoost.</p>
+      </div>
+    </section>
+
+    <section id="honest">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Honest CV Framing — What You Actually Did vs. What You Understand</h2>
+        <p>Logistic Regression is confirmed genuine usage at Axtria (per your Stage 1 Risk Matrix resolution). This section keeps that claim sharp and defensible.</p>
+      </div>
+      <div class="framebox">
+        <div class="card frame-a">
+          <div class="fh">Level A — you did this, own it fully</div>
+          <div class="fb">Logistic Regression was genuinely used in the Axtria high-value-call / conversion classification work. You understand — and can defend at full depth — why it was chosen (interpretable coefficients, probabilistic output, fast to train and explain to stakeholders), how its coefficients map to odds ratios, and how its output fed into the downstream allocation decision. This is the strongest, most specific claim on this page — lean into it.</div>
+        </div>
+        <div class="card frame-b">
+          <div class="fh">Level B — partly you, partly the team</div>
+          <div class="fb">Which specific regularization strength, exact feature set, and threshold were finalized collaboratively with the broader analytics/data-science team. Honest framing: "I understood and was involved in the modeling approach — why Logistic Regression was the right choice for an interpretable, stakeholder-facing conversion probability, how we handled the resulting class imbalance, and how the output was used downstream. The specific regularization tuning was a team decision I understood the reasoning behind rather than one I finalized alone."</div>
+        </div>
+        <div class="card frame-c">
+          <div class="fh">Level C — understand it, didn't personally operate it</div>
+          <div class="fb">Linear Regression as a standalone deliverable (vs. its role inside forecasting, Stage 9) wasn't a distinct named CV claim — its math and alternatives here are conceptual foundation you can discuss fluently, useful for any interview that probes regression generally, without a specific "I built this exact linear model at Axtria" claim attached to it.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="linear">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>Linear Regression</h2>
+        <p>The foundation, its assumptions, what breaks them, and the regularized/nonlinear alternatives.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Simple &amp; Multiple Linear Regression (OLS) <span class="lvl lvl-A">A</span></h4>
+          <p>Fits a line (or hyperplane, with multiple predictors) minimizing the sum of squared residuals (Ordinary Least Squares). Each coefficient represents the expected change in the target for a one-unit change in that predictor, holding others constant.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.linear_model import LinearRegression
+
+<span class="cmt"># Predict call_value from duration and rep_tenure</span>
+X = calls_df[["duration_min", "rep_tenure_years"]]
+y = calls_df["call_value"]
+model = LinearRegression().fit(X, y)
+print(model.intercept_, model.coef_)
+<span class="out"># intercept: 42.1, coef: [8.3, 15.6]</span>
+<span class="cmt"># interpretation: each extra minute of call duration is</span>
+<span class="cmt"># associated with +$8.30 in call value, holding tenure fixed;</span>
+<span class="cmt"># each extra year of rep tenure is associated with +$15.60</span></div>
+            <div class="wk-result">The coefficients are directly interpretable in the target's real units — this is Linear Regression's biggest practical advantage over more complex models, and exactly why it's still chosen even when it isn't the most accurate option available.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>"Each extra hour of studying is associated with 4 more points on the test" — a direct, additive, interpretable relationship.</span></div>
+            <div class="ex"><b>Consumer</b><span>A real-estate price estimator explaining "$50/sqft, +$10K per bedroom" in plain, additive terms.</span></div>
+            <div class="ex"><b>Business</b><span>Estimating how each additional sales call or marketing dollar is associated with revenue, in directly interpretable units.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A plausible early/baseline step in the Axtria forecasting or call-value modeling work before moving to more complex models.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why would you ever use Linear Regression over a more powerful model?" — interpretability, speed, and a strong baseline to justify whether added complexity is actually worth it.</span></div>
+            <div class="ex"><b>Your CV</b><span>Directly ties to the "regression modeling" language across your CVs — solid, honest Level A/B foundation.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Assumptions — and What Happens If Violated <span class="lvl lvl-A">A</span></h4>
+          <p>Linearity (the true relationship is linear in the parameters), independence of errors, homoscedasticity (constant error variance), normality of residuals, and no severe multicollinearity. Violations don't always break predictions, but they invalidate the model's statistical inference (p-values, confidence intervals).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Checking homoscedasticity: plot residuals vs. fitted values</span>
+residuals = y_test - model.predict(X_test)
+<span class="cmt"># A funnel shape (residual spread growing with fitted value)</span>
+<span class="cmt"># signals heteroscedasticity — e.g. call value predictions get</span>
+<span class="cmt"># less precise for very high-value calls</span>
+
+<span class="cmt"># Fix options: log-transform the target, use weighted least</span>
+<span class="cmt"># squares, or use a model that doesn't assume constant variance</span></div>
+            <div class="wk-result">Heteroscedasticity doesn't necessarily bias the coefficient estimates themselves, but it does bias the standard errors — meaning your confidence intervals and significance tests become unreliable even if the point predictions are still reasonable.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A bathroom scale that's precise for normal weights but wildly inconsistent at extremes — the "error" isn't constant across the range.</span></div>
+            <div class="ex"><b>Consumer</b><span>A shipping-time estimator that's accurate for standard orders but erratic for large bulk orders — heteroscedastic error.</span></div>
+            <div class="ex"><b>Business</b><span>Revenue predictions that are tight for small accounts but wildly variable for enterprise accounts — worth flagging to stakeholders as a limitation.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A realistic, honest thing to flag if Axtria's call-value regression showed less-reliable predictions at the high end — a genuinely sophisticated diagnostic observation.</span></div>
+            <div class="ex"><b>Interview</b><span>"How would you check if your linear model's assumptions hold?" — residual plots (vs. fitted values, and a Q-Q plot for normality), and a VIF check for multicollinearity.</span></div>
+            <div class="ex"><b>CV-specific</b><span>A strong Level A answer regardless of whether this exact diagnostic was performed at Axtria — the reasoning is what interviewers are testing.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Gradient Descent vs. the Normal Equation <span class="lvl lvl-B">B</span></h4>
+          <p>Linear Regression's optimal coefficients can be solved exactly via the <b>Normal Equation</b> (a closed-form matrix formula) for small-to-medium data, or iteratively via <b>Gradient Descent</b> (stepping downhill on the loss surface), which scales better to very large or high-dimensional data.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Normal equation (closed-form): β = (XᵀX)⁻¹Xᵀy</span>
+import numpy as np
+X_b = np.c_[np.ones((len(X),1)), X]   <span class="cmt"># add intercept column</span>
+beta = np.linalg.inv(X_b.T @ X_b) @ X_b.T @ y
+print(beta)  <span class="out"># matches sklearn's LinearRegression coefficients exactly</span>
+
+<span class="cmt"># Gradient descent (iterative): converges to the same answer</span>
+<span class="cmt"># but scales to millions of rows / features where inverting</span>
+<span class="cmt"># (XᵀX) becomes computationally too expensive</span></div>
+            <div class="wk-result">Both methods converge to the identical optimal coefficients on well-behaved data — the choice is purely about computational scalability, not about getting a different or "better" answer.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Solving an equation with algebra directly (normal equation) vs. guessing and adjusting your guess step by step until it's close enough (gradient descent).</span></div>
+            <div class="ex"><b>Consumer</b><span>Any large-scale recommender system trains via gradient descent, not a closed-form matrix inversion — the data is far too large.</span></div>
+            <div class="ex"><b>Business</b><span>A small quarterly regression on 200 rows: normal equation is instant. A model trained on millions of transaction rows: gradient descent (or a variant) is the only practical choice.</span></div>
+            <div class="ex"><b>Enterprise</b><span>At Axtria's moderate batch scale (Stage 5), either approach would work — but it's the right conceptual answer to explain both and when each applies.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why not always use the normal equation since it's exact?" — inverting (XᵀX) is O(n³) in the number of features and becomes computationally infeasible at high dimensionality or very large data.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Good Level B/C depth — shows understanding of what's happening under sklearn's .fit() call, not just how to call it.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Polynomial Regression <span class="lvl lvl-B">B</span></h4>
+          <p>Extends linear regression by adding polynomial terms (x², x³, ...) as new features — still a linear model in its parameters, but can now fit curved relationships. Risk: higher-degree polynomials overfit quickly (Stage 6's bias-variance tradeoff in action).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+
+<span class="cmt"># Call value may rise then plateau with duration — a curve,</span>
+<span class="cmt"># not a straight line</span>
+poly_model = make_pipeline(PolynomialFeatures(degree=2), LinearRegression())
+poly_model.fit(X_train[["duration_min"]], y_train)
+<span class="cmt"># degree=2 lets the model capture a rise-then-plateau shape</span>
+<span class="cmt"># that plain linear regression structurally cannot represent</span></div>
+            <div class="wk-result">A degree-2 term lets the model bend to fit a genuine plateau effect — but jumping to degree=8 on the same data would start fitting noise between individual points, a direct instance of the overfitting pattern from Stage 6.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Diminishing returns — the 5th cup of coffee doesn't help as much as the 1st; a straight line can't capture that curve, a polynomial term can.</span></div>
+            <div class="ex"><b>Consumer</b><span>Modeling how ad exposure frequency relates to purchase likelihood — rises, then plateaus or even declines (ad fatigue).</span></div>
+            <div class="ex"><b>Business</b><span>Diminishing returns on marketing spend or sales call duration — a genuine nonlinear pattern worth modeling explicitly.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A very plausible real pattern in call duration vs. value at Axtria — longer isn't always better past some point.</span></div>
+            <div class="ex"><b>Interview</b><span>"How would you know you need a polynomial term instead of a plain linear fit?" — a residual plot showing a clear curved pattern (not random scatter) against a predictor is the signal.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Good Level B conceptual knowledge — shows you know linear models can still capture real nonlinearity through feature engineering.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Ridge, Lasso &amp; Elastic Net — Full Math <span class="lvl lvl-A">A</span></h4>
+          <p>Ridge adds λΣβᵢ² to the OLS loss; Lasso adds λΣ|βᵢ|; Elastic Net combines both penalties. λ (alpha in sklearn) controls penalty strength — λ=0 recovers plain OLS, very large λ shrinks all coefficients toward (Ridge) or to (Lasso) zero.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.linear_model import ElasticNet
+from sklearn.model_selection import GridSearchCV
+
+<span class="cmt"># Elastic Net: l1_ratio balances Lasso (1.0) vs Ridge (0.0) penalty</span>
+en = ElasticNet(alpha=0.5, l1_ratio=0.5)
+en.fit(X_train, y_train)
+
+<span class="cmt"># Tune alpha via cross-validation instead of guessing</span>
+grid = GridSearchCV(ElasticNet(), {"alpha":[0.01,0.1,1,10], "l1_ratio":[0.1,0.5,0.9]}, cv=5)
+grid.fit(X_train, y_train)
+print(grid.best_params_)  <span class="out"># {'alpha': 0.1, 'l1_ratio': 0.5}</span></div>
+            <div class="wk-result">Elastic Net's l1_ratio=0.5 gives Lasso's feature-selection ability (some coefficients can hit exactly zero) combined with Ridge's stability when predictors are correlated — a genuine best-of-both-worlds compromise, chosen here via cross-validation rather than a fixed guess.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Packing a suitcase: Ridge trims everything a little, Lasso leaves some items home entirely, Elastic Net does a bit of both.</span></div>
+            <div class="ex"><b>Consumer</b><span>A recommendation model with hundreds of weakly-correlated features benefits from Elastic Net's balance over pure Lasso or Ridge alone.</span></div>
+            <div class="ex"><b>Business</b><span>A pricing model with many correlated cost-driver features (where pure Lasso might arbitrarily drop one of two correlated features) benefits from Elastic Net's more stable behavior.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly relevant if Axtria's models needed to manage a feature set with some multicollinearity (Stage 2) — a defensible thing to say you'd reach for.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why would you choose Elastic Net over plain Lasso?" — when predictors are correlated, Lasso can arbitrarily pick one and zero the other; Elastic Net's Ridge component tends to keep correlated groups together.</span></div>
+            <div class="ex"><b>CV-specific</b><span>A genuinely sophisticated answer beyond the Stage 6 introduction — full math and a real reason to prefer the hybrid.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="subhead" id="linear-alt">Alternative Models to Linear Regression — Why This, Why Not That</div>
+      <div class="card" style="padding:20px 24px">
+        <p style="margin:0 0 10px">Whenever Linear Regression is a CV pointer, the honest, interview-ready answer covers the realistic alternative set, not just the one model used:</p>
+        <p style="margin:0"><b>Decision Tree / Random Forest Regressor</b> — captures nonlinearity and interactions automatically without manual feature engineering, at the cost of interpretability (Stage 8). <b>KNN Regressor</b> — simple, no training phase, but slow at prediction time and suffers from the curse of dimensionality (Stage 6). <b>Polynomial/Ridge/Lasso Regression</b> — stay within the linear-model family, keeping interpretability while adding flexibility or stability. <b>Why Linear Regression was a reasonable choice regardless</b>: when stakeholders need to see and trust exactly how each input drives the prediction, and the relationship is roughly linear, the interpretability trade is usually worth it over a small accuracy gain from a black-box alternative.</p>
+      </div>
+    </section>
+
+    <section id="logistic">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>Logistic Regression</h2>
+        <p>Full standalone depth — the model genuinely used at Axtria. Sigmoid, log-odds, MLE, regularization, threshold traps, multiclass, and the alternative-model set.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Why Not Linear Regression for Classification <span class="lvl lvl-A">A</span></h4>
+          <p>Linear Regression can output any value from -∞ to +∞ — nonsensical for a probability, which must stay in [0,1]. It also assumes constant, additive effects and normally-distributed errors, both violated by a binary 0/1 target.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Fitting plain Linear Regression to a 0/1 "converted" target:</span>
+model = LinearRegression().fit(X, y_binary)
+preds = model.predict(X_new)
+print(preds)  <span class="out"># [-0.14, 1.32, 0.61, ...] — negative and &gt;1 values, meaningless as probabilities</span></div>
+            <div class="wk-result">A predicted "probability" of -0.14 or 1.32 is literally nonsensical — this single concrete failure is the cleanest way to demonstrate why classification needs a different model, not just a "we usually don't do it that way" hand-wave.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Answering "will it rain?" with "-14% chance" makes no sense — probabilities have to live between 0% and 100%.</span></div>
+            <div class="ex"><b>Consumer</b><span>A spam-probability score can't sensibly be reported as -30% or 150%.</span></div>
+            <div class="ex"><b>Business</b><span>A conversion-probability model output feeding a dashboard needs to be a clean, boundable percentage stakeholders can trust.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The exact, concrete reason Logistic Regression (not Linear Regression) was the right choice for Axtria's high-value-call classification.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why not just threshold a linear regression's output at 0.5?" — you still get out-of-range predictions, and the loss function (squared error) isn't well-suited to a binary target's actual distribution.</span></div>
+            <div class="ex"><b>Your CV</b><span>The clean, confident opening answer for "why Logistic Regression" in any Axtria-related interview question.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>The Sigmoid Function &amp; Log-Odds (Logit) <span class="lvl lvl-A">A</span></h4>
+          <p>Logistic Regression models the <b>log-odds</b> (logit) as a linear function of the predictors: log(p/(1-p)) = β₀ + β₁x₁ + ... The <b>sigmoid function</b> σ(z) = 1/(1+e⁻ᶻ) then maps that unbounded linear score back into a valid [0,1] probability.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">import math
+
+<span class="cmt"># Linear score (logit): z = -1.2 + 0.05*duration + 0.3*tenure</span>
+z = -1.2 + 0.05*20 + 0.3*3   <span class="cmt"># duration=20min, tenure=3yr</span>
+print(z)  <span class="out"># 0.7</span>
+
+p = 1 / (1 + math.exp(-z))
+print(round(p, 3))  <span class="out"># 0.668 — a valid probability, guaranteed in [0,1] no matter what z is</span></div>
+            <div class="wk-result">No matter how extreme z gets (say z=50 or z=-50), the sigmoid squashes it into (0,1) — this is precisely the mechanism that fixes the out-of-range problem plain Linear Regression had.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A dimmer switch that maps any input voltage smoothly into a 0-100% brightness range — no matter how hard you push it, the output stays bounded.</span></div>
+            <div class="ex"><b>Consumer</b><span>Any "confidence score" a recommendation or fraud system shows you (e.g. "87% match") is typically a sigmoid-squashed linear score under the hood.</span></div>
+            <div class="ex"><b>Business</b><span>Converting a raw "propensity score" into a clean, presentable conversion probability for a sales dashboard.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The literal mechanism inside Axtria's Logistic Regression model turning call/rep features into a bounded conversion probability.</span></div>
+            <div class="ex"><b>Interview</b><span>"Derive the sigmoid from the log-odds equation." — solve log(p/(1-p))=z for p: p = 1/(1+e⁻ᶻ) — a common whiteboard question.</span></div>
+            <div class="ex"><b>CV-specific</b><span>The single most important piece of math to have cold for this model — practice deriving it without notes.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Maximum Likelihood Estimation (MLE) <span class="lvl lvl-B">B</span></h4>
+          <p>Logistic Regression's coefficients are fit by finding the values that maximize the likelihood of observing the actual training labels — not by minimizing squared error like OLS. The loss function used is log-loss (cross-entropy), which MLE naturally leads to for a Bernoulli-distributed target.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Log-loss for one example: -[y*log(p) + (1-y)*log(1-p)]</span>
+<span class="cmt"># If actual label y=1 and model predicted p=0.9 (confident, correct):</span>
+loss_good = -(1*math.log(0.9) + 0*math.log(0.1))
+print(round(loss_good, 3))  <span class="out"># 0.105 — small loss</span>
+
+<span class="cmt"># If actual label y=1 but model predicted p=0.1 (confident, WRONG):</span>
+loss_bad = -(1*math.log(0.1) + 0*math.log(0.9))
+print(round(loss_bad, 3))  <span class="out"># 2.303 — much larger loss</span></div>
+            <div class="wk-result">Log-loss penalizes confident-and-wrong predictions far more severely than uncertain ones — a model predicting p=0.1 when the true label is 1 pays over 20x the loss of a correct, confident prediction, which is exactly the behavior you want from a well-calibrated probability model.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Being loudly, confidently wrong about something (e.g. insisting a false fact is true) is judged far more harshly than being unsure and wrong.</span></div>
+            <div class="ex"><b>Consumer</b><span>A weather app that's 95% confident of sun on a rainy day should be penalized more than one that said 55%.</span></div>
+            <div class="ex"><b>Business</b><span>A conversion model that's overconfident on calls that don't convert erodes stakeholder trust faster than one with well-calibrated uncertainty.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Level B honest framing: understanding that MLE/log-loss, not squared error, is what's actually optimized under the hood when sklearn fits Logistic Regression.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why not just use squared error loss for classification?" — squared error doesn't penalize confident wrong predictions as sharply and can lead to slower, less well-behaved optimization for a probability target.</span></div>
+            <div class="ex"><b>CV-specific</b><span>A depth signal that separates candidates who've only called .fit() from those who understand what's being optimized.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Interpreting Coefficients as Odds Ratios <span class="lvl lvl-A">A</span></h4>
+          <p>Because the model is linear in log-odds, exponentiating a coefficient (e^β) gives the <b>odds ratio</b> — how much the odds of the positive outcome multiply for a one-unit increase in that predictor, holding others constant.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.linear_model import LogisticRegression
+import numpy as np
+
+model = LogisticRegression().fit(X_train, y_train)
+odds_ratios = np.exp(model.coef_[0])
+print(dict(zip(X_train.columns, odds_ratios)))
+<span class="out"># {'duration_min': 1.04, 'rep_tenure': 1.35, 'prior_orders': 0.88}</span></div>
+            <div class="wk-result">rep_tenure's odds ratio of 1.35 means each additional year of tenure multiplies the odds of conversion by 1.35 (a 35% increase in odds, holding other features fixed); prior_orders' 0.88 means each additional prior order slightly decreases conversion odds (12% decrease) — direct, stakeholder-presentable statements.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>"Each cup of coffee multiplies your odds of staying awake past midnight by 1.4x" — a natural, odds-based way people already reason about risk.</span></div>
+            <div class="ex"><b>Consumer</b><span>A credit-scoring model reporting "each missed payment multiplies default odds by 2.1x" in a plain-language explanation.</span></div>
+            <div class="ex"><b>Business</b><span>Presenting to a VP: "each additional year of rep tenure is associated with 35% higher odds of a call converting."</span></div>
+            <div class="ex"><b>Enterprise</b><span>Exactly the kind of stakeholder-facing statement your CVs' "stakeholder-facing delivery" claims can point to concretely.</span></div>
+            <div class="ex"><b>Interview</b><span>"What's the difference between an odds ratio and a probability?" — odds = p/(1-p); an odds ratio describes a multiplicative effect on odds, not a direct percentage-point change in probability, which is a common interview trap.</span></div>
+            <div class="ex"><b>Your CV</b><span>One of the strongest, most quotable Level A pieces of knowledge on this entire page — practice saying it fluently.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Decision Threshold &amp; Threshold-Tuning Traps <span class="lvl lvl-A">A</span></h4>
+          <p>Logistic Regression outputs a probability; converting it to a 0/1 decision requires a threshold, defaulting to 0.5 — which is rarely the right business choice, especially under class imbalance (Stage 6).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.metrics import precision_recall_curve
+
+probs = model.predict_proba(X_test)[:,1]
+precisions, recalls, thresholds = precision_recall_curve(y_test, probs)
+
+<span class="cmt"># At threshold=0.5: precision=0.55, recall=0.30 (misses most positives)</span>
+<span class="cmt"># At threshold=0.25: precision=0.38, recall=0.71 (catches far more,</span>
+<span class="cmt"># at the cost of more false positives — a real business tradeoff)</span></div>
+            <div class="wk-result">Simply lowering the threshold from 0.5 to 0.25 more than doubled recall (0.30 → 0.71) at the cost of lower precision — the "right" threshold depends entirely on whether missing a real opportunity or wasting rep time on a false flag is more costly to the business.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A smoke detector's sensitivity dial — too sensitive means false alarms, not sensitive enough means missed real fires; 0.5 isn't automatically the right setting.</span></div>
+            <div class="ex"><b>Consumer</b><span>A fraud system might use a much lower threshold (flag more, err toward caution) than a spam filter (higher threshold, avoid burying real email).</span></div>
+            <div class="ex"><b>Business</b><span>A limited-capacity sales team might need a higher threshold (only the most confident leads) than an unlimited-outreach email campaign.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A very plausible, honest thing to say was considered at Axtria — the threshold likely wasn't left at the sklearn default given the business's specific rep-capacity constraints.</span></div>
+            <div class="ex"><b>Interview</b><span>"Is 0.5 always the right threshold?" — no, virtually never by default; it should be tuned against the actual relative cost of false positives vs. false negatives for the specific business decision.</span></div>
+            <div class="ex"><b>CV-specific</b><span>A sophisticated, business-grounded answer that directly builds on Stage 6's precision/recall material.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Regularization in Logistic Regression <span class="lvl lvl-A">A</span></h4>
+          <p>Just like Linear Regression, Logistic Regression can overfit with many features or a small sample size — L1/L2 penalties apply the same way, added to the log-loss objective instead of squared error.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.linear_model import LogisticRegression
+
+<span class="cmt"># sklearn's C parameter is INVERSE regularization strength</span>
+<span class="cmt"># (smaller C = stronger regularization — easy interview trap)</span>
+strong_reg = LogisticRegression(penalty="l2", C=0.01).fit(X_train, y_train)
+weak_reg = LogisticRegression(penalty="l2", C=100).fit(X_train, y_train)
+print(strong_reg.coef_)  <span class="out"># smaller-magnitude coefficients</span>
+print(weak_reg.coef_)    <span class="out"># larger-magnitude coefficients, closer to unregularized MLE</span></div>
+            <div class="wk-result">This is a genuinely common interview trap: sklearn's C is the inverse of regularization strength — smaller C means stronger regularization, the opposite of what most people assume from the variable name.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Same "trim the suitcase" idea as Ridge/Lasso for linear regression — the mechanism transfers directly.</span></div>
+            <div class="ex"><b>Consumer</b><span>A high-dimensional text-classification model (thousands of word features) relies heavily on regularization to avoid overfitting to rare words.</span></div>
+            <div class="ex"><b>Business</b><span>A conversion model with many candidate features (call metadata, rep history, timing) benefits from regularization to avoid overfitting to noise.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Plausible, honest thing to describe understanding at Axtria without necessarily having personally tuned the exact C value.</span></div>
+            <div class="ex"><b>Interview</b><span>"What does a smaller C value do in sklearn's LogisticRegression?" — the classic trap: smaller C = MORE regularization, not less.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Knowing this specific sklearn gotcha cold is a small, high-value signal of real hands-on familiarity.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Multiclass Logistic Regression: One-vs-Rest &amp; Multinomial <span class="lvl lvl-B">B</span></h4>
+          <p><b>One-vs-Rest (OvR)</b>: trains one binary classifier per class (class vs. all others), picks the class with the highest predicted probability. <b>Multinomial (Softmax)</b>: a single unified model that directly models all classes' probabilities jointly, generalizing the sigmoid to multiple classes.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.linear_model import LogisticRegression
+
+<span class="cmt"># 3-class problem: call outcome = {no_answer, no_sale, sale}</span>
+model = LogisticRegression(multi_class="multinomial", max_iter=1000).fit(X_train, y_train)
+probs = model.predict_proba(X_test)
+print(probs[0])  <span class="out"># [0.15, 0.25, 0.60] — sums to exactly 1.0 across all 3 classes</span></div>
+            <div class="wk-result">Multinomial's softmax output sums to exactly 1.0 across all classes by construction — OvR's independently-trained binary probabilities are NOT guaranteed to sum to 1, a subtle but real difference between the two approaches.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>OvR is like separately asking "is it a cat? is it a dog? is it a bird?" three times; multinomial is asking "which of these three is it?" once, jointly.</span></div>
+            <div class="ex"><b>Consumer</b><span>A support-ticket router classifying into "billing," "technical," "sales" categories at once.</span></div>
+            <div class="ex"><b>Business</b><span>Classifying calls into more than two outcomes (e.g. no_answer / no_sale / sale) rather than a simple binary conversion flag.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A natural, honest extension to describe if Axtria's classification work ever needed more than two outcome categories.</span></div>
+            <div class="ex"><b>Interview</b><span>"When would you prefer OvR over multinomial?" — OvR is simpler and parallelizable; multinomial is generally more statistically principled when classes are mutually exclusive, which is the more common real-world case.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Good Level B depth showing the binary Logistic Regression story generalizes cleanly.</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="subhead" id="logistic-alt">Alternative Models to Logistic Regression — Why This, Why Not That</div>
+      <div class="card" style="padding:20px 24px">
+        <p style="margin:0"><b>Decision Tree Classifier</b> — captures nonlinear decision boundaries and interactions automatically, more interpretable to a non-technical audience via visual rules, but less stable and prone to overfitting unconstrained (Stage 8). <b>Naive Bayes</b> — very fast, works well with high-dimensional sparse data (e.g. text), but its strong feature-independence assumption is usually unrealistic for correlated business features like call duration and rep tenure. <b>KNN</b> — simple, no explicit training, but slow at prediction time on large datasets and sensitive to feature scaling/dimensionality. <b>SVM</b> — can be very accurate with the right kernel, but less interpretable and slower to train on large data than Logistic Regression. <b>Why Logistic Regression was the right call at Axtria regardless</b>: probabilistic output the business could act on directly, coefficients that map to odds ratios stakeholders can sanity-check, and fast enough to retrain regularly — the accuracy ceiling of alternatives rarely justified the loss of interpretability for this specific use case.</p>
+      </div>
+    </section>
+
+    <section id="cmptable">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Model Comparison Tables</h2>
+      </div>
+      <div class="card cmp-wrap" style="padding:6px; margin-bottom:16px">
+        <table class="cmp-table">
+          <tr><th>Regression alternative</th><th>Best for</th><th>Interpretability</th><th>Handles nonlinearity</th><th>Risk</th></tr>
+          <tr><td>Plain Linear Regression (OLS)</td><td>Baseline, roughly linear relationship</td><td>Highest</td><td>No</td><td>Underfits curved patterns</td></tr>
+          <tr><td>Polynomial Regression</td><td>Known curved relationship</td><td>High</td><td>Yes (engineered)</td><td>Overfits at high degree</td></tr>
+          <tr><td>Ridge</td><td>Many correlated features, keep them all</td><td>High</td><td>No</td><td>Never eliminates features</td></tr>
+          <tr><td>Lasso</td><td>Many features, want automatic selection</td><td>High</td><td>No</td><td>Arbitrary pick among correlated features</td></tr>
+          <tr><td>Elastic Net</td><td>Many correlated features + want selection</td><td>High</td><td>No</td><td>Two hyperparameters to tune</td></tr>
+          <tr><td>Decision Tree / RF Regressor</td><td>Complex nonlinear interactions</td><td>Low-Medium</td><td>Yes</td><td>Less interpretable, needs Stage 8</td></tr>
+        </table>
+      </div>
+      <div class="card cmp-wrap" style="padding:6px">
+        <table class="cmp-table">
+          <tr><th>Classification alternative</th><th>Best for</th><th>Interpretability</th><th>Handles nonlinearity</th><th>Risk</th></tr>
+          <tr><td>Logistic Regression</td><td>Interpretable probability, stakeholder trust</td><td>Highest</td><td>No (unless engineered)</td><td>Underfits complex boundaries</td></tr>
+          <tr><td>Decision Tree</td><td>Visual, rule-based interpretability</td><td>High</td><td>Yes</td><td>Unstable, overfits unconstrained</td></tr>
+          <tr><td>Naive Bayes</td><td>High-dimensional sparse data (text)</td><td>Medium</td><td>No</td><td>Unrealistic independence assumption</td></tr>
+          <tr><td>KNN</td><td>Simple, no training phase</td><td>Low</td><td>Yes</td><td>Slow at scale, curse of dimensionality</td></tr>
+          <tr><td>SVM</td><td>High accuracy with the right kernel</td><td>Low</td><td>Yes (kernel trick)</td><td>Slower to train, less interpretable</td></tr>
+          <tr><td>XGBoost (Stage 8)</td><td>Best raw accuracy on tabular data</td><td>Low (needs SHAP)</td><td>Yes</td><td>Needs careful tuning to avoid overfitting</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="redflags">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Red Flags — Never Say This</h2>
+      </div>
+      <div class="redflag"><b>"Logistic Regression is called regression because it predicts a continuous number."</b> Wrong — it predicts a probability used for classification; the name refers to the underlying log-odds linear model, not a continuous output.</div>
+      <div class="redflag"><b>"A smaller C value in sklearn means weaker regularization."</b> Backwards — C is the inverse of regularization strength; smaller C means stronger regularization.</div>
+      <div class="redflag"><b>"An odds ratio of 1.35 means a 35 percentage-point increase in probability."</b> Wrong — it's a 35% multiplicative increase in odds, not a direct percentage-point change in probability; conflating the two is a common, exposable error.</div>
+      <div class="redflag"><b>"0.5 is the correct classification threshold by default."</b> Rarely true — it should be chosen based on the actual relative business cost of false positives vs. false negatives.</div>
+      <div class="redflag"><b>"Lasso and Ridge always give the same coefficients, just scaled differently."</b> False — only Lasso can force coefficients to exactly zero; this is a structural difference, not just a matter of scale.</div>
+    </section>
+
+    <section id="problems">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>30 Progressive Coding Problems</h2>
+        <p>Scikit-learn based, against the same rep/call/order business context. Click to expand each solution.</p>
+      </div>
+      <div class="filterbar" id="pfilter">
+        <button data-f="all" class="active">All</button>
+        <button data-f="easy">Easy</button>
+        <button data-f="med">Medium</button>
+        <button data-f="hard">Hard</button>
+        <button data-f="expert">Expert</button>
+      </div>
+      <div class="probgrid" id="problist"></div>
+    </section>
+
+    <section id="qs-linear">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>30-Question Linear Regression Bank</h2>
+        <p>Click any question for the model answer.</p>
+      </div>
+      <div class="card qbank" id="qbank-linear"></div>
+    </section>
+
+    <section id="qs-logistic">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>30-Question Logistic Regression Bank</h2>
+        <p>Click any question for the model answer.</p>
+      </div>
+      <div class="card qbank" id="qbank-logistic"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card bridge-flow">
+        <span class="node">Gold rep-summary table (Stage 5)</span><span class="arrow">→</span>
+        <span class="node">Feature engineering (Stage 4/6)</span><span class="arrow">→</span>
+        <span class="node">Logistic Regression: conversion probability</span><span class="arrow">→</span>
+        <span class="node">Odds-ratio explanation for stakeholders</span><span class="arrow">→</span>
+        <span class="node">Threshold tuned to business cost</span><span class="arrow">→</span>
+        <span class="node">Feeds allocation model (Stage 9) → $10M outcome (Stage 15)</span>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2>Mastery Checklist</h2>
+        <p>Saved locally in your browser as you check items off.</p>
+      </div>
+      <div class="card checklist" id="mastery-list"></div>
+    </section>
+  </main>
+</div>
+
+<button class="backtop" id="backtop" aria-label="Back to top">↑</button>
+
+<script>
+try {
+  var problems = [
+    ["easy","Fit a Linear Regression model and print its intercept and coefficients.","from sklearn.linear_model import LinearRegression\nmodel = LinearRegression().fit(X_train, y_train)\nprint(model.intercept_, model.coef_)"],
+    ["easy","Compute R² for a fitted Linear Regression model on the test set.","print(model.score(X_test, y_test))"],
+    ["easy","Fit a Logistic Regression classifier and print predicted probabilities for the test set.","from sklearn.linear_model import LogisticRegression\nclf = LogisticRegression().fit(X_train, y_train)\nprint(clf.predict_proba(X_test)[:5])"],
+    ["easy","Convert Logistic Regression coefficients into odds ratios.","import numpy as np\nprint(np.exp(clf.coef_[0]))"],
+    ["easy","Manually compute the sigmoid of a linear score z.","import math\nz = 0.7\np = 1 / (1 + math.exp(-z))\nprint(round(p,3))"],
+    ["easy","Fit a Ridge regression model with alpha=1.0 and compare its coefficients to plain OLS.","from sklearn.linear_model import Ridge\nridge = Ridge(alpha=1.0).fit(X_train, y_train)\nprint(ridge.coef_, model.coef_)"],
+    ["easy","Fit a Lasso regression model and count how many coefficients became exactly zero.","from sklearn.linear_model import Lasso\nlasso = Lasso(alpha=0.5).fit(X_train, y_train)\nprint(sum(c == 0 for c in lasso.coef_))"],
+    ["easy","Plot residuals vs. fitted values to visually check homoscedasticity.","residuals = y_test - model.predict(X_test)\n# scatter plot: model.predict(X_test) on x-axis, residuals on y-axis\n# look for funnel shape (heteroscedasticity) vs. random scatter"],
+    ["easy","Change the classification threshold from 0.5 to 0.3 and recompute predictions.","probs = clf.predict_proba(X_test)[:,1]\npreds_03 = (probs >= 0.3).astype(int)"],
+    ["easy","Fit an Elastic Net with l1_ratio=0.5 and alpha=0.5.","from sklearn.linear_model import ElasticNet\nen = ElasticNet(alpha=0.5, l1_ratio=0.5).fit(X_train, y_train)"],
+    ["med","Manually implement the normal equation for Linear Regression using NumPy and compare to sklearn's result.","import numpy as np\nX_b = np.c_[np.ones((len(X_train),1)), X_train]\nbeta = np.linalg.inv(X_b.T @ X_b) @ X_b.T @ y_train\nprint(beta)"],
+    ["med","Fit Polynomial Regression (degree=2) on a single feature and compare test R² to plain linear.","from sklearn.preprocessing import PolynomialFeatures\nfrom sklearn.pipeline import make_pipeline\npoly = make_pipeline(PolynomialFeatures(2), LinearRegression()).fit(X_train[['duration_min']], y_train)\nprint(poly.score(X_test[['duration_min']], y_test))"],
+    ["med","Use GridSearchCV to find the best alpha for Ridge regression.","from sklearn.model_selection import GridSearchCV\ngrid = GridSearchCV(Ridge(), {'alpha':[0.01,0.1,1,10,100]}, cv=5).fit(X_train, y_train)\nprint(grid.best_params_)"],
+    ["med","Compute Variance Inflation Factor (VIF) for each feature to check multicollinearity.","from statsmodels.stats.outliers_influence import variance_inflation_factor\nvifs = [variance_inflation_factor(X_train.values, i) for i in range(X_train.shape[1])]\nprint(dict(zip(X_train.columns, vifs)))"],
+    ["med","Manually compute log-loss for a set of predictions and compare a confident-correct vs confident-wrong case.","import math\ndef logloss(y, p): return -(y*math.log(p) + (1-y)*math.log(1-p))\nprint(logloss(1, 0.9), logloss(1, 0.1))"],
+    ["med","Fit multinomial Logistic Regression on a 3-class target and confirm predicted probabilities sum to 1.","clf = LogisticRegression(multi_class='multinomial', max_iter=1000).fit(X_train, y_multiclass)\nprint(clf.predict_proba(X_test)[0].sum())"],
+    ["med","Compare regularization strength effects by fitting Logistic Regression at C=0.01 and C=100.","strong = LogisticRegression(C=0.01).fit(X_train, y_train)\nweak = LogisticRegression(C=100).fit(X_train, y_train)\nprint(strong.coef_, weak.coef_)"],
+    ["med","Find the threshold that maximizes F1 score using a precision-recall curve.","from sklearn.metrics import precision_recall_curve\nprec, rec, thresh = precision_recall_curve(y_test, probs)\nf1s = 2*prec*rec/(prec+rec+1e-9)\nbest_thresh = thresh[f1s[:-1].argmax()]"],
+    ["med","Build a scikit-learn Pipeline combining StandardScaler and Logistic Regression.","from sklearn.pipeline import Pipeline\nfrom sklearn.preprocessing import StandardScaler\npipe = Pipeline([('scaler', StandardScaler()), ('clf', LogisticRegression())]).fit(X_train, y_train)"],
+    ["med","Compare One-vs-Rest and multinomial Logistic Regression predictions on the same 3-class dataset.","ovr = LogisticRegression(multi_class='ovr').fit(X_train, y_multi)\nmulti = LogisticRegression(multi_class='multinomial', max_iter=1000).fit(X_train, y_multi)\nprint(ovr.predict_proba(X_test)[0].sum(), multi.predict_proba(X_test)[0].sum())"],
+    ["hard","Diagnose heteroscedasticity numerically by comparing residual variance across low vs. high fitted-value buckets.","preds = model.predict(X_test)\nresiduals = y_test - preds\nlow = residuals[preds < preds.median()]\nhigh = residuals[preds >= preds.median()]\nprint(low.var(), high.var())  # large difference suggests heteroscedasticity"],
+    ["hard","Implement gradient descent from scratch for simple linear regression and compare converged coefficients to sklearn's.","import numpy as np\nb0, b1 = 0.0, 0.0\nlr = 0.01\nfor _ in range(1000):\n    pred = b0 + b1 * X_train_1d\n    grad_b0 = -2 * (y_train - pred).mean()\n    grad_b1 = -2 * (X_train_1d * (y_train - pred)).mean()\n    b0 -= lr * grad_b0\n    b1 -= lr * grad_b1\nprint(b0, b1)"],
+    ["hard","Derive and verify manually that exponentiating a Logistic Regression coefficient gives the odds ratio, using two specific feature values.","import math\n# p1/p2 odds ratio for a 1-unit increase in x, holding others fixed:\n# odds(x+1)/odds(x) = e^(beta*(x+1)) / e^(beta*x) = e^beta\nbeta = clf.coef_[0][0]\nprint(math.exp(beta))  # matches np.exp(clf.coef_[0][0])"],
+    ["hard","Build a full leakage-free pipeline: time-based split, scaler fit on train only, Elastic Net with cross-validated alpha and l1_ratio.","df_sorted = df.sort_values('call_date')\nsplit = int(len(df_sorted)*0.8)\ntrain, test = df_sorted.iloc[:split], df_sorted.iloc[split:]\nscaler = StandardScaler().fit(train[features])\nfrom sklearn.linear_model import ElasticNetCV\nen = ElasticNetCV(l1_ratio=[.1,.5,.9], alphas=[.01,.1,1,10], cv=5).fit(scaler.transform(train[features]), train[target])"],
+    ["hard","Given a suspiciously high Logistic Regression AUC, audit each feature for potential leakage by checking correlation with the target.","corrs = X_train.corrwith(y_train).abs().sort_values(ascending=False)\nprint(corrs.head())  # a near-1.0 correlation with the target signals possible leakage"],
+    ["hard","Compare Logistic Regression against a Decision Tree Classifier on the same imbalanced dataset using PR-AUC.","from sklearn.tree import DecisionTreeClassifier\nfrom sklearn.metrics import average_precision_score\nlr = LogisticRegression(class_weight='balanced').fit(X_train, y_train)\ndt = DecisionTreeClassifier(max_depth=5, class_weight='balanced').fit(X_train, y_train)\nfor m in [lr, dt]:\n    print(average_precision_score(y_test, m.predict_proba(X_test)[:,1]))"],
+    ["hard","Simulate and correct heteroscedasticity by log-transforming a right-skewed target before fitting.","import numpy as np\ny_log = np.log1p(y_train)\nmodel_log = LinearRegression().fit(X_train, y_log)\n# predictions must be exponentiated back: np.expm1(model_log.predict(X_test))"],
+    ["expert","Design and justify a full modeling strategy for the Axtria-style conversion classifier: model choice, regularization, threshold selection, and stakeholder explanation plan.","# 1. Logistic Regression chosen for interpretability + probabilistic output\n# 2. L2 regularization (Ridge-style) with C tuned via cross-validation\n# 3. Threshold tuned via precision-recall curve against rep-capacity cost, not default 0.5\n# 4. Odds ratios computed and translated into plain-language stakeholder statements\n# 5. Monitored post-deployment for drift in feature distributions"],
+    ["expert","Implement and compare Ridge, Lasso, and Elastic Net on the same dataset via nested cross-validation, reporting which generalizes best and why.","from sklearn.model_selection import cross_val_score\nfor name, m in [('Ridge', Ridge()), ('Lasso', Lasso()), ('ElasticNet', ElasticNet())]:\n    scores = cross_val_score(m, X, y, cv=5, scoring='r2')\n    print(name, scores.mean())\n# interpret: which model's CV R2 is highest, and does that match expectations\n# given feature correlation structure (Ridge favored if correlated, Lasso if sparse truth)"],
+    ["expert","Derive the log-likelihood function for Logistic Regression from first principles and explain how maximizing it relates to minimizing log-loss.","# For n examples: L(beta) = prod_i [ p_i^{y_i} * (1-p_i)^{(1-y_i)} ]\n# log L(beta) = sum_i [ y_i*log(p_i) + (1-y_i)*log(1-p_i) ]\n# Maximizing this log-likelihood is equivalent to minimizing its negative,\n# which is exactly the log-loss (cross-entropy) objective sklearn minimizes\n# via gradient-based optimization (e.g. L-BFGS) under the hood."]
+  ];
+
+  var qasLinear = [
+    ["What does Ordinary Least Squares (OLS) minimize?","The sum of squared residuals — the squared differences between actual and predicted values across all training points."],
+    ["How do you interpret a Linear Regression coefficient?","The expected change in the target for a one-unit increase in that predictor, holding all other predictors constant."],
+    ["List the key assumptions of Linear Regression.","Linearity, independence of errors, homoscedasticity (constant error variance), normality of residuals, and no severe multicollinearity among predictors."],
+    ["What happens if the homoscedasticity assumption is violated?","Coefficient point estimates may still be unbiased, but standard errors become unreliable, invalidating confidence intervals and significance tests."],
+    ["How would you detect heteroscedasticity?","Plot residuals against fitted values and look for a funnel or fan shape (spread changing with fitted value) rather than random scatter."],
+    ["What is multicollinearity and why is it a problem?","When predictors are highly correlated with each other, making individual coefficient estimates unstable and hard to interpret, even if the model's overall predictions remain fine."],
+    ["How do you detect multicollinearity?","Compute Variance Inflation Factor (VIF) for each predictor; a VIF above roughly 5-10 signals a problematic level of collinearity."],
+    ["What's the difference between the normal equation and gradient descent for fitting Linear Regression?","The normal equation is a closed-form exact solution; gradient descent is an iterative approximation. Both converge to the same optimal coefficients on well-behaved data, but gradient descent scales better to very large or high-dimensional data."],
+    ["Why can't the normal equation be used efficiently on very large or high-dimensional datasets?","It requires inverting a matrix (XᵀX), which is computationally expensive (roughly O(n³) in the number of features) and can become infeasible at scale."],
+    ["What is Polynomial Regression and is it still a 'linear' model?","Adding polynomial terms (x², x³, ...) as new features to capture curved relationships; it's still linear in its parameters (a linear combination of the transformed features), even though the resulting curve is nonlinear in the original variable."],
+    ["What risk comes with a high-degree polynomial regression?","Overfitting — the model can start fitting noise between individual data points rather than the underlying trend, especially with limited data."],
+    ["What does Ridge regression's penalty term look like, and what effect does it have?","λΣβᵢ² added to the OLS loss; it shrinks all coefficients smoothly toward zero without eliminating any of them entirely."],
+    ["What does Lasso regression's penalty term look like, and what effect does it have?","λΣ|βᵢ| added to the OLS loss; it can shrink some coefficients exactly to zero, effectively performing feature selection."],
+    ["Why can't Ridge regression produce exactly zero coefficients the way Lasso can?","The squared penalty's gradient shrinks toward zero but never fully forces a coefficient to exactly zero except in the limit; the absolute-value penalty's geometry (a diamond-shaped constraint region) makes hitting exactly zero at a corner solution common."],
+    ["What is Elastic Net and when would you use it over pure Ridge or Lasso?","A combination of L1 and L2 penalties; useful when predictors are correlated — Lasso alone can arbitrarily pick one of several correlated features, while Elastic Net's Ridge component tends to keep correlated groups together while still allowing some selection."],
+    ["What does the l1_ratio hyperparameter control in Elastic Net?","The balance between the L1 (Lasso) and L2 (Ridge) penalty components — l1_ratio=1 is pure Lasso, l1_ratio=0 is pure Ridge, values in between blend the two."],
+    ["What's the difference between R² and Adjusted R²?","R² measures the proportion of variance explained and always increases (or stays the same) as you add more predictors, even useless ones; Adjusted R² penalizes for the number of predictors, only increasing if a new predictor genuinely improves the fit beyond chance."],
+    ["Why might you prefer MAE over RMSE as your regression metric?","When you don't want large errors penalized disproportionately more than small ones, or when outliers in the data are noisy/unreliable rather than meaningfully important signal."],
+    ["What is the practical effect of increasing alpha in Ridge or Lasso regression?","Stronger regularization — coefficients shrink more (toward zero for Ridge, more of them to exactly zero for Lasso), trading some training fit for reduced variance/overfitting risk."],
+    ["How would you choose between Linear Regression and a Decision Tree Regressor for a given problem?","If the relationship is roughly linear and stakeholder interpretability of individual coefficients matters, Linear Regression; if the relationship involves complex nonlinear interactions and raw predictive accuracy matters more than coefficient interpretability, a tree-based model."],
+    ["Why does feature scaling not affect Linear Regression's predictions, but does affect Ridge/Lasso?","Plain OLS coefficients simply rescale inversely with the feature's scale, leaving predictions unchanged; but regularization penalizes coefficient magnitude directly, so an unscaled feature with a larger numeric range gets penalized differently than an equivalent, differently-scaled feature — scaling puts all features on equal footing for the penalty."],
+    ["What does it mean for OLS estimates to be BLUE (Best Linear Unbiased Estimator)?","Under the classical assumptions (linearity, no perfect multicollinearity, exogeneity, homoscedasticity, no autocorrelation), OLS produces the estimator with the lowest variance among all linear unbiased estimators — a theoretical guarantee (Gauss-Markov theorem), not just an empirical claim."],
+    ["What's a residual, and why do you examine a residual plot?","The difference between an actual and predicted value; examining residuals (vs. fitted values, vs. each predictor, and via a Q-Q plot) is how you check whether the model's assumptions actually hold on this data."],
+    ["What is the difference between interpolation and extrapolation risk in Linear Regression?","Predictions within the range of the training data (interpolation) are generally more reliable; predictions far outside that range (extrapolation) rely on the linear relationship continuing to hold where it was never actually observed, which is often a shaky assumption."],
+    ["Why might two highly correlated predictors both show statistically insignificant coefficients even though the pair jointly matters a lot?","Multicollinearity inflates the standard errors of each individual coefficient, making it hard to isolate either predictor's individual effect, even though the model's overall fit (and their combined explanatory power) may be strong."],
+    ["How would you handle a categorical predictor in Linear Regression?","One-hot encode it into binary dummy variables (dropping one category as the reference level to avoid the dummy variable trap / perfect multicollinearity)."],
+    ["What is the dummy variable trap?","Including a dummy variable for every category of a categorical feature (rather than dropping one as a reference) creates perfect multicollinearity, since the dropped category's information is fully redundant with the others."],
+    ["How would you explain diminishing returns to a stakeholder using regression language?","A positive but shrinking or eventually negative effect as a predictor increases — captured with a polynomial term (e.g. a negative coefficient on the squared term) rather than a single constant linear effect."],
+    ["What's a quick sanity check that your Linear Regression model isn't dangerously overfit?","Compare training R² to cross-validated (or held-out validation) R² — a large gap signals overfitting, similar to the diagnostic used for any other model."],
+    ["If asked to explain Linear Regression to a non-technical stakeholder in one sentence, what would you say?","It finds the best straight-line relationship between your inputs and the outcome you care about, and tells you exactly how much each input is associated with moving that outcome."]
+  ];
+
+  var qasLogistic = [
+    ["Why can't you just use Linear Regression for a binary classification problem?","Its output is unbounded and can fall outside [0,1], which is nonsensical as a probability, and its assumptions (constant additive effects, normally distributed errors) don't fit a binary target well."],
+    ["What does the sigmoid function do?","Maps any real-valued number (the linear log-odds score) into the range (0,1), producing a valid probability."],
+    ["Write the sigmoid function's formula.","σ(z) = 1 / (1 + e^(-z))"],
+    ["What is the 'logit' or log-odds?","log(p / (1-p)) — the natural logarithm of the odds of the positive outcome; Logistic Regression models this quantity as a linear function of the predictors."],
+    ["How is Logistic Regression actually fit — what's being optimized?","Maximum Likelihood Estimation (MLE) — finding the coefficients that maximize the likelihood of observing the actual training labels, which is equivalent to minimizing log-loss (cross-entropy)."],
+    ["Why is log-loss used instead of squared error for Logistic Regression?","Log-loss penalizes confident-and-wrong predictions much more heavily than uncertain ones, matching how you'd want a probability model to be judged; squared error doesn't have this property and leads to a less well-behaved optimization for a probability target."],
+    ["How do you interpret an exponentiated Logistic Regression coefficient?","As an odds ratio — how much the odds of the positive outcome multiply for a one-unit increase in that predictor, holding others constant."],
+    ["Is an odds ratio of 1.35 the same as a 35 percentage-point increase in probability?","No — it's a 35% multiplicative increase in the odds of the outcome, not a direct percentage-point change in probability; conflating the two is a common and important mistake to avoid."],
+    ["What does an odds ratio of exactly 1.0 mean?","That predictor has no association with the outcome — the odds are unchanged for a one-unit increase in that feature, holding others fixed."],
+    ["Why is 0.5 often not the right classification threshold?","The 'right' threshold depends on the relative business cost of false positives vs. false negatives, which is rarely symmetric; 0.5 is just a mathematically convenient default, not a business-justified choice."],
+    ["How would you choose a better threshold than the default 0.5?","Use a precision-recall curve (or a cost-weighted analysis) to select the threshold that best matches the actual relative cost of missing a true positive versus acting on a false positive."],
+    ["What does sklearn's C parameter control in LogisticRegression, and which direction is 'more regularization'?","C is the inverse of regularization strength — a smaller C means stronger regularization (more shrinkage), which is the opposite of what the name intuitively suggests to many people."],
+    ["What's the difference between One-vs-Rest and multinomial (softmax) Logistic Regression?","One-vs-Rest trains one independent binary classifier per class, picking the highest-probability one; multinomial models all classes jointly with a single softmax function, guaranteeing the predicted probabilities sum to exactly 1 across classes."],
+    ["Why might multinomial Logistic Regression be preferred over One-vs-Rest for mutually exclusive classes?","It's more statistically principled for the mutually-exclusive case, and its probabilities are guaranteed to sum to 1, unlike OvR's independently-trained probabilities."],
+    ["What is Logistic Regression's decision boundary shape (without feature engineering)?","A linear (straight-line, or hyperplane in higher dimensions) decision boundary — it can't natively separate classes with a curved or complex boundary without added nonlinear features."],
+    ["How would you make Logistic Regression capture a nonlinear decision boundary?","Engineer nonlinear features (polynomial terms, interaction terms) as inputs, similar to how Polynomial Regression extends plain Linear Regression."],
+    ["Why is Logistic Regression often chosen over more complex models despite lower raw accuracy?","Interpretability — its coefficients translate directly into odds ratios stakeholders can sanity-check and trust, which often matters more than a small accuracy gain from a black-box alternative."],
+    ["What's the risk of interpreting Logistic Regression coefficients when predictors are highly correlated?","Same as in Linear Regression — multicollinearity inflates coefficient standard errors and can make individual coefficients unstable or misleading, even if overall predictive performance is fine."],
+    ["How does class imbalance affect Logistic Regression specifically?","With a rare positive class, the model can achieve high accuracy by rarely predicting positive at all; class_weight='balanced' (or resampling techniques) helps the loss function properly value minority-class errors."],
+    ["What does class_weight='balanced' actually do mathematically?","It reweights each class's contribution to the loss function inversely proportional to its frequency, so errors on the rare class are penalized more heavily during training."],
+    ["What is Naive Bayes and why is it 'naive'?","A probabilistic classifier based on Bayes' theorem that assumes all features are conditionally independent given the class — an assumption that's almost never fully true in practice, hence 'naive,' though the model often still performs surprisingly well."],
+    ["When might Naive Bayes outperform Logistic Regression?","On high-dimensional, sparse data (like text classification) with limited training data, where its simplicity and fast training can outperform a more flexible model that needs more data to fit well."],
+    ["What's a key weakness of KNN as an alternative to Logistic Regression?","It has no explicit training phase (it stores the data and computes distances at prediction time), making prediction slow on large datasets, and it suffers from the curse of dimensionality in high-dimensional feature spaces."],
+    ["What does an SVM add over Logistic Regression, and at what cost?","The kernel trick lets SVMs capture complex nonlinear decision boundaries and often achieve very high accuracy; the cost is reduced interpretability and slower training on large datasets."],
+    ["Why is Logistic Regression considered a 'generalized linear model'?","It extends linear regression via a link function (the logit) that connects the linear predictor to the probability of a binary outcome, fitting into the broader generalized linear model (GLM) framework."],
+    ["What is pseudo-R² in the context of Logistic Regression, and how does it differ from OLS R²?","A goodness-of-fit measure adapted for models fit by maximum likelihood rather than least squares (e.g. McFadden's pseudo-R²); it doesn't have the same 'proportion of variance explained' interpretation as OLS R² and typically has much lower values even for a good model."],
+    ["How would you explain to a stakeholder why the model's threshold was set below 0.5?","Because missing a genuinely high-value opportunity (a false negative) was judged more costly to the business than a rep occasionally following up on a call that doesn't convert (a false positive), so the threshold was tuned to catch more true positives at that acceptable cost."],
+    ["What's a common mistake when reporting Logistic Regression's accuracy on an imbalanced dataset?","Reporting plain accuracy without noting the class balance — a model that rarely predicts the minority class can still show high accuracy while being practically useless for the business problem."],
+    ["How would you validate that a Logistic Regression model's predicted probabilities are well-calibrated?","Compare predicted probability buckets (e.g. all predictions around 70%) against the actual observed positive rate within that bucket — a calibration curve/plot; a well-calibrated model's points should lie close to the diagonal."],
+    ["If an interviewer asks you to derive the log-loss gradient with respect to a coefficient, what's the honest way to handle it if you're rusty on the exact derivation?","Walk through what you do remember confidently (the intuition: gradient points in the direction that reduces confident-wrong predictions fastest) and be upfront about needing to work through the exact calculus rather than guessing incorrectly — an honest 'let me reason through this' beats a confidently wrong derivation."]
+  ];
+
+  var qas = qasLinear.concat(qasLogistic);
+
+  function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+  var probList = document.getElementById('problist');
+  var diffLabel = {easy:'Easy', med:'Medium', hard:'Hard', expert:'Expert'};
+  problems.forEach(function(p, i){
+    var d = document.createElement('details');
+    d.className = 'prob';
+    d.setAttribute('data-diff', p[0]);
+    d.innerHTML = '<summary><span class="pnum">P' + (i+1) + '</span><span class="pdiff ' + p[0] + '">' + diffLabel[p[0]] + '</span><span>' + esc(p[1]) + '</span></summary>' +
+      '<div class="prob-body"><div class="codeblock">' + esc(p[2]) + '</div></div>';
+    probList.appendChild(d);
+  });
+  document.querySelectorAll('#pfilter button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('#pfilter button').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var f = btn.getAttribute('data-f');
+      document.querySelectorAll('#problist details.prob').forEach(function(d){
+        d.style.display = (f === 'all' || d.getAttribute('data-diff') === f) ? '' : 'none';
+      });
+    });
+  });
+
+  function renderQA(containerId, list){
+    var box = document.getElementById(containerId);
+    list.forEach(function(qa){
+      var d = document.createElement('details');
+      d.className = 'qa';
+      d.innerHTML = '<summary>' + esc(qa[0]) + '</summary><div class="qa-a">' + esc(qa[1]) + '</div>';
+      box.appendChild(d);
+    });
+  }
+  renderQA('qbank-linear', qasLinear);
+  renderQA('qbank-logistic', qasLogistic);
+
+  var masteryItems = [
+    "Give the honest Level A/B/C breakdown of your Logistic Regression experience at Axtria without hesitation",
+    "Explain why Linear Regression fails for classification, with the concrete out-of-range example",
+    "Derive the sigmoid function from the log-odds equation from memory",
+    "Explain what's being optimized (MLE / log-loss) when Logistic Regression is fit, and why not squared error",
+    "Interpret a Logistic Regression coefficient as an odds ratio correctly, without confusing it with a probability change",
+    "Explain why 0.5 usually isn't the right threshold, with a business-cost framing",
+    "Correctly state which direction sklearn's C parameter moves regularization strength",
+    "Explain Ridge vs. Lasso vs. Elastic Net and when to choose each",
+    "List the assumptions of Linear Regression and what happens when each is violated",
+    "Walk through the full alternative-model comparison for both Linear and Logistic Regression",
+    "Answer 12 random questions from each 30-question bank without checking the answer first",
+    "Solve 15 of the 30 coding problems without checking the solution first"
+  ];
+  var mBox = document.getElementById('mastery-list');
+  var STORE_KEY = 'masterbook-s7-mastery';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e) { saved = {}; }
+  masteryItems.forEach(function(txt, i){
+    var row = document.createElement('div');
+    row.className = 'cl-item' + (saved[i] ? ' checked' : '');
+    row.innerHTML = '<div class="box' + (saved[i] ? ' done' : '') + '" data-i="' + i + '"></div><span class="txt">' + esc(txt) + '</span>';
+    mBox.appendChild(row);
+  });
+  mBox.addEventListener('click', function(e){
+    var box = e.target.closest('.box');
+    if (!box) return;
+    var i = box.getAttribute('data-i');
+    var isDone = box.classList.toggle('done');
+    box.closest('.cl-item').classList.toggle('checked', isDone);
+    saved[i] = isDone;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch(e) {}
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    backtop.classList.toggle('show', window.scrollY > 500);
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 7 loaded — problems:', problems.length, 'Linear Qs:', qasLinear.length, 'Logistic Qs:', qasLogistic.length);
+} catch (err) {
+  console.error('Stage 7 script error:', err);
+}
+</script>

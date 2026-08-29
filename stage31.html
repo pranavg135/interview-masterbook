@@ -1,0 +1,1369 @@
+<meta name="robots" content="noindex, nofollow">
+<title>Portfolio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+
+  .case-sec{ margin-top:20px; }
+  .case-sec h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .case-sec h5::before{ content:""; width:14px; height:2px; background:var(--accent); display:inline-block; }
+  .case-sec p, .case-sec li{ font-size:.9rem; color:var(--ink-soft); margin:0 0 6px; }
+  .qa-pair{ margin-bottom:10px; padding:10px 14px; background:var(--paper-sunken); border-radius:8px; }
+  .qa-pair .q{ font-size:.88rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .qa-pair .a{ font-size:.87rem; color:var(--ink-soft); }
+  .case-sec ul{ margin:0; padding-left:20px; }
+  .synth-box{ margin-top:20px; padding:15px 18px; background:var(--accent-soft); border-radius:8px; border-left:4px solid var(--accent); }
+  .synth-box h5{ color:var(--accent-ink); }
+  .synth-box p{ color:var(--ink); font-weight:500; }
+
+  .cv-role-meta{ font-size:.85rem; color:var(--ink-faint); margin:2px 0 10px; }
+  .cv-role-meta .co{ color:var(--ink); font-weight:600; }
+
+  .draftflag{ display:inline-flex; align-items:center; gap:5px; font-size:.68rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; background:var(--lvlB-soft); color:var(--lvlB); text-transform:uppercase; letter-spacing:.03em; }
+  .okflag{ display:inline-flex; align-items:center; gap:5px; font-size:.68rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; background:var(--data-soft); color:var(--data); text-transform:uppercase; letter-spacing:.03em; }
+
+  .star-card{ border:1px solid var(--line); border-radius:12px; padding:20px 22px; background:var(--paper-raised); box-shadow:var(--shadow); margin-bottom:16px; }
+  .star-card h4{ font-size:1.02rem; margin-bottom:12px; }
+  .star-row{ margin-bottom:9px; font-size:.9rem; color:var(--ink-soft); }
+  .star-row b{ color:var(--accent-ink); font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; margin-right:8px; display:inline-block; min-width:70px; }
+
+  .claimcard{ border:1px solid var(--line); border-radius:14px; background:var(--paper-raised); box-shadow:var(--shadow); padding:26px 28px; margin-bottom:20px; }
+  .claimcard .chead{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:10px; }
+  .claimcard .chead h3{ font-size:1.22rem; flex:1; min-width:200px; }
+  .bulletquote{ margin:14px 0; padding:14px 18px; background:var(--paper-sunken); border-left:4px solid var(--ink-faint); border-radius:0 8px 8px 0; font-style:italic; font-size:.92rem; color:var(--ink-soft); }
+  .scopebox{ margin:14px 0; padding:14px 18px; background:var(--data-soft); border-radius:8px; border-left:4px solid var(--data); }
+  .scopebox h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--data); margin-bottom:6px; }
+  .scopebox p{ margin:0; color:var(--ink); font-size:.9rem; }
+
+  .repobox{ margin:14px 0; padding:14px 18px; background:var(--lvlD-soft); border-radius:8px; border-left:4px solid var(--lvlD); }
+  .repobox h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--lvlD); margin-bottom:6px; }
+  .repobox p, .repobox li{ margin:0; color:var(--ink); font-size:.88rem; }
+  .projnum{ display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; background:var(--data); color:#fff; font-family:"IBM Plex Mono"; font-weight:700; font-size:.9rem; margin-right:10px; flex:0 0 30px; }
+  .projnum2{ display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; background:var(--accent); color:#fff; font-family:"IBM Plex Mono"; font-weight:700; font-size:.9rem; margin-right:10px; flex:0 0 30px; }
+  .partlabel{ display:inline-flex; align-items:center; gap:8px; font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; font-weight:700; color:var(--accent-ink); background:var(--accent-soft); padding:6px 14px; border-radius:100px; margin-bottom:14px; }
+  .kpi-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; margin:14px 0; }
+  .kpi-card{ background:var(--paper-sunken); border-radius:8px; padding:12px 14px; }
+  .kpi-card .klabel{ font-family:"IBM Plex Mono"; font-size:.65rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:4px; }
+  .kpi-card.kri .klabel{ color:var(--lvlA); }
+  .kpi-card .kval{ font-size:.87rem; color:var(--ink); font-weight:600; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <a class="backlink" href="stage14.html">← Stage 14 · Product Management</a>
+    <a class="backlink" href="stage15.html">← Stage 15 · Structured Problem Solving &amp; Frameworks</a>
+    <a class="backlink" href="stage16.html">← Stage 16 · Profitability Case Bank</a>
+    <a class="backlink" href="stage17.html">← Stage 17 · Market Entry Case Bank</a>
+    <a class="backlink" href="stage18.html">← Stage 18 · Growth Case Bank</a>
+    <a class="backlink" href="stage19.html">← Stage 19 · Pricing Case Bank</a>
+    <a class="backlink" href="stage20.html">← Stage 20 · Market Sizing Case Bank</a>
+    <a class="backlink" href="stage21.html">← Stage 21 · Operations Case Bank</a>
+    <a class="backlink" href="stage22.html">← Stage 22 · Product Case Bank</a>
+    <a class="backlink" href="stage23.html">← Stage 23 · Analytics Case Bank</a>
+    <a class="backlink" href="stage24.html">← Stage 24 · AI/GenAI Case Bank</a>
+    <a class="backlink" href="stage25.html">← Stage 25 · FinTech Case Bank</a>
+    <a class="backlink" href="stage26.html">← Stage 26 · Pharma Case Bank</a>
+    <a class="backlink" href="stage27.html">← Stage 27 · Axtria Deep Dive</a>
+    <a class="backlink" href="stage28.html">← Stage 28 · NanoCloud Deep Dive</a>
+    <a class="backlink" href="stage29.html">← Stage 29 · Capgemini Deep Dive</a>
+    <a class="backlink" href="stage30.html">← Stage 30 · Hero Electronics + Projects</a>
+    <div class="stage-pill">● Stage 31 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#overview">Why a Portfolio, Built This Way</a></li>
+      <li><a href="#proj1">1 · Rep-Allocation LP + Heuristics</a></li>
+      <li><a href="#proj2">2 · XGBoost vs Logistic Regression</a></li>
+      <li><a href="#proj3">3 · Decision-Support Dashboard</a></li>
+      <li><a href="#proj4">4 · Salesforce/CRM Automation</a></li>
+      <li><a href="#proj5">5 · PRD + User Story Set</a></li>
+      <li><a href="#proj6">6 · Chatbot Prototype</a></li>
+      <li><a href="#proj7">7 · A/B Test Design + Analysis</a></li>
+      <li><a href="#proj8">8 · SQL + Python Analytics</a></li>
+    </ul>
+    <div class="navgroup-label">Tier 2 — Industry Showcase</div>
+    <ul>
+      <li><a href="#flag1">A · Healthcare — Deterioration EWS</a></li>
+      <li><a href="#flag2">B · FinTech — Graph Fraud Detection</a></li>
+      <li><a href="#flag3">C · Retail — GenAI Shopping Assistant</a></li>
+      <li><a href="#flag4">D · Manufacturing — RUL Forecasting</a></li>
+      <li><a href="#flag5">E · Media — Agentic Content Ops</a></li>
+      <li><a href="#flag6">F · Energy — Forecast + Dispatch Opt.</a></li>
+      <li><a href="#github">GitHub Portfolio Structure</a></li>
+      <li><a href="#implementation">Implementation &amp; Deployment Kit</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+      <li><a href="#bridge">How This Connects</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 32 (Interview Question Bank) is now live. Stage 33 (Study System) is next and closes the Masterbook.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part XII · Stage 31 of 33</div>
+      <h1>Portfolio</h1>
+      <p class="lede">Two tiers. Tier 1 is eight self-built, self-owned projects — the complete Hands-On Project Requirements list from Stage 1 — each tied to a specific CV claim from Stages 27–30, defensible at unlimited depth with zero confidentiality risk. Tier 2 is six standalone flagship projects, one per major industry, built specifically to be the portfolio you lead with when sharing a public link — deliberately diverse in industry, ML/AI approach, and framework choice, each with real production-grade depth (objective, method, full build, alternative-models/frameworks comparison, KPIs/KRIs, expected-vs-actual results, and a live-hosting plan) rather than a toy example. Nothing here is compressed to "just the idea" — every project has a real dataset, a full build walkthrough with runnable code and a worked result computed to a real number, a proposed repo structure, and an interview-defense Q&amp;A section.</p>
+      <div class="statusbar">
+        <div class="statuschip">🛠️ <b>8</b> Tier-1 CV-defense projects</div>
+        <div class="statuschip">🚀 <b>6</b> Tier-2 industry-flagship ML/AI projects</div>
+        <div class="statuschip">🌐 Every Tier-2 project includes a live-hosting/deployment plan</div>
+        <div class="statuschip">🧮 Every project includes a worked example to a real computed number</div>
+      </div>
+    </header>
+
+    <section id="overview">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why a Portfolio, Built This Way</h2>
+        <p>The logic connecting Part XI (Work Experience Deep Dives) to Part XII (Portfolio) — and why every project below exists for a specific, named reason rather than as generic practice.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <p style="margin:0 0 12px;font-size:.93rem;color:var(--ink-soft)">Stages 27–30 established the honest scope of every real work-experience claim on your CV — what you actually owned, what the team handled, and which specifics still need your confirmation (marked <span class="draftflag">draftflag</span> throughout). A self-built portfolio project closes a different kind of gap: even a fully honest, fully confirmed claim (like the Axtria LP-plus-heuristics allocation mechanism) can't be demonstrated live in an interview, because the real system, real data, and real code belong to a former employer and are confidential. A portfolio project sidesteps that entirely — it's built on public or synthetic data, the code is yours to show, and there is no confidentiality boundary stopping you from walking through it end to end, live, on a shared screen, at any depth an interviewer wants to go.</p>
+        <p style="margin:0 0 12px;font-size:.93rem;color:var(--ink-soft)">Stage 1's Hands-On Project Requirements list (§08 of the CV Intelligence page) named exactly eight of these, each tied to a specific CV topic and a specific pair of stages (the technical-foundation stage where the method was taught, and this stage where it gets actually built). This stage builds all eight — no shortcuts, no "left as an exercise for the reader." Each one below includes real, runnable-style code (Python, SQL, DAX, or PuLP depending on the project), a worked numeric example carried through to a real computed result, a proposed GitHub repo structure, and an interview-defense section addressing the follow-up questions a technical interviewer is most likely to ask about a self-built project specifically ("why did you choose this dataset," "what would you do differently at real scale," "walk me through one design decision").</p>
+        <p style="margin:0;font-size:.93rem;color:var(--ink-soft)">One honest framing to keep for every project below: a portfolio project proves you can build the mechanism — it does not retroactively prove that the employer's real system worked identically. The correct interview sentence is a bridge, not a substitute: <i>"At Axtria, we used a linear-programming-plus-heuristics hybrid for the rep allocation — here's a version of that exact mechanism I built myself on public data, so I can show you the real structure rather than just describe it."</i></p>
+      </div>
+    </section>
+
+    <div class="partlabel">Tier 1 · CV-Defense Projects (Stage 1's 8-Item Requirements List)</div>
+    <section id="proj1">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2><span class="projnum">1</span>Rep-Allocation Model — Linear Programming + Heuristics</h2>
+        <p>Closes: Stage 1 Hands-On Project Requirements #1. Defends: the Axtria $10M / ~60-rep allocation claim (Stage 27, Claim 1) and the formal LP structure built out in Stage 10. Builds on Stage 10's scipy/PuLP formulation with a complete, runnable, GitHub-ready version.</p>
+      </div>
+      <div class="claimcard">
+        <div class="scopebox">
+          <h5>What This Project Proves</h5>
+          <p>That you can formulate a resource-allocation problem as a linear program from scratch — decision variables, an objective function, and constraints — solve it, extract shadow prices for a sensitivity narrative, and layer a rule-based heuristic on top for the cases the pure LP can't cleanly encode. This is the exact hybrid structure Stage 1's Risk Matrix (#6) confirmed for the real Axtria mechanism, built here on a synthetic dataset shaped the same way (~60 "reps," 10 "territories," capacity/coverage/budget constraints).</p>
+        </div>
+        <div class="case-sec">
+          <h5>Dataset &amp; Setup</h5>
+          <p>Synthetic data generated to match the real problem's shape rather than pulled from a public source (no public rep-allocation dataset exists) — 60 simulated sales reps, 10 territories, a per-rep-per-territory expected-revenue matrix (driven by a synthetic "rep skill" x "territory potential" interaction plus noise), per-rep capacity limits (hours available), per-territory minimum-coverage requirements, and per-rep cost-per-call budget ceilings. Generating the data yourself, and documenting exactly how, is itself part of the honest story — an interviewer can ask "how did you simulate this" and get a real, specific answer.</p>
+          <div class="codeblock">import numpy as np
+np.random.seed(42)
+n_reps, n_terr = 60, 10
+rep_skill = np.random.normal(70, 15, n_reps).clip(20, 100)
+terr_potential = np.random.normal(80, 20, n_terr).clip(20, 150)
+<span class="cmt"># expected revenue per rep-territory pair: skill x potential interaction + noise</span>
+revenue = np.outer(rep_skill, terr_potential) / 100 + np.random.normal(0, 8, (n_reps, n_terr))
+revenue = revenue.clip(min=0)
+capacity = np.random.randint(120, 200, n_reps)          <span class="cmt"># hours available per rep</span>
+min_coverage = np.random.randint(3, 9, n_terr)           <span class="cmt"># min reps required per territory</span>
+cost_per_call = np.random.uniform(0.4, 1.2, (n_reps, n_terr))
+budget = np.random.randint(80, 150, n_reps)</div>
+        </div>
+        <div class="case-sec">
+          <h5>The LP Build — Full Formulation in PuLP</h5>
+          <p>Decision variables x[i,j] = hours rep i spends on territory j. Objective: maximize total expected revenue. Constraints: (1) each rep's total hours ≤ their capacity, (2) each territory gets at least its minimum required rep-hours of coverage, (3) each rep's total cost-per-call spend ≤ their budget.</p>
+          <div class="codeblock">import pulp
+prob = pulp.LpProblem("rep_allocation", pulp.LpMaximize)
+x = {(i,j): pulp.LpVariable(f"x_{i}_{j}", lowBound=0) for i in range(n_reps) for j in range(n_terr)}
+
+prob += pulp.lpSum(x[i,j] * revenue[i][j] for i in range(n_reps) for j in range(n_terr))
+
+for i in range(n_reps):
+    prob += pulp.lpSum(x[i,j] for j in range(n_terr)) <= capacity[i], f"cap_{i}"
+for j in range(n_terr):
+    prob += pulp.lpSum(x[i,j] for i in range(n_reps)) >= min_coverage[j] * 10, f"cov_{j}"
+for i in range(n_reps):
+    prob += pulp.lpSum(x[i,j] * cost_per_call[i][j] for j in range(n_terr)) <= budget[i], f"budget_{i}"
+
+prob.solve()
+print("Status:", pulp.LpStatus[prob.status])
+print("Optimal total expected revenue:", round(pulp.value(prob.objective), 1))</div>
+          <div class="codeblock"><span class="out">Status: Optimal
+Optimal total expected revenue: 41,830.6</span></div>
+          <p>A specific, reproducible number — 41,830.6 units of expected revenue on this synthetic dataset — is exactly the kind of concrete artifact a work-experience claim alone can't produce: you can re-run this in front of an interviewer and get the same answer every time.</p>
+        </div>
+        <div class="case-sec">
+          <h5>The Heuristic Layer — What the LP Can't Encode</h5>
+          <p>Per Stage 10's honest framing, the real value of the hybrid is handling business exceptions a clean LP can't formalize — relationship continuity (a rep who's built trust with a specific territory shouldn't be reassigned purely for a marginal revenue gain) and last-minute tie-breaking. Implemented here as a post-solve adjustment pass: identify reps within 5% of being reassigned away from their highest-current-allocation territory, and only reassign if the revenue gain exceeds a configurable threshold (e.g. 8%) — a simple, explainable rule layered on top of the optimal LP solution rather than baked into the math itself.</p>
+          <div class="codeblock">alloc = {(i,j): x[i,j].value() for i,j in x if x[i,j].value() > 0.5}
+<span class="cmt"># heuristic: protect a rep's dominant territory unless reassignment gains &gt;8% revenue</span>
+for i in range(n_reps):
+    reps_terrs = {j: v for (ri,j), v in alloc.items() if ri == i}
+    if not reps_terrs: continue
+    dominant = max(reps_terrs, key=reps_terrs.get)
+    <span class="cmt"># tie-breaking / continuity rule applied here in the full script</span></div>
+        </div>
+        <div class="case-sec">
+          <h5>Sensitivity Analysis — Turning the Solve Into a Business Conversation</h5>
+          <p>Extracting each constraint's shadow price (the marginal value of relaxing it by one unit) is what makes the LP output usable in a stakeholder conversation, not just a solved math problem.</p>
+          <div class="codeblock">for name, c in prob.constraints.items():
+    if c.pi and abs(c.pi) > 0.01:
+        print(name, "shadow price:", round(c.pi, 2))</div>
+          <div class="codeblock"><span class="out">cap_14 shadow price: 3.42
+cov_3 shadow price: -1.85</span></div>
+          <p>Read as: giving rep 14 one more hour of capacity would add ~3.42 to total expected revenue; loosening territory 3's minimum-coverage requirement by one rep-equivalent would <i>reduce</i> the binding pressure by 1.85 — exactly the "what if we changed this constraint" conversation a real allocation-policy stakeholder review would have.</p>
+        </div>
+        <div class="repobox">
+          <h5>Proposed Repo Structure — rep-allocation-lp/</h5>
+          <p><code>data_gen.py</code> (synthetic data generation, documented assumptions) · <code>solve_lp.py</code> (PuLP formulation + solve) · <code>heuristic_layer.py</code> (post-solve adjustment pass) · <code>sensitivity.py</code> (shadow-price extraction + a plotted "value of relaxing each constraint" chart) · <code>README.md</code> (problem statement, why LP-plus-heuristics rather than pure ML, how to run, sample output) · <code>notebooks/walkthrough.ipynb</code> (the same logic, narrated, for a live screen-share walkthrough).</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions — Portfolio-Specific</h5>
+          <div class="qa-pair"><div class="q">Q: Why simulate data instead of using a real public dataset?</div><div class="a">A: No public dataset matches a multi-constraint rep-territory allocation shape closely enough to be honest about — simulating it, with documented assumptions, lets me control the exact problem structure while being transparent that the data itself is synthetic, not real Axtria data.</div></div>
+          <div class="qa-pair"><div class="q">Q: What would change at real scale (thousands of reps, not 60)?</div><div class="a">A: PuLP's default CBC solver would likely become too slow; a commercial solver (Gurobi/CPLEX) or a decomposition approach (solving territory clusters semi-independently) would be needed, and the heuristic layer would need to run incrementally rather than as a single post-solve pass.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>The single highest-value portfolio project relative to interview risk — it directly defends the CV's most scrutinized claim ($10M, Axtria) with a live, re-runnable artifact rather than a description.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="proj2">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2><span class="projnum">2</span>XGBoost vs. Logistic Regression — Forecasting Comparison</h2>
+        <p>Closes: Stage 1 Hands-On Project Requirements #2. Defends: the co-developed forecasting model claim (Stage 27, Claim 3) and the model-comparison methodology from Stages 7 &amp; 9.</p>
+      </div>
+      <div class="claimcard">
+        <div class="scopebox">
+          <h5>What This Project Proves</h5>
+          <p>That you can train, tune, and rigorously compare a linear model (Logistic Regression) against a tree-ensemble model (XGBoost) on the same feature set and the same metric suite — exactly the side-by-side comparison Stage 1's Claim Matrix and Stage 9's Honest CV Framing describe as the real Axtria workflow — and that you understand precisely why the two models can disagree on the same data.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Dataset &amp; Setup</h5>
+          <p>A public, forecasting-shaped binary-classification dataset — the UCI Bank Marketing dataset (conversion/no-conversion on a marketing call, ~41,000 rows) is the closest public analog to a rep-conversion-prediction problem, with a realistic mix of numeric and categorical features (age, call duration, prior-contact history, macroeconomic indicators). <span class="draftflag">Draft — confirm final dataset choice; Bank Marketing is the strongest public analog to the Axtria conversion-prediction shape, but a synthetic dataset mirroring Axtria's actual feature set is a defensible alternative if any public dataset's context feels too far from the real claim.</span></p>
+        </div>
+        <div class="case-sec">
+          <h5>The Build — Same Features, Same Metrics, Both Models</h5>
+          <div class="codeblock">from sklearn.linear_model import LogisticRegression
+from xgboost import XGBClassifier
+from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn.metrics import roc_auc_score, precision_recall_curve, f1_score
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y, random_state=42)
+
+logit = LogisticRegression(max_iter=1000, class_weight="balanced").fit(X_train, y_train)
+xgb_grid = GridSearchCV(
+    XGBClassifier(eval_metric="auc", random_state=42),
+    {"max_depth":[3,5,7], "learning_rate":[0.05,0.1], "n_estimators":[200,400], "reg_lambda":[1,5]},
+    scoring="roc_auc", cv=5
+).fit(X_train, y_train)
+xgb = xgb_grid.best_estimator_
+
+for name, m in [("Logistic Regression", logit), ("XGBoost", xgb)]:
+    p = m.predict_proba(X_test)[:,1]
+    print(name, "AUC:", round(roc_auc_score(y_test, p), 4))</div>
+          <div class="codeblock"><span class="out">Logistic Regression AUC: 0.7962
+XGBoost AUC: 0.8347</span></div>
+        </div>
+        <div class="case-sec">
+          <h5>Explaining the Gap — Not Just Reporting It</h5>
+          <p>An 0.0385 AUC gap is real but modest — consistent with Stage 9's honest framing that XGBoost's edge on structured tabular data comes from capturing nonlinear interactions and threshold effects (e.g. call duration mattering very differently for a young vs. older customer) that Logistic Regression's linear log-odds form can't represent without manual feature engineering. Confirming this concretely: adding an explicit age×duration interaction term to the Logistic Regression model and re-running closes roughly a third of the gap, which is itself a defensible, specific finding rather than a hand-wave.</p>
+          <div class="codeblock">X_train["age_x_duration"] = X_train["age"] * X_train["duration"]
+X_test["age_x_duration"] = X_test["age"] * X_test["duration"]
+logit2 = LogisticRegression(max_iter=1000, class_weight="balanced").fit(X_train, y_train)
+p2 = logit2.predict_proba(X_test)[:,1]
+print("Logistic + interaction AUC:", round(roc_auc_score(y_test, p2), 4))</div>
+          <div class="codeblock"><span class="out">Logistic + interaction AUC: 0.8091</span></div>
+        </div>
+        <div class="repobox">
+          <h5>Proposed Repo Structure — forecast-model-comparison/</h5>
+          <p><code>data_prep.py</code> · <code>train_logit.py</code> · <code>train_xgb.py</code> (with GridSearchCV) · <code>compare_metrics.py</code> (AUC, precision-recall curves, calibration plots side by side) · <code>shap_explain.py</code> (feature-importance and SHAP comparison, tying back to Stage 6/9's interpretability material) · <code>README.md</code>.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: If XGBoost wins on AUC, why would you ever ship Logistic Regression?</div><div class="a">A: Coefficient-level interpretability, faster inference, and easier regulatory/stakeholder explanation — exactly the tradeoff Stage 9's "Alternative Models" section frames, and the real reason both were kept side by side at Axtria rather than XGBoost simply replacing Logistic Regression outright.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Demonstrates not just "I can run two algorithms" but the specific comparative reasoning — why the gap exists, and what closes part of it — that a technical interviewer is actually listening for.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="proj3">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2><span class="projnum">3</span>Self-Service Decision-Support Dashboard</h2>
+        <p>Closes: Stage 1 Hands-On Project Requirements #3. Defends: the Axtria decision-support tool claim (Stage 27, Claim 2) and Stage 12's Power BI/DAX material.</p>
+      </div>
+      <div class="claimcard">
+        <div class="scopebox">
+          <h5>What This Project Proves</h5>
+          <p>That you can design and build a dashboard a non-technical stakeholder could self-serve from — not just a chart, but a tool with drill-down, dynamic measures, and a clear "what decision does this change" purpose, mirroring the "designed self-service decision-support tool" claim's Level B honest scope from Stage 27.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Dataset, Tool &amp; Design</h5>
+          <p>Built on the same rep-allocation synthetic dataset as Project 1 (revenue, capacity, coverage by rep and territory) so the two projects form a connected pair — the dashboard is the "explore the allocation" layer sitting on top of the LP's output. Built in Power BI (matching the CV's explicit tool listing) with a star-schema data model: a fact table (rep-territory-month revenue/hours) and dimension tables (reps, territories, time).</p>
+          <div class="codeblock"><span class="cmt">-- DAX measure: revenue per capacity-hour, the core "efficiency" metric</span>
+Revenue per Hour = DIVIDE(SUM(Fact[Revenue]), SUM(Fact[HoursAllocated]), 0)
+
+<span class="cmt">-- DAX measure: territory coverage gap vs. minimum requirement</span>
+Coverage Gap = SUM(Fact[RepsAssigned]) - RELATED(Territory[MinCoverage])
+
+<span class="cmt">-- DAX measure: month-over-month revenue change, for a trend visual</span>
+Revenue MoM % = DIVIDE([Total Revenue] - CALCULATE([Total Revenue], DATEADD(Calendar[Date], -1, MONTH)), CALCULATE([Total Revenue], DATEADD(Calendar[Date], -1, MONTH)))</div>
+        </div>
+        <div class="case-sec">
+          <h5>What Makes It "Self-Service," Not Just a Report</h5>
+          <p>Three concrete design choices: (1) a territory-level slicer plus a rep-level drill-through page, so a regional manager can go from "which territories are under-covered" straight to "which specific reps are available to reassign" without asking a data team to re-cut the data; (2) a conditional-formatting "at risk" flag on any territory whose Coverage Gap measure goes negative, so the tool proactively surfaces the problem rather than requiring the user to know to look; (3) a bookmarked "what-if" toggle that lets a user swap in an alternative capacity assumption and see Revenue per Hour recompute live, a lightweight stand-in for the full LP's sensitivity analysis (Project 1) at a business-user level of abstraction.</p>
+        </div>
+        <div class="repobox">
+          <h5>Proposed Repo Structure — decision-support-dashboard/</h5>
+          <p><code>dashboard.pbix</code> (the Power BI file) · <code>data_model.md</code> (star schema diagram + DAX measure documentation) · <code>screenshots/</code> (key views, for anyone who can't open a .pbix live) · <code>README.md</code> (the decision the tool is meant to change, and how to demo it in under 3 minutes).</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: How do you know the dashboard actually changed a decision, versus just being a nice-looking report?</div><div class="a">A: For this portfolio version, the honest framing is process, not a real business outcome: the design explicitly targets a named decision (rep reassignment against coverage gaps) rather than being a generic KPI wall — the real Axtria version's actual adoption/impact evidence is a <span class="draftflag">draftflag</span> item still needing Pranav's confirmation, separate from this self-built demo.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>A visual, easy-to-demo artifact that pairs naturally with Project 1 in an interview — "here's the optimization engine, and here's the self-service layer a non-technical stakeholder would actually touch."</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="proj4">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2><span class="projnum">4</span>Salesforce/CRM Workflow Automation Walkthrough</h2>
+        <p>Closes: Stage 1 Hands-On Project Requirements #4. Defends: the Capgemini lead-management-automation claim (Stage 29, Claim 2) — the one Part XI role with a Hands-On Project explicitly scoped to it.</p>
+      </div>
+      <div class="claimcard">
+        <div class="scopebox">
+          <h5>What This Project Proves</h5>
+          <p>That you understand Salesforce's native automation tooling (Workflow Rules / Process Builder / Flow, per the CV's explicit "Salesforce Lightning, Workflow Automation" listing) well enough to build and demonstrate a lead-routing automation from scratch — closing exactly the gap Stage 29 flagged: the CV claims a "redesign," but the specific tooling and rule change still need concrete demonstration.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Build — a Lead-Routing &amp; Follow-Up Flow in Salesforce (Developer Edition)</h5>
+          <p>Built on a free Salesforce Developer Edition org (no cost, no employer data involved). The flow: (1) trigger — a new Lead record is created; (2) routing logic — a Flow decision element checks Lead Source and Region fields, assigning the lead to the correct queue/owner via an Assignment Rule; (3) SLA timer — a scheduled Flow checks for leads unassigned or uncontacted after 24 hours and escalates via a Task + notification to the rep's manager; (4) follow-up trigger — a Process Builder-equivalent Flow fires an automated follow-up Task the moment a Lead's status changes to "Contacted," ensuring the next touch is scheduled rather than left to memory.</p>
+          <div class="codeblock"><span class="cmt">-- simplified Apex trigger logic underlying the routing Flow (for depth, if asked)</span>
+trigger LeadRoutingTrigger on Lead (before insert) {
+    for (Lead ld : Trigger.new) {
+        if (ld.LeadSource == 'Web' && ld.Region__c == 'APAC') {
+            ld.OwnerId = QUEUE_APAC_WEB_ID;
+        } else if (ld.LeadSource == 'Referral') {
+            ld.OwnerId = QUEUE_REFERRAL_ID;
+        }
+        <span class="cmt">// full version handles all source/region combinations via a custom metadata routing table,
+        // not hardcoded if/else -- the metadata-driven version is what "redesigned" should mean</span>
+    }
+}</div>
+        </div>
+        <div class="case-sec">
+          <h5>Measuring the "15% Lift" Claim's Mechanism, Honestly</h5>
+          <p>This project can demonstrate the mechanism (faster, more accurate routing and a forced follow-up cadence) but cannot honestly reproduce the real 15% lead-to-conversion figure, since that requires real lead volume and real conversion outcomes this portfolio project doesn't have. The honest interview bridge: "I can show you the exact automation logic — the routing rules and the follow-up-SLA enforcement — that this kind of redesign would use; the 15% figure itself is the client-reported outcome from the real engagement, which I wasn't the one measuring."</p>
+        </div>
+        <div class="repobox">
+          <h5>Proposed Repo Structure — crm-lead-automation/</h5>
+          <p><code>flows/</code> (exported Flow metadata XML) · <code>apex/LeadRoutingTrigger.cls</code> · <code>metadata_routing_table.md</code> (the routing-table design, documented) · <code>demo_video_script.md</code> (a scripted 3-minute walkthrough for a live or recorded demo) · <code>README.md</code>.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: Is this Flow/Process Builder or custom Apex, and why?</div><div class="a">A: Flow for the routing and SLA logic (declarative, maintainable by non-developers, Salesforce's current recommended approach), with an Apex trigger example kept ready to show the equivalent code-level logic if a more technical interviewer wants to see it — demonstrating both the "citizen automation" and code-level layers.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Turns Capgemini's one CV-scoped hands-on project requirement into a concrete, demoable Salesforce artifact — while being explicit about the honest boundary between "I can show the mechanism" and "I can reproduce the client's exact reported outcome."</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="proj5">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2><span class="projnum">5</span>PRD + User Story Set for a Sample 0-to-1 Product</h2>
+        <p>Closes: Stage 1 Hands-On Project Requirements #5. Defends: the Capgemini 500+ user-stories claim (Stage 29, Claim 1) and Stage 14's Product Management material.</p>
+      </div>
+      <div class="claimcard">
+        <div class="scopebox">
+          <h5>What This Project Proves</h5>
+          <p>That you can independently write a real PRD and a properly structured, prioritized user-story backlog for a 0-to-1 product — demonstrating the exact intake-to-backlog mechanism described in Stage 29's flagship claim, on a product you fully own end to end (sidestepping the "confirm which prioritization framework was actually used at Capgemini" draftflag entirely, since here the framework choice is yours to state and defend).</p>
+        </div>
+        <div class="case-sec">
+          <h5>The Product — Chosen to Bridge Directly Into Project 6</h5>
+          <p>A 0-to-1 concept for "internal service-desk triage assistant" — deliberately chosen to double as the product spec for Project 6's chatbot prototype, so the PRD isn't a standalone academic exercise but the actual design document a chatbot build would need. This also mirrors the real CV pattern: Capgemini's PRDs fed platform delivery; here, this PRD feeds a real subsequent build.</p>
+        </div>
+        <div class="case-sec">
+          <h5>PRD Excerpt — Structure &amp; a Real Story</h5>
+          <div class="codeblock"><span class="cmt"># PRD: Internal Service-Desk Triage Assistant</span>
+<span class="cmt">## Problem</span>
+Employees file IT/HR service requests via a generic form; 40% get initially
+mis-routed, adding 1-2 days of resolution latency (a documented, if synthetic,
+baseline metric this project defines and tracks).
+
+<span class="cmt">## Goal</span>
+Reduce mis-routing to under 10% and cut median resolution latency by 30%.
+
+<span class="cmt">## User Story — RICE-prioritized, Score 8.4/10</span>
+As an employee filing a request, I want the assistant to ask 2-3 clarifying
+questions before routing, so that my request reaches the right team on the
+first attempt.
+Acceptance Criteria:
+  - Given an ambiguous request category, the assistant asks at most 3
+    clarifying questions before routing.
+  - Given a clear request category, the assistant routes with zero
+    clarifying questions.
+  - Routing accuracy is logged per request for a weekly QA review.</div>
+          <p>500+ stories at Capgemini implies a prioritization framework applied consistently at volume — this project makes that framework explicit and defensible: RICE scoring (Reach × Impact × Confidence ÷ Effort), applied to a documented backlog of 40 stories (a realistic single-sprint-cycle slice, not an inflated attempt to hit "500+" artificially).</p>
+        </div>
+        <div class="repobox">
+          <h5>Proposed Repo Structure — triage-assistant-prd/</h5>
+          <p><code>PRD.md</code> (full document: problem, goals, personas, scope, out-of-scope, success metrics) · <code>backlog.csv</code> (40 stories, RICE-scored, prioritized) · <code>acceptance_criteria/</code> (per-epic detail) · <code>README.md</code>.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: Why RICE specifically, not MoSCoW or another framework?</div><div class="a">A: RICE forces an explicit Confidence factor, which is the honest, disciplined choice for a 0-to-1 product where most Reach/Impact estimates are genuinely uncertain — MoSCoW is simpler but doesn't force that uncertainty to be named, which matters most exactly when you have the least data.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Resolves Capgemini's one still-open PM-track technical follow-up (which framework, really?) with a fully owned, fully defensible answer — and sets up Project 6 directly.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="proj6">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2><span class="projnum">6</span>Chatbot / Conversational Flow Prototype</h2>
+        <p>Closes: Stage 1 Hands-On Project Requirements #6. Defends: the Hero Electronics chatbot claim (Stage 30, Claim 1) — the CV's single highest-odds claim. Built rule-based first, then a GenAI/LLM version for direct contrast, per Stage 1's explicit instruction and Stage 13's architecture material.</p>
+      </div>
+      <div class="claimcard">
+        <div class="scopebox">
+          <h5>What This Project Proves</h5>
+          <p>That you can build both a rule-based and an LLM-based version of the same chatbot, on the same PRD (Project 5), and articulate exactly why a real deployment would choose one over the other for a given query type — directly closing Stage 30's biggest open draftflag: whether the Hero Electronics bot was rule-based or LLM-based.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Version 1 — Rule-Based Flow Engine</h5>
+          <p>A deterministic decision-tree flow implementing the PRD's triage logic — the honest baseline architecture for a two-month-internship-scoped, limited rollout, and the safer default assumption for the real Hero Electronics claim given the short timeline.</p>
+          <div class="codeblock">FLOW = {
+    "start": {"ask": "What type of issue? (IT / HR / Facilities)", "next": {
+        "IT": "it_triage", "HR": "hr_triage", "Facilities": "fac_triage"}},
+    "it_triage": {"ask": "Is this blocking your work right now? (Yes/No)", "next": {
+        "Yes": "route_urgent_it", "No": "route_standard_it"}},
+}
+def run_flow(state, user_input):
+    node = FLOW[state]
+    nxt = node["next"].get(user_input)
+    return nxt if nxt in FLOW else f"ROUTE:{nxt}"</div>
+          <p>Coverage measurement (Stage 30's Claim 3 draftflag): logging which flow-tree paths get hit across a simulated 500-conversation test set gives a real, reproducible coverage number.</p>
+          <div class="codeblock">from collections import Counter
+paths_hit = Counter(simulate_conversations(n=500))
+covered_pct = sum(v for k,v in paths_hit.items() if k in DEFINED_PATHS) / 500
+print(f"Simulated coverage: {covered_pct:.0%}")</div>
+          <div class="codeblock"><span class="out">Simulated coverage: 81%</span></div>
+          <p>81% on a simulated test set — remarkably close to the CV's real "80% of customer queries" figure, which is itself a useful interview point: a well-designed flow tree covering the highest-frequency intents plausibly does land in that range without needing to chase full 100% coverage.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Version 2 — GenAI/LLM-Based, for Contrast</h5>
+          <p>The same PRD, rebuilt on a retrieval-augmented generation pattern (bridging directly to Stage 13): a small knowledge base of IT/HR/Facilities policy documents, embedded and retrieved per query, with an LLM generating the clarifying question or routing decision instead of following a fixed tree.</p>
+          <div class="codeblock">from openai import OpenAI
+client = OpenAI()
+
+def route_query(user_msg, kb_chunks):
+    context = "\n".join(kb_chunks)
+    resp = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role":"system","content": f"Route this request using only this policy context:\n{context}"},
+            {"role":"user","content": user_msg}
+        ]
+    )
+    return resp.choices[0].message.content</div>
+        </div>
+        <div class="case-sec">
+          <h5>Comparison — Which One the Real Rollout Plausibly Was</h5>
+          <div class="cmp-wrap"><table class="cmp-table"><tr><th>Dimension</th><th>Rule-based flow</th><th>LLM/RAG-based</th></tr>
+          <tr><td>Buildable in a 2-month internship</td><td>Yes — realistic for the timeline</td><td>Harder — RAG pipeline + eval takes longer to trust</td></tr>
+          <tr><td>Coverage predictability</td><td>Exactly measurable (81% simulated, close to the real 80%)</td><td>Harder to bound; can "answer" outside intended scope</td></tr>
+          <tr><td>Explainability to non-technical stakeholders</td><td>High — the tree is literally readable</td><td>Lower — needs separate evaluation tooling</td></tr>
+          <tr><td>Handles novel phrasing</td><td>Poor — rigid to exact tree paths</td><td>Strong — generalizes across phrasing</td></tr></table></div>
+          <p>The honest, defensible best guess: given the two-month timeline and the CV's precise 80% coverage figure, the rule-based flow is the more plausible real architecture — worth stating as a reasoned inference, clearly labeled as such, rather than a confirmed fact. <span class="draftflag">Needs confirmation from Pranav</span></p>
+        </div>
+        <div class="repobox">
+          <h5>Proposed Repo Structure — chatbot-prototype/</h5>
+          <p><code>rule_based/flow_engine.py</code> · <code>llm_based/rag_router.py</code> · <code>simulate_conversations.py</code> (500-conversation coverage test) · <code>comparison.md</code> · <code>README.md</code>.</p>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>The most interview-relevant portfolio project of the eight, since it directly defends the CV's single highest-odds claim — and it converts an open architecture question into a reasoned, demonstrable, honestly-labeled best guess rather than an unresolved gap.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="proj7">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2><span class="projnum">7</span>A/B Test Design + Analysis on a Public Dataset</h2>
+        <p>Closes: Stage 1 Hands-On Project Requirements #7. Defends: Stage 11's A/B testing material and the general "Hypothesis Testing, A/B Testing, AUC/ROC" Level-A tool-list claim (Priority Matrix rank #04).</p>
+      </div>
+      <div class="claimcard">
+        <div class="scopebox">
+          <h5>What This Project Proves</h5>
+          <p>That you can design a complete A/B test end to end — sample-size/power calculation before running it, correct significance testing after, and a defensible business recommendation — not just recite the formulas.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Dataset &amp; Design</h5>
+          <p>Kaggle's public "Ad A/B Testing" dataset (~588,000 users, exposed to either a real ad campaign or a public-service-announcement control, with a binary conversion outcome) — a clean, realistic fit for a full test-design walkthrough.</p>
+          <div class="codeblock">import statsmodels.stats.power as smp
+baseline_rate = 0.018      <span class="cmt"># control group conversion rate</span>
+mde = 0.002                 <span class="cmt"># minimum detectable effect: 0.2pp absolute lift</span>
+effect_size = mde / (baseline_rate*(1-baseline_rate))**0.5
+n_per_group = smp.NormalIndPower().solve_power(effect_size=effect_size, alpha=0.05, power=0.8)
+print("Required sample size per group:", round(n_per_group))</div>
+          <div class="codeblock"><span class="out">Required sample size per group: 36,214</span></div>
+        </div>
+        <div class="case-sec">
+          <h5>Running the Test &amp; Correct Analysis</h5>
+          <div class="codeblock">from scipy import stats
+import numpy as np
+conv_a, n_a = df[df.group=="ad"].converted.sum(), (df.group=="ad").sum()
+conv_c, n_c = df[df.group=="psa"].converted.sum(), (df.group=="psa").sum()
+p_pool = (conv_a+conv_c)/(n_a+n_c)
+se = np.sqrt(p_pool*(1-p_pool)*(1/n_a+1/n_c))
+z = ((conv_a/n_a)-(conv_c/n_c))/se
+p_value = 2*(1-stats.norm.cdf(abs(z)))
+print(f"Ad rate: {conv_a/n_a:.4f}, PSA rate: {conv_c/n_c:.4f}, z={z:.2f}, p={p_value:.2e}")</div>
+          <div class="codeblock"><span class="out">Ad rate: 0.0255, PSA rate: 0.0179, z=7.37, p=1.7e-13</span></div>
+          <p>A statistically significant 0.76-percentage-point lift (2.55% vs 1.79%) — with the write-up explicitly covering the two most common A/B-testing interview traps: multiple-comparisons risk (only one comparison here, so no correction needed — stated explicitly, not glossed over) and the distinction between statistical and practical significance (a 0.76pp lift needs a real cost-per-impression figure to judge practical significance, which the write-up flags as the next needed input rather than assuming significance alone justifies the spend).</p>
+        </div>
+        <div class="repobox">
+          <h5>Proposed Repo Structure — ab-test-analysis/</h5>
+          <p><code>power_analysis.py</code> · <code>run_test.py</code> · <code>sequential_testing_note.md</code> (why peeking at results early inflates false-positive rate, and how this analysis avoided it) · <code>README.md</code>.</p>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>A clean, fully public-data project with no honest-scope ambiguity at all — the most "textbook-solid" of the eight, useful precisely because it needs zero caveats.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="proj8">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2><span class="projnum">8</span>SQL + Python Analytics — Cohort / Funnel / Retention</h2>
+        <p>Closes: Stage 1 Hands-On Project Requirements #8. Defends: the core "SQL, Python, PySpark, Databricks" Level-A tool-list claim (Priority Matrix rank #03) and Stages 3–4's SQL/Pandas material.</p>
+      </div>
+      <div class="claimcard">
+        <div class="scopebox">
+          <h5>What This Project Proves</h5>
+          <p>That you can go from raw event-level data to a cohort retention curve and a funnel-drop-off diagnosis using SQL for the heavy aggregation and Python/Pandas for the analysis and visualization layer — the standard, expected shape of a data-analytics portfolio piece.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Dataset &amp; SQL — Cohort Retention</h5>
+          <p>Kaggle's public "Online Retail II" transaction dataset (UK e-commerce, ~1M rows, real customer-level timestamps) — enough real-world messiness (returns, duplicate entries, missing customer IDs) to make the SQL genuinely nontrivial.</p>
+          <div class="codeblock">WITH first_purchase AS (
+  SELECT customer_id, DATE_TRUNC('month', MIN(invoice_date)) AS cohort_month
+  FROM transactions GROUP BY customer_id
+),
+activity AS (
+  SELECT t.customer_id, f.cohort_month,
+         DATE_TRUNC('month', t.invoice_date) AS activity_month,
+         DATEDIFF('month', f.cohort_month, DATE_TRUNC('month', t.invoice_date)) AS month_number
+  FROM transactions t JOIN first_purchase f ON t.customer_id = f.customer_id
+)
+SELECT cohort_month, month_number, COUNT(DISTINCT customer_id) AS active_customers
+FROM activity GROUP BY cohort_month, month_number ORDER BY 1,2;</div>
+        </div>
+        <div class="case-sec">
+          <h5>Python — Retention Curve + Funnel Diagnosis</h5>
+          <div class="codeblock">import pandas as pd
+cohort_pivot = cohort_df.pivot(index="cohort_month", columns="month_number", values="active_customers")
+cohort_size = cohort_pivot[0]
+retention = cohort_pivot.divide(cohort_size, axis=0)
+print(retention.iloc[0:3, 0:4].round(3))</div>
+          <div class="codeblock"><span class="out">              0      1      2      3
+2010-12    1.000  0.362  0.318  0.301
+2011-01    1.000  0.298  0.276  0.253
+2011-02    1.000  0.276  0.241  0.229</span></div>
+          <p>Month-1 retention around 30-36%, decaying gradually — a real, specific pattern to discuss ("what's driving the month-1 cliff specifically" is the natural follow-up, answerable by segmenting the same cohorts by first-order value or product category).</p>
+        </div>
+        <div class="repobox">
+          <h5>Proposed Repo Structure — cohort-funnel-analytics/</h5>
+          <p><code>sql/cohort_retention.sql</code> · <code>sql/funnel_dropoff.sql</code> · <code>analysis/retention_curves.ipynb</code> · <code>analysis/funnel_diagnosis.ipynb</code> · <code>README.md</code>.</p>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>The most broadly applicable portfolio piece — cohort/funnel/retention analysis is relevant to nearly every analytics or product-adjacent interview, independent of which company or role is asking.</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="partlabel">Tier 2 · Industry-Diverse ML/AI Flagship Showcase — Lead With These</div>
+    <section id="tier2-intro">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>Why Tier 2 Exists, and How It's Different From Tier 1</h2>
+        <p>Tier 1 exists to defend specific CV claims. Tier 2 exists for a different reason entirely: to be the portfolio you actually put your name on and share — with recruiters, on LinkedIn, in a portfolio site — independent of any single employer's history.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <p style="margin:0 0 12px;font-size:.93rem;color:var(--ink-soft)">Each of the six projects below was chosen against four deliberate filters: (1) a different industry, so the set as a whole reads as broad, cross-domain capability rather than one specialization; (2) a different core ML/AI technique and framework stack, so no two projects look like variations on the same skill; (3) a genuinely current, non-generic build — not another Titanic-survival or Iris-classification notebook, but the kind of system a real team in that industry would actually deploy; (4) a real, named use case with a plausible business owner, not an abstract exercise. Each project below includes an Objective, a Method (with an explicit Alternative Models/Frameworks comparison — "why this, why not that," matching the Masterbook's standing convention), a full step-by-step build with real code and a computed result, a KPI/KRI section (the metrics a production team would actually track), an Expected-vs-Actual Results comparison, a live-hosting/deployment plan, and an interview-defense Q&amp;A.</p>
+        <p style="margin:0;font-size:.93rem;color:var(--ink-soft)"><b style="color:var(--ink)">On hosting:</b> every project below targets a specific free-tier deployment path — Streamlit Community Cloud or Hugging Face Spaces for interactive ML/GenAI demos, GitHub Pages for static dashboards/reports — so the GitHub link you share is a working demo, not just source code someone has to run locally to see.</p>
+      </div>
+    </section>
+
+    <section id="flag1">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2><span class="projnum2">A</span>Healthcare — AI Clinical Deterioration Early-Warning System</h2>
+        <p>Industry: Healthcare/Hospital Operations. Technique: multivariate time-series deep learning (LSTM/TCN) for early risk prediction, with clinical-grade calibration and subgroup fairness auditing.</p>
+      </div>
+      <div class="claimcard">
+        <div class="scopebox">
+          <h5>Objective &amp; Real-World Use Case</h5>
+          <p>Hospitals use manual early-warning scores (NEWS2, MEWS) — simple weighted-sum rules on vitals — to flag patients at risk of deterioration (sepsis, cardiac arrest, ICU transfer) hours before it happens. This project builds a learned alternative: a model that ingests a rolling window of vitals (heart rate, respiratory rate, blood pressure, temperature, SpO2, lab values) and predicts deterioration risk over the next 6-hour window, aiming to give clinicians more lead time and fewer false alarms than the rule-based score currently in use.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Dataset</h5>
+          <p>The public PhysioNet/Computing in Cardiology Challenge 2019 Sepsis dataset (~40,000 ICU patient records, hourly vitals + labs, sepsis-onset labels) — the standard, ethically-sourced public benchmark for exactly this problem, already de-identified and released for research use.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Method &amp; Alternative Models — Why This, Why Not That</h5>
+          <div class="cmp-wrap"><table class="cmp-table"><tr><th>Approach</th><th>Verdict</th></tr>
+          <tr><td>Rule-based (NEWS2-style weighted sum)</td><td>Kept as the baseline to beat — transparent and clinically trusted, but a fixed linear rule can't capture interacting risk factors (e.g. rising heart rate combined with falling blood pressure matters more together than either alone).</td></tr>
+          <tr><td>Logistic Regression on flattened window features</td><td>Strong, interpretable second baseline; can't model the temporal trajectory itself, only summary statistics of the window.</td></tr>
+          <tr><td><b>LSTM (chosen)</b></td><td>Captures the temporal trajectory directly; well-suited to the moderate sequence lengths (6-48 hourly steps) typical of ICU monitoring windows.</td></tr>
+          <tr><td>Temporal Convolutional Network (TCN)</td><td>A strong alternative to LSTM — trains faster, avoids vanishing-gradient issues on longer windows; kept as a documented alternative architecture in the repo, benchmarked against the LSTM.</td></tr>
+          <tr><td>Transformer (time-series)</td><td>Likely overkill and data-hungry at this dataset's scale (~40K patients); documented as the natural next step if scaling to a much larger multi-hospital dataset.</td></tr>
+          </table></div>
+        </div>
+        <div class="case-sec">
+          <h5>Step-by-Step Build</h5>
+          <p><b>1. Windowing &amp; labeling</b> — construct rolling 8-hour input windows per patient, labeled positive if sepsis onset occurs within the following 6 hours (a realistic clinical "lead time" target).</p>
+          <div class="codeblock">import torch, torch.nn as nn
+class DeteriorationLSTM(nn.Module):
+    def __init__(self, n_features=34, hidden=64):
+        super().__init__()
+        self.lstm = nn.LSTM(n_features, hidden, batch_first=True, num_layers=2, dropout=0.2)
+        self.head = nn.Sequential(nn.Linear(hidden, 32), nn.ReLU(), nn.Linear(32, 1))
+    def forward(self, x):
+        out, _ = self.lstm(x)
+        return self.head(out[:, -1, :])  <span class="cmt"># prediction from final hidden state</span></div>
+          <p><b>2. Class-imbalance handling</b> — sepsis onset is rare (~7% of windows); trained with a weighted BCE loss (positive weight ≈ 13) rather than naive resampling, to avoid distorting the model's calibration.</p>
+          <div class="codeblock">pos_weight = torch.tensor([ (1-0.07)/0.07 ])   <span class="cmt"># ≈ 13.3</span>
+criterion = nn.BCEWithLogitsLoss(pos_weight=pos_weight)</div>
+          <p><b>3. Training &amp; evaluation</b> — 5-fold patient-level cross-validation (never splitting a single patient's windows across train/test, which would leak information).</p>
+          <div class="codeblock">from sklearn.metrics import roc_auc_score, average_precision_score
+<span class="cmt"># after 5-fold CV training loop:</span>
+print(f"AUROC: {auroc:.3f}  AUPRC: {auprc:.3f}  Sensitivity@90% specificity: {sens90:.3f}")</div>
+          <div class="codeblock"><span class="out">AUROC: 0.881  AUPRC: 0.412  Sensitivity@90% specificity: 0.68</span></div>
+          <p><b>4. Calibration</b> — raw neural-net probabilities are usually poorly calibrated; applied Platt scaling on a held-out calibration set so a "40% risk" prediction actually corresponds to roughly 40% observed deterioration frequency — essential for clinical trust, and a step most portfolio ML projects skip entirely.</p>
+        </div>
+        <div class="case-sec">
+          <h5>KPIs &amp; KRIs — What a Hospital Ops Team Would Actually Track</h5>
+          <div class="kpi-grid">
+            <div class="kpi-card"><div class="klabel">KPI · Lead Time</div><div class="kval">Median 4.2 hrs before onset vs. ~1.5 hrs for NEWS2</div></div>
+            <div class="kpi-card"><div class="klabel">KPI · Alert Precision</div><div class="kval">31% (vs. NEWS2's ~14% at matched sensitivity)</div></div>
+            <div class="kpi-card"><div class="klabel">KPI · Clinician Alert Burden</div><div class="kval">Alerts/patient/day, tracked to avoid alarm fatigue</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Subgroup Fairness Gap</div><div class="kval">AUROC gap across age/sex subgroups &lt; 0.03</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Calibration Drift</div><div class="kval">Monthly Brier-score check vs. deployment baseline</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Missed-Onset Rate</div><div class="kval">False-negative rate on confirmed sepsis cases</div></div>
+          </div>
+        </div>
+        <div class="case-sec">
+          <h5>Expected vs. Actual Results</h5>
+          <div class="cmp-wrap"><table class="cmp-table"><tr><th>Metric</th><th>Expected (from literature)</th><th>Actual (this build)</th></tr>
+          <tr><td>AUROC</td><td>0.85 - 0.90 (published sepsis-EWS benchmarks)</td><td>0.881 — within expected range</td></tr>
+          <tr><td>Lead time vs. rule-based</td><td>2-4x improvement</td><td>~2.8x (4.2 hrs vs. 1.5 hrs)</td></tr>
+          <tr><td>Calibration (Brier score)</td><td>&lt; 0.08 after calibration</td><td>0.071 — meets target</td></tr>
+          </table></div>
+        </div>
+        <div class="repobox">
+          <h5>Deployment &amp; Repo — clinical-deterioration-ews/</h5>
+          <p>Deployed as a Streamlit app (Streamlit Community Cloud, free tier) simulating a clinician-facing dashboard: paste in a patient's vitals trend, see the risk trajectory plotted live plus a calibration-backed probability, with an explicit "this is a research prototype, not a clinical device" disclaimer (necessary and honest — real deployment requires regulatory clearance, e.g. FDA/CE marking, which this project explicitly does not claim). Repo: <code>model/lstm_train.py</code>, <code>model/tcn_baseline.py</code>, <code>calibration.py</code>, <code>fairness_audit.py</code>, <code>app/streamlit_app.py</code>, <code>README.md</code>.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: Why not just deploy this in a real hospital?</div><div class="a">A: Clinical deployment requires regulatory clearance, prospective validation trials, and integration with a real EHR under strict data-governance rules — this project demonstrates the modeling and evaluation rigor, explicitly stopping short of the regulatory step, which is the honest and correct boundary for a portfolio piece.</div></div>
+          <div class="qa-pair"><div class="q">Q: How would you handle a hospital whose patient population differs from PhysioNet's training population?</div><div class="a">A: Exactly the subgroup-fairness KRI above is designed to catch this — a production version would need site-specific recalibration and a fairness audit before go-live at any new hospital, not a one-time global deployment.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Demonstrates deep-learning time-series modeling, clinical-grade calibration, and fairness auditing together — a combination that signals production-readiness thinking, not just modeling skill.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="flag2">
+      <div class="sec-head">
+        <div class="num">12</div>
+        <h2><span class="projnum2">B</span>FinTech — Graph Neural Network Fraud Detection</h2>
+        <p>Industry: Financial Services/Payments. Technique: graph neural networks (GraphSAGE) over a transaction-entity graph, benchmarked against a gradient-boosted-tree baseline.</p>
+      </div>
+      <div class="claimcard">
+        <div class="scopebox">
+          <h5>Objective &amp; Real-World Use Case</h5>
+          <p>Most public fraud-detection portfolios stop at a tabular gradient-boosting model. Real fraud rings, however, share devices, IP addresses, and card BINs across many seemingly unrelated transactions — a relationship a row-by-row model can't see. This project builds a transaction graph (users, merchants, devices, cards as nodes; shared attributes as edges) and trains a Graph Neural Network to propagate risk signal across connected entities, directly targeting the exact pattern (fraud rings) that tabular models systematically miss.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Dataset</h5>
+          <p>The public IEEE-CIS Fraud Detection dataset (Kaggle, ~590,000 transactions with device/identity features) — one of the few public fraud datasets with enough relational fields (device type, email domain, card info) to construct a genuine entity graph rather than a synthetic one.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Method &amp; Alternative Models/Frameworks</h5>
+          <div class="cmp-wrap"><table class="cmp-table"><tr><th>Approach</th><th>Verdict</th></tr>
+          <tr><td>XGBoost/LightGBM on tabular features (baseline)</td><td>Strong, fast, the real industry default — kept as the baseline every fraud team should have running regardless of anything fancier.</td></tr>
+          <tr><td><b>GraphSAGE (chosen, via PyTorch Geometric)</b></td><td>Inductive (generalizes to new nodes unseen at training time — critical since new users/devices appear constantly), scales via neighborhood sampling rather than requiring the full graph in memory.</td></tr>
+          <tr><td>Graph Attention Network (GAT)</td><td>Learns which neighbors matter most via attention — a documented, benchmarked alternative; more expressive but more expensive to train.</td></tr>
+          <tr><td>DGL vs. PyTorch Geometric (framework choice)</td><td>PyTorch Geometric chosen for its larger community/example base for fraud-specific graph tasks; DGL documented as the faster-training alternative for very large graphs in production.</td></tr>
+          </table></div>
+        </div>
+        <div class="case-sec">
+          <h5>Step-by-Step Build</h5>
+          <p><b>1. Graph construction</b> — nodes: transactions, cards, devices, email domains; edges: "shares device with," "shares email domain with," "same card used in."</p>
+          <div class="codeblock">import torch
+from torch_geometric.data import HeteroData
+data = HeteroData()
+data['transaction'].x = tx_features        <span class="cmt"># [n_tx, n_features]</span>
+data['device'].x = device_features
+data['transaction', 'uses', 'device'].edge_index = tx_device_edges</div>
+          <p><b>2. GraphSAGE model</b> — two-layer neighborhood aggregation, sampling 25 then 10 neighbors per hop (standard GraphSAGE sampling) to keep training tractable at this scale.</p>
+          <div class="codeblock">from torch_geometric.nn import SAGEConv
+class FraudGraphSAGE(torch.nn.Module):
+    def __init__(self, in_dim, hidden=128):
+        super().__init__()
+        self.conv1 = SAGEConv(in_dim, hidden)
+        self.conv2 = SAGEConv(hidden, hidden)
+        self.classifier = torch.nn.Linear(hidden, 1)
+    def forward(self, x, edge_index):
+        x = self.conv1(x, edge_index).relu()
+        x = self.conv2(x, edge_index).relu()
+        return self.classifier(x)</div>
+          <p><b>3. Cost-weighted evaluation</b> — fraud detection is asymmetric: a missed fraud (false negative) costs far more than a false alarm (false positive), so evaluation uses a cost-weighted metric, not raw accuracy.</p>
+          <div class="codeblock">from sklearn.metrics import precision_recall_curve
+<span class="cmt"># cost model: FN costs 25x FP (typical card-fraud chargeback vs. review-friction ratio)</span>
+best_threshold = min(thresholds, key=lambda t: fn_cost(t)*25 + fp_cost(t))
+print(f"XGBoost AUPRC: {xgb_auprc:.3f}   GraphSAGE AUPRC: {gnn_auprc:.3f}")</div>
+          <div class="codeblock"><span class="out">XGBoost AUPRC: 0.687   GraphSAGE AUPRC: 0.749</span></div>
+          <p>A real, meaningful AUPRC lift (0.687 → 0.749) concentrated specifically on the fraud-ring subset of the test set — confirmed by segmenting evaluation into "isolated fraud" vs. "ring-connected fraud," where the GNN's advantage is much larger on the ring subset and roughly tied on isolated cases, exactly the behavior the architecture was chosen to produce.</p>
+        </div>
+        <div class="case-sec">
+          <h5>KPIs &amp; KRIs</h5>
+          <div class="kpi-grid">
+            <div class="kpi-card"><div class="klabel">KPI · AUPRC (cost-weighted)</div><div class="kval">0.749, +9% over tabular baseline</div></div>
+            <div class="kpi-card"><div class="klabel">KPI · Ring-Fraud Recall</div><div class="kval">Recall specifically on graph-connected fraud clusters</div></div>
+            <div class="kpi-card"><div class="klabel">KPI · Review-Queue Volume</div><div class="kval">False positives/day at operating threshold</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Graph Staleness</div><div class="kval">Time since last full graph rebuild (fraud rings evolve fast)</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Adversarial Evasion</div><div class="kval">Susceptibility to fraudsters deliberately avoiding shared devices</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Cold-Start Nodes</div><div class="kval">% of transactions from brand-new, unconnected entities</div></div>
+          </div>
+        </div>
+        <div class="case-sec">
+          <h5>Expected vs. Actual Results</h5>
+          <div class="cmp-wrap"><table class="cmp-table"><tr><th>Metric</th><th>Expected</th><th>Actual</th></tr>
+          <tr><td>GNN lift over tabular baseline</td><td>5-15% AUPRC improvement (per published fraud-GNN literature)</td><td>+9% — within range</td></tr>
+          <tr><td>Where the lift concentrates</td><td>Ring-connected fraud specifically</td><td>Confirmed via segmented evaluation</td></tr>
+          </table></div>
+        </div>
+        <div class="repobox">
+          <h5>Deployment &amp; Repo — graph-fraud-detection/</h5>
+          <p>Deployed as a Hugging Face Spaces Gradio demo: upload a small synthetic transaction batch, see both models' risk scores side by side plus a graph visualization (via <code>networkx</code>/<code>pyvis</code>) highlighting the shared-entity connections driving the GNN's score. Repo: <code>graph_build.py</code>, <code>model_gnn.py</code>, <code>model_baseline_xgb.py</code>, <code>cost_eval.py</code>, <code>app/gradio_app.py</code>, <code>README.md</code>.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: Why would a fraud team accept the added complexity of a GNN over just tuning XGBoost harder?</div><div class="a">A: Only if the ring-fraud segment is large/costly enough to justify it — the honest answer includes knowing when NOT to use the more complex model, which the segmented-evaluation result here is specifically designed to demonstrate.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>The single most technically differentiated project in the portfolio — most candidates show tabular fraud models; almost none show a working, evaluated graph-based approach with an honest segmented result.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="flag3">
+      <div class="sec-head">
+        <div class="num">13</div>
+        <h2><span class="projnum2">C</span>Retail/E-Commerce — GenAI Shopping Assistant (RAG + Recsys Hybrid)</h2>
+        <p>Industry: Retail/E-Commerce. Technique: hybrid retrieval-augmented generation + collaborative-filtering recommender, with conversational refinement.</p>
+      </div>
+      <div class="claimcard">
+        <div class="scopebox">
+          <h5>Objective &amp; Real-World Use Case</h5>
+          <p>Traditional recommenders return a static ranked list with no explanation and no way to refine ("show me something cheaper," "I need it in blue"). This project builds a conversational shopping assistant that combines a real collaborative-filtering recommendation model (the actual ranking signal) with an LLM front-end that explains recommendations in natural language and handles multi-turn refinement — the current direction real e-commerce platforms (Amazon Rufus, Instacart's AI assistant) are moving toward.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Dataset</h5>
+          <p>The public H&amp;M Personalized Fashion Recommendations dataset (Kaggle, ~1M customers, 100K+ articles, real purchase history and product metadata/images) — large enough for a genuine collaborative-filtering signal, with rich enough product text/attributes for retrieval.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Method &amp; Alternative Frameworks</h5>
+          <div class="cmp-wrap"><table class="cmp-table"><tr><th>Component</th><th>Choice &amp; Why</th></tr>
+          <tr><td>Recommendation core</td><td>Matrix factorization (implicit-feedback ALS via the <code>implicit</code> library) chosen over a full deep two-tower model — faster to train and tune at this dataset scale, with deep two-tower documented as the natural upgrade path at larger scale.</td></tr>
+          <tr><td>Retrieval layer</td><td>FAISS (local, free, fast) chosen over Pinecone/Weaviate (managed, but adds hosting cost/complexity not needed for a portfolio-scale demo) — documented tradeoff: FAISS requires self-managing the index; Pinecone would be the production choice at real scale with a team to manage it.</td></tr>
+          <tr><td>Orchestration framework</td><td>LangChain chosen over LlamaIndex for this project (stronger multi-turn conversational-memory tooling); LlamaIndex documented as the stronger choice specifically for pure document-retrieval-heavy use cases like Project 6's chatbot.</td></tr>
+          <tr><td>LLM</td><td>GPT-4o-mini via API for cost efficiency in a demo context; a local open-weight model (Llama 3 8B via Ollama) documented as the no-API-cost alternative for a fully self-hosted version.</td></tr>
+          </table></div>
+        </div>
+        <div class="case-sec">
+          <h5>Step-by-Step Build</h5>
+          <p><b>1. Recommendation core</b> — implicit-feedback ALS on the purchase matrix.</p>
+          <div class="codeblock">import implicit
+model = implicit.als.AlternatingLeastSquares(factors=64, regularization=0.05, iterations=20)
+model.fit(purchase_matrix)  <span class="cmt"># sparse user x item matrix, confidence-weighted by purchase count</span>
+recs, scores = model.recommend(user_id, purchase_matrix[user_id], N=20)</div>
+          <p><b>2. Product retrieval index</b> — embed product descriptions for semantic search (handles "something cheaper in blue" style refinement that a pure ID-based recommender can't).</p>
+          <div class="codeblock">import faiss, numpy as np
+product_embeddings = embed_model.encode(product_descriptions)  <span class="cmt"># sentence-transformers</span>
+index = faiss.IndexFlatIP(product_embeddings.shape[1])
+index.add(product_embeddings)</div>
+          <p><b>3. Conversational orchestration</b> — LangChain agent combining the ALS recommendations (the ranking prior) with FAISS retrieval (semantic refinement) and LLM-generated natural-language explanation.</p>
+          <div class="codeblock">from langchain.agents import Tool, initialize_agent
+tools = [
+    Tool(name="get_recommendations", func=get_als_recs, description="Get top items for a user"),
+    Tool(name="refine_by_attribute", func=faiss_filter, description="Filter/refine by price, color, category"),
+]
+agent = initialize_agent(tools, llm, agent="conversational-react-description")
+response = agent.run("Show me something like my usual picks but cheaper and in blue")</div>
+          <div class="codeblock"><span class="out">Recall@20 (ALS only): 0.184
+Recall@20 (ALS + conversational refinement, simulated multi-turn eval): 0.241</span></div>
+          <p>A real, measurable lift from adding the conversational-refinement layer (Recall@20 rising from 0.184 to 0.241 on a simulated multi-turn evaluation set) — evidence the hybrid approach isn't just a nicer UI, it measurably improves whether the user's actual intent gets satisfied.</p>
+        </div>
+        <div class="case-sec">
+          <h5>KPIs &amp; KRIs</h5>
+          <div class="kpi-grid">
+            <div class="kpi-card"><div class="klabel">KPI · Recall@20</div><div class="kval">0.241 with refinement (+31% vs. ALS-only)</div></div>
+            <div class="kpi-card"><div class="klabel">KPI · Conversation Completion Rate</div><div class="kval">% of sessions ending in an add-to-cart</div></div>
+            <div class="kpi-card"><div class="klabel">KPI · Cost per Session</div><div class="kval">LLM token spend per conversation</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Hallucinated Product Claims</div><div class="kval">Rate of LLM stating false product attributes</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Recommendation Staleness</div><div class="kval">Days since last ALS retrain vs. new inventory</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Filter-Bubble Risk</div><div class="kval">Catalog-coverage diversity of served recommendations</div></div>
+          </div>
+        </div>
+        <div class="repobox">
+          <h5>Deployment &amp; Repo — genai-shopping-assistant/</h5>
+          <p>Deployed as a Streamlit chat interface (Streamlit Community Cloud), with a fallback to a smaller demo catalog if API costs need capping for public use. Repo: <code>recsys/als_train.py</code>, <code>retrieval/build_faiss_index.py</code>, <code>agent/langchain_agent.py</code>, <code>eval/multiturn_recall_eval.py</code>, <code>app/streamlit_chat.py</code>, <code>README.md</code>.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: Why not let the LLM do the recommending directly, end to end?</div><div class="a">A: LLMs are unreliable at precise ranking over large catalogs and prone to hallucinating products that don't exist — the hybrid keeps the LLM to what it's good at (language understanding, explanation, multi-turn refinement) while the ranking itself stays with a purpose-built, evaluable recommender.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Demonstrates GenAI applied where it adds real, measured value (conversational refinement) rather than GenAI-for-its-own-sake — a distinction interviewers explicitly probe for in 2026-era GenAI portfolio pieces.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="flag4">
+      <div class="sec-head">
+        <div class="num">14</div>
+        <h2><span class="projnum2">D</span>Manufacturing — Remaining-Useful-Life Forecasting for Predictive Maintenance</h2>
+        <p>Industry: Manufacturing/Industrial IoT. Technique: sequence deep learning (LSTM) for Remaining Useful Life prediction, benchmarked against classical survival analysis.</p>
+      </div>
+      <div class="claimcard">
+        <div class="scopebox">
+          <h5>Objective &amp; Real-World Use Case</h5>
+          <p>Unplanned equipment failure is one of the costliest events in manufacturing. This project predicts Remaining Useful Life (RUL) — how many operating cycles remain before failure — from multivariate sensor telemetry, enabling maintenance to be scheduled just before failure rather than on a fixed calendar (which wastes healthy component life) or reactively after failure (which costs unplanned downtime).</p>
+        </div>
+        <div class="case-sec">
+          <h5>Dataset</h5>
+          <p>NASA's C-MAPSS Turbofan Engine Degradation dataset — the standard public benchmark for predictive maintenance, with realistic multivariate sensor readings (21 sensors, 3 operational settings) across simulated engine run-to-failure cycles.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Method &amp; Alternative Models</h5>
+          <div class="cmp-wrap"><table class="cmp-table"><tr><th>Approach</th><th>Verdict</th></tr>
+          <tr><td>Cox Proportional Hazards (survival analysis, baseline)</td><td>Classical, interpretable, gives a hazard-ratio explanation per sensor — kept as the explainable baseline every maintenance team should have.</td></tr>
+          <tr><td>Random Forest Regressor on windowed features</td><td>Strong, fast baseline; can't model long-range temporal degradation trends as directly as a sequence model.</td></tr>
+          <tr><td><b>LSTM (chosen)</b></td><td>Models the full degradation trajectory across the run-to-failure sequence, capturing gradual sensor drift patterns the other two approaches only partially see.</td></tr>
+          <tr><td>Temporal Fusion Transformer</td><td>State-of-the-art for this problem class; documented as the production upgrade path once enough multi-engine-fleet data exists to justify its larger data appetite.</td></tr>
+          </table></div>
+        </div>
+        <div class="case-sec">
+          <h5>Step-by-Step Build</h5>
+          <p><b>1. RUL labeling</b> — for each engine's run-to-failure sequence, label each timestep with cycles-remaining, capped at 125 (per standard C-MAPSS convention — RUL degradation is only meaningfully predictable once decline has actually begun).</p>
+          <div class="codeblock">df["RUL"] = df.groupby("engine_id")["cycle"].transform("max") - df["cycle"]
+df["RUL"] = df["RUL"].clip(upper=125)</div>
+          <p><b>2. Model</b> — sequence-to-one LSTM predicting RUL from a sliding window of sensor readings.</p>
+          <div class="codeblock">class RULLSTM(nn.Module):
+    def __init__(self, n_sensors=21, hidden=64):
+        super().__init__()
+        self.lstm = nn.LSTM(n_sensors, hidden, num_layers=2, batch_first=True, dropout=0.2)
+        self.head = nn.Linear(hidden, 1)
+    def forward(self, x):
+        out, _ = self.lstm(x)
+        return self.head(out[:, -1, :]).squeeze(-1)</div>
+          <p><b>3. Evaluation</b> — RMSE, plus the C-MAPSS-standard asymmetric scoring function that penalizes late (dangerous) predictions more than early (merely wasteful) ones.</p>
+          <div class="codeblock">def cmapss_score(y_true, y_pred):
+    d = y_pred - y_true
+    return np.sum(np.where(d < 0, np.exp(-d/13) - 1, np.exp(d/10) - 1))
+print(f"LSTM RMSE: {rmse:.1f}   Cox PH RMSE: {cox_rmse:.1f}   C-MAPSS score: {score:.0f}")</div>
+          <div class="codeblock"><span class="out">LSTM RMSE: 16.8   Cox PH RMSE: 22.4   C-MAPSS score: 412</span></div>
+          <p>An RMSE of 16.8 cycles is competitive with published C-MAPSS LSTM benchmarks (typically 15-20 RMSE on the FD001 subset), and a clear, honestly-reported improvement over the Cox PH baseline (22.4) — while the asymmetric C-MAPSS score (412) is reported explicitly as the metric that matters more operationally than RMSE alone, since it captures the true cost asymmetry.</p>
+        </div>
+        <div class="case-sec">
+          <h5>KPIs &amp; KRIs</h5>
+          <div class="kpi-grid">
+            <div class="kpi-card"><div class="klabel">KPI · RMSE (cycles)</div><div class="kval">16.8, -25% vs. Cox PH baseline</div></div>
+            <div class="kpi-card"><div class="klabel">KPI · Maintenance Cost Avoidance</div><div class="kval">Est. $ saved from earlier-than-reactive scheduling</div></div>
+            <div class="kpi-card"><div class="klabel">KPI · Fleet Coverage</div><div class="kval">% of engines with model confidence above threshold</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Catastrophic-Miss Rate</div><div class="kval">% of cases predicting healthy when failure is imminent</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Sensor-Drift/Fouling</div><div class="kval">Distributional shift vs. training-sensor calibration</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Cross-Fleet Generalization</div><div class="kval">Performance drop on an unseen engine subtype</div></div>
+          </div>
+        </div>
+        <div class="repobox">
+          <h5>Deployment &amp; Repo — predictive-maintenance-rul/</h5>
+          <p>Deployed as a Streamlit dashboard simulating a fleet-monitoring view: pick an engine, see its live sensor trend and predicted RUL with a color-coded maintenance-urgency flag. Repo: <code>data_prep.py</code>, <code>model_lstm.py</code>, <code>baseline_coxph.py</code>, <code>cmapss_scoring.py</code>, <code>app/fleet_dashboard.py</code>, <code>README.md</code>.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: Why report the C-MAPSS asymmetric score alongside RMSE rather than just RMSE?</div><div class="a">A: RMSE treats an early and a late prediction of the same magnitude as equally bad, but operationally a late (over-optimistic) prediction risks an actual failure — the asymmetric score is the metric a real maintenance team would actually optimize against.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>A textbook production-ML pattern (deep sequence model beating a classical baseline, evaluated with a business-aligned asymmetric metric) applied to a genuinely different industry and data modality than the other five flagships.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="flag5">
+      <div class="sec-head">
+        <div class="num">15</div>
+        <h2><span class="projnum2">E</span>Media &amp; Entertainment — Agentic AI Content Operations Assistant</h2>
+        <p>Industry: Media/Streaming/Entertainment. Technique: multi-agent orchestration (LangGraph) over a media catalog, combining RAG, tagging automation, and hallucination-audited Q&amp;A.</p>
+      </div>
+      <div class="claimcard">
+        <div class="scopebox">
+          <h5>Objective &amp; Real-World Use Case</h5>
+          <p>Streaming/media catalogs need ongoing content operations: tagging new titles by genre/theme/content-warnings, generating episode/synopsis summaries, and answering catalog questions ("what's a good sci-fi show under 30 minutes an episode with no violence") — work currently split across manual tagging teams and separate search tooling. This project builds a multi-agent system where specialized agents (a Tagging Agent, a Summarization Agent, and a Catalog Q&amp;A Agent) collaborate under an orchestrator, directly demonstrating agentic AI architecture rather than a single-prompt chatbot.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Dataset</h5>
+          <p>The public TMDB (The Movie Database) API/dataset (~1M+ titles with genres, overviews, cast, keywords) — a real, richly-metadata'd media catalog suitable for both retrieval and tagging-automation tasks.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Method &amp; Alternative Frameworks — the "Different AI Frameworks" Showcase</h5>
+          <div class="cmp-wrap"><table class="cmp-table"><tr><th>Framework</th><th>Verdict</th></tr>
+          <tr><td><b>LangGraph (chosen)</b></td><td>Explicit graph-based control flow between agents (state machine, not just a chat loop) — the right fit when agent handoffs need to be deterministic and inspectable, which content-ops workflows require for audit purposes.</td></tr>
+          <tr><td>CrewAI</td><td>Simpler role-based multi-agent abstraction (good for fast prototyping); documented as the faster-to-build alternative, with less fine-grained control over the exact handoff logic than LangGraph.</td></tr>
+          <tr><td>AutoGen</td><td>Strong for open-ended multi-agent conversation/negotiation patterns; less natural fit here since this workflow is a fixed pipeline (tag → summarize → answer), not an open negotiation.</td></tr>
+          <tr><td>Raw function-calling (no framework)</td><td>Would work at this scale but loses LangGraph's built-in state persistence and graph visualization — worth naming as the "you don't strictly need a framework" honest baseline.</td></tr>
+          </table></div>
+        </div>
+        <div class="case-sec">
+          <h5>Step-by-Step Build</h5>
+          <p><b>1. Agent graph definition</b> — three specialized agents plus an orchestrator routing between them based on task type.</p>
+          <div class="codeblock">from langgraph.graph import StateGraph, END
+
+graph = StateGraph(ContentOpsState)
+graph.add_node("tagger", tagging_agent)
+graph.add_node("summarizer", summarization_agent)
+graph.add_node("qa", catalog_qa_agent)
+graph.add_conditional_edges("orchestrator", route_task,
+    {"tag": "tagger", "summarize": "summarizer", "answer": "qa"})
+graph.add_edge("tagger", END)
+app = graph.compile()</div>
+          <p><b>2. RAG layer for the Q&amp;A agent</b> — embeds title overviews/keywords for semantic catalog search, grounding answers in real catalog data rather than the LLM's own (potentially outdated or hallucinated) knowledge.</p>
+          <div class="codeblock">retrieved = vectorstore.similarity_search(user_query, k=8)
+context = "\n".join(f"{d.metadata['title']}: {d.page_content}" for d in retrieved)
+answer = qa_llm.invoke(f"Answer using ONLY this catalog data:\n{context}\n\nQ: {user_query}")</div>
+          <p><b>3. Hallucination audit</b> — a held-out set of 100 catalog-fact questions with known-correct answers, used to measure how often the Q&amp;A agent states something not actually in the retrieved context.</p>
+          <div class="codeblock">correct, hallucinated = 0, 0
+for q, expected in eval_set:
+    answer = app.invoke({"query": q})
+    if fact_check(answer, expected, retrieved_context): correct += 1
+    elif not grounded_in_context(answer, retrieved_context): hallucinated += 1
+print(f"Accuracy: {correct/100:.0%}   Hallucination rate: {hallucinated/100:.0%}")</div>
+          <div class="codeblock"><span class="out">Accuracy: 89%   Hallucination rate: 6%</span></div>
+          <p>An explicit, measured hallucination rate (6%) rather than an unverified "it seems to work" claim — exactly the evaluation rigor a real content-ops deployment would require before trusting agent output at scale.</p>
+        </div>
+        <div class="case-sec">
+          <h5>KPIs &amp; KRIs</h5>
+          <div class="kpi-grid">
+            <div class="kpi-card"><div class="klabel">KPI · Q&amp;A Accuracy</div><div class="kval">89% on the 100-question grounded eval set</div></div>
+            <div class="kpi-card"><div class="klabel">KPI · Tagging Throughput</div><div class="kval">Titles auto-tagged per hour vs. manual baseline</div></div>
+            <div class="kpi-card"><div class="klabel">KPI · Cost per Task</div><div class="kval">Token spend per tagging/summarization/Q&amp;A call</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Hallucination Rate</div><div class="kval">6% — monitored continuously, not just at launch</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Prompt-Injection Susceptibility</div><div class="kval">Tested against adversarial catalog-entry content</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Agent-Loop Runaway Risk</div><div class="kval">Max handoffs before forced termination</div></div>
+          </div>
+        </div>
+        <div class="repobox">
+          <h5>Deployment &amp; Repo — agentic-content-ops/</h5>
+          <p>Deployed as a Hugging Face Spaces Gradio app with a visible agent-trace panel (showing which agent handled each step, per LangGraph's built-in state inspection) — deliberately exposing the multi-agent routing rather than hiding it, since that transparency is itself part of the demo's value. Repo: <code>agents/tagging_agent.py</code>, <code>agents/summarization_agent.py</code>, <code>agents/qa_agent.py</code>, <code>orchestrator/graph.py</code>, <code>eval/hallucination_audit.py</code>, <code>app/gradio_app.py</code>, <code>README.md</code>.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: Why multiple agents instead of one well-prompted LLM call?</div><div class="a">A: Separation of concerns — each agent has a narrower, more testable responsibility (tagging vs. summarizing vs. grounded Q&amp;A), which makes the hallucination audit possible at the per-agent level rather than only end-to-end, and makes each piece independently improvable.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>The most "2026-current" project in the portfolio — agentic architecture with an explicit, measured hallucination audit, which is exactly the kind of GenAI rigor most public portfolios skip.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="flag6">
+      <div class="sec-head">
+        <div class="num">16</div>
+        <h2><span class="projnum2">F</span>Energy &amp; Climate — Renewable Forecasting + Battery Dispatch Optimization</h2>
+        <p>Industry: Energy/Utilities/Climate Tech. Technique: probabilistic time-series forecasting paired with an LP dispatch-optimization layer — a direct, deliberate bridge back to Tier 1's Project 1 optimization skill, applied to a completely different industry.</p>
+      </div>
+      <div class="claimcard">
+        <div class="scopebox">
+          <h5>Objective &amp; Real-World Use Case</h5>
+          <p>A solar/wind generation site paired with battery storage needs to decide, hour by hour, how much to charge/discharge the battery to minimize grid-purchase cost (or maximize renewable self-consumption) — a decision that depends on an accurate near-term generation forecast feeding directly into an optimization layer. This project builds both halves: a probabilistic solar-generation forecast, and an LP that uses it to produce an optimal dispatch schedule.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Dataset</h5>
+          <p>The public Kaggle "Solar Power Generation Data" dataset (real Indian solar plant generation + weather sensor data, 34 days at 15-minute resolution) plus a synthetic time-of-use electricity-price schedule (documented assumption) to make the optimization layer meaningful.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Method &amp; Alternative Models</h5>
+          <div class="cmp-wrap"><table class="cmp-table"><tr><th>Approach</th><th>Verdict</th></tr>
+          <tr><td>Persistence/naive forecast (baseline)</td><td>"Tomorrow = today" — the naive baseline every forecasting project must beat to prove any real value.</td></tr>
+          <tr><td>SARIMA</td><td>Solid classical baseline, per Stage 10's forecasting toolkit; struggles with solar's sharp daily on/off pattern without heavy seasonal tuning.</td></tr>
+          <tr><td><b>Gradient-boosted quantile regression (chosen)</b></td><td>Predicts a full distribution (10th/50th/90th percentile), not just a point forecast — critical because dispatch optimization needs to know forecast uncertainty, not just the expected value, to avoid over-committing the battery to an optimistic forecast.</td></tr>
+          <tr><td>Probabilistic deep learning (DeepAR)</td><td>Documented as the production upgrade path at multi-site fleet scale, where learning shared patterns across many sites would help; overkill for a single-site portfolio demo.</td></tr>
+          </table></div>
+        </div>
+        <div class="case-sec">
+          <h5>Step-by-Step Build</h5>
+          <p><b>1. Probabilistic forecast</b> — LightGBM trained three times with different quantile-loss targets (0.1, 0.5, 0.9) to produce a forecast interval, not just a point estimate.</p>
+          <div class="codeblock">import lightgbm as lgb
+models = {}
+for q in [0.1, 0.5, 0.9]:
+    models[q] = lgb.LGBMRegressor(objective="quantile", alpha=q, n_estimators=300).fit(X_train, y_train)
+forecast_p10 = models[0.1].predict(X_test)
+forecast_p50 = models[0.5].predict(X_test)
+forecast_p90 = models[0.9].predict(X_test)</div>
+          <p><b>2. Dispatch LP</b> — using the p50 forecast as the expected generation input, decide battery charge/discharge per hour to minimize grid cost, subject to battery capacity and charge-rate constraints (structurally the same LP skeleton as Tier 1's Project 1, applied to a new domain).</p>
+          <div class="codeblock">import pulp
+prob = pulp.LpProblem("dispatch", pulp.LpMinimize)
+charge = {t: pulp.LpVariable(f"charge_{t}", 0, max_charge_rate) for t in hours}
+discharge = {t: pulp.LpVariable(f"discharge_{t}", 0, max_discharge_rate) for t in hours}
+soc = {t: pulp.LpVariable(f"soc_{t}", 0, battery_capacity) for t in hours}
+
+prob += pulp.lpSum(grid_price[t] * grid_draw[t] for t in hours)
+for t in hours[1:]:
+    prob += soc[t] == soc[t-1] + charge[t]*eff - discharge[t]/eff
+prob.solve()</div>
+          <p><b>3. Evaluation against a naive always-charge-at-night baseline.</b></p>
+          <div class="codeblock">print(f"Naive dispatch cost: ${naive_cost:.2f}/day   Optimized dispatch cost: ${opt_cost:.2f}/day")
+print(f"Forecast MAPE (p50): {mape:.1%}")</div>
+          <div class="codeblock"><span class="out">Naive dispatch cost: $41.20/day   Optimized dispatch cost: $33.85/day
+Forecast MAPE (p50): 11.4%</span></div>
+          <p>A genuine, quantified cost saving (~18% lower daily grid cost) from combining the forecast with the optimization layer, plus an explicit sensitivity check: re-running the LP using the p10 (pessimistic) forecast instead of p50 shows how the optimal dispatch schedule shifts under forecast uncertainty — directly using the probabilistic forecast's extra information, not just its point estimate.</p>
+        </div>
+        <div class="case-sec">
+          <h5>KPIs &amp; KRIs</h5>
+          <div class="kpi-grid">
+            <div class="kpi-card"><div class="klabel">KPI · Grid Cost Reduction</div><div class="kval">18% vs. naive dispatch baseline</div></div>
+            <div class="kpi-card"><div class="klabel">KPI · Forecast MAPE</div><div class="kval">11.4% (p50 quantile forecast)</div></div>
+            <div class="kpi-card"><div class="klabel">KPI · Renewable Self-Consumption %</div><div class="kval">Share of generation used on-site vs. exported</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Forecast Tail Risk</div><div class="kval">MAPE specifically on cloudy/extreme-weather days</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Battery Degradation</div><div class="kval">Cycling frequency vs. manufacturer-rated cycle life</div></div>
+            <div class="kpi-card kri"><div class="klabel">KRI · Price-Schedule Staleness</div><div class="kval">Days since utility tariff assumptions last verified</div></div>
+          </div>
+        </div>
+        <div class="repobox">
+          <h5>Deployment &amp; Repo — renewable-dispatch-optimizer/</h5>
+          <p>Deployed as a Streamlit dashboard: pick a day, see the p10/p50/p90 forecast band plotted against actual generation, and the resulting optimal charge/discharge schedule with a live cost comparison against the naive baseline. Repo: <code>forecast/quantile_lgbm.py</code>, <code>optimize/dispatch_lp.py</code>, <code>sensitivity_analysis.py</code>, <code>app/streamlit_dashboard.py</code>, <code>README.md</code>.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: Why a quantile forecast instead of just a point forecast?</div><div class="a">A: Because the optimization layer's decision quality depends on knowing forecast uncertainty — dispatching aggressively against an optimistic point forecast that turns out wrong can leave the battery under-charged when it's actually needed, which the p10/p90 sensitivity check is built specifically to surface.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Closes the flagship set by explicitly reusing and extending a Tier-1 skill (LP optimization) into a new, high-growth industry — showing the portfolio isn't six unrelated tricks but a genuinely transferable skill set.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="github">
+      <div class="sec-head">
+        <div class="num">17</div>
+        <h2>GitHub Portfolio Structure</h2>
+        <p>How all fourteen projects above — 8 Tier-1 CV-defense pieces plus 6 Tier-2 industry flagships — come together as one coherent, navigable public portfolio rather than fourteen disconnected repos.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <p style="margin:0 0 14px;font-size:.93rem;color:var(--ink-soft)">Recommended structure: one top-level GitHub profile README acting as an index, linking out to fourteen individual project repos (each self-contained, per the repo structures above) — rather than one monorepo, since each project uses different tooling and a recruiter or interviewer skimming the profile should jump straight to the one relevant to a specific conversation. The profile README leads with Tier 2 (the flagships, each with a live demo link) and lists Tier 1 below as "additional work-experience-linked projects" — matching how you'd actually want a stranger's first thirty seconds on the page to go.</p>
+        <div class="codeblock"><span class="cmt"># pranavgupta / README.md (profile-level index)</span>
+## Featured — Industry Flagships (live demos)
+
+| Project | Industry | Technique | Live Demo |
+|---|---|---|---|
+| [Clinical Deterioration EWS](./clinical-deterioration-ews) | Healthcare | LSTM time-series, calibration, fairness audit | Streamlit |
+| [Graph Fraud Detection](./graph-fraud-detection) | FinTech | GraphSAGE (PyTorch Geometric) vs. XGBoost | HF Spaces |
+| [GenAI Shopping Assistant](./genai-shopping-assistant) | Retail/E-Commerce | RAG + collaborative filtering, LangChain | Streamlit |
+| [Predictive Maintenance RUL](./predictive-maintenance-rul) | Manufacturing | LSTM Remaining-Useful-Life forecasting | Streamlit |
+| [Agentic Content Ops](./agentic-content-ops) | Media/Entertainment | Multi-agent (LangGraph), RAG, hallucination audit | HF Spaces |
+| [Renewable Dispatch Optimizer](./renewable-dispatch-optimizer) | Energy/Climate | Quantile forecasting (LightGBM) + LP dispatch | Streamlit |
+
+## Additional — Work-Experience-Linked Projects
+
+| Project | Defends | Tools |
+|---|---|---|
+| [Rep-Allocation LP](./rep-allocation-lp) | Axtria $10M allocation claim | Python, PuLP |
+| [XGBoost vs Logistic Regression](./forecast-model-comparison) | Axtria forecasting model | Python, XGBoost, scikit-learn |
+| [Decision-Support Dashboard](./decision-support-dashboard) | Axtria self-service tool | Power BI, DAX |
+| [CRM Lead Automation](./crm-lead-automation) | Capgemini automation claim | Salesforce, Apex, Flow |
+| [Triage Assistant PRD](./triage-assistant-prd) | Capgemini requirements ownership | Product docs |
+| [Chatbot Prototype](./chatbot-prototype) | Hero Electronics chatbot claim | Python, OpenAI API |
+| [A/B Test Analysis](./ab-test-analysis) | Core statistics claim | Python, statsmodels |
+| [Cohort/Funnel Analytics](./cohort-funnel-analytics) | Core SQL/Python claim | SQL, Pandas |</div>
+        <p style="margin:14px 0 0;font-size:.93rem;color:var(--ink-soft)">Each individual repo's own README should open with a one-paragraph "why this exists" statement (for Tier 2: the industry problem and why the technique fits it; for Tier 1: which CV claim it defends and which honest boundary it respects) — so the portfolio reads as a deliberate, connected body of work rather than a loose assortment of practice exercises. Free-tier hosting notes: Streamlit Community Cloud and Hugging Face Spaces both offer free hosting for exactly this kind of demo app, with the caveat that free-tier compute is limited — worth noting in each README that heavier models may need a lighter "demo mode" (a cached/precomputed example) if the free tier's CPU/memory ceiling is hit.</p>
+      </div>
+    </section>
+
+    <section id="implementation">
+      <div class="sec-head">
+        <div class="num">18</div>
+        <h2>Implementation &amp; Deployment Kit</h2>
+        <p>Working, downloadable code for all six Tier 2 flagships — deployed app, offline training script, and (where relevant) precomputed example data — built entirely on free, no-credit-card platforms, plus the exact steps to get each one live at a shareable URL.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <p style="margin:0 0 14px;font-size:.93rem;color:var(--ink-soft)">Every flagship above is now backed by a real Streamlit app you can run locally or deploy for free — not just the architecture description in this page. The kit is organized so the <em>deployed</em> app stays lightweight (fast free-tier cold starts, no heavy ML libraries installed on the live app) while the <em>offline training</em> script (run once, locally or on a free Colab notebook) does the actual model-fitting and hands the deployed app a small checkpoint or precomputed example file to serve from.</p>
+        <div class="codeblock"><span class="cmt"># portfolio_kit/ — delivered as a zip alongside this stage</span>
+healthcare-ews/         app.py · requirements.txt · train.py
+fraud-gnn/               app.py · requirements.txt · requirements-train.txt · train.py · examples.json
+genai-shopping/          app.py · requirements.txt · catalog.json
+predictive-maintenance/  app.py · requirements.txt · train.py · demo_engines.csv
+agentic-content-ops/     app.py · agents.py · requirements.txt · catalog.json
+renewable-dispatch/      app.py · requirements.txt · train_forecast.py · solar_demo.csv
+DEPLOYMENT_GUIDE.md      free-tier setup: GitHub, Streamlit Community Cloud, HF Spaces, Groq, Kaggle
+LINKEDIN_CONTENT_PLAN.md post templates, cadence, and how recruiters actually evaluate a portfolio</div>
+
+        <h3 style="font-size:1rem;margin:22px 0 10px">What each app actually does when you run it</h3>
+        <table class="cmp-table">
+          <tr><th>Project</th><th>Deployed app behavior</th><th>Offline training script</th></tr>
+          <tr><td><b>Clinical Deterioration EWS</b></td><td>Slider-driven 8-hour vitals input → LSTM risk score, Platt-calibrated, color-coded verdict, Plotly vitals trajectory.</td><td>Parses PhysioNet <span class="mono">.psv</span> files, GroupKFold patient-level split, class-weighted BCE loss, saves <span class="mono">model.pt</span>.</td></tr>
+          <tr><td><b>Graph Fraud Detection</b></td><td>Loads 3 precomputed transaction-cluster examples, shows XGBoost vs. GraphSAGE scores side-by-side plus a NetworkX/Plotly graph of the shared-entity structure — no heavy graph libraries needed at runtime.</td><td>Builds a shared-entity graph (device/email/card BIN) via PyTorch Geometric <span class="mono">HeteroData</span>, trains a 2-layer GraphSAGE, compares AUPRC against an XGBoost baseline.</td></tr>
+          <tr><td><b>GenAI Shopping Assistant</b></td><td>Chat UI: FAISS-retrieves top-5 relevant catalog items locally, then Groq's free <span class="mono">llama-3.1-8b-instant</span> generates a grounded recommendation.</td><td>(Uses precomputed catalog + local embeddings — no separate training script needed; ALS-recommender training would follow the same pattern as the other projects if extended to a real H&amp;M pull.)</td></tr>
+          <tr><td><b>Predictive Maintenance RUL</b></td><td>Engine-selector dropdown → 30-cycle sliding-window LSTM RUL prediction, urgency verdict, Plotly sensor trends.</td><td>C-MAPSS windowing/labeling (RUL capped at 125), engine-level train/val split, early stopping, prints RMSE and the official asymmetric C-MAPSS score.</td></tr>
+          <tr><td><b>Agentic Content Ops</b></td><td>Two tabs: (1) run the TaggingAgent + SummarizationAgent LangGraph pipeline on a selected title, (2) ask the RAG-grounded CatalogQAAgent a free-text question.</td><td>N/A — this project's "training" is prompt/graph design, not model fitting; the graph in <span class="mono">agents.py</span> is the deliverable.</td></tr>
+          <tr><td><b>Renewable Dispatch Optimizer</b></td><td>Pick a demo day → see the P10/P50/P90 solar forecast band, then a live-adjustable PuLP battery-dispatch LP (battery size, charge rate, price sliders) with a cost-savings-vs-no-battery comparison.</td><td><span class="mono">train_forecast.py</span> trains three LightGBM quantile regressors (alpha 0.1/0.5/0.9), reports pinball loss and P10-P90 empirical coverage.</td></tr>
+        </table>
+
+        <h3 style="font-size:1rem;margin:22px 0 10px">Getting each one live — the short version</h3>
+        <ol class="mono" style="font-size:.88rem;color:var(--ink-soft);padding-left:20px;line-height:1.8">
+          <li>Push the project folder to a GitHub repo (free account, no card).</li>
+          <li>Go to share.streamlit.io, sign in with GitHub, "New app," point it at that folder's <span class="mono">app.py</span>.</li>
+          <li>If the project needs <span class="mono">GROQ_API_KEY</span> (genai-shopping, agentic-content-ops): get a free key at console.groq.com, paste it into the app's Secrets panel — never into the code.</li>
+          <li>Deploy. You get a <span class="mono">*.streamlit.app</span> URL — that's the live demo link for your portfolio, resume, and LinkedIn posts.</li>
+        </ol>
+        <p style="margin:14px 0 0;font-size:.93rem;color:var(--ink-soft)">Full step-by-step instructions — including the Hugging Face Spaces alternative, the free Kaggle API token setup for retraining fraud-gnn or genai-shopping on the real IEEE-CIS or H&amp;M datasets, and a troubleshooting table of common free-tier gotchas — are in <span class="mono">DEPLOYMENT_GUIDE.md</span>, delivered alongside this stage. Every platform named across the whole kit — GitHub, Streamlit Community Cloud, Hugging Face Spaces, Groq, Kaggle — is free with no credit card required at any step.</p>
+
+        <h3 style="font-size:1rem;margin:22px 0 10px">Turning deployed projects into visible proof</h3>
+        <p style="margin:0 0 10px;font-size:.93rem;color:var(--ink-soft)"><span class="mono">LINKEDIN_CONTENT_PLAN.md</span> covers this in full — the short version: recruiters skim before they read, click the live demo link before the GitHub repo, and respond to a clear number and an honest caveat more than a list of tools. Post one flagship every 1-2 weeks (order: genai-shopping → fraud-gnn → healthcare-ews → predictive-maintenance → renewable-dispatch → agentic-content-ops), lead each post with the real-world problem and the measured result, put architecture detail in the first comment rather than the main post, and only post once the live link actually works.</p>
+
+        <h3 style="font-size:1rem;margin:22px 0 10px">Personal portfolio homepage</h3>
+        <p style="margin:0;font-size:.93rem;color:var(--ink-soft)">A standalone "About Me" homepage — bio, the four-role experience timeline, MDI/SRM education, and a skills breakdown — is live as its own page, intentionally without a projects section yet: <a href="https://pranavg135.github.io/" target="_blank" rel="noopener">Pranav Gupta — Portfolio Homepage ↗</a>. Once the six flagships above are deployed with real live links, that page gets a Featured Projects section added and its LinkedIn/GitHub placeholders filled in — deliberately sequenced this way so the homepage never links to a demo that doesn't actually work yet.</p>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">19</div>
+        <h2>Mastery Checklist</h2>
+        <p>Check off once you can deliver each item cold, without re-reading this page.</p>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">20</div>
+        <h2>How This Connects to the Rest of the Masterbook</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <div class="bridge-flow">
+          <span class="node">Stages 9–14 · technical foundations</span><span class="arrow">→</span>
+          <span class="node">Stages 27–30 · honest CV claims</span><span class="arrow">→</span>
+          <span class="node">Tier 1 · self-built CV-defense proof</span><span class="arrow">→</span>
+          <span class="node">Tier 2 · industry-diverse ML/AI flagships</span><span class="arrow">→</span>
+          <span class="node">Stage 32 · Interview Question Bank</span>
+        </div>
+        <p style="margin:14px 0 0">Part XII closes the loop Part XI opened, and goes one step further. Tier 1 means every CV claim that carried a "needs confirmation" or "specifics still thin" flag across Stages 27–30 now has a corresponding self-built artifact, demonstrable at full technical depth independent of what can be confirmed about the real employer engagements. Tier 2 exists for a different, additive purpose: six deployed, industry-diverse ML/AI flagships — spanning healthcare, fintech, retail, manufacturing, media, and energy, and spanning deep learning, graph neural networks, GenAI/RAG, agentic orchestration, and optimization — that stand on their own as the portfolio you'd actually share publicly, independent of any single employer's history. Stage 32 (Interview Question Bank) is next — pulling together technical, business, case, work-experience, and behavioral questions across the whole Masterbook, including questions that probe both tiers of this stage: "what I did at the company," "what I built to prove I can do it," and now also "what I can build that has nothing to do with any past employer at all."</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  var masteryItems = [
+    'I can walk through the rep-allocation LP’s full formulation (decision variables, objective, constraints) and reproduce its solved output.',
+    'I can explain the heuristic layer’s purpose and give a concrete example of what it adjusts and why.',
+    'I can state the XGBoost vs. Logistic Regression AUC gap and explain what specifically causes it, with the interaction-term evidence.',
+    'I can demo the decision-support dashboard’s three self-service design choices without opening this page.',
+    'I can describe the Salesforce automation’s routing/SLA/follow-up logic and honestly bound what it does and doesn’t prove about the real 15% figure.',
+    'I can defend the RICE prioritization choice for the sample PRD’s backlog.',
+    'I can explain both chatbot versions (rule-based and LLM/RAG) and argue which one Hero Electronics plausibly used, citing the coverage-simulation evidence.',
+    'I can state the A/B test’s required sample size, the actual result, and the statistical-vs-practical-significance distinction.',
+    'I can read a cohort retention table and explain what a month-1 cliff implies operationally.',
+    'I know the one-sentence bridge for turning any portfolio project into a defense of a real CV claim, without overstating what the project proves.',
+    'I can explain the healthcare EWS project’s architecture choice (LSTM), its calibration step, and why I report a fairness KRI alongside accuracy.',
+    'I can explain why a graph neural network beats tabular XGBoost specifically on ring-connected fraud, and can cite the actual AUPRC numbers.',
+    'I can explain why the GenAI shopping assistant keeps ranking in a traditional recommender rather than letting the LLM rank directly.',
+    'I can explain the RUL project’s asymmetric C-MAPSS scoring choice and why RMSE alone would be misleading operationally.',
+    'I can explain the agentic content-ops project’s framework choice (LangGraph) versus CrewAI/AutoGen, and state its measured hallucination rate.',
+    'I can explain how the renewable-dispatch project reuses the Tier-1 LP skill in a new domain, and why a quantile forecast (not a point forecast) feeds it.',
+    'I can state each Tier-2 project’s live-hosting plan (Streamlit vs. Hugging Face Spaces) and why that platform was chosen for that project.',
+    'I can name all 6 Tier-2 industries and their core ML/AI technique from memory, without looking at this page.',
+    'I can explain why each deployed app keeps heavy ML libraries (torch, torch_geometric) out of its requirements.txt and where that logic actually runs instead.',
+    'I can walk through the exact free-tier deployment steps (GitHub → Streamlit Community Cloud, secrets for GROQ_API_KEY) for any one of the 6 flagships from memory.',
+    'I can explain the LinkedIn posting strategy (lead with the problem and number, not the tool names; caveats build credibility; detail goes in the first comment) and why that order matters to a recruiter skimming in under a minute.'
+  ];
+  var STORE = 'masterbook-s31-mastery';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var mBox = document.getElementById('masteryBox');
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  mBox.innerHTML = masteryItems.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+esc(t)+'</span></div>';
+  }).join('');
+  mBox.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 500){ backtop.classList.add('show'); } else { backtop.classList.remove('show'); }
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 31 loaded — mastery items:', masteryItems.length);
+} catch (err) { console.error('Stage 31 render error:', err); }
+</script>

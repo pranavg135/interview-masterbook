@@ -1,0 +1,799 @@
+<meta name="robots" content="noindex, nofollow">
+
+
+<title>FinTech Case Bank</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+
+  .caselist{ display:flex; flex-direction:column; gap:14px; }
+  details.case{ border:1px solid var(--line); border-radius:12px; background:var(--paper-raised); box-shadow:var(--shadow); overflow:hidden; }
+  details.case summary{ padding:16px 22px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.98rem; font-weight:600; }
+  details.case summary::-webkit-details-marker{ display:none; }
+  details.case summary .cnum{ font-family:"IBM Plex Mono"; font-size:.72rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:3px 9px; border-radius:6px; flex:0 0 auto; }
+  details.case summary .cdiff{ font-size:.66rem; font-weight:700; padding:3px 9px; border-radius:6px; flex:0 0 auto; text-transform:uppercase; letter-spacing:.03em; }
+  .cdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .cdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .cdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .cdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  details.case summary .cind{ font-size:.72rem; font-weight:500; color:var(--ink-faint); flex:0 0 auto; }
+  details.case summary .ctitle{ flex:1; }
+  .case-body{ padding:0 22px 24px; border-top:1px solid var(--line); }
+  .case-prompt{ margin:18px 0; padding:15px 18px; background:var(--paper-sunken); border-left:4px solid var(--ink-faint); border-radius:0 8px 8px 0; font-style:italic; font-size:.93rem; }
+  .case-sec{ margin-top:20px; }
+  .case-sec h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .case-sec h5::before{ content:""; width:14px; height:2px; background:var(--accent); display:inline-block; }
+  .case-sec p, .case-sec li{ font-size:.9rem; color:var(--ink-soft); margin:0 0 6px; }
+  .qa-pair{ margin-bottom:10px; padding:10px 14px; background:var(--paper-sunken); border-radius:8px; }
+  .qa-pair .q{ font-size:.88rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .qa-pair .a{ font-size:.87rem; color:var(--ink-soft); }
+  .case-sec ul{ margin:0; padding-left:20px; }
+  .case-sec .calc-block{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:14px 16px; font-family:"IBM Plex Mono"; font-size:.79rem; overflow-x:auto; line-height:1.65; white-space:pre; margin-top:4px; }
+  .case-sec .result-tag{ display:inline-block; margin-top:8px; font-family:"IBM Plex Mono"; font-size:.8rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:5px 11px; border-radius:6px; }
+  .synth-box{ margin-top:20px; padding:15px 18px; background:var(--accent-soft); border-radius:8px; border-left:4px solid var(--accent); }
+  .synth-box h5{ color:var(--accent-ink); }
+  .synth-box p{ color:var(--ink); font-weight:500; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <a class="backlink" href="stage14.html">← Stage 14 · Product Management</a>
+    <a class="backlink" href="stage15.html">← Stage 15 · Structured Problem Solving &amp; Frameworks</a>
+    <a class="backlink" href="stage16.html">← Stage 16 · Profitability Case Bank</a>
+    <a class="backlink" href="stage17.html">← Stage 17 · Market Entry Case Bank</a>
+    <a class="backlink" href="stage18.html">← Stage 18 · Growth Case Bank</a>
+    <a class="backlink" href="stage19.html">← Stage 19 · Pricing Case Bank</a>
+    <a class="backlink" href="stage20.html">← Stage 20 · Market Sizing Case Bank</a>
+    <a class="backlink" href="stage21.html">← Stage 21 · Operations Case Bank</a>
+    <a class="backlink" href="stage22.html">← Stage 22 · Product Case Bank</a>
+    <a class="backlink" href="stage23.html">← Stage 23 · Analytics Case Bank</a>
+    <a class="backlink" href="stage24.html">← Stage 24 · AI/GenAI Case Bank</a>
+    <div class="stage-pill">● Stage 25 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#howtouse">How to Use This Case Bank</a></li>
+      <li><a href="#cases">The 10 FinTech Cases</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 27 (Axtria Deep Dive) is next, starting Part XI — Work Experience Deep Dives.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part X · Stage 25 of 33</div>
+      <h1>FinTech Case Bank</h1>
+      <p class="lede">10 full FinTech cases at full interview depth: credit-model deployment trade-offs, fraud-model threshold diagnosis, product pricing and unit economics, default-rate root-cause decomposition, churn/CLV modeling, risk-based market expansion, chargeback root-cause diagnosis, build-vs-partner-vs-acquire regulatory strategy, interest-rate risk diagnosis, and a crisis-response liquidity case — each solved with a genuine structural approach, worked math, and a real recommendation, walked through exactly as a real case interview runs, including interviewer pushback and model answers.</p>
+      <div class="statusbar">
+        <div class="statuschip">💳 <b>10</b> full FinTech cases, zero compressed</div>
+        <div class="statuschip">🧮 Every case has a genuine worked financial/risk calculation</div>
+        <div class="statuschip">🗣️ Every case includes interviewer cross-questions with model answers</div>
+        <div class="statuschip">🔀 Spans consumer lending, payments, neobanking, robo-advisory, and BNPL</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">FinTech cases are the most balance-sheet-and-regulation-aware case type in the whole Masterbook, because the discipline being tested layers a normal business or analytical question on top of real constraints that don't exist elsewhere: fair-lending and disparate-impact law, credit-risk and interest-rate-risk mechanics, and the reality that a fintech's product decisions can directly create or absorb financial risk on its own balance sheet. The pattern that separates a strong answer from a weak one is never treating a fintech decision as a pure growth or product question in isolation — a pricing change, a model swap, or a market expansion has to be checked against compliance, credit-risk, and balance-sheet consequences before it's a complete recommendation. This stage applies that discipline to 10 genuinely distinct fintech situations, from a straightforward model-deployment trade-off to an expert-level funding-crisis response, so the underlying regulation-aware, risk-first fintech reasoning becomes second nature.</p>
+      </div>
+    </section>
+
+    <section id="howtouse">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>How to Use This Case Bank</h2>
+        <p>Every case follows the exact same 10-part structure, so you can drill any single part in isolation or run the whole case end to end.</p>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <div class="bridge-flow">
+          <span class="node">Prompt</span><span class="arrow">→</span>
+          <span class="node">Clarifying Qs</span><span class="arrow">→</span>
+          <span class="node">MECE Structure</span><span class="arrow">→</span>
+          <span class="node">Hypothesis</span><span class="arrow">→</span>
+          <span class="node">Data</span><span class="arrow">→</span>
+          <span class="node">Calculation</span><span class="arrow">→</span>
+          <span class="node">Insight</span><span class="arrow">→</span>
+          <span class="node">Recommendation</span><span class="arrow">→</span>
+          <span class="node">Risks</span><span class="arrow">→</span>
+          <span class="node">Cross-Qs</span><span class="arrow">→</span>
+          <span class="node">Synthesis</span>
+        </div>
+        <p style="margin:14px 0 0">Recommended drill: read only the <b>prompt</b>, pause the page, and before proposing a fix, ask what constraint a purely commercial answer would miss — a fair-lending or disparate-impact requirement, a credit-risk or interest-rate-risk exposure, or a regulatory-capital or licensing consideration — since fintech interview questions punish answers that optimize for growth or conversion alone without checking them against those constraints. FinTech cases especially reward grounding a recommendation in a real worked number (a loss-rate calculation, a margin bridge, a unit-economics comparison) rather than a qualitative judgment call. The 10 cases are tagged by difficulty (easier / medium / hard / expert) and filterable below the case list heading.</p>
+      </div>
+    </section>
+
+    <section id="cases">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>The 10 FinTech Cases</h2>
+        <p>Full quota, full depth — every case fully interactive, none compressed to structure-plus-answer-only.</p>
+      </div>
+      <div class="filterbar" id="casefilter">
+        <button class="active" data-diff="all">All (10)</button>
+        <button data-diff="easy">Easier</button>
+        <button data-diff="med">Medium</button>
+        <button data-diff="hard">Hard</button>
+        <button data-diff="expert">Expert</button>
+      </div>
+      <div class="caselist" id="caselist"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">None of these 10 companies or fintech situations are Pranav's own work experience, and none should ever be presented as such — they're deliberate practice cases. The honest bridge is the METHOD: decomposing a blended metric (a default rate, a chargeback rate, a margin figure) into its true drivers before proposing a fix, checking a commercially attractive decision against real regulatory and risk constraints, and grounding a recommendation in a worked financial calculation rather than intuition is the same rigorous, evidence-first discipline behind the statistics, SQL, and analytical work in Stages 2-4 and the analytics case work in Stage 23. If an interviewer asks "have you made a fintech or credit-risk decision before," the honest and strong answer is: "Not as a standalone fintech-risk role, but I've built the underlying habits — decomposing a blended metric to find its real driver, checking a decision against compliance and balance-sheet constraints, and defending a recommendation with a worked financial calculation under skeptical pushback — through real analytical work, and I've drilled a full bank of fintech cases spanning credit risk, fraud, payments, and balance-sheet management to build that judgment on top of that foundation."</p>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Mastery Checklist</h2>
+        <p>One item per case — check off once you can walk through that case's full structure, calculation, and synthesis cold, without re-reading it.</p>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  var cases = [
+  {
+    "diff": "easy",
+    "industry": "Consumer Lending / Digital Bank",
+    "title": "Should a Digital Lender Use a Simple Scorecard or a Black-Box ML Model for Loan Approval?",
+    "prompt": "A digital-only consumer lender currently approves personal loans using a 12-variable logistic-regression credit scorecard built three years ago. The data science team has built a gradient-boosted model that improves default prediction accuracy by roughly 4 percentage points of AUC. The head of risk wants to know whether to switch the production approval decision to the new model. What do you recommend?",
+    "clarify": [
+      {
+        "q": "Is the lender subject to fair-lending / adverse-action-notice regulation, such as an Equal Credit Opportunity Act style requirement?",
+        "a": "Yes — the lender operates in a market where any credit denial must come with a specific, understandable reason, and the model is subject to periodic disparate-impact testing by regulators."
+      },
+      {
+        "q": "How is the 4-point AUC improvement distributed — is it concentrated in a specific score band, or spread evenly across the population?",
+        "a": "It is concentrated in the middle score band, borderline applicants, where the new model reclassifies about 6% of applicants from approve to decline or vice versa."
+      },
+      {
+        "q": "Does the lender have infrastructure today to generate reason codes from a gradient-boosted model, or only from the linear scorecard?",
+        "a": "Only from the linear scorecard today — reason-code generation for the new model would need a new explainability layer built and validated before go-live."
+      }
+    ],
+    "mece": "Break the decision into three independent dimensions: (1) Performance — how much better is the new model at separating good from bad borrowers, and where does that improvement concentrate; (2) Compliance and explainability — can the lender still produce valid, specific adverse-action reasons and pass disparate-impact testing; (3) Operational readiness — does the infrastructure exist today to deploy, monitor, and explain the new model in production. A model that wins on (1) but fails (2) or (3) is not ready to replace the current scorecard, regardless of the accuracy gain.",
+    "hypothesis": "The accuracy gain is real but concentrated in a segment where explainability is legally required and not yet operationally supported, so a full swap to the black-box model is premature; a staged approach captures most of the value without the compliance risk.",
+    "data": "Segment default-model agreement: bottom 20% of applicants, clear declines — scorecard and new model agree on 97% of decisions. Top 40%, clear approves — 95% agreement. Middle 40%, borderline — only 81% agreement, and this is where nearly all the AUC improvement comes from. Reason-code infrastructure: the scorecard produces reason codes natively from its 12 linear coefficients; the new model has no validated reason-code layer yet, estimated 10-12 weeks to build and validate with legal and compliance sign-off.",
+    "calc": "Of roughly 100,000 annual applicants, about 40,000 fall in the borderline middle band. If the new model's improved separation is applied only there, expected bad-debt reduction is approximately 0.9 percentage points on that segment's loan balance, versus expected annual loan originations of roughly $180M in that band — implying about $1.6M in avoided losses per year from the middle band alone, versus a low-single-digit-percent, largely non-actionable-without-explainability improvement in the clear-approve and clear-decline bands.",
+    "insight": "Nearly all of the switch's value is concentrated in the 40% of applicants where reason-code explainability is legally required and does not yet exist — meaning the model that unlocks the most value is also the one the lender is least ready to deploy compliantly today.",
+    "recommendation": "Do not do a full production swap yet. Build and validate a SHAP-based, or comparable, reason-code layer for the new model over the next quarter, run it in shadow mode against live decisions to confirm reason-code stability and disparate-impact test results, then deploy the new model specifically for the borderline middle band first, where the value is, while keeping the linear scorecard for the clear approve and decline bands until the new model's reason-code layer has a full compliance sign-off across all bands.",
+    "risks": [
+      "Shadow-mode testing may reveal that reason codes generated from the new model are unstable across nearly-identical applicants, which would itself be a fair-lending red flag and could delay deployment further.",
+      "Running two models in parallel by segment adds ongoing engineering and monitoring complexity, and a boundary-definition error between the borderline and clear bands could inadvertently reintroduce disparate impact.",
+      "If a regulator's definition of adequate explainability is stricter than the internal legal team's standard, the reason-code layer built to internal spec may still not be accepted at audit."
+    ],
+    "cross": [
+      {
+        "q": "Why not just add SHAP explanations after the fact and deploy the full model everywhere immediately, since the accuracy gain is real?",
+        "a": "Because reason codes generated after the fact from a complex model can be unstable — two nearly-identical applicants can get different top reason codes across model versions or minor input perturbations, which is itself a compliance red flag under disparate-impact testing. It has to be validated for stability before it's trustworthy enough to hand to a regulator, not bolted on at launch."
+      },
+      {
+        "q": "Isn't segmenting the population by which model handles the decision itself a fairness risk?",
+        "a": "It's a manageable one, as long as the segmentation boundary is based purely on an objective score band, not any demographic or proxy variable, and both models are subject to the same disparate-impact testing standard. The real risk is deploying an unexplainable model everywhere without any staging, not staging it carefully by score band."
+      }
+    ],
+    "synthesis": "The instinct to chase the accuracy number is natural, but a 4-point AUC gain that regulators can't be shown a reason for isn't yet a deployable improvement — the discipline here is recognizing that model performance and model deployability are two different questions, and staging the rollout by where the compliance infrastructure is actually ready captures nearly all of the economic value with almost none of the regulatory risk."
+  },
+  {
+    "diff": "easy",
+    "industry": "Payments / Card Network",
+    "title": "A Payments Company's Fraud Model Is Blocking Too Many Good Transactions — What's the First Fix?",
+    "prompt": "A payments processor's real-time fraud-detection model flags roughly 2.5% of all transactions for manual review or automatic decline. Merchants are complaining that legitimate customers are getting declined at checkout, and the support team says complaint volume has tripled in the last month. The VP of Risk asks you to recommend a first fix. What do you do?",
+    "clarify": [
+      {
+        "q": "Has the fraud model itself changed recently, or is this a shift in the transaction mix hitting an unchanged model?",
+        "a": "The model was retrained and redeployed five weeks ago on an updated dataset; the complaint spike started about two weeks after that redeployment."
+      },
+      {
+        "q": "Is the decline rate up across all merchant categories evenly, or concentrated somewhere specific?",
+        "a": "It is heavily concentrated in a handful of merchant categories — travel booking and digital subscriptions — where false-decline rate has roughly tripled, while most other categories are roughly flat."
+      },
+      {
+        "q": "What decision threshold is the model using today, and was that threshold reviewed as part of the retraining?",
+        "a": "The threshold was carried over unchanged from the old model, on the assumption that the new model's score distribution would be similar to the old one's — that assumption was not tested before launch."
+      }
+    ],
+    "mece": "Separate what could be driving the spike into: (1) a genuine increase in fraud attempts that the model is correctly catching, in which case declines are a feature, not a bug; (2) a model or threshold problem introduced at the retraining, producing more false positives on the same underlying transaction mix; (3) a change in the transaction mix itself, such as more high-risk-looking but legitimate transactions in categories the model was never well-tuned for. The fact that the spike is concentrated in two categories and started right after a model change points toward option (2), but this needs to be confirmed against fraud-loss data before concluding it isn't real fraud.",
+    "hypothesis": "The retrained model's score distribution shifted, but the decision threshold was carried over unchanged, so a threshold calibrated for the old model's score range is now over-flagging legitimate transactions in categories where the new model's scores run systematically higher — a threshold-recalibration problem, not a genuine fraud increase.",
+    "data": "Actual confirmed-fraud rate, chargebacks plus confirmed fraud reports, over the same five-week window is flat at roughly 0.31% of transactions, essentially unchanged from the prior quarter. Meanwhile the decline-and-review rate has risen from 1.4% to 2.5% of transactions. In travel and subscriptions specifically, the new model's raw fraud-probability scores for legitimate transactions are running about 35% higher on average than the old model's scores for the same transaction profile, even though actual fraud incidence in those categories hasn't changed.",
+    "calc": "At current volume of roughly 4M transactions per week, the false-decline increase, 2.5% minus 1.4% equals 1.1 percentage points, of which the underlying confirmed-fraud rate explains essentially none, implies about 44,000 additional transactions per week being wrongly declined or held for review, heavily concentrated in the two affected categories. At an average transaction value of $85, that is roughly $3.7M per week in legitimate transaction volume being blocked or delayed, well above the $12,400 per week in actual fraud losses the model is preventing at the margin.",
+    "insight": "The model got better at scoring, but the threshold wasn't recalibrated to the new score distribution — so a well-intentioned model upgrade turned into a large false-decline problem because a threshold that was appropriate for one score distribution was silently applied to a different one.",
+    "recommendation": "Immediately recalibrate the decision threshold specifically for the travel and subscription categories using the new model's actual score distribution on a held-out validation set, targeting the same approval rate the old model produced for confirmed-legitimate transactions in those categories, rather than reusing the old numeric cutoff. Before any future model redeployment, add a mandatory step comparing new-model score distributions against the old model's on a common validation set, and require threshold recalibration as part of the release checklist, not an afterthought.",
+    "risks": [
+      "Recalibrating the threshold purely to reduce false declines could let through some fraud that the new model was correctly catching for a different reason — the fix should be validated against both false-decline rate and fraud-loss rate together, not false declines alone.",
+      "The threshold shift may need to be applied gradually and monitored, since an abrupt large change could mask a genuine emerging fraud pattern that happens to coincide with the recalibration window.",
+      "If the retraining also changed which features drive the score for these categories, not just the score's overall level, a pure threshold fix may not fully solve the problem and a category-specific model review could still be needed."
+    ],
+    "cross": [
+      {
+        "q": "How do you know this isn't just a genuine increase in fraud attempts in travel and subscriptions that the new model is correctly catching?",
+        "a": "Because confirmed fraud and chargeback rates in those categories are flat over the same window — if the new declines were catching real fraud, we'd expect the fraud rate to fall as those transactions get blocked, or at minimum steady losses on transactions that do get through. Instead we see steady fraud and a spike in blocked legitimate volume, which points to the model, not the fraud landscape, having changed."
+      },
+      {
+        "q": "Why not just roll back to the old model entirely instead of recalibrating the new one?",
+        "a": "Because the new model was retrained for a reason — likely better overall separation — and rolling back would forfeit that improvement everywhere else where it's working fine. A targeted threshold recalibration in the two affected categories preserves the model upgrade's benefit while fixing the specific miscalibration, which is faster and lower-risk than a full rollback and re-launch cycle."
+      }
+    ],
+    "synthesis": "The reflex when a fraud model over-flags is to blame the model itself, but the real story here is a process gap — a threshold tuned for one score distribution silently carried over to a materially different one. The fix isn't build a better model, it's recalibrate the decision layer to match the model you already have, and building that recalibration step into the release process prevents the same failure from recurring on the next retraining."
+  },
+  {
+    "diff": "easy",
+    "industry": "Neobank",
+    "title": "Should a Neobank Offer Overdraft Protection Free, or as a Paid Feature?",
+    "prompt": "A neobank targeting young, lower-income customers is designing its overdraft protection feature, which covers a customer's account when a debit exceeds their balance, up to a $200 cushion. The product team is debating whether to offer this free to all customers or charge a flat $4.99 per month subscription fee for it. Which model do you recommend, and why?",
+    "clarify": [
+      {
+        "q": "What is the neobank's current revenue model — interchange fees, subscription tiers, or both?",
+        "a": "Primarily interchange fees on debit card spend, plus a small existing premium subscription tier at $9.99 per month that includes early paycheck access and higher ATM limits."
+      },
+      {
+        "q": "What fraction of the target customer base is estimated to need overdraft coverage in a typical month, and how price-sensitive is that group?",
+        "a": "Roughly 18% of active customers overdraft in a typical month; internal research and competitor benchmarks suggest this segment is highly price-sensitive and often the same segment that churns fastest when hit with unexpected fees."
+      },
+      {
+        "q": "How does overdraft protection affect customer engagement and retention if offered free versus paid?",
+        "a": "Competitor data suggests free overdraft protection is one of the single biggest drivers of primary-account status, meaning customers routing their paycheck there, and of lowest 90-day churn among lower-income digital-bank customers."
+      }
+    ],
+    "mece": "Frame this as a trade-off across three levers: (1) Direct feature revenue — what a $4.99 fee generates directly; (2) Indirect revenue via interchange and primary-account status — what free overdraft protection generates by making the neobank the customer's main account, driving more debit spend through it; (3) Retention and brand differentiation — since this customer segment churns fastest when hit with fees, and overdraft protection is a known differentiator versus traditional banks that charge $30-plus per overdraft. A decision based only on lever (1) would miss the much larger effects on (2) and (3).",
+    "hypothesis": "Because the target segment is price-sensitive and overdraft protection is a primary driver of primary-account status in this demographic, the indirect revenue from increased interchange and reduced churn from offering it free likely outweighs the direct subscription revenue a paid tier would generate.",
+    "data": "Of an estimated 500,000 active customers, 18% (90,000) overdraft in a typical month. If offered free, competitor benchmarks suggest a 12-percentage-point lift in primary-account status among affected customers and a reduction in 90-day churn from 22% to roughly 14% for that segment. Primary-account customers generate on average $340 per year in interchange revenue, versus $95 per year for non-primary customers. If sold as a $4.99/month add-on, industry benchmarks for adoption of a paid protection feature in this demographic run 15-25%.",
+    "calc": "Paid scenario: 90,000 potential overdraft users x 20% adoption (midpoint estimate) x $4.99 x 12 months is approximately $1.08M/year in direct fee revenue, with no meaningful lift to primary-account status since most of the price-sensitive segment won't pay. Free scenario: of the 90,000 overdraft users, a 12-point lift in primary-account status among a segment that's currently roughly 40% primary implies about 10,800 additional customers converting to primary-account status, at an incremental $245/year in interchange revenue each (the $340 minus $95 difference) — approximately $2.65M/year in incremental interchange revenue, before even counting the churn-reduction effect on customer lifetime value.",
+    "insight": "The paid-feature framing values overdraft protection only as a standalone product line, but for this price-sensitive segment it is really an acquisition-and-retention lever — its economic value shows up almost entirely in interchange and churn, not in a subscription fee, and pricing it directly cannibalizes the larger indirect return.",
+    "recommendation": "Offer overdraft protection free as a baseline feature for all customers, and use it explicitly in marketing as a primary-account differentiator against traditional banks' overdraft fees. Preserve the existing $9.99 premium tier for genuinely premium features (early paycheck access, higher ATM limits) that a less price-sensitive segment of the customer base is more willing to pay for, rather than bundling overdraft protection — the segment that needs it most is the segment least likely to pay for it directly.",
+    "risks": [
+      "Free overdraft protection at $200 cushion is not free to the neobank if a meaningful fraction of the cushion is never repaid — an unsecured credit-loss rate on the cushion needs to be modeled and monitored, not just interchange upside.",
+      "If the $200 cushion is drawn frequently by the same customers without repayment, it functions as a revolving unsecured loan and may need to be treated and disclosed as consumer credit, with associated regulatory requirements.",
+      "Removing overdraft protection as a paid option forgoes a small amount of guaranteed direct revenue from customers who would have paid regardless — the indirect-revenue bet needs to be tracked against actual realized interchange and churn outcomes to confirm the assumption holds."
+    ],
+    "cross": [
+      {
+        "q": "Isn't $1.08M in guaranteed subscription revenue safer than a projection of $2.65M in interchange that depends on assumptions about primary-account conversion?",
+        "a": "It would be, if the two options were mutually exclusive on customer behavior alone — but the paid option actively works against the interchange upside, since making a price-sensitive segment pay for the feature reduces both adoption of the feature and the primary-account conversion it would otherwise drive. The $2.65M projection deserves real scrutiny and a pilot to validate, but the paid option isn't a safer baseline — it's a different bet that's likely to underperform on both dimensions at once."
+      },
+      {
+        "q": "How would you validate the primary-account conversion assumption before committing to the free model company-wide?",
+        "a": "Run a controlled pilot — offer free overdraft protection to a randomly selected subset of the eligible 90,000 overdraft-prone customers, keep the rest under the status quo, and measure primary-account conversion, interchange spend, and 90-day churn over a full quarter before rolling out company-wide, so the conversion assumption is tested with real behavior rather than only competitor benchmarks."
+      }
+    ],
+    "synthesis": "The case looks like a simple pricing decision, but the real analytical move is recognizing which revenue line a feature actually drives — treating overdraft protection as a standalone product understates its value for a price-sensitive segment where its real payoff is in account primacy and retention, and the numbers only make sense once the feature is valued for the behavior it changes, not the fee it could charge."
+  },
+  {
+    "diff": "med",
+    "industry": "Consumer Lending",
+    "title": "Diagnose a Sudden Spike in Loan Default Rates at a Fintech Lender",
+    "prompt": "A fintech personal-loan lender has seen its 90-day default rate rise from 4.2% to 6.8% over the past two quarters, well above what the CFO budgeted for. The board is asking whether the underwriting model has failed, whether the economy is to blame, or whether something else is going on. You're asked to diagnose the root cause before any model or policy changes are made.",
+    "clarify": [
+      {
+        "q": "Has the mix of loan vintages, origination cohorts, changed over this period — for example, more loans originated recently versus in a more mature, seasoned part of the portfolio?",
+        "a": "Yes — loan origination volume roughly doubled starting about five months ago after a new marketing partnership launched, so the portfolio now has a much larger share of young, unseasoned loans than it did two quarters ago."
+      },
+      {
+        "q": "Has the underwriting score cutoff or approval policy changed over this period?",
+        "a": "The minimum approval score was lowered slightly (from 620 to 600) about four months ago as part of a growth push, expanding the approved population somewhat."
+      },
+      {
+        "q": "How does the default rate look when segmented by origination cohort and by score band, rather than as a single blended portfolio number?",
+        "a": "That's exactly the segmentation the team hasn't done yet — the 6.8% figure is a blended number across the entire live portfolio."
+      }
+    ],
+    "mece": "There are at least four independent explanations for a rising blended default rate that must be distinguished: (1) Vintage/seasoning effect — a portfolio that just doubled in size skews young, and young loans haven't had time to default yet in some cohorts but appear riskier in others depending on how default timing works; (2) Underwriting policy loosening — the score cutoff change genuinely lets in riskier borrowers; (3) Macroeconomic deterioration — a real increase in borrower financial stress across all cohorts and score bands; (4) Model degradation — the existing score is simply predicting default worse than before for reasons unrelated to policy or the economy, such as data drift. These are not mutually exclusive and could combine, but a blended default rate cannot distinguish between them without segmentation.",
+    "hypothesis": "The rise is driven primarily by the combination of rapid portfolio growth (skewing the mix toward less-seasoned loans, which mechanically changes the blended default rate's math even if per-cohort default curves are unchanged) and the score-cutoff loosening, rather than a broad macroeconomic shift or model failure.",
+    "data": "Segmented by score band: default rate for loans with original scores 620-650 (a band that existed before and after the cutoff change) is 5.1%, up from 4.4% two quarters ago — a real but modest increase. Default rate for loans with scores 600-619 (only originated after the cutoff change) is 11.3% at the same loan-age comparison point. Segmented by vintage: loans originated in the last five months (post-growth-push) show a materially steeper early-default curve than loans originated a year ago at the same number of months on book, even within the same score band, though part of this may reflect them simply not being fully seasoned yet in the data.",
+    "calc": "Decomposing the blended 6.8% rate: the newly-approved 600-619 band now represents about 14% of the live portfolio and carries an 11.3% default rate, contributing roughly 1.6 points to the blended rate on its own. The 620-650 band's own increase from 4.4% to 5.1% contributes roughly 0.3-0.4 points across its portfolio share. The remaining gap between the original 4.2% and today's 6.8% (roughly 1.9 points) is largely explained by the mix-shift toward less-seasoned loans overall plus the two effects above, rather than a broad-based rise in default rates within previously-existing, seasoned score bands.",
+    "insight": "The 620-650 score band, which the model has always approved, shows only a modest true default increase — the vast majority of the spike is attributable to a new subprime band the cutoff change opened up, plus a portfolio mix that's mechanically skewed younger by rapid growth, not a broad economic deterioration or a failure of the existing model within its original operating range.",
+    "recommendation": "Reverse or significantly tighten the 600-619 score-band approval policy, since it is carrying a default rate more than double the rest of the portfolio and is the single largest driver of the spike. Separately, track default rates by vintage-adjusted cohort (comparing loans at the same number of months on book) rather than blended portfolio rate going forward, since blended rate will keep mechanically shifting as long as origination volume keeps changing quarter to quarter, masking the true underlying trend.",
+    "risks": [
+      "Tightening back to a 620 cutoff will reduce approval volume and near-term origination revenue, which needs to be weighed against the loss avoidance, and the growth team will likely push back on reversing a recent growth initiative.",
+      "The 620-650 band's own default rate did rise modestly (4.4% to 5.1%) — this shouldn't be ignored as pure noise, and if it continues to climb it could indicate an early, smaller version of the same problem or a genuine early sign of macro deterioration worth monitoring separately.",
+      "Newer loans in every band are, by definition, less seasoned, so early-default-curve comparisons between vintages carry some real uncertainty until the newer cohorts fully mature — the diagnosis should be revisited once more data accumulates rather than treated as fully settled."
+    ],
+    "cross": [
+      {
+        "q": "Couldn't the 620-650 band's modest increase itself be a sign that the economy is turning, and you're underweighting that risk?",
+        "a": "It's a fair concern and worth monitoring closely, but a 0.7-point rise in an established, seasoned band is a much smaller and slower-moving signal than an 11.3% default rate in a brand-new subprime band that didn't exist two quarters ago. The math shows the subprime band explains the large majority of the spike; the modest 620-650 rise deserves a watch flag, not equal weight in the root-cause diagnosis, but it should absolutely be tracked going forward as a leading indicator."
+      },
+      {
+        "q": "Why not keep the 600-619 band but price it with a higher interest rate to compensate for the higher default risk, instead of cutting it entirely?",
+        "a": "That's a reasonable alternative to explore, and risk-based pricing is standard practice — but it requires confirming that the incremental interest income at a defensible rate actually exceeds the incremental expected loss and cost of capital for that band, which the team hasn't modeled yet. Given an 11.3% default rate versus roughly a 4-5% rate elsewhere, the required rate to compensate might be high enough to price most of that segment out of demand anyway, which is worth testing with a controlled pilot before committing either way."
+      }
+    ],
+    "synthesis": "A single blended metric hid two very different stories — a barely-moving core portfolio and a new high-risk segment carrying nearly all of the damage — and the discipline of the case is refusing to accept 'defaults are up 2.6 points' as an answer on its own, instead decomposing it by score band and vintage until the actual driver is isolated and the fix can be targeted rather than a blunt, portfolio-wide policy reversal."
+  },
+  {
+    "diff": "med",
+    "industry": "Robo-Advisor / WealthTech",
+    "title": "Design a Churn and Customer-Lifetime-Value Model for a Subscription Robo-Advisor",
+    "prompt": "A robo-advisor charges a flat 0.35% annual advisory fee on assets under management (AUM) and has no minimum balance. The head of growth wants a churn model to identify at-risk customers before they leave, and a CLV model to prioritize which customer segments are worth the most in retention spend. Walk through how you'd design both.",
+    "clarify": [
+      {
+        "q": "What does churn actually mean here — full account closure, or does gradual asset withdrawal without closure also count?",
+        "a": "Both matter, but for this exercise define churn as either full account closure or AUM dropping below 20% of its 12-month peak, since revenue is AUM-based and a customer who withdraws most of their assets but keeps a token account open is economically equivalent to churned."
+      },
+      {
+        "q": "What customer and behavioral data is available — onboarding info, transaction history, app engagement, support interactions?",
+        "a": "All of the above: onboarding questionnaire responses (risk tolerance, goals, income bracket), monthly AUM and deposit/withdrawal history, app login frequency, and support-ticket history including any complaints."
+      },
+      {
+        "q": "Is the business more interested in predicting churn to intervene proactively, or in understanding which acquired-customer segments are worth the most to prioritize acquisition spend?",
+        "a": "Both, but if forced to prioritize, retention intervention is the more urgent near-term need since churn has been trending up; CLV-based acquisition targeting is the next priority after that."
+      }
+    ],
+    "mece": "Structure this as two related but distinct models with different design questions: (1) The churn model — what's the prediction target and time window (e.g. probability of churning in the next 90 days), what features are genuinely predictive versus just correlated with tenure, and what's the actionable intervention once a customer is flagged; (2) The CLV model — what's the right time horizon and discount rate for a subscription-with-variable-fee-base business, how does CLV differ from a simple average-revenue-per-customer number given that AUM (and therefore fee revenue) itself grows or shrinks over a customer's lifetime, and how should churn probability feed into the CLV estimate rather than being modeled entirely separately.",
+    "hypothesis": "The most valuable churn signals will be behavioral (declining login frequency, a large single withdrawal, an unresolved support complaint) rather than static onboarding attributes, and CLV will be dominated by AUM trajectory more than by fee rate or tenure alone, meaning the two models should share features but serve different decisions.",
+    "data": "Historical analysis of prior churned customers shows: a drop in app logins of more than 50% over a rolling 60-day window precedes churn in 68% of cases, occurring on average 45 days before the churn event. A single withdrawal exceeding 30% of AUM in one transaction precedes churn in 41% of cases. An unresolved or negatively-rated support ticket precedes churn in 22% of cases but with high precision when combined with either of the other two signals. Static onboarding attributes (risk tolerance, income bracket) show weak standalone correlation with churn (under 0.1 in a univariate check) but do correlate with CLV via their relationship to typical AUM level.",
+    "calc": "A candidate churn model combining the login-decline signal, large-single-withdrawal signal, and support-ticket signal as features in a logistic regression or gradient-boosted classifier, evaluated on a held-out set, would be expected to identify the majority of churn events with meaningfully more lead time (45 days average) than support-ticket-only monitoring alone (which triggers close to the churn event itself). For CLV: expected CLV for a customer equals expected annual fee revenue (0.35% x expected AUM trajectory) summed over an expected retention-weighted horizon, discounted — e.g. for a customer with $50,000 current AUM growing 6%/year on average and a 90% annual retention probability, expected CLV over a 5-year horizon at a 10% discount rate comes to roughly $780, versus a customer with the same starting AUM but only 70% annual retention, which comes to roughly $410 — nearly a 2x difference driven entirely by retention probability, not starting AUM.",
+    "insight": "Because retention probability compounds multiplicatively over the CLV horizon, two customers who look identical at signup (same AUM, same risk profile) can have wildly different CLV purely based on predicted churn probability — meaning the churn model isn't just a standalone retention tool, it's a critical input to the CLV model, not a separate exercise, and the CLV ranking used to prioritize retention spend should be churn-probability-weighted, not a naive AUM-based ranking.",
+    "recommendation": "Build the churn model first as a 90-day-forward probability score using the three behavioral signals identified (login decline, large withdrawal, support friction) plus AUM trajectory, since these have the strongest lead time and effect size; feed this churn probability directly into the CLV model as the retention-probability term rather than assuming a flat retention rate for all customers. Prioritize retention-team outreach using CLV-at-risk (current CLV x churn probability) rather than either churn probability or CLV alone, since a high-churn-probability, low-CLV customer may not be worth an expensive intervention while a moderate-churn-probability, high-CLV customer might be the highest-value save.",
+    "risks": [
+      "The login-decline signal has real lead time but a meaningful false-positive rate — some customers reduce app usage simply because the product is working well and they check less often, so intervention triggers need a threshold tuned to balance false alarms against catching real at-risk customers.",
+      "A large single withdrawal isn't always a churn precursor — it could be a planned life event (home purchase, tuition payment) unrelated to dissatisfaction, and blanket retention outreach on every large withdrawal risks feeling intrusive rather than helpful if not paired with cause-sensitive messaging.",
+      "CLV estimates that rely on AUM growth assumptions are sensitive to market performance, not just customer behavior — a market downturn could reduce AUM (and thus fee revenue) across the board independent of any customer-level churn risk, and the model needs a mechanism to separate market-driven AUM changes from customer-driven ones."
+    ],
+    "cross": [
+      {
+        "q": "Why weight CLV by churn probability instead of just running the two models independently and having the retention team look at both scores together?",
+        "a": "Because two separate scores force a manual, inconsistent trade-off decision for every customer, and the multiplicative relationship between churn probability and expected future revenue means a simple side-by-side comparison undersells how much a moderate churn-probability difference matters for a high-AUM customer versus a low-AUM one. Combining them into one CLV-at-risk number gives the retention team a single, economically consistent ranking to prioritize against a limited outreach budget."
+      },
+      {
+        "q": "How would you validate that the login-decline signal is actually causal to churn risk, rather than just correlated with something else going on with the customer?",
+        "a": "I wouldn't claim it's causal without more work — the honest framing is that it's a strong leading indicator with real lead time, which is enough to justify using it for an early-warning trigger, but before using it to justify a specific intervention (like an outreach campaign), I'd want to run a controlled test: flag a sample of login-decline customers, randomly split them into an outreach group and a no-outreach control group, and measure whether outreach actually changes the churn rate versus the control — that tells us whether the signal is actionable, not just predictive."
+      }
+    ],
+    "synthesis": "The instinct to build churn and CLV as two separate deliverables misses that in a fee-on-AUM business, retention probability isn't just a retention-team metric — it's mathematically embedded in what a customer is worth, and the real design insight here is recognizing that dependency and building the models to reflect it, rather than producing two scores that then require a judgment call to reconcile."
+  },
+  {
+    "diff": "med",
+    "industry": "Buy Now, Pay Later (BNPL)",
+    "title": "Should a BNPL Provider Expand Into a New, Higher-Risk Demographic Segment?",
+    "prompt": "A buy-now-pay-later provider currently serves customers with a median credit score around 680 and a default rate of 3.1% on its 4-installment, interest-free product. The growth team wants to expand into a lower-credit-score segment (median around 600) that a competitor is aggressively targeting, projecting it could grow total transaction volume by 35%. The CFO asks you to evaluate whether this expansion makes sense.",
+    "clarify": [
+      {
+        "q": "How is the BNPL provider actually compensated — is it purely merchant fees, or does it also carry credit risk directly on unpaid installments?",
+        "a": "Both — the provider earns a 4-6% merchant fee on transaction volume regardless of repayment, but also bears the full credit loss if a customer defaults on their installments, since there's no external funding partner absorbing that risk currently."
+      },
+      {
+        "q": "Does the competitor's aggressive push into the lower-score segment reflect a different underwriting approach (e.g. smaller loan sizes, different repayment cadence) or just different risk tolerance?",
+        "a": "It appears to be a combination — the competitor caps loan size much lower for this segment (under $150 versus no cap today) and requires a larger first-installment down payment (25% vs 25% standard), which likely mitigates some of the higher default risk structurally."
+      },
+      {
+        "q": "What's the expected default rate for the 600-score segment if approved under the current 680-segment underwriting terms, versus under adjusted terms similar to the competitor's approach?",
+        "a": "Under current terms (no size cap, standard down payment), initial modeling estimates default rate in the 600-score segment at 9-11%. Under competitor-style adjusted terms (capped loan size, larger down payment), modeling estimates a lower 5-6% default rate for the same segment."
+      }
+    ],
+    "mece": "This is a three-part decision, not a single yes/no: (1) Is the lower-score segment profitable at all under any terms, given merchant fee revenue versus expected credit losses; (2) If profitable only under adjusted terms (loan caps, larger down payments), does the smaller average transaction size still deliver enough incremental volume to be worth the operational complexity of running two distinct underwriting policies; (3) Is there a reputational or regulatory risk dimension specific to expanding into a lower-income, higher-risk segment with a credit-like product that needs separate evaluation beyond pure unit economics.",
+    "hypothesis": "The segment is likely profitable only if underwritten with structurally different terms (loan caps and higher down payments) similar to the competitor's approach, not under the current product's terms — a straight volume-growth pitch without adjusted underwriting would likely turn net-negative once realistic default rates are modeled.",
+    "data": "Current 680-segment unit economics per $100 of transaction volume: merchant fee revenue of $5 (5% average), against a 3.1% default rate meaning expected credit loss of roughly $3.10 on defaulted balances (assuming near-total loss on default, before any partial recovery), net contribution before operating costs of roughly $1.90-2.00 per $100 (recoveries typically add back 15-20% of defaulted balance in this industry, refining net loss to roughly $2.60-2.65). At 9-11% default rate under current terms, the 600-score segment would run a net loss of roughly $0.85-$1.35 per $100 of volume before operating costs — unprofitable. At 5-6% default rate under adjusted terms (loan cap, larger down payment), net contribution improves to roughly $1.65-$1.90 per $100 — comparable to or slightly below the current segment, but positive.",
+    "calc": "If the 35% volume growth projection assumes current terms applied to the new segment, the expansion would be value-destructive: at an estimated $50M in incremental annual transaction volume from this segment, a $0.85-1.35 net loss per $100 implies roughly $425,000-$675,000 in annual losses before operating costs, worsening rather than improving overall economics. If instead adjusted terms are applied (loan cap plus larger down payment), that same $50M in volume (likely somewhat lower in practice given the loan cap, but assume similar for a first-pass estimate) would generate roughly $825,000-$950,000 in positive net contribution before operating costs — a meaningfully different outcome purely based on which underwriting terms are used.",
+    "insight": "The growth team's 35% volume projection implicitly assumes the new segment behaves like an incremental copy of the existing product, but the segment is only profitable under a materially different underwriting structure — the real decision isn't 'should we expand,' it's 'should we launch a structurally different product for this segment,' which is a bigger and slower initiative than a simple market expansion.",
+    "recommendation": "Do not expand into the 600-score segment under current product terms — model confirms this would be net-negative. Instead, greenlight a pilot of a distinct, adjusted-terms product (loan cap around $150, 25% down payment) specifically for the lower-score segment, run it at limited scale for one to two quarters to validate the modeled 5-6% default rate against real repayment behavior, and only scale further once the adjusted terms are confirmed to hold up in practice rather than committing to the full 35%-volume growth plan upfront.",
+    "risks": [
+      "The 5-6% modeled default rate for adjusted terms is based on the competitor's disclosed approach and internal estimation, not the company's own historical data in this segment — actual performance could differ meaningfully once real customers are underwritten, and the pilot needs a genuine stop-loss trigger if early results run hotter than modeled.",
+      "Running two structurally different products (different caps, different down payments) for two credit segments adds real operational and compliance complexity, and the underwriting logic needs to be auditable and consistently applied to avoid inadvertent disparate-impact issues across the two segments.",
+      "A pure focus on unit economics understates reputational risk — extending credit-like products to a financially vulnerable segment invites regulatory and public scrutiny regardless of whether the unit economics pencil out, and this dimension should be reviewed by legal/compliance before any launch, pilot or otherwise."
+    ],
+    "cross": [
+      {
+        "q": "If the adjusted-terms product is only marginally more profitable per $100 of volume than the current one, is this expansion really worth the operational complexity and risk you're describing?",
+        "a": "On unit economics alone it's a close call, which is exactly why I'm recommending a limited pilot rather than a full-scale launch — the real value isn't necessarily in this segment's marginal profitability today, it's in validating whether the company can profitably serve a broader credit spectrum at all, which could matter more for long-term market share as competitors expand into this space regardless. But I wouldn't commit to the full 35% volume plan on a modeled estimate alone; the pilot is the right-sized bet given the uncertainty."
+      },
+      {
+        "q": "Why not just partner with an external funder to take on the credit risk for this segment, instead of bearing it directly?",
+        "a": "That's a legitimate alternative worth exploring in parallel — if a funding partner would take on the credit risk of the lower-score segment in exchange for a share of merchant fee revenue, it could let the company capture the volume growth with less balance-sheet risk. That said, it likely comes with a lower net take rate per transaction and adds a partner-dependency risk of its own, so it should be evaluated side by side with the direct-underwriting pilot rather than assumed to be strictly better."
+      }
+    ],
+    "synthesis": "The growth pitch conflated 'more volume' with 'more value,' but a segment's transaction volume only matters if the underlying unit economics are positive, and this case turns on recognizing that the same product terms don't transfer cleanly across credit segments — the honest recommendation isn't a flat yes or no to expansion, it's a redefinition of what's actually being proposed, from a volume play into a new-product pilot with its own validation requirements."
+  },
+  {
+    "diff": "hard",
+    "industry": "Payments / Merchant Acquiring",
+    "title": "A Payments Company's Chargeback Rate Has Doubled — Diagnose the Root Cause",
+    "prompt": "A payments processor serving small and mid-size e-commerce merchants has seen its blended chargeback rate rise from 0.28% to 0.61% of transaction volume over the past quarter, well above the 1% threshold at which card networks begin imposing monitoring penalties on individual merchants, though the processor's blended rate itself is still under that threshold. The head of risk asks you to find the root cause before the company faces network penalties or loses processing privileges for affected merchants.",
+    "clarify": [
+      {
+        "q": "Is the chargeback increase spread evenly across the merchant portfolio, or concentrated in specific merchants or categories?",
+        "a": "Highly concentrated — of roughly 3,200 active merchants, chargebacks are elevated at only about 40 merchants, but those 40 account for nearly 70% of the total increase in chargeback dollar volume."
+      },
+      {
+        "q": "What do the chargeback reason codes show — is this fraud-related (unauthorized transaction), or non-fraud (product not received, not as described, subscription cancellation disputes)?",
+        "a": "Breaking down the reason codes for the affected merchants: roughly 60% are 'product not as described' or 'not received,' and only about 15% are unauthorized-transaction fraud codes; the remainder are subscription/recurring-billing disputes."
+      },
+      {
+        "q": "Is there anything these 40 merchants have in common — onboarding date, merchant category, marketing channel, or fulfillment model?",
+        "a": "About 30 of the 40 merchants onboarded within the same 10-week window roughly four months ago, and a disproportionate number are in a drop-shipping fulfillment model rather than holding their own inventory."
+      }
+    ],
+    "mece": "Separate the possible root causes into: (1) A fraud problem — bad actors either running fraudulent transactions or a fraud ring targeting the platform, which the reason-code mix argues against as the primary driver; (2) A merchant-quality/onboarding problem — a specific cohort of merchants with poor fulfillment practices or misleading product descriptions was let onto the platform, which the reason-code mix and cohort concentration both point toward; (3) A merchant-category or business-model risk factor — drop-shipping specifically carries structurally higher dispute risk due to longer, less-controlled fulfillment chains, independent of merchant onboarding-cohort timing; (4) A processing or product change on the payments company's own side (e.g., a change in the checkout or dispute-handling flow) that's generating more disputes regardless of merchant quality. The concentration in one onboarding window and one fulfillment model suggests (2) and (3) combined are the primary driver, but this needs to be checked against (4) before ruling it out.",
+    "hypothesis": "A specific merchant-onboarding cohort, concentrated in the drop-shipping fulfillment model, was approved with insufficiently rigorous vetting during a roughly 10-week period about four months ago, and the resulting fulfillment-quality and product-description issues are now surfacing as chargebacks at a rate materially higher than the rest of the portfolio — a merchant-risk-underwriting gap, not a fraud spike or a platform-wide processing issue.",
+    "data": "Chargeback rate for the ~30 flagged merchants from the specific onboarding cohort: 2.4% of their transaction volume, roughly 8x the pre-spike blended rate. Chargeback rate for drop-shipping merchants onboarded in other periods: 0.9% — elevated versus the overall portfolio average but well below the flagged cohort, suggesting drop-shipping as a fulfillment model does carry somewhat higher baseline risk, but the onboarding-cohort effect is much larger. Checking the payments company's own checkout/dispute-handling flow: no changes were made to either system in the relevant window, ruling out cause (4). Onboarding records for the flagged cohort show a lighter merchant-vetting process was piloted during that 10-week window (a faster approval track intended to boost merchant acquisition), which was later reverted.",
+    "calc": "Decomposing the rise from 0.28% to 0.61% (a 0.33-point increase): the ~30 flagged onboarding-cohort merchants, representing roughly 4% of total transaction volume but carrying a 2.4% chargeback rate versus a 0.28% baseline, contribute approximately (0.04 x (0.024-0.0028)) = 0.00085, or about 0.085 percentage points of the blended increase on their own — but this understates their true contribution once the elevated drop-shipping baseline and their outsized dollar-volume share of the chargeback increase (70% of the increase in dollar terms, per the given data) are accounted for; reconciling both views, the flagged cohort and the broader drop-shipping risk factor together plausibly explain the large majority of the 0.33-point rise, with the remainder attributable to normal portfolio variation.",
+    "insight": "The lighter-vetting pilot during a specific onboarding window let in a cohort of merchants with weaker fulfillment practices, and because this cohort is concentrated in a fulfillment model (drop-shipping) that structurally carries more dispute risk to begin with, the two factors compounded rather than acting independently — a vetting gap alone might have been contained, but combined with the higher-risk business model it produced an outsized chargeback spike.",
+    "recommendation": "Immediately place the roughly 30 flagged merchants under enhanced monitoring or a chargeback-reserve requirement, and directly investigate the worst offenders for potential offboarding if fulfillment and dispute-resolution practices don't improve within a defined remediation window, since a handful of these merchants are likely approaching or exceeding individual card-network monitoring thresholds even though the blended portfolio rate is not there yet. Reinstate stricter vetting specifically for drop-shipping merchants going forward — verified fulfillment-time SLAs, product-description accuracy checks, and potentially a reserve requirement or lower initial processing limit during a new merchant's first 90 days — rather than reverting to a uniform standard that doesn't account for this fulfillment model's structurally higher risk.",
+    "risks": [
+      "Aggressively offboarding merchants or imposing reserves could trigger contract disputes or reputational damage if not communicated carefully, especially for the merchants in the flagged cohort who may not all be equally at fault — some of the 70% dollar-volume concentration in the flagged cohort may come from just a handful of the worst offenders, not all 30 merchants equally, and the remediation approach should be merchant-specific, not blanket.",
+      "Permanently treating drop-shipping merchants as categorically higher-risk could turn away legitimate, well-run drop-shipping businesses and cede that segment to competitors — the fix should target fulfillment-quality signals specifically, not the business model as a blanket category.",
+      "If individual affected merchants do cross the 1% chargeback threshold before remediation takes effect, the company could face direct card-network monitoring program penalties on those merchant accounts regardless of the portfolio-level fix — this needs urgent, merchant-by-merchant checking in parallel with the broader policy fix, not sequenced after it."
+    ],
+    "cross": [
+      {
+        "q": "Given that drop-shipping merchants onboarded in other periods also show an elevated 0.9% chargeback rate, isn't the real root cause the fulfillment model itself, not the specific onboarding cohort?",
+        "a": "Both are real, contributing factors, and I don't think it's an either/or — the data shows drop-shipping merchants carry a meaningfully higher baseline risk across all onboarding periods, which argues for the policy change on vetting drop-shipping merchants generally, going forward. But the flagged cohort's rate is roughly 2.5x even the elevated drop-shipping baseline, which points to something specific to that onboarding window, the lighter-vetting pilot, compounding on top of the model-level risk. The recommendation addresses both: enhanced monitoring for the specific flagged cohort now, and a structurally different vetting standard for drop-shipping merchants going forward."
+      },
+      {
+        "q": "How confident are you that the lighter-vetting pilot, rather than something else about that specific 10-week period, like a marketing channel or seasonal effect, is the actual cause?",
+        "a": "I'd want to check that directly rather than assume it — pulling the specific vetting criteria that were relaxed during the pilot and cross-referencing which flagged merchants would have failed under the standard, stricter process is the clean test. If most of the flagged merchants would have been rejected or flagged under the normal process, that's strong evidence it's the vetting change specifically, not a coincidental seasonal or channel effect from the same period. That verification step should happen before the vetting policy conclusion is finalized and rolled into a permanent policy change."
+      }
+    ],
+    "synthesis": "A single portfolio-level percentage hid a concentrated, mostly-preventable problem — the discipline here is refusing to treat 'chargebacks doubled' as a diffuse, portfolio-wide issue and instead decomposing by merchant, cohort, and fulfillment model until two compounding, specific causes emerge, each of which has a different, targeted fix rather than one blunt policy response that would either overcorrect on drop-shipping broadly or undercorrect on the specific vetting gap."
+  },
+  {
+    "diff": "hard",
+    "industry": "Fintech / Banking-as-a-Service",
+    "title": "Should a Fintech Build, Partner, or License Its Way Into Banking-as-a-Service?",
+    "prompt": "A consumer fintech app with 2 million users currently partners with a single sponsor bank to offer checking accounts and debit cards. The executive team is considering launching a Banking-as-a-Service (BaaS) offering — letting other companies build financial products on top of the fintech's infrastructure — as a new B2B revenue line. Three paths are on the table: build the full regulated banking-license stack in-house, partner with an existing BaaS infrastructure provider and white-label their platform, or acquire a smaller company that already holds relevant licenses. Evaluate the options.",
+    "clarify": [
+      {
+        "q": "What's driving the interest in BaaS specifically — is it a genuine new revenue opportunity, or a defensive move because sponsor-bank dependency is itself a risk to the core business?",
+        "a": "Both, but the sponsor-bank dependency risk is a real and separate concern — the current sponsor bank relationship has had regulatory friction in the past 18 months, and leadership sees BaaS infrastructure ownership as partially a hedge against that dependency, not purely a new revenue play."
+      },
+      {
+        "q": "What's the expected timeline pressure — is there a specific market window or competitive threat driving urgency, or is this a multi-year strategic bet with more time to get it right?",
+        "a": "There's real competitive pressure — at least two well-funded competitors have already launched BaaS offerings in the past year, but the executive team has stated they'd rather launch 6-12 months later with a defensible offering than rush a weak one to market first."
+      },
+      {
+        "q": "What's the regulatory capital and compliance capability today — does the company have any in-house expertise in bank regulatory compliance, or is that entirely outsourced to the sponsor bank relationship today?",
+        "a": "Almost entirely outsourced to the sponsor bank today — the company has a small compliance team focused on its own product's regulatory obligations, but no in-house expertise in being a regulated banking entity or servicing other companies' regulatory needs."
+      }
+    ],
+    "mece": "Evaluate the three paths against four independent dimensions: (1) Time to market — how quickly each path could produce a launchable BaaS offering; (2) Capital and cost — the upfront and ongoing cost of each path, including regulatory capital requirements for a bank charter versus platform/licensing fees versus acquisition cost; (3) Regulatory risk and control — how much direct control and risk exposure the company takes on for both its own compliance and its BaaS clients' compliance; (4) Strategic fit with the stated goal — since the underlying motivation is partly a hedge against sponsor-bank dependency, does each path actually reduce that dependency, or does it just add a new business line while leaving the original risk unaddressed.",
+    "hypothesis": "Given the stated dependency-hedging motivation combined with limited in-house regulatory expertise and a 6-12 month acceptable timeline, an acquisition of a smaller licensed player is likely to outperform both a slower full in-house build and a partner/white-label approach that wouldn't actually reduce the underlying sponsor-bank dependency risk.",
+    "data": "Full in-house build: obtaining a bank charter or equivalent state money-transmitter/trust licenses across target states typically takes 18-36 months and requires meaningful regulatory capital reserves plus a build-out of a full compliance and risk function — well beyond the stated 6-12 month timeline. Partner/white-label with an existing BaaS provider: fastest to market, typically 3-6 months to launch, lowest upfront capital requirement, but the company remains dependent on that provider's own sponsor-bank relationship and regulatory standing — it doesn't reduce dependency risk, it adds a new counterparty dependency on top of the existing one. Acquisition of a smaller licensed entity: candidates in the market hold relevant money-transmitter licenses or a small bank charter, typical acquisition timelines (deal plus integration) run 9-15 months, acquisition cost is substantial but the company gains direct regulatory standing and reduces reliance on any single sponsor-bank relationship going forward.",
+    "calc": "Rough cost-timeline comparison: in-house build estimated at $40-60M in regulatory capital and compliance build-out costs over 24-36 months, missing the stated timeline entirely. Partner/white-label estimated at $3-5M in integration and platform fees, launching in 3-6 months, but ongoing revenue share with the platform provider (typically 30-40% of BaaS client revenue) meaningfully caps long-term margin, and doesn't address dependency risk. Acquisition estimated at $80-120M for a suitable target (based on comparable recent fintech-license acquisitions), 9-15 months to full integration — more expensive than partnering but directly acquires the regulatory standing that both other options lack, and is within the stated timeline tolerance.",
+    "insight": "The partner/white-label path is fastest and cheapest, but it fails the actual strategic test the executive team set — it makes the company an additional layer of dependency on someone else's regulatory relationship rather than reducing dependency, meaning the option that looks best on a simple cost/speed comparison is actually the weakest fit for the stated underlying goal.",
+    "recommendation": "Pursue the acquisition path as the primary strategy, given it is the only option that both fits within the stated timeline tolerance and directly addresses the sponsor-bank dependency concern that partially motivated this initiative in the first place. As a parallel, lower-risk step, begin partner/white-label conversations now as a bridge — a small pilot BaaS offering via partnership could generate early market learnings and initial B2B client relationships within 3-6 months while the acquisition process runs its longer course, rather than the company having no BaaS offering at all during the 9-15 month acquisition timeline.",
+    "risks": [
+      "An $80-120M acquisition is a major capital commitment and integration risk for a fintech of this size — the specific target's licenses, compliance history, and technology stack need extremely thorough diligence, since regulatory violations or technical debt inherited from the acquired entity become the company's own direct liability.",
+      "Running a partner/white-label pilot in parallel with pursuing an acquisition could create confusing or conflicting go-to-market messaging for early B2B clients, and the company needs a clear plan for how (or whether) partner-based clients eventually migrate to the acquired entity's infrastructure once integration completes.",
+      "The competitive pressure cited (two competitors already live with BaaS offerings) means a 9-15 month acquisition-and-integration timeline still cedes meaningful first-mover advantage — this needs to be weighed against the strategic case for direct regulatory control, and the executive team should be clear-eyed that acquisition solves the dependency problem but doesn't solve the speed problem entirely."
+    ],
+    "cross": [
+      {
+        "q": "Given the stated preference for a defensible offering over a fast one, why recommend the partner pilot at all instead of just committing fully to the acquisition path?",
+        "a": "Because a pure acquisition path with nothing else in market means roughly a year with zero BaaS revenue or client relationships while competitors continue building market share and switching costs with early B2B clients — the pilot isn't meant to be the long-term strategy, it's a way to start learning what BaaS clients actually need and start building a small client base and case studies during the acquisition's execution, so that once the acquired entity's infrastructure is ready, the company isn't starting from zero on the go-to-market side."
+      },
+      {
+        "q": "How would you evaluate whether a specific acquisition target's licenses and regulatory standing are actually solid, rather than themselves a hidden risk?",
+        "a": "This needs a dedicated regulatory diligence workstream, not just financial and technology diligence — engaging outside banking-regulatory counsel to review the target's license history, any past consent orders or enforcement actions, the health of their own existing sponsor or correspondent relationships if any, and their compliance program's actual maturity versus paper policy. Given that avoiding exactly this kind of regulatory fragility is the whole point of the acquisition, a target with a shaky regulatory history would defeat the purpose and should be a disqualifying finding, not a negotiable risk factor."
+      }
+    ],
+    "synthesis": "The three options look like a simple build-partner-buy menu, but the case turns on recognizing that the fastest and cheapest option doesn't actually solve the problem that's driving the decision — the analytical discipline here is going back to the real underlying objective (reducing dependency risk, not just adding a revenue line) and rejecting the option that scores best on a superficial cost/speed comparison once it's clear that option fails the strategic test that matters most."
+  },
+  {
+    "diff": "hard",
+    "industry": "Fintech Lending / Balance Sheet",
+    "title": "Diagnose an Interest-Rate Risk Mismatch at a Fintech Lender Funding Fixed-Rate Loans With Short-Term Deposits",
+    "prompt": "A fintech lender originates 5-year fixed-rate personal loans at an average 9% APR, funded primarily by variable-rate deposits from its own neobank product, which currently pays depositors 2%. Over the past year, the central bank has raised benchmark rates significantly, and the CFO is alarmed that net interest margin has compressed sharply even though loan performance (defaults) hasn't changed. Diagnose what's happening and recommend a fix.",
+    "clarify": [
+      {
+        "q": "How exactly is deposit pricing set — does it track a benchmark rate automatically, or is it set at management's discretion?",
+        "a": "It's set at management's discretion but has historically tracked the central bank's benchmark rate fairly closely to stay competitive with other neobanks and avoid deposit outflows, meaning it moves up when the benchmark rate rises."
+      },
+      {
+        "q": "What's the maturity and rate-reset profile of the loan portfolio versus the deposit base — are all loans truly fixed for their full 5-year term, and are deposits truly short-term/variable?",
+        "a": "Yes — loans are fixed-rate for the full 5-year term once originated, with no repricing. Deposits are demand deposits and short-term savings accounts that can effectively reprice (or leave the platform) at any time."
+      },
+      {
+        "q": "What was net interest margin a year ago versus today, and how much of the loan portfolio was originated before versus after the rate increases began?",
+        "a": "NIM has compressed from approximately 6.2% to 3.1% over the past year. Roughly 65% of the current loan portfolio was originated more than a year ago, before the bulk of the rate increases, and is locked in at the lower rates that were standard then."
+      }
+    ],
+    "mece": "Break the margin compression into its component parts: (1) Asset-side effect — new loans being originated at higher rates today should be helping margin, not hurting it, so check whether new-origination pricing has actually adjusted upward with the rate environment; (2) Liability-side effect — deposit costs rising with the benchmark rate directly compress margin on the entire back book of fixed-rate loans, since those loans' revenue is frozen while their funding cost rises; (3) Portfolio-mix effect — how much of the current portfolio is locked-in old-rate loans (fully exposed to the liability-side effect) versus newly-originated loans (which may or may not be repriced enough to offset it). This is a classic asset-liability duration mismatch, and the diagnosis needs to quantify how much of the 3.1-point NIM compression is structural (the fixed/floating mismatch) versus a pricing failure (new loans not repriced enough).",
+    "hypothesis": "The lender has a structural asset-liability duration mismatch — long-duration fixed-rate assets funded by short-duration floating-rate liabilities — and the majority of the margin compression is coming from the large back book of old, low-rate loans now being funded at a much higher deposit cost, a mismatch that will only partially self-correct as the portfolio turns over toward new, higher-rate originations.",
+    "data": "New loan originations today are priced at an average 11.5% APR (up from 9% a year ago), reflecting some pass-through of higher rates. But the back book (the 65% of the portfolio originated before the rate increases) remains locked at the original average 9% rate for its full remaining term. Deposit cost has risen from 2% to roughly 4.8% (broadly tracking the benchmark rate increase). Blended portfolio yield today: (0.65 x 9%) + (0.35 x 11.5%) = 5.85% + 4.025% = approximately 9.9%. Blended cost of funds: approximately 4.8% (deposits, which are the dominant funding source and all reprice together, unlike the loan book). Resulting NIM: approximately 9.9% minus 4.8% = 5.1% on a pure yield-minus-cost basis — notably higher than the reported 3.1%, implying additional drag beyond the simple mismatch, such as higher provisioning, funding-mix shifts, or deposit-base attrition requiring more expensive wholesale funding to backfill.",
+    "calc": "Isolating the pure duration-mismatch effect: if deposit costs had stayed flat at 2% instead of rising to 4.8%, and loan yield had stayed at the blended 9.9% level, NIM would be roughly 7.9% instead of the observed ~5.1% pure-yield-based figure — meaning the rate-rise-driven deposit cost increase alone accounts for roughly 2.8 points of margin compression on the back book's fixed-rate exposure. The gap between that 5.1% figure and the actually-reported 3.1% NIM (a further ~2.0-point unexplained gap) likely reflects additional drags — increased provisioning for credit losses (even if default rates are stated as unchanged, provisioning models may have grown more conservative), deposit outflows to higher-yielding competitors requiring more expensive wholesale funding to replace, or funding-mix shifts toward costlier sources — that should be investigated as a distinct, second workstream from the core duration mismatch.",
+    "insight": "Even though loan performance hasn't changed, the lender is suffering from a textbook interest-rate risk mismatch: 65% of its earning assets are frozen at pre-rate-hike pricing while effectively all of its funding cost moves with the market, and this exposure was baked in at origination — it's not a new problem introduced by the rate environment, it's a pre-existing structural vulnerability that the rate environment has now exposed. Additionally, there is a second, roughly equal-sized source of margin drag beyond the pure rate mismatch that hasn't yet been isolated and needs its own diagnosis.",
+    "recommendation": "Address the structural mismatch directly: introduce interest-rate hedging (e.g., interest-rate swaps converting a portion of the fixed-rate loan book's economic exposure to floating, or laddered funding instruments with longer contractual duration than demand deposits) sized to the back book's duration, rather than relying on portfolio turnover alone to fix the mismatch over the loans' remaining 1-4 year average life. In parallel, launch a focused investigation into the additional ~2-point NIM drag beyond the pure rate mismatch — likely candidates are deposit attrition to competitors requiring costlier wholesale funding, or a provisioning-methodology change — since fixing the hedging problem alone won't fully restore margin if this second driver isn't addressed.",
+    "risks": [
+      "Interest-rate swaps and other hedging instruments carry their own cost and counterparty risk, and if rates were to fall significantly instead of continuing to rise, a hedge sized for further rate increases could itself become a drag on margin — the hedge ratio needs active management, not a one-time fixed sizing.",
+      "If part of the unexplained NIM gap is deposit attrition to higher-yielding competitors, raising deposit rates further to stem outflows would directly worsen the funding-cost side of the mismatch even as it addresses a liquidity concern — these two objectives are in tension and need to be modeled together, not solved independently.",
+      "Repricing new originations further upward (beyond the current 11.5%) to offset margin pressure risks reducing loan demand and adverse-selecting for higher-risk borrowers willing to accept higher rates, which could reintroduce a credit-risk problem while trying to solve an interest-rate-risk problem."
+    ],
+    "cross": [
+      {
+        "q": "Why hedge with swaps rather than simply shortening the duration of new loan originations going forward, so this problem doesn't recur?",
+        "a": "Shortening new-loan duration is a sound structural fix for the future book and should absolutely be part of the plan, but it does nothing for the roughly 65% of the portfolio that's already locked in at old rates for years to come — that back book's mismatch exists today and needs an instrument that addresses existing exposure, which is what the hedge is for. The two aren't alternatives, they're complementary: hedge the existing back-book exposure now, and shorten or float new originations going forward to reduce how much of this problem gets rebuilt."
+      },
+      {
+        "q": "You flagged a roughly 2-point NIM gap you can't yet explain with the rate mismatch alone — how would you actually go about isolating that before proposing a fix for it?",
+        "a": "I'd build a full NIM bridge, decomposing period-over-period NIM change into its individual components: rate-mismatch effect (calculated above), portfolio-mix shift, provisioning-rate change, funding-mix shift including any wholesale funding usage, and a residual/other bucket. Given the data available today only supports the rate-mismatch calculation cleanly, the next step is pulling the provisioning and funding-mix data specifically, since those are the two most likely candidates based on what's typical in this kind of environment, before committing to a fix for that portion of the gap."
+      }
+    ],
+    "synthesis": "The CFO's first instinct was to suspect credit quality, but the case shows that a business can have perfectly stable default rates and still see margin collapse purely from a mismatch between how assets and liabilities are priced over time — the discipline here is separating a credit-risk story from an interest-rate-risk story using the actual mechanics of the balance sheet, and then resisting the urge to declare the problem fully explained once the visible rate-mismatch math still leaves real ground uncovered."
+  },
+  {
+    "diff": "expert",
+    "industry": "Fintech Lending / Liquidity & Crisis Management",
+    "title": "A Wholesale Funding Partner Pulls Out Overnight — Design the Crisis Response and the Structural Fix",
+    "prompt": "A fintech lender funds roughly 60% of its loan originations through a single wholesale funding partner (a warehouse credit facility from an institutional lender) and the remaining 40% through its own balance sheet and smaller secondary facilities. With no advance warning, the primary wholesale funding partner notifies the company on a Friday afternoon that it is terminating the facility effective in 30 days, citing internal portfolio-concentration concerns unrelated to the fintech's own performance. Loan originations funded through this facility are running at roughly $40M per week. You are asked to lead the crisis response over the following days, and to design the structural fix that prevents a single-partner failure from threatening the business again. What do you do?",
+    "clarify": [
+      {
+        "q": "Is there an immediate liquidity crisis — could the company face insolvency or an inability to fund already-committed loans within the 30-day window — or is the risk primarily to future origination volume?",
+        "a": "Already-committed and disbursed loans are not at risk — the facility termination only affects new originations going forward, since loans already funded under the facility remain in place per the existing agreement. The immediate risk is to originations after the 30-day window, not solvency of the existing book."
+      },
+      {
+        "q": "What alternative funding sources exist today, even partial ones, and how quickly could they realistically be scaled?",
+        "a": "The company has two smaller secondary wholesale facilities (currently funding a combined 15% of originations, separate from the 40% balance-sheet-funded share already mentioned) with contractual headroom to expand, plus preliminary, non-binding conversations with two other institutional funders that have expressed interest in the past but never been formalized."
+      },
+      {
+        "q": "Does the terminating partner's stated reason (internal portfolio-concentration concerns) suggest anything about how other potential funders might view the relationship, or is it genuinely specific to that one partner's internal book?",
+        "a": "Based on direct conversation with the partner's relationship team, the concentration concern is specific to that institution's own broader lending-sector exposure across its entire portfolio, not a signal about this company's credit quality or fintech lending as a sector broadly — but this needs independent verification rather than being taken purely at face value."
+      }
+    ],
+    "mece": "This requires two parallel workstreams operating on very different timelines: (1) Immediate crisis response, days to weeks — stabilizing origination capacity within the 30-day window using existing headroom and expedited new-partner conversations, plus proactive, controlled communication to the board, investors, and potentially credit-rating or regulatory stakeholders before the news becomes public or leaks; (2) Structural fix, weeks to months — redesigning the funding-partner portfolio so that no single partner represents a business-threatening concentration again, which requires diagnosing not just 'how do we replace this partner' but 'why did we let concentration risk get to 60% with a single partner in the first place,' since the structural fix needs to prevent recurrence, not just patch this instance.",
+    "hypothesis": "The immediate 30-day gap can likely be substantially, though not fully, covered by scaling the two existing secondary facilities and accelerating the informal conversations with the two other interested funders, but full replacement of 60% of funding capacity within 30 days is unrealistic, meaning origination volume will likely need to be deliberately throttled in the near term as part of the crisis response, not just funded around — and the structural fix requires setting a hard concentration cap policy, not simply adding one more partner and returning to a similar concentration risk with a different institution.",
+    "data": "Secondary facilities currently fund 15% of originations combined; based on stated contractual headroom, they could realistically be scaled to absorb roughly an additional 20-25 percentage points of origination volume within the 30-day window, based on documented unused facility capacity, bringing total non-balance-sheet coverage to roughly 35-40% versus the 60% that's being lost. The two informal funder conversations, even if fast-tracked, would realistically take 60-90 days to reach a binding, funded facility given standard institutional due-diligence timelines, well beyond the 30-day window. Current weekly origination run rate is $40M/week from the terminating facility alone, out of a total roughly $67M/week across all funding sources.",
+    "calc": "If secondary facilities are scaled to their estimated maximum within 30 days (absorbing roughly 20-25 points of the lost 60%) and balance-sheet funding capacity is also modestly stretched (perhaps an additional 5 points, if capital and risk appetite allow), the company can realistically cover roughly 60-70% of the funding gap left by the terminated facility within the 30-day window, implying total origination capacity would need to shrink by roughly 20-30% from current levels ($67M/week) — to roughly $47-54M/week — until the new institutional funding relationships close, likely 60-90 days out. Deliberately throttling origination volume via tighter approval criteria or reduced marketing spend during this window, rather than attempting to fund the full prior volume through untested channels, avoids a more dangerous scenario of overextending secondary facilities or balance-sheet capacity beyond prudent risk limits.",
+    "insight": "The instinct in a funding crisis is to try to replace 100% of lost capacity as fast as possible, but doing so by overextending secondary facilities or balance-sheet capacity beyond safe limits would trade a funding-concentration crisis for a credit-risk or liquidity crisis of the company's own making — the financially disciplined response accepts a temporary, controlled reduction in origination volume as the safer path, rather than a scramble to maintain volume at any cost.",
+    "recommendation": "Immediate response: scale the two secondary facilities to their maximum safe capacity, fast-track the two informal funder conversations into formal term-sheet discussions while being transparent with them about the timeline pressure, and deliberately throttle new-loan origination volume to a level the available funding can safely support (roughly 70-80% of prior volume) rather than attempting to maintain full volume through untested or overextended channels — communicate this proactively and calmly to the board and key investors before it becomes an externally-visible problem. Structural fix: institute a hard policy cap limiting any single wholesale funding partner to no more than roughly 30-35% of total origination funding capacity going forward, requiring the company to maintain at minimum three to four active, meaningfully-sized funding relationships plus continued balance-sheet capacity, even if this means somewhat higher blended funding costs than concentrating with the single cheapest partner — treating funding-source diversification as a standing risk-management requirement, not an opportunistic afterthought.",
+    "risks": [
+      "Throttling origination volume, even temporarily, has real revenue and growth consequences and could itself trigger anxious reactions from investors or the board if not communicated clearly as a deliberate, controlled decision rather than a sign of deeper distress — the messaging strategy matters as much as the operational plan.",
+      "Fast-tracking new funder relationships under visible time pressure could result in accepting less favorable terms (higher cost of capital, more restrictive covenants) than the company would negotiate under normal circumstances, and the crisis-negotiation dynamic needs active management to avoid a bad long-term deal made under short-term duress.",
+      "A hard concentration-cap policy set at 30-35% per partner may itself be difficult to satisfy at the current company scale if the market for institutional wholesale funding partners willing to work with this size and risk profile of fintech lender is limited — the target cap needs to be validated as achievable, not set as an arbitrary risk-management ideal disconnected from actual market capacity."
+    ],
+    "cross": [
+      {
+        "q": "Given the terminating partner said this was about their own internal concentration limits and not about this company's credit quality, why throttle origination volume at all instead of just aggressively pursuing full replacement funding?",
+        "a": "Because even taking the partner's explanation at face value, the operational reality is that no realistic combination of secondary facilities and new-partner conversations can safely replace 60% of funding capacity within 30 days without either overextending existing facilities beyond prudent limits or accepting funding terms hastily negotiated under duress. Throttling isn't a response to doubting the partner's explanation, it's a response to the mechanical reality of how fast institutional funding can be safely scaled — the math simply doesn't support full-speed origination continuing unfunded or under-funded."
+      },
+      {
+        "q": "How would you independently verify that the terminating partner's stated reason is genuinely unrelated to this company's own credit performance, rather than taking their explanation at face value during an already stressful negotiation?",
+        "a": "I'd request specific, verifiable detail — asking whether other similarly-situated fintech lending clients in the partner's portfolio are also being wound down for the same stated reason, checking whether the partner's public disclosures or industry reporting mention a broader portfolio rebalancing that would corroborate the explanation, and separately, reviewing the company's own recent performance data (delinquency, default trends) with fresh eyes to rule out a self-inflicted cause before fully accepting the partner's framing. Given the significant consequences either way — how we message this to other funders and the board — this verification needs to happen quickly but rigorously, not be assumed."
+      }
+    ],
+    "synthesis": "A funding crisis tests a different kind of discipline than most cases in this bank — the pressure is toward action at any cost, but the correct analytical response is recognizing the limits of how fast capacity can safely be rebuilt and choosing a controlled, temporary pullback over an uncontrolled scramble, while treating the structural fix (diversification requirements) as the real deliverable, since surviving this single crisis without changing the underlying concentration risk just schedules the next one."
+  }
+];
+} catch (err) { console.error('Stage 25 data error:', err); }
+</script>
+<script>
+try {
+  var diffLabel = {easy:"Easier", med:"Medium", hard:"Hard", expert:"Expert"};
+
+  function renderCases(list){
+    var wrap = document.getElementById('caselist');
+    wrap.innerHTML = '';
+    list.forEach(function(c, i){
+      var det = document.createElement('details');
+      det.className = 'case';
+      det.id = 'case-' + (i+1);
+
+      var clarifyHtml = c.clarify.map(function(qa){
+        return '<div class="qa-pair"><div class="q">Q: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
+      }).join('');
+
+      var risksHtml = '<ul>' + c.risks.map(function(r){ return '<li>' + esc(r) + '</li>'; }).join('') + '</ul>';
+
+      var crossHtml = c.cross.map(function(qa){
+        return '<div class="qa-pair"><div class="q">Interviewer: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
+      }).join('');
+
+      det.innerHTML =
+        '<summary><span class="cnum">Case ' + (i+1) + '</span>' +
+        '<span class="cdiff ' + c.diff + '">' + diffLabel[c.diff] + '</span>' +
+        '<span class="cind">' + esc(c.industry) + '</span>' +
+        '<span class="ctitle">' + esc(c.title) + '</span></summary>' +
+        '<div class="case-body">' +
+          '<div class="case-prompt">"' + esc(c.prompt) + '"</div>' +
+          '<div class="case-sec"><h5>Clarifying Questions &amp; Answers</h5>' + clarifyHtml + '</div>' +
+          '<div class="case-sec"><h5>MECE Structure</h5><div class="calc-block">' + esc(c.mece) + '</div></div>' +
+          '<div class="case-sec"><h5>Hypothesis</h5><p>' + esc(c.hypothesis) + '</p></div>' +
+          '<div class="case-sec"><h5>Data &amp; Exhibits</h5><div class="calc-block">' + esc(c.data) + '</div></div>' +
+          '<div class="case-sec"><h5>Calculation</h5><div class="calc-block">' + esc(c.calc) + '</div></div>' +
+          '<div class="case-sec"><h5>Insight</h5><p>' + esc(c.insight) + '</p></div>' +
+          '<div class="case-sec"><h5>Recommendation</h5><p>' + esc(c.recommendation) + '</p></div>' +
+          '<div class="case-sec"><h5>Risks &amp; Caveats</h5>' + risksHtml + '</div>' +
+          '<div class="case-sec"><h5>Interviewer Cross-Questions</h5>' + crossHtml + '</div>' +
+          '<div class="synth-box"><h5>Synthesis</h5><p>' + esc(c.synthesis) + '</p></div>' +
+        '</div>';
+      wrap.appendChild(det);
+    });
+  }
+
+  renderCases(cases);
+
+  document.getElementById('casefilter').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if(!btn) return;
+    document.querySelectorAll('#casefilter button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var diff = btn.getAttribute('data-diff');
+    var filtered = diff === 'all' ? cases : cases.filter(function(c){ return c.diff === diff; });
+    renderCases(filtered);
+  });
+
+  var masteryItems = cases.map(function(c, i){ return 'Case ' + (i+1) + ' — ' + c.title + ': I can walk through the full structure, calculation, and synthesis cold.'; });
+  var STORE = 'masterbook-s25-mastery';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var mBox = document.getElementById('masteryBox');
+  mBox.innerHTML = masteryItems.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+esc(t)+'</span></div>';
+  }).join('');
+  mBox.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 500){ backtop.classList.add('show'); } else { backtop.classList.remove('show'); }
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 25 loaded — cases:', cases.length);
+} catch (err) { console.error('Stage 25 render error:', err); }
+</script>

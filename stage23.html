@@ -1,0 +1,797 @@
+<meta name="robots" content="noindex, nofollow">
+
+
+<title>Analytics Case Bank</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+
+  .caselist{ display:flex; flex-direction:column; gap:14px; }
+  details.case{ border:1px solid var(--line); border-radius:12px; background:var(--paper-raised); box-shadow:var(--shadow); overflow:hidden; }
+  details.case summary{ padding:16px 22px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.98rem; font-weight:600; }
+  details.case summary::-webkit-details-marker{ display:none; }
+  details.case summary .cnum{ font-family:"IBM Plex Mono"; font-size:.72rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:3px 9px; border-radius:6px; flex:0 0 auto; }
+  details.case summary .cdiff{ font-size:.66rem; font-weight:700; padding:3px 9px; border-radius:6px; flex:0 0 auto; text-transform:uppercase; letter-spacing:.03em; }
+  .cdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .cdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .cdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .cdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  details.case summary .cind{ font-size:.72rem; font-weight:500; color:var(--ink-faint); flex:0 0 auto; }
+  details.case summary .ctitle{ flex:1; }
+  .case-body{ padding:0 22px 24px; border-top:1px solid var(--line); }
+  .case-prompt{ margin:18px 0; padding:15px 18px; background:var(--paper-sunken); border-left:4px solid var(--ink-faint); border-radius:0 8px 8px 0; font-style:italic; font-size:.93rem; }
+  .case-sec{ margin-top:20px; }
+  .case-sec h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .case-sec h5::before{ content:""; width:14px; height:2px; background:var(--accent); display:inline-block; }
+  .case-sec p, .case-sec li{ font-size:.9rem; color:var(--ink-soft); margin:0 0 6px; }
+  .qa-pair{ margin-bottom:10px; padding:10px 14px; background:var(--paper-sunken); border-radius:8px; }
+  .qa-pair .q{ font-size:.88rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .qa-pair .a{ font-size:.87rem; color:var(--ink-soft); }
+  .case-sec ul{ margin:0; padding-left:20px; }
+  .case-sec .calc-block{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:14px 16px; font-family:"IBM Plex Mono"; font-size:.79rem; overflow-x:auto; line-height:1.65; white-space:pre; margin-top:4px; }
+  .case-sec .result-tag{ display:inline-block; margin-top:8px; font-family:"IBM Plex Mono"; font-size:.8rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:5px 11px; border-radius:6px; }
+  .synth-box{ margin-top:20px; padding:15px 18px; background:var(--accent-soft); border-radius:8px; border-left:4px solid var(--accent); }
+  .synth-box h5{ color:var(--accent-ink); }
+  .synth-box p{ color:var(--ink); font-weight:500; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <a class="backlink" href="stage14.html">← Stage 14 · Product Management</a>
+    <a class="backlink" href="stage15.html">← Stage 15 · Structured Problem Solving &amp; Frameworks</a>
+    <a class="backlink" href="stage16.html">← Stage 16 · Profitability Case Bank</a>
+    <a class="backlink" href="stage17.html">← Stage 17 · Market Entry Case Bank</a>
+    <a class="backlink" href="stage18.html">← Stage 18 · Growth Case Bank</a>
+    <a class="backlink" href="stage19.html">← Stage 19 · Pricing Case Bank</a>
+    <a class="backlink" href="stage20.html">← Stage 20 · Market Sizing Case Bank</a>
+    <a class="backlink" href="stage21.html">← Stage 21 · Operations Case Bank</a>
+    <a class="backlink" href="stage22.html">← Stage 22 · Product Case Bank</a>
+    <div class="stage-pill">● Stage 23 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#howtouse">How to Use This Case Bank</a></li>
+      <li><a href="#cases">The 10 Analytics Cases</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 25 (FinTech) is next, followed by Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part X · Stage 23 of 33</div>
+      <h1>Analytics Case Bank</h1>
+      <p class="lede">10 full analytics cases at full interview depth: metric-definition and measurement-artifact diagnosis, attribution bias, A/B test interpretation and rollout risk, customer segmentation, cohort-composition effects, forecasting structural breaks, and cross-team metric reconciliation — each solved with a genuine analytical approach, worked math, and a real recommendation, walked through exactly as a real case interview runs, including interviewer pushback and model answers.</p>
+      <div class="statusbar">
+        <div class="statuschip">📊 <b>10</b> full analytics cases, zero compressed</div>
+        <div class="statuschip">🧮 Every case has a genuine worked analytical/statistical calculation</div>
+        <div class="statuschip">🗣️ Every case includes interviewer cross-questions with model answers</div>
+        <div class="statuschip">🔀 Spans e-commerce, D2C retail, SaaS, EdTech, and consumer goods</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">Analytics cases are the most self-referential case type in the whole Masterbook, because the discipline being tested is exactly the discipline needed to solve the case: don't trust a metric or a dashboard number until you've checked whether it's measuring what you think it's measuring. The pattern that separates a strong answer from a weak one is resisting the urge to build a narrative around a number's face value, and instead checking for measurement artifacts, attribution bias, composition effects, and confounds before treating a metric movement as a real signal to act on. This stage applies that discipline to 10 genuinely distinct analytical situations, from a straightforward metric-definition check to an expert-level causal-robustness defense of an A/B test result under executive scrutiny, so the underlying skeptical, evidence-first analytical reasoning becomes second nature.</p>
+      </div>
+    </section>
+
+    <section id="howtouse">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>How to Use This Case Bank</h2>
+        <p>Every case follows the exact same 10-part structure, so you can drill any single part in isolation or run the whole case end to end.</p>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <div class="bridge-flow">
+          <span class="node">Prompt</span><span class="arrow">→</span>
+          <span class="node">Clarifying Qs</span><span class="arrow">→</span>
+          <span class="node">MECE Structure</span><span class="arrow">→</span>
+          <span class="node">Hypothesis</span><span class="arrow">→</span>
+          <span class="node">Data</span><span class="arrow">→</span>
+          <span class="node">Calculation</span><span class="arrow">→</span>
+          <span class="node">Insight</span><span class="arrow">→</span>
+          <span class="node">Recommendation</span><span class="arrow">→</span>
+          <span class="node">Risks</span><span class="arrow">→</span>
+          <span class="node">Cross-Qs</span><span class="arrow">→</span>
+          <span class="node">Synthesis</span>
+        </div>
+        <p style="margin:14px 0 0">Recommended drill: read only the <b>prompt</b>, pause the page, and before proposing any explanation, list the specific alternative, non-obvious explanations for the observed number (a measurement/tracking change, an attribution artifact, a composition effect, a confound) that a rigorous analyst would rule out first. Analytics cases especially reward decomposing a blended or aggregate number into segments and checking whether the pieces reconcile with the whole, since that reconciliation step is usually what turns a vague suspicion into a precise, defensible diagnosis. The 10 cases are tagged by difficulty (easier / medium / hard / expert) and filterable below the case list heading.</p>
+      </div>
+    </section>
+
+    <section id="cases">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>The 10 Analytics Cases</h2>
+        <p>Full quota, full depth — every case fully interactive, none compressed to structure-plus-answer-only.</p>
+      </div>
+      <div class="filterbar" id="casefilter">
+        <button class="active" data-diff="all">All (10)</button>
+        <button data-diff="easy">Easier</button>
+        <button data-diff="med">Medium</button>
+        <button data-diff="hard">Hard</button>
+        <button data-diff="expert">Expert</button>
+      </div>
+      <div class="caselist" id="caselist"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">None of these 10 companies or analytics situations are Pranav's own work experience, and none should ever be presented as such — they're deliberate practice cases. The honest bridge is the METHOD: treating a metric movement as a hypothesis to be tested rather than a fact to be explained, decomposing a blended number into segments to check for composition effects, and reconciling conflicting figures with real, quantified evidence rather than assertion is the same rigorous, evidence-first discipline behind the SQL, Python, and statistics work in Stages 2-4 and the A/B-testing methodology in Stage 11. If an interviewer asks "have you diagnosed a metrics or analytics problem before," the honest and strong answer is: "Not as a standalone analytics-consulting engagement, but I've built the underlying habits — checking a metric's definition before trusting its movement, decomposing an aggregate number to find its real driver, and reconciling conflicting figures with precise, quantified evidence — through real analytical work, and I've drilled a full bank of analytics cases spanning attribution, experimentation, segmentation, and forecasting to build that skeptical, evidence-first instinct on top of that foundation."</p>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Mastery Checklist</h2>
+        <p>One item per case — check off once you can walk through that case's full structure, calculation, and synthesis cold, without re-reading it.</p>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  var cases = [
+  {
+    "diff": "easy",
+    "industry": "E-Commerce — Marketing Dashboard Metric Definition",
+    "title": "A Marketing Dashboard Shows Click-Through Rate Declining 20% — Before Reacting, Is the Metric Even Defined Consistently?",
+    "prompt": "An e-commerce company's marketing dashboard shows email click-through rate (CTR) has declined 20% month-over-month. The marketing team wants to immediately investigate creative fatigue and refresh all email templates. Before jumping to that conclusion, what would you check?",
+    "clarify": [
+      {
+        "q": "Did anything change in how CTR is calculated or tracked around the time of the drop — a new email service provider, a tracking-pixel change, anything like that?",
+        "a": "Actually yes — the company switched email service providers three weeks ago, right around when the decline starts in the data."
+      },
+      {
+        "q": "Is CTR being calculated the same way before and after the switch — same denominator (e.g., emails delivered vs. emails sent), same click-tracking method (raw clicks vs. unique clicks)?",
+        "a": "That's exactly the right question — nobody has actually checked this yet."
+      },
+      {
+        "q": "Has open rate also declined by a similar magnitude, or is the drop isolated to clicks specifically?",
+        "a": "Open rate is roughly flat — only CTR shows the sharp decline, which is itself a bit unusual if this were genuine creative fatigue, since fatigue usually depresses opens too."
+      }
+    ],
+    "mece": "Before treating this as a genuine behavioral decline requiring a creative fix, I'll rule out a measurement-definition change first, structured as: (1) timing correlation — does the ESP switch line up precisely with the start of the decline, (2) definitional consistency — are CTR's numerator (clicks) and denominator (opens or delivers) computed the same way across both systems, (3) corroborating-metric check — does open rate (a metric less likely to be affected by a click-tracking change) also show a matching decline, which would support a real behavioral story over a measurement artifact.\n\nL1 — Timing: does the decline's start date align with the ESP migration date precisely, or did it begin drifting before/after that event.\nL1 — Definitional consistency: compare the old ESP's CTR formula and click-tracking mechanism (e.g., redirect-based link tracking, unique vs. total clicks) against the new ESP's — a common cause of an artificial step-change in CTR.\nL1 — Corroborating metric: open rate, being computed independently of click-tracking mechanics, should also decline if this is genuine audience fatigue; if it doesn't, that's strong evidence the click-side measurement itself changed, not audience behavior.",
+    "hypothesis": "Given the decline's timing lines up with the ESP switch and open rate hasn't moved, I expect this to be a measurement-definition artifact — most likely a difference in how the new ESP tracks or attributes link clicks (e.g., it may exclude prefetch clicks from email-client link previews that the old ESP counted as clicks, or use a different unique-click deduplication window) — rather than a genuine decline in subscriber engagement.",
+    "data": "CTR trend: stable around 3.2% for the 8 weeks before the ESP switch, then drops to approximately 2.55% in the first full week after switching, and has stayed roughly flat at that lower level since (not a gradual decline, but a step-change). Open rate over the same period: 21.4% before, 21.1% after — within normal week-to-week noise. ESP documentation check: the old ESP's CTR metric counted any request to a tracked redirect link, including automated 'link preview' fetches triggered by some email clients' security scanning; the new ESP's documentation explicitly states it filters out bot/prescan traffic from its click count by design.",
+    "calc": "If roughly 15-25% of the old ESP's reported clicks were actually automated security-scan prefetches (a commonly cited range for enterprise/corporate email environments, which make up a meaningful share of B2C email lists that include work-email signups), removing that inflation would produce exactly this kind of step-change: old reported CTR of 3.2% with ~20% attributable to bot-filtered clicks would net down to roughly 3.2% × 0.80 ≈ 2.56% — matching the new ESP's observed 2.55% almost exactly. This is a strong, testable match between the hypothesized mechanism and the actual magnitude of the drop.",
+    "insight": "The magnitude of the 'decline' (20%) matches almost exactly what would be expected if the new ESP is simply filtering out a category of automated clicks the old ESP counted — combined with flat open rates and a precise timing match to the ESP switch, this is very unlikely to represent a real change in subscriber engagement, and refreshing all email creative in response would fix a problem that doesn't exist while masking whatever the true, currently-invisible CTR trend actually is.",
+    "recommendation": "Do not launch a creative refresh based on this data. Instead, confirm directly with the new ESP's support/documentation exactly what their CTR methodology excludes versus the old ESP, and if confirmed, either request an unfiltered comparison metric for a like-for-like read or establish a new post-switch CTR baseline going forward rather than comparing across the discontinuity — only investigate creative fatigue if CTR continues declining from the new, corrected baseline over the following several weeks.",
+    "risks": [
+      "The bot-prescan-filtering hypothesis is plausible and matches the magnitude well, but hasn't been confirmed directly with the ESP vendor — this should be verified with their documentation or support team before being stated as fact to the marketing team, rather than presented as a confirmed conclusion from indirect evidence alone.",
+      "Even if the definitional change explains the step-change, it doesn't rule out a smaller, genuine underlying engagement trend hiding underneath it — the recommendation to establish a fresh post-switch baseline is important specifically so a real decline isn't masked by having incorrectly attributed everything to the ESP switch.",
+      "This analysis used open rate as a corroborating signal, but open-rate tracking itself can also be affected by ESP-specific technical factors (e.g., Apple Mail Privacy Protection pre-fetching images) — it's a reasonable but not perfect independent check, and ideally a metric further downstream (like email-attributed conversions or revenue) should also be checked for consistency."
+    ],
+    "cross": [
+      {
+        "q": "The marketing team is under pressure to show engagement improvement this quarter — how would you convince them not to launch the creative refresh they're already excited about, without seeming like you're just creating obstacles?",
+        "a": "I'd lead with the specific, checkable evidence rather than a general caution — showing them the precise timing alignment with the ESP switch and the flat open-rate trend makes the case concrete rather than abstract, and I'd frame it as 'let's not spend the refresh budget solving a measurement problem — let's get a clean baseline first, and if there's still a real decline in two weeks, we'll have much stronger, cleaner data to design the right creative fix from' — this positions the caution as protecting their eventual refresh's effectiveness, not blocking their work."
+      },
+      {
+        "q": "Suppose you confirm with the ESP that they do filter prescan clicks — does that fully close the investigation, or is there anything else you'd still want to check?",
+        "a": "It would explain the step-change, but I'd still want to check whether the filtering rate is consistent across subscriber segments — if certain segments (e.g., corporate/work-email subscribers) have disproportionately more prescan traffic than others, the 'true' CTR by segment could look different post-switch than a blended average suggests, and marketing might want segment-level CTR baselines rather than one company-wide number, especially if they're making per-segment creative or targeting decisions."
+      }
+    ],
+    "synthesis": "This case is a clean example of why any 'metric moved' finding in analytics needs a definitional-consistency check before it's treated as a behavioral finding — a tracking or measurement-methodology change can produce a step-change that looks exactly like genuine behavior change, and the fastest, most reliable way to catch it is checking whether the timing lines up with a known system change and whether related, differently-measured metrics moved in a consistent way."
+  },
+  {
+    "diff": "easy",
+    "industry": "D2C Retail — Marketing Channel Budget Allocation Dashboard",
+    "title": "A ROAS Dashboard Shows Paid Social Outperforming Paid Search 3-to-1 — Should Budget Shift Accordingly?",
+    "prompt": "A D2C retail company's marketing dashboard shows paid social advertising delivering a 6.0x return on ad spend (ROAS) versus paid search's 2.0x, both measured by last-click attribution. The marketing lead wants to shift a large share of the paid search budget into paid social based on this dashboard. Should they?",
+    "clarify": [
+      {
+        "q": "How is ROAS being attributed here — is it last-click across all channels, or does each channel have some other attribution logic?",
+        "a": "Last-click attribution across the board, using whichever channel's ad the customer clicked immediately before converting."
+      },
+      {
+        "q": "Do we have any sense of how much overlap there typically is between customers who see/click paid social ads and those who separately search for the brand directly or via paid search later?",
+        "a": "We don't have a formal number, but anecdotally, paid social is understood internally as more of a 'discovery' channel and paid search (especially branded search terms) as more of a 'capture' channel for people already familiar with the brand."
+      },
+      {
+        "q": "What share of paid search spend is on branded terms (people searching the company's own name) versus non-branded/category terms?",
+        "a": "About 65% of paid search budget is on branded terms, 35% on non-branded/category terms."
+      }
+    ],
+    "mece": "I'll evaluate this as a channel-attribution-bias problem, since last-click attribution is well known to systematically misrepresent channels that play different roles in the funnel, structured as: (1) attribution mechanics — how last-click specifically over- or under-credits channels depending on their funnel position, (2) the described customer journey — the internal understanding that social is a discovery channel and branded search is a capture channel is itself evidence of a multi-touch journey that last-click can't represent fairly, (3) what the branded-vs-non-branded search split implies — branded search ROAS is inflated by capturing demand that other channels (including social) already created, while non-branded search is a fairer like-for-like comparison to social's discovery role.\n\nL1 — Attribution mechanics: last-click gives 100% of conversion credit to the final touchpoint, systematically overvaluing 'closer' channels (often branded search, since a customer who's already decided to buy searches the brand name directly) and undervaluing 'opener' channels (like social, which sparks interest but often isn't the last click before purchase).\nL1 — Journey structure: the internal understanding of social-as-discovery and search-as-capture is a strong qualitative signal that a large share of paid search's credited conversions were actually influenced earlier by social (or other) touchpoints that last-click attribution erases entirely.\nL1 — Branded vs. non-branded split: since 65% of search spend is branded, and branded search largely captures pre-existing demand/intent rather than creating it, comparing social's 6.0x against a blended search ROAS that's mostly inflated branded-term performance is not a fair like-for-like comparison of demand-generation effectiveness.",
+    "hypothesis": "I expect the 6.0x vs. 2.0x gap to substantially overstate paid social's true relative effectiveness, because last-click attribution likely credits branded search with conversions that paid social (and other upper-funnel activity) actually generated — meaning a large reallocation of budget away from search based on this dashboard alone risks cutting a channel that's secretly capturing (and getting credit for) demand that other channels, including social itself, are creating.",
+    "data": "Branded search ROAS (isolated): typically 4-8x in D2C retail benchmarks, since branded search captures near-certain purchase intent at low cost-per-click — assume this company's branded search ROAS is roughly 5.5x. Non-branded/category search ROAS: typically much lower, assume roughly 1.2x for this company, reflecting the blended 2.0x figure (65% × 5.5 + 35% × 1.2 ≈ 3.995... this doesn't match the stated blended 2.0x, suggesting either the branded assumption is too high or there's some other factor — for the purposes of this case, take the company's actual reported blended search ROAS of 2.0x as given and back into a more conservative branded estimate: if non-branded is ~1.0x and branded search makes up 65% of spend, solving 0.65×B + 0.35×1.0 = 2.0 gives B ≈ 2.65x branded ROAS — still meaningfully higher than the 1.0x non-branded figure, supporting the same directional point with company-consistent numbers). This confirms branded search materially outperforms non-branded search within the search channel itself, consistent with branded search capturing pre-existing demand.",
+    "calc": "The relevant comparison for 'should we shift budget from search to social' isn't social's 6.0x against blended search's 2.0x — it's social's 6.0x against NON-BRANDED search's ~1.0x (the fairer like-for-like comparison, since both are meant to generate/capture new, not pre-existing, demand) AND a look at whether cutting search budget (branded especially) causes conversions attributed to search to simply not happen elsewhere, or whether those customers would have found their way to purchase via a different last-click channel (including organic search or direct) at zero incremental ad cost. Cutting branded search specifically is risky precisely because it's capturing already-warm demand cheaply (2.65x-5.5x range) — a budget cut there doesn't obviously get replaced by equally cheap non-branded search or social spend, since those channels operate on colder audiences.\nA fairer test: run a geo-holdout or brand-search pause experiment (turning off branded search ads in a subset of markets/for a short period) to see how much of that 'captured' branded-search revenue is truly incremental versus would have converted anyway via organic/direct — this is the standard way to de-bias branded search's apparent ROAS, which is well known in the industry to be substantially overstated by last-click.",
+    "insight": "The 6.0x vs. 2.0x comparison compares apples to oranges — social's number is being measured on its own merits as a discovery channel, while search's blended 2.0x is diluted by a mix of a cheap-to-capture branded segment (which last-click likely over-credits, since much of that branded demand may have been generated by social or other channels) and a genuinely weaker non-branded segment; the real decision-relevant comparison is social's incremental discovery value against non-branded search's incremental discovery value, and separately, whether branded search spend is truly incremental or just efficiently harvesting demand created elsewhere.",
+    "recommendation": "Do not make a large budget shift based on the last-click dashboard alone. First, split search ROAS into branded and non-branded segments explicitly (not blended) for a fairer comparison to social, and run a controlled experiment — either a brief branded-search holdout in a subset of geos, or a proper multi-touch/incrementality-based attribution model — to estimate how much of branded search's apparent performance is truly incremental versus captured demand generated by other channels including social. Only reallocate budget once there's a credible incremental-ROAS estimate for each channel, not a last-click ROAS estimate.",
+    "risks": [
+      "A branded-search holdout experiment has real short-term revenue risk (deliberately turning off ads that are known to convert, even if the incrementality is uncertain) — this should be scoped carefully (small geo subset, short duration, clear stop-loss criteria) rather than a broad, open-ended test.",
+      "This analysis assumes non-branded search (~1.0x) is the fairer comparison to social, but non-branded search and paid social may not be equally efficient discovery mechanisms even before attribution bias is considered — some of the gap could reflect a genuine, if smaller, real performance difference, not purely an attribution artifact, and the experiment should be designed to isolate this rather than assuming the entire gap is attribution bias.",
+      "If a proper incrementality read does show social genuinely outperforming search on a like-for-like basis, a large sudden reallocation still carries execution risk — social ad inventory and audience saturation effects mean a channel's ROAS at its current spend level doesn't necessarily hold at a much higher spend level (diminishing returns), so any reallocation should be staged and monitored, not executed as one large one-time shift."
+    ],
+    "cross": [
+      {
+        "q": "The marketing lead is going to ask why you're recommending an experiment that takes weeks, when the dashboard 'clearly' shows social winning 3-to-1 right now — how do you defend the delay?",
+        "a": "I'd explain that the 3-to-1 gap is measuring two different things dressed up as the same metric — social's number reflects genuine channel performance, while search's blended number is inflated by branded search capturing demand that may have been generated elsewhere, including by social itself; making a large budget decision on a number that's this likely to be biased risks cutting a channel (branded search) that's actually cheap and effective, while over-investing in a channel whose true incremental value hasn't been separately verified — a few weeks of a properly scoped experiment is a small cost relative to the risk of a large, wrong reallocation based on a known-biased metric."
+      },
+      {
+        "q": "If the incrementality test comes back showing branded search really is mostly non-incremental (i.e., customers would have converted anyway), what would you actually recommend doing with that search budget?",
+        "a": "I wouldn't necessarily recommend cutting it entirely even if it's mostly non-incremental in a narrow sense — protecting branded search prevents competitors from bidding on the company's own brand terms and capturing that traffic instead, which has defensive value beyond the direct ROAS number; I'd recommend right-sizing branded search spend to a minimum-viable defensive level (informed by what happens to conversion rates and competitor presence during the holdout test) and redirecting the freed-up budget toward non-branded search and paid social in a staged, monitored way, rather than assuming 100% of the freed budget should go to social specifically."
+      }
+    ],
+    "synthesis": "This case tests whether a candidate recognizes that last-click attribution systematically distorts channel comparisons based on funnel position, and specifically that a blended metric (mixing a capture-heavy segment like branded search with other segments) can make a supposedly straightforward 'channel A beats channel B' comparison deeply misleading — the right response isn't to reject the dashboard outright, but to decompose it into fairer like-for-like comparisons and design a real experiment before acting on a number known to have this kind of bias."
+  },
+  {
+    "diff": "easy",
+    "industry": "SaaS — A/B Test Interpretation, Early-Read Risk",
+    "title": "An A/B Test Shows a New Checkout Flow Winning by 12% After 3 Days — Is It Safe to Call the Test and Roll Out?",
+    "prompt": "A SaaS company is running an A/B test on a redesigned checkout flow. After 3 days, the dashboard shows the new flow converting 12% better than the old one, and the product manager wants to end the test early and roll out the winner immediately to capture the gains sooner. Is this a safe call?",
+    "clarify": [
+      {
+        "q": "Was the test's sample size and duration planned in advance — was there a pre-registered minimum sample size or duration before looking at results?",
+        "a": "Yes — the original test plan called for a minimum 2-week run to reach the pre-calculated sample size needed for the target statistical power, based on the baseline conversion rate and expected minimum detectable effect."
+      },
+      {
+        "q": "Has anyone checked whether the observed 12% difference is statistically significant yet, given only 3 of the planned 14 days have elapsed?",
+        "a": "No formal significance check has been run yet — the PM is going off the raw dashboard numbers looking favorable, not a significance calculation."
+      },
+      {
+        "q": "Does checkout behavior vary meaningfully by day of week (e.g., weekday vs. weekend purchasing patterns), and which days does the 3-day window cover?",
+        "a": "Yes, there's a known weekday/weekend difference in this business's purchase behavior — and the 3 days so far are Monday through Wednesday, so the test hasn't yet seen a weekend."
+      }
+    ],
+    "mece": "I'll evaluate whether it's safe to call this test early across three checks: (1) statistical validity — whether the sample size at day 3 is anywhere near the pre-calculated minimum needed for the planned statistical power, and whether stopping early inflates the false-positive risk (peeking problem), (2) representativeness — whether 3 weekdays without a weekend is a representative window given known day-of-week variation in this business, (3) novelty-effect risk — whether an early lift could partly reflect users reacting to something new/different rather than a durable improvement, which sometimes fades over the following days or weeks.\n\nL1 — Statistical validity: compare current sample size against the pre-calculated required sample size, and flag the 'peeking' problem — checking significance repeatedly before reaching the planned sample size inflates the true false-positive rate well above the nominal significance threshold, meaning a seemingly significant early result is less trustworthy than it looks.\nL1 — Representativeness: with known weekday/weekend behavioral differences and no weekend data yet in the 3-day window, the observed effect could be specific to weekday purchasing patterns and may not hold once weekend traffic (which behaves differently) is included.\nL1 — Novelty effect: a genuinely new checkout flow can produce a temporary engagement or completion bump purely from being different/novel, independent of whether the redesign is actually better — this effect is well documented in UX/product experimentation and typically fades over 1-2 weeks, which is part of why the original 2-week minimum duration was likely set in the first place.",
+    "hypothesis": "I expect it is NOT safe to call this test at day 3 — the combination of an under-powered sample relative to the pre-calculated plan, no weekend data yet in a business with known day-of-week variation, and the classic novelty-effect risk for a freshly redesigned flow all point toward the 12% lift being unreliable as an estimate of the true, durable effect, even though the number itself sounds compelling on the dashboard.",
+    "data": "Pre-calculated minimum sample size for the planned power: enough conversions to detect the target minimum detectable effect at 80% power and 95% confidence — by the original plan, that requires the full 2-week window at expected traffic levels. At day 3, the test has accumulated roughly 21% of the planned sample size (3 of 14 days, though not exactly linear if traffic varies by day). Days observed: Monday-Wednesday only, missing the weekend entirely from a business with documented day-of-week behavioral variation. No formal significance test has been run — the '12% better' figure is a raw ratio of two conversion rates on a partial, non-representative sample.",
+    "calc": "At approximately 21% of the planned sample size, the test's actual statistical power to detect a real effect (or correctly reject a spurious one) is far below the 80% target the 2-week plan was calibrated for — a raw 12% difference on this small a sample could easily be within normal random noise, especially for a metric like checkout conversion where day-to-day and even hour-to-hour variance can be substantial. Separately, if this business's weekday conversion rate is even moderately different from its weekend rate (common in SaaS and e-commerce checkout behavior), the 3-day weekday-only sample is measuring a different population than the full week the eventual rollout will actually serve — meaning even a 'real' 12% lift measured Monday-Wednesday might not hold, or might reverse, over a full week.",
+    "insight": "There are two independent reasons this early read shouldn't be trusted, and either one alone would be enough to recommend continuing the test: the sample simply isn't large enough yet relative to the pre-calculated plan to distinguish a real effect from noise with acceptable confidence, and even if it were large enough, a weekday-only window isn't representative of the full-week population the flow will eventually serve. Stopping early to 'capture the gains sooner' risks locking in a decision based on a number that may not replicate once the full, representative sample is collected.",
+    "recommendation": "Continue the test to its originally planned 2-week duration and pre-calculated sample size rather than stopping early — this both restores statistical power to the planned level and ensures the test window includes at least one full weekend cycle, giving a representative read across the whole week. If the 12% lift is real and durable, it will still be there (likely somewhat attenuated once any novelty effect fades) at the end of the full run, and the decision to roll out will be made on much more trustworthy evidence.",
+    "risks": [
+      "There's a real cost to waiting — if the new flow genuinely is better, every additional day running the test at 50/50 traffic split means some users are still experiencing the (statistically) inferior old flow, so the recommendation to wait isn't free and should be communicated as a genuine trade-off, not a costless default.",
+      "If traffic is unusually low during the remaining test period (e.g., a seasonal lull), even the full 2-week run might not reach the originally planned sample size — the sample-size progress should be monitored against the plan, and the timeline adjusted (not the conclusion) if traffic patterns differ from what was assumed when the original plan was calculated.",
+      "This analysis assumes the original 2-week/sample-size plan was well-calibrated in the first place — if it was set without a rigorous power calculation (e.g., an arbitrary 'let's run it for 2 weeks' choice rather than a calculation from baseline conversion rate and desired minimum detectable effect), the plan itself should be sanity-checked, since 'stick to the original plan' is only as good as the plan was to begin with."
+    ],
+    "cross": [
+      {
+        "q": "The PM's argument is that waiting costs the company real revenue if the new flow really is 12% better right now — how do you weigh that against your recommendation to wait?",
+        "a": "That's a legitimate trade-off, not something to dismiss — but the flip side is just as real: if the 12% is noise or a weekday-only/novelty-driven artifact and the company rolls out early, they could actually be making checkout WORSE at scale while believing they improved it, and it might take much longer to notice and reverse that mistake than it costs to wait 11 more days for a trustworthy read; I'd frame it as: the expected cost of waiting (a bounded, known number of days at a known traffic split) is more predictable and recoverable than the expected cost of a wrong full rollout based on an unreliable early signal, which could persist undetected for a long time."
+      },
+      {
+        "q": "Is there a middle-ground option between 'stop now' and 'wait the full 2 weeks,' given the PM's urgency?",
+        "a": "Yes — a reasonable middle ground is to pre-register an earlier 'peek' checkpoint using a proper sequential-testing correction (like an alpha-spending approach) rather than an uncorrected significance check, which allows for statistically valid early stopping if the effect is large and consistent enough to clear a stricter early threshold; alternatively, if the team wants a faster general signal without weakening the primary test, they could look at leading indicators like page-level engagement or drop-off-step changes as a directional read while still letting the primary conversion-rate test run its full, properly-powered course before making the actual rollout decision."
+      }
+    ],
+    "synthesis": "This case tests a candidate's basic experimentation discipline: recognizing that a favorable-looking early result can be driven by an under-powered sample, a non-representative time window, or a novelty effect, and that resisting the pressure to call a test early — even when the number looks good and there's real urgency — is often the correct, if less satisfying, answer; a strong candidate explains WHY each of these specific risks applies here rather than giving a generic 'always wait for statistical significance' response."
+  },
+  {
+    "diff": "med",
+    "industry": "Retail — Customer Segmentation for a Loyalty Program Redesign",
+    "title": "Design a Customer Segmentation Approach for a Retail Loyalty Program Being Redesigned Around Personalized Offers",
+    "prompt": "A retail chain's loyalty program (2.5M enrolled members) currently sends the same generic 10%-off coupon to every member monthly. Leadership wants to redesign it around personalized offers by customer segment. How would you approach building the segmentation, and what should the resulting segments be used for?",
+    "clarify": [
+      {
+        "q": "What data is actually available per loyalty member — just purchase history, or also demographic/behavioral data like store visits, app usage, category browsing?",
+        "a": "Purchase history (transaction-level, going back 2 years: items, categories, spend, timing, channel) is solid and complete. Demographic data is sparse and unreliable (optional signup fields, mostly blank). App/browsing behavior data is not currently integrated with the loyalty system."
+      },
+      {
+        "q": "What's the business's specific goal for personalization — increasing overall spend, increasing visit frequency, reducing churn/lapsing, or something else?",
+        "a": "All matter, but if forced to rank: reducing member lapsing (members who stop shopping with the brand) is the top stated priority, since lapsed-member reactivation is cited as far more expensive than retaining an active member."
+      },
+      {
+        "q": "Is there an existing internal definition of a 'lapsed' or 'at-risk' member, or would that need to be defined as part of this work?",
+        "a": "No formal definition exists yet — that would need to be defined as part of this work, based on the actual purchase-frequency data."
+      }
+    ],
+    "mece": "Given the priority is reducing lapsing and the richest available data is transaction history, I'll structure the segmentation approach around a behavioral (not demographic) framework, specifically: (1) segmentation basis — using RFM (Recency, Frequency, Monetary value), a well-established, purchase-history-only method that doesn't require the sparse demographic data, (2) operationalizing 'at-risk'/'lapsing' — defining recency thresholds empirically from the actual purchase-interval distribution rather than an arbitrary guess, since different customer types naturally have very different normal purchase cadences, (3) mapping segments to distinct offer strategies — since the stated goal is lapsing reduction specifically, the segmentation's primary output should be an actionable 'risk tier' that drives differentiated intervention (not just a static customer typology).\n\nL1 — Segmentation basis: RFM is well-suited here because it uses exactly the reliable data available (transaction history) and is interpretable/actionable for a non-technical marketing team, versus a more complex clustering approach that would need richer, currently-unavailable behavioral data to add real value.\nL1 — Defining 'at-risk': recency thresholds should be set relative to each customer's own typical purchase cadence (e.g., a customer who normally buys weekly and hasn't purchased in 5 weeks is more 'at-risk' than one who normally buys quarterly and hasn't purchased in 5 weeks) rather than one universal days-since-last-purchase cutoff for everyone.\nL1 — Offer-strategy mapping: the RFM segments should translate into a small number of clearly differentiated actions (e.g., win-back offers for at-risk high-value customers, low-cost loyalty reinforcement for stable frequent buyers, no discount needed for already-maximally-engaged customers) rather than producing an academically interesting typology that doesn't change what gets sent to whom.",
+    "hypothesis": "I expect a customer-specific (not universal) recency-based RFM segmentation to be both the most feasible approach given the available data and the most directly useful for the stated lapsing-reduction goal, and I expect the biggest single win to come from correctly identifying 'at-risk-but-historically-high-value' customers specifically — since the current one-size-fits-all 10% coupon almost certainly under-targets this group (giving them the same generic offer as everyone else, right before they lapse) while over-spending discount budget on already-loyal customers who would have purchased anyway.",
+    "data": "2.5M loyalty members with 2 years of transaction history. Illustrative purchase-cadence distribution by historical frequency tier (to be derived from real data, illustrated here): high-frequency members (top 20% by visit count) typically purchase every 8-12 days; mid-frequency (middle 50%) every 25-40 days; low-frequency (bottom 30%) every 60-120 days. Current blanket 10%-off coupon cost: assume ~₹15/member/month in discount cost across all 2.5M members regardless of segment, roughly ₹3.75Cr/month in undifferentiated discount spend.",
+    "calc": "PROPOSED SEGMENT STRUCTURE (RFM-based, with recency thresholds relative to each customer's own historical cadence):\n1. 'Core Loyal' — recent purchase within their own normal cadence window, high frequency, high monetary value: likely 15-20% of members, driving a disproportionate share of revenue — these customers don't need a discount to keep purchasing, so offer budget here should shift toward non-discount loyalty reinforcement (early access, exclusive items) rather than margin-eroding coupons.\n2. 'At-Risk High-Value' — historically high frequency/monetary value, but recency has exceeded 1.5-2x their normal cadence window: likely a small but disproportionately valuable segment (illustratively 5-8% of members) — this is the priority group for an aggressive, personalized win-back offer, since losing them is expensive and a well-timed offer has a real chance of reactivating a high-value relationship.\n3. 'Steady Mid-Value' — the bulk of members with moderate frequency/value and normal recency: the current generic 10% coupon is probably reasonably fit for this large group, so minimal redesign needed here.\n4. 'Low-Value/Low-Engagement' — infrequent, low monetary value, and long recency even relative to their own (already-long) normal cadence: a large segment by headcount but low value per member — a lighter-touch, lower-cost offer (or none at all) is likely more efficient than the same 10% coupon, redirecting saved discount budget toward the At-Risk High-Value segment.\nRedirecting discount budget from segments 1 and 4 toward segment 2 specifically (a shift, not necessarily a net increase in total discount spend) targets the segment where a coupon is most likely to change behavior and most valuable if it does.",
+    "insight": "The core insight is that a single blanket coupon spends discount budget roughly proportionally to headcount rather than to where it can actually change behavior — 'Core Loyal' customers get a discount they didn't need to convert, 'Low-Value/Low-Engagement' customers often don't respond enough to justify the cost, while the 'At-Risk High-Value' segment (the group most aligned with the stated lapsing-reduction goal, and where an offer is most likely to be the deciding factor) may be currently under-served by a generic, non-urgent-feeling 10% coupon that looks identical to what they've always received.",
+    "recommendation": "Build the RFM segmentation using customer-relative recency thresholds (not universal day-cutoffs), and pilot a redesigned offer structure that meaningfully increases discount value and adds urgency/personalization specifically for the At-Risk High-Value segment, while testing reduced or non-discount engagement (e.g., exclusive access rather than % off) for the Core Loyal segment and a lighter-touch offer for the Low-Value/Low-Engagement segment — run this as a controlled test (holdout group per segment) rather than a full rollout, to directly measure whether the redesigned, segment-specific offers actually reduce lapsing and improve overall program ROI versus the current blanket approach.",
+    "risks": [
+      "RFM segmentation using only transaction history will miss customers who are being served by other channels not captured in the loyalty transaction data (e.g., a customer shifting to online orders through a non-loyalty-linked account) — before concluding someone has 'lapsed,' it's worth checking whether cross-channel data linkage is complete, or the at-risk segment could be partly an artifact of incomplete tracking rather than genuine disengagement.",
+      "A more aggressive win-back offer for the At-Risk High-Value segment could train customers to strategically let their engagement lapse specifically to trigger a bigger discount — this incentive-design risk should be monitored over time (watching whether repeat 'lapse-then-reactivate' cycling increases for individual customers) and may require capping how often any one customer can receive the aggressive win-back offer.",
+      "The illustrative segment-size percentages and cadence thresholds in this analysis are estimates for the purpose of structuring the approach — the actual segmentation must be built and validated against the real 2-year transaction dataset, and the thresholds should be checked for reasonable segment sizes and stability before being operationalized into the offer engine."
+    ],
+    "cross": [
+      {
+        "q": "Why RFM specifically, rather than a more sophisticated machine-learning clustering approach that might find segments humans wouldn't think to define manually?",
+        "a": "Given the stated data constraints — reliable transaction history but sparse demographics and no integrated behavioral/app data — a more sophisticated clustering approach wouldn't have meaningfully richer inputs to work with than RFM already captures, so the added complexity is unlikely to justify its cost in interpretability and maintainability; RFM's segments map directly and transparently to actionable business logic ('this customer used to buy often and stopped' is immediately understandable to a marketing team), whereas an ML-clustering output often needs significant translation work to become actionable, and that translation step is exactly where a lot of segmentation projects lose momentum after the initial analysis. I'd revisit a more sophisticated approach once richer behavioral data (app usage, browsing) is actually integrated, since that's when the added complexity would have new information to exploit."
+      },
+      {
+        "q": "How would you actually validate, after launch, whether this new segmented-offer approach is working better than the old blanket coupon — what would 'working' look like specifically?",
+        "a": "I'd design it as a proper controlled test from the start: hold out a control group within each segment that continues receiving the old blanket 10% coupon, and compare, segment by segment, the new personalized offers against that control on the specific outcome that matters most for the stated goal — lapsing rate (what share of At-Risk High-Value members reactivate to a normal purchase cadence within, say, 60 days) — as the primary metric, with total discount cost per reactivated customer and overall program margin as secondary checks, since a segmentation that reduces lapsing but does so at an unsustainable discount cost per customer wouldn't actually be a win for the business even if the headline lapsing metric improved."
+      }
+    ],
+    "synthesis": "This case rewards matching the segmentation method to both the actual available data (not an idealized dataset) and the specific stated business goal, rather than defaulting to the most sophisticated technique available — a well-designed, data-appropriate RFM segmentation that directly ties to an actionable offer strategy and is validated with a proper controlled test is more valuable here than a more complex model that doesn't have better inputs to work with and produces outputs that are harder to act on."
+  },
+  {
+    "diff": "med",
+    "industry": "Consumer App — Analytics Pipeline Anomaly Diagnosis",
+    "title": "Weekly Active Users Spiked 40% Overnight on the Analytics Dashboard — Real Growth or a Pipeline Bug?",
+    "prompt": "A consumer app's analytics dashboard shows weekly active users (WAU) jumping 40% between two consecutive daily dashboard refreshes, with no marketing campaign, press coverage, or app-store feature that would explain a spike of that size. The growth team is excited and wants to understand what's driving it so they can double down. Before that, how would you investigate whether this is real?",
+    "clarify": [
+      {
+        "q": "Did anything change in the data pipeline, event-tracking SDK, or analytics tooling configuration around the same time as the jump?",
+        "a": "There was a mobile app release two days before the jump that included an SDK update to the analytics/event-tracking library, though the release notes don't mention anything analytics-related specifically — it was described as a routine dependency update."
+      },
+      {
+        "q": "Is the 40% jump concentrated on a specific platform (iOS/Android), user segment, or is it spread evenly across the whole user base?",
+        "a": "Good question to dig into — that hasn't been broken down yet, which is part of what needs investigating."
+      },
+      {
+        "q": "Has the definition of 'active user' (the underlying event that counts someone as active) changed recently, or is it the same event definition as before?",
+        "a": "As far as anyone knows it's the same definition — a session-start event — but nobody has explicitly verified this against the new SDK version's behavior."
+      }
+    ],
+    "mece": "Given the timing coincidence with an SDK update and no external growth driver, I'll treat this primarily as a data-integrity investigation before treating it as a growth signal, structured as: (1) platform/segment decomposition — breaking the 40% jump down by platform and segment to see if it's concentrated in a way that would implicate the SDK update specifically (e.g., isolated to the platform/OS that received the update) versus genuinely broad-based, (2) event-definition verification — directly checking whether the 'session-start' event the new SDK version fires behaves identically to the old version (e.g., could it now fire multiple times per real session, inflating counts, or fire in a new circumstance like app backgrounding/foregrounding that didn't count before), (3) corroborating signal check — looking at a metric that should move together with genuine WAU growth (like revenue, session duration, or a specific in-app action) to see if it moved proportionally, which would support a real-growth story, or stayed flat, which would support a measurement-artifact story.\n\nL1 — Platform/segment decomposition: if the jump is concentrated specifically on the platform/OS version that received the SDK update, that's strong circumstantial evidence pointing at the update as the cause rather than genuine organic growth (which would more plausibly be broad-based or tied to a specific acquisition channel).\nL1 — Event-definition verification: directly test the new SDK version's session-start event firing behavior (e.g., install both old and new SDK versions in a controlled test environment and compare event counts for identical user actions) to check for double-firing, a changed session-timeout window, or a new triggering condition.\nL1 — Corroborating signal: revenue, session duration, or a specific core action's volume should move roughly proportionally with a genuine 40% WAU increase — if these stayed flat while WAU jumped, that's a strong signal the WAU metric itself is measuring something different than before, not that real new users appeared.",
+    "hypothesis": "Given the precise timing alignment with an SDK update explicitly touching the event-tracking library, and no external growth driver to explain a jump of this size, I expect this to be a measurement artifact from the SDK update — most likely the new SDK version either fires the session-start event more than once per real session (e.g., once on app foreground from a notification tap in addition to the original cold-start trigger) or uses a different session-timeout definition that counts what used to be one continuous session as multiple separate ones — rather than genuine new user growth.",
+    "data": "WAU before jump: stable around 850,000 for the preceding 6 weeks. WAU after jump: approximately 1,190,000 (the reported 40% increase). Platform breakdown (once pulled): the jump is concentrated almost entirely on the platform that received the SDK update in the release two days prior — the other platform's WAU is essentially flat over the same window. Revenue and core-action-volume metrics (independent of the session-start event): both flat, within normal week-to-week variance, showing no proportional increase matching the WAU jump.",
+    "calc": "The platform-concentration finding alone is highly diagnostic: if this were genuine organic growth (viral spread, a press mention someone forgot to flag, an algorithm-driven app-store visibility boost), there's no obvious mechanism that would make it appear almost exclusively on one platform two days after that platform's specific SDK update — the far more parsimonious explanation is that the update changed session-counting behavior on that platform specifically.\nThe flat revenue and flat core-action-volume are the second, independent confirming signal: real new active users, even at lower initial engagement than existing users, should show up as at least some proportional increase in these metrics — a 40% WAU increase with 0% change in revenue or core actions is a very large divergence that's much more consistent with double-counting existing users' sessions than with a genuine influx of (even low-engagement) new active users.",
+    "insight": "Two independent pieces of evidence — the platform-specific concentration matching the SDK update's rollout, and the complete lack of proportional movement in revenue or core-action volume — both point to the same conclusion: this is very likely a session-counting artifact from the SDK update (most plausibly a double-firing or changed session-timeout definition), not real growth, and celebrating or trying to 'double down' on whatever caused it would be chasing a phantom signal.",
+    "recommendation": "Do not treat this as a growth signal or attempt to identify and amplify a 'cause.' Immediately flag the SDK update as the primary suspect to engineering, and specifically test the new SDK version's session-start event firing behavior in a controlled environment (simulating known user actions like app backgrounding/foregrounding, notification taps, and cold starts) to confirm the exact mechanism. If confirmed, either revert to the prior SDK behavior, patch the double-firing/timeout issue, or, if the new behavior is intentional and considered more accurate, clearly document the discontinuity and do NOT compare pre- and post-update WAU figures directly — establish a new baseline going forward instead.",
+    "risks": [
+      "Even after identifying the SDK update as the likely cause, this analysis hasn't pinpointed the EXACT mechanism (double-firing vs. changed timeout vs. some other behavior change) — that requires direct engineering-level testing of the SDK's event-firing logic, not just the indirect statistical evidence gathered here, before a fix can be correctly scoped.",
+      "The flat revenue/core-action-volume check is a reasonably strong corroborating signal but isn't fully conclusive on its own — it's possible (though less likely given the platform-concentration evidence) that a genuine influx of very low-engagement new users occurred that simply hasn't converted to revenue or core actions yet within the short window observed; the SDK-testing step should be the definitive check, not the indirect metric comparison alone.",
+      "If this SDK issue has been silently inflating (or will inflate) other downstream metrics that depend on session counts (e.g., session-based cohort/retention calculations, per-session engagement rates), those should also be audited for the same period — an event-tracking bug of this kind rarely affects only the one metric where it was first noticed."
+    ],
+    "cross": [
+      {
+        "q": "The growth team is excited and already planning a 'what's working' retrospective meeting to identify and scale whatever drove this — how would you approach that conversation given your diagnosis?",
+        "a": "I'd ask to present findings before that meeting happens, or as the first agenda item, specifically because the excitement is understandable but premature — I'd walk through the platform-concentration and flat-revenue evidence directly (both are intuitive, not overly technical, so a growth team can follow the logic quickly), and reframe the conversation from 'what caused this growth, let's scale it' to 'let's confirm with engineering whether this is a measurement bug, and if so, treat it as a data-quality fix, not a growth win' — I'd want to prevent the team from spending a retrospective's worth of time and energy building a growth narrative around what's very likely a false signal."
+      },
+      {
+        "q": "Suppose engineering confirms the SDK now double-counts sessions specifically when a user backgrounds and re-foregrounds the app within a short window (a legitimate behavior change, not a bug, that they made deliberately to better capture 're-engagement' sessions) — how does that change your recommendation?",
+        "a": "That reframes it from 'bug to fix' to 'legitimate metric-definition change that needs to be communicated and re-baselined' — the recommendation would shift to: don't revert the SDK behavior if the team believes the new definition is actually more meaningful, but absolutely do NOT let the pre/post comparison stand as if it represents real growth; clearly document the date and nature of the definitional change, communicate it to any team or dashboard consumer who might otherwise misread the discontinuity as growth, and establish the post-change WAU level as the new baseline for future week-over-week comparisons, exactly as I'd recommend for a genuine bug — the difference is more about internal documentation and whether to revert, not about whether the pre/post comparison is valid, which it isn't in either case."
+      }
+    ],
+    "synthesis": "This case is a strong example of a broader analytics discipline: an unexplained, large, sudden metric shift with a suspicious timing coincidence should trigger a data-integrity investigation before a business-narrative investigation — decomposing the anomaly by segment/platform and checking whether independent, related metrics moved proportionally are two fast, powerful diagnostic techniques that can distinguish a real signal from a pipeline artifact well before any deep-dive into 'what caused the growth' would even be warranted."
+  },
+  {
+    "diff": "med",
+    "industry": "EdTech — Cohort Retention Curve Divergence",
+    "title": "Monthly Cohort Retention Curves Show Sharply Worse Retention for Recent Signup Cohorts — Diagnose the Driver",
+    "prompt": "An EdTech subscription platform tracks user retention by monthly signup cohort. The last 3 months' cohorts show meaningfully worse 30-day retention (curve drops off much faster) than every cohort from the prior 12 months, which had been fairly stable. The team needs a diagnosis before deciding what to fix.",
+    "clarify": [
+      {
+        "q": "Did the acquisition mix change around the time the worse cohorts started signing up — a new marketing channel, a promotional pricing change, a different lead source?",
+        "a": "Yes — 3 months ago the company launched a new paid social acquisition channel (previously acquisition was almost entirely organic/referral) and it now accounts for roughly 35% of new signups in the affected cohorts."
+      },
+      {
+        "q": "Is the retention drop uniform across the affected cohorts' users, or is it concentrated in users from the new acquisition channel specifically?",
+        "a": "That's exactly the breakdown that hasn't been done yet — retention has only been looked at cohort-wide, not segmented by acquisition source within each cohort."
+      },
+      {
+        "q": "Did anything about the onboarding experience or initial product content change around the same time, separate from the acquisition channel change?",
+        "a": "No significant product or onboarding changes in that window — the acquisition channel launch is the most notable change."
+      }
+    ],
+    "mece": "Since a major acquisition-mix change coincides precisely with the retention decline, I'll frame this as a composition-effect investigation before assuming a product-quality problem, structured as: (1) segment the affected cohorts by acquisition source — comparing new-paid-social-channel users' retention against organic/referral users' retention within the SAME recent cohorts, which directly tests whether the decline is concentrated in the new channel, (2) check whether even organic/referral users within the recent cohorts show any decline (which would implicate something broader like a product change, ruled out somewhat by the clarifying answer but still worth confirming), (3) if the decline is channel-concentrated, understand WHY the new channel's users retain worse — likely a mismatch between what paid social ads promise/attract and what the actual product delivers, versus organic/referral users who tend to arrive with more accurate expectations and often warmer intent.\n\nL1 — Channel-segmented retention comparison: split each of the last 3 cohorts into 'new paid social channel' vs. 'organic/referral' sub-groups and compare 30-day retention curves for each sub-group against the historical baseline cohorts (which were almost entirely organic/referral) — this directly tests the composition-effect hypothesis.\nL1 — Organic/referral-only check within recent cohorts: if organic/referral users within the recent cohorts retain similarly to historical cohorts, that strongly confirms the decline is a composition effect (a new, lower-retaining channel diluting the blended average) rather than a broader product or market issue; if organic/referral retention has ALSO declined, that would point to something else changing independent of the channel mix.\nL1 — Root cause within the new channel (if confirmed): investigate whether paid social ad creative/targeting is attracting users with a expectation-product mismatch (e.g., ads emphasizing a feature or use case the core product doesn't fully deliver, or targeting a demographic/intent-level poorly matched to the platform), which is a common and fixable driver of new-channel retention gaps.",
+    "hypothesis": "Given the precise timing alignment with the new paid social channel launch and no other product/onboarding changes, I expect this to be a composition effect — the new channel is very likely bringing in users who retain meaningfully worse than the historical organic/referral base, dragging down the blended cohort-level average — rather than a decline affecting the whole user base or a product-quality regression, and I'd expect organic/referral users within the same recent cohorts to show retention roughly in line with the historical baseline.",
+    "data": "Historical (prior 12 months) 30-day retention: stable around 42%, almost entirely organic/referral acquisition. Last 3 cohorts blended 30-day retention: dropped to approximately 31%. Once segmented (illustrative, to be confirmed with real data): organic/referral users within the last 3 cohorts retain at approximately 41% — essentially matching the historical baseline — while new paid-social-channel users within the same cohorts retain at only approximately 16%. Paid social channel accounts for ~35% of these cohorts' signups.",
+    "calc": "Reconciling the blended rate: 0.65 (organic/referral share) × 41% + 0.35 (paid social share) × 16% = 26.65% + 5.6% = 32.25% — closely matching the observed blended 31% figure (small gap attributable to rounding/illustrative-data imprecision), which confirms the composition-effect hypothesis mathematically: the historical-baseline-matching organic/referral retention combined with the new channel's much weaker 16% retention, weighted by their actual share of the cohort, reproduces almost exactly the overall decline that triggered the investigation.",
+    "insight": "This is a clean, mathematically confirmed composition effect, not a broad retention problem — the platform's core product experience for its traditional (organic/referral) user base hasn't gotten worse at all, but the new paid social channel is bringing in a large volume of users (35% of recent cohorts) who churn at nearly 3x the rate of the historical base, which mechanically drags the blended average down by exactly the amount observed; treating this as a general 'onboarding is failing users' problem and redesigning onboarding for everyone would misdiagnose a channel-specific quality/fit issue as a universal product issue.",
+    "recommendation": "Do not make broad onboarding or product changes based on the blended retention decline. Instead, treat the new paid social channel's poor retention as a distinct, specific problem: audit its ad creative, targeting, and landing-page messaging for expectation-product mismatch (what promise is attracting clicks that the actual product doesn't deliver on), and consider testing tighter targeting criteria or a channel-specific onboarding flow that addresses whatever gap is causing the 16% retention specifically, rather than diluting the fix across the whole user base. Continue tracking retention split by acquisition source going forward as a standard reporting dimension, not just blended cohort retention, so composition effects like this are caught immediately rather than discovered only after a multi-month trend emerges.",
+    "risks": [
+      "The illustrative 41%/16% segmented figures need to be confirmed with the platform's actual data before any conclusions are finalized — the reconciliation math is a useful sanity check on the hypothesis, but the real analysis must be run on real segmented retention data, not the illustrative numbers used here to demonstrate the approach.",
+      "Even if the new channel's poor retention explains the blended decline mathematically, this doesn't yet explain WHY the new channel retains poorly — that requires a separate, more qualitative investigation (ad creative audit, possibly user interviews or exit surveys with churned paid-social users) before a specific fix can be designed; the composition-effect diagnosis is necessary but not sufficient to solve the underlying problem.",
+      "If the paid social channel is still net-positive on a pure customer-acquisition-cost/lifetime-value basis despite the lower retention rate (e.g., it's a high-volume, low-cost channel where even a smaller retained fraction is still profitable), the 'fix' might reasonably be 'accept this channel's economics as-is' rather than investing in retention improvements specifically for it — that judgment requires a full CAC/LTV comparison, not retention data alone."
+    ],
+    "cross": [
+      {
+        "q": "The growth team championed this new paid social channel and reported strong signup-volume numbers when it launched — how would you present this retention finding without it landing as 'the new channel was a mistake' and creating unnecessary defensiveness?",
+        "a": "I'd lead with the reconciliation math showing the blended decline is fully explained by a real, measurable retention gap in the new channel specifically — framing it as a diagnosis of WHERE to focus optimization effort, not a verdict on whether launching the channel was right; a new channel launching with a retention gap that then gets diagnosed and fixed with targeting/creative improvements is a normal, expected part of scaling acquisition, not a failure — I'd present the specific, actionable next step (audit creative/targeting for expectation-mismatch) alongside the finding so the conversation moves toward 'here's how we improve this channel's economics' rather than dwelling on whether launching it was a mistake."
+      },
+      {
+        "q": "Suppose the ad-creative audit finds the paid social ads are accurately representing the product with no obvious mismatch — what would you investigate next?",
+        "a": "I'd look at targeting and audience-intent level next, since accurate creative doesn't rule out reaching the wrong audience — paid social platforms often let advertisers target broad interest categories that produce lower-intent clicks than organic search or referral (where someone actively sought the product or was personally recommended it), so even honest, accurate ads can attract users who were never strongly motivated to begin with; I'd also check the specific ad placements/formats (e.g., video views converting to signups at lower intent than a clicked search ad) and consider testing narrower, higher-intent targeting criteria even if it reduces raw signup volume, since the goal should be retained users, not just signups, and a smaller volume of better-fit signups could be a better trade for this channel."
+      }
+    ],
+    "synthesis": "This case demonstrates the power of decomposing a blended trend by a plausible compositional driver (acquisition source, in this case) before assuming a metric decline reflects a uniform, platform-wide problem — the reconciliation math (weighted average of segment rates closely matching the observed blended rate) is a simple, powerful way to both confirm a composition-effect hypothesis and quantify exactly how much of the decline each segment explains, turning a vague 'retention got worse' signal into a precise, targeted, and much more solvable problem."
+  },
+  {
+    "diff": "hard",
+    "industry": "D2C E-Commerce — Marketing Attribution Methodology Overhaul",
+    "title": "Should a D2C E-Commerce Company Move From Last-Click to Multi-Touch Attribution?",
+    "prompt": "A D2C e-commerce company currently uses last-click attribution to evaluate all marketing channels and allocate budget. As the company has added more channels (paid social, influencer, affiliate, email, paid search, organic), leadership suspects last-click is giving a distorted picture and is considering investing in a multi-touch attribution (MTA) model. Should they make this investment, and what should they watch out for?",
+    "clarify": [
+      {
+        "q": "How many touchpoints does a typical converting customer journey have today, based on whatever tracking currently exists?",
+        "a": "Rough estimate from available session data: the median converting customer has 3-4 tracked touchpoints across channels before purchase, and a meaningful tail of customers has 6+ touchpoints, especially for higher-consideration/higher-price product lines."
+      },
+      {
+        "q": "What's driving the suspicion that last-click is distorted — any specific symptom, or a general sense that it must be wrong given the growing channel mix?",
+        "a": "A specific symptom: influencer marketing spend has grown significantly, but it almost never shows up as a meaningful revenue driver in the last-click dashboard, even though the marketing team has strong qualitative signals (customers mentioning specific influencers in support tickets and reviews) that it's driving real interest."
+      },
+      {
+        "q": "What's the rough budget and timeline being considered for building or buying an MTA capability?",
+        "a": "Two options on the table: buying a third-party MTA platform (moderate ongoing subscription cost, faster to implement) or building a custom in-house model using existing data infrastructure (higher upfront engineering cost, more control and customization, slower to implement)."
+      }
+    ],
+    "mece": "I'll evaluate this as a measurement-investment decision, structured across: (1) diagnosing whether the specific symptom (influencer's apparent last-click invisibility) is consistent with last-click's known structural bias, which would validate the underlying problem before investing in a fix, (2) MTA's own real limitations — since multi-touch attribution models, despite being more sophisticated than last-click, still rely on assumptions (which touches get how much credit) that can introduce their own biases and false precision, meaning 'better than last-click' doesn't automatically mean 'accurate', (3) build-vs-buy considerations for the MTA capability itself, and (4) whether a full MTA overhaul is even the right-sized solution, versus simpler, lower-investment fixes (like incrementality testing for specific channels) that could address the diagnosed problem more directly.\n\nL1 — Symptom diagnosis: influencer marketing is a textbook upper-funnel, awareness/consideration-driving channel — it's structurally very unlikely to be the LAST touch before a purchase (a customer who sees an influencer post rarely clicks through and buys in that same session; more often they search or navigate directly later), so its near-invisibility in last-click data is exactly what last-click's known bias would predict, which is a strong sign the underlying suspicion is correct.\nL1 — MTA's own limitations: rule-based MTA models (linear, time-decay, U-shaped) assign credit based on a chosen formula, not a causally validated measurement of actual influence — even 'data-driven' MTA (using algorithmic credit allocation) is still fundamentally correlational, and channels can still be over- or under-credited based on model assumptions, meaning MTA is a real improvement over last-click but not a source of ground truth.\nL1 — Build vs. buy: a third-party platform is faster and lower upfront engineering cost but adds ongoing subscription cost, less customization, and dependency on a vendor's black-box methodology; an in-house build offers more control and transparency but requires real engineering investment and data science expertise to do well, with real risk of doing it poorly if under-resourced.\nL1 — Right-sized solution: a full MTA overhaul is a significant investment — it's worth explicitly considering whether a lighter-weight, faster fix (like a targeted incrementality test specifically for influencer spend) would resolve the most pressing diagnosed problem at a fraction of the cost and time, reserving a full MTA build for later if the org's channel complexity continues to grow.",
+    "hypothesis": "I expect the underlying suspicion about last-click distortion to be well-founded, specifically for influencer (a classic upper-funnel channel that last-click structurally undervalues) — but I'm skeptical that a full MTA platform investment is the right first move; I'd expect a more targeted, faster, and cheaper incrementality test specifically on influencer spend to answer the immediate question (is influencer actually driving real, incremental revenue) more reliably than a rule-based or algorithmic MTA model would, while a full MTA investment could be justified later once the org has more channels and a more complex journey structure that specifically requires ongoing, granular multi-touch credit allocation rather than periodic incrementality checks on individual channels.",
+    "data": "Current last-click influencer-attributed revenue: near-negligible (e.g., <2% of total attributed revenue) despite influencer spend being a meaningful and growing share of total marketing budget (illustratively, 12% of budget). Median converting journey: 3-4 touchpoints, with a meaningful tail at 6+ — enough complexity that last-click is very likely materially wrong for a meaningful share of conversions, though not so extreme (e.g., dozens of touchpoints per journey, common in B2B) that a full enterprise MTA build is obviously necessary versus a lighter-weight approach. MTA platform cost estimate (buy option): moderate ongoing subscription, likely payable back quickly if it correctly redirects even a modest share of the 12% influencer budget away from underperforming placements toward better ones, IF the model's credit allocation is trustworthy. In-house build estimate: meaningfully larger upfront cost and multi-month timeline, requiring data science resourcing the company may or may not currently have.",
+    "calc": "INCREMENTALITY TEST AS THE FASTER, CHEAPER ALTERNATIVE:\nA geo-holdout or influencer-pause incrementality test (pausing influencer spend in a subset of markets or for a defined period, then comparing revenue in test vs. control markets/periods) directly answers 'is influencer driving real incremental revenue' without needing to build any attribution model at all — this could be run in weeks at near-zero incremental cost (beyond the temporary opportunity cost of reduced influencer activity in the test group), versus months and real budget for an MTA build or purchase.\nIf the incrementality test confirms influencer IS driving meaningful incremental revenue (consistent with the qualitative support-ticket/review signal), that validates redirecting budget toward it without needing precise multi-touch credit allocation — a blunter 'increase influencer budget, monitor overall revenue' approach, informed by the incrementality read, may be sufficient.\nIf the org's channel mix and journey complexity continue growing (more channels, longer journeys, need for ongoing per-channel budget optimization rather than periodic one-off tests), THAT is the point at which a full MTA investment's ongoing, granular credit-allocation capability becomes worth its cost — the case for MTA scales with journey complexity and the need for continuous (not periodic) optimization, not with the presence of a single specific measurement question.",
+    "insight": "The org's actual question right now — 'is influencer marketing working, despite last-click hiding it' — has a faster, cheaper, and arguably MORE reliable answer than a full MTA investment would provide: a direct incrementality test, since incrementality testing measures actual causal impact rather than a model's assumption-based credit allocation. A full MTA platform is a reasonable future investment as channel complexity grows and the organization needs continuous, granular optimization across many channels simultaneously, but it's not the right-sized first response to the specific, bounded problem currently being diagnosed.",
+    "recommendation": "Do not commit to a full MTA build or purchase yet. First, run a targeted incrementality test on influencer spend specifically (the channel driving the current suspicion) to get a fast, causally credible read on its real value — use this to make near-term budget decisions. In parallel, evaluate journey complexity trends (touchpoint counts, channel count growth) over the next 2-3 quarters; if that complexity continues increasing to a point where periodic incrementality tests per-channel become impractical to keep up with, revisit the MTA build-vs-buy decision then, informed by more data on the org's actual channel-complexity trajectory and a track record of what incrementality testing has already revealed about which channels most need ongoing, granular measurement.",
+    "risks": [
+      "An incrementality test only answers the question for the specific channel and time period tested — it doesn't provide the ongoing, real-time per-channel budget-allocation input that a marketing team might want for day-to-day decisions across many channels simultaneously, which is a genuine limitation relative to what an MTA platform would eventually provide.",
+      "If leadership has already built organizational momentum and expectation around 'we need an MTA platform,' recommending a cheaper, more targeted alternative first could be perceived as under-delivering on what was asked — this should be framed explicitly as a sequencing recommendation (validate the specific problem fast and cheaply first, THEN make a better-informed MTA investment decision) rather than a rejection of the idea, to manage that expectation.",
+      "The incrementality test itself carries some risk (temporarily reduced influencer activity in the test group, meaning some real revenue may be foregone during the test window) — this should be scoped carefully with a clear stop-loss and the smallest test that can still produce a statistically credible read, not an unnecessarily large or long test."
+    ],
+    "cross": [
+      {
+        "q": "Isn't there a risk that by the time you run the incrementality test, gather results, and THEN decide whether to build MTA, you've lost months versus just committing to the MTA investment now?",
+        "a": "I'd push back on the framing that these are sequential in a way that wastes time — the incrementality test can run in parallel with an initial MTA vendor evaluation/build-vs-buy scoping process (which itself takes time regardless), so the org isn't necessarily choosing between 'fast test now' and 'MTA later' as mutually exclusive paths on a single timeline; more importantly, an MTA investment made without first validating the specific, cheaper-to-test hypothesis risks building an expensive, ongoing measurement system that still might get influencer credit-allocation wrong (since MTA models are assumption-based, not causally validated) — running the fast, causally credible test first actually De-risks whatever MTA decision comes next, whether that's build, buy, or 'not yet needed.'"
+      },
+      {
+        "q": "If the incrementality test shows influencer marketing has close to ZERO incremental effect — contradicting the qualitative support-ticket/review signal the marketing team has been citing — how would you reconcile that and what would you recommend?",
+        "a": "I'd take that result seriously rather than assuming the test must be flawed just because it contradicts a preferred narrative — qualitative signals like support-ticket mentions are genuinely useful for understanding awareness and sentiment, but they don't measure incrementality (a customer might mention an influencer they saw AND would have purchased anyway through organic search or direct navigation, meaning the mention reflects awareness, not causation); if the test is well-designed and shows near-zero incrementality, I'd recommend a substantial reduction in influencer spend, redirected toward channels with confirmed incremental value, while being transparent with the marketing team about the distinction between 'influencer marketing built brand awareness that shows up in surveys and mentions' (which may still have some value, just not necessarily justifying its current spend level as a direct revenue driver) and 'influencer marketing directly drives incremental purchases' (what the test specifically measured and didn't find)."
+      }
+    ],
+    "synthesis": "This case tests whether a candidate can resist the pull toward the most sophisticated-sounding solution (a full MTA platform) when a more targeted, faster, and arguably more causally rigorous alternative (a direct incrementality test) can answer the organization's actual, specific question more efficiently — the discipline of matching the size and type of measurement investment to the size and specificity of the actual decision being informed, rather than defaulting to 'more sophisticated attribution model' as the answer to any attribution-related suspicion, is the core signal being tested."
+  },
+  {
+    "diff": "hard",
+    "industry": "Consumer Goods — Sales Forecasting Model Accuracy Degradation",
+    "title": "A Demand Forecasting Model's Accuracy Has Degraded Sharply Over the Past 2 Quarters — Diagnose and Recommend a Fix",
+    "prompt": "A consumer goods company's SKU-level demand forecasting model, which had run reliably for 3 years with a mean absolute percentage error (MAPE) around 12%, has degraded to a MAPE of nearly 28% over the past 2 quarters, causing significant inventory and stockout problems. The data science team needs to diagnose the cause and recommend a fix before the next planning cycle.",
+    "clarify": [
+      {
+        "q": "Has the model's accuracy degraded uniformly across all SKUs and regions, or is it concentrated in specific product categories or markets?",
+        "a": "It's concentrated — roughly 70% of the accuracy degradation is coming from a subset of SKUs in one product category that launched a major reformulation and repackaging 3 quarters ago; other categories show more modest degradation."
+      },
+      {
+        "q": "Was the forecasting model retrained or updated recently, or is it the same model/parameters that had been running reliably for 3 years?",
+        "a": "Same underlying model and parameters — it hasn't been retrained or materially changed; it's been running on the same time-series/feature-based approach throughout."
+      },
+      {
+        "q": "What forecasting approach does the model use — is it primarily based on historical sales patterns (time-series), or does it also incorporate external features like promotions, pricing, seasonality drivers?",
+        "a": "Primarily a time-series approach using historical sales patterns (trend, seasonality, recent momentum) with some basic promotional-calendar features, but it does NOT incorporate any signal about product formulation/packaging changes — those aren't in its feature set at all."
+      }
+    ],
+    "mece": "Given the degradation is concentrated in a category that underwent a major reformulation/repackaging and the model has no feature representing that kind of change, I'll frame this as a regime-change / structural-break diagnosis, structured as: (1) mechanism — why a reformulation/repackaging specifically breaks a time-series-based forecasting approach, since such models fundamentally assume the historical pattern (trend, seasonality, autocorrelation structure) continues to hold, which a major product change directly violates, (2) magnitude reconciliation — checking whether the affected category's outsized contribution to the overall MAPE degradation (70% of the degradation from this one category) is proportionate to that category's typical size in the SKU portfolio, which would confirm this specific driver explains most of the problem rather than being a coincidental correlation, (3) fix design — since the root cause is a known, identifiable structural break rather than a general model-quality decay, the fix should be targeted (handling reformulated/new-launch SKUs differently) rather than a full model rebuild.\n\nL1 — Mechanism: time-series forecasting models are built on the assumption that a SKU's own history is a reliable guide to its near-future demand; a reformulation/repackaging effectively creates a 'new product' in terms of the demand-generating process (different consumer perception, potentially different price point or shelf placement, a transition period where existing loyal customers might buy less while trial/new customers ramp up) — the historical sales pattern the model is trained on for these SKUs is no longer representative of the current demand regime, a classic structural-break problem in forecasting.\nL1 — Magnitude reconciliation: check whether the reformulated category's typical share of total SKU volume/count is roughly consistent with it explaining 70% of the MAPE degradation, or whether it's disproportionately large — if the category is a large share of the portfolio, its degradation naturally dominates the aggregate MAPE; if it's a small share explaining a disproportionately large share of degradation, that's an even stronger, more concentrated signal pointing at this specific driver.\nL1 — Fix design: since this isn't a general model-quality problem (the model was reliable for 3 years and other categories show only modest degradation), the fix should specifically address how the model handles SKUs that have undergone a major, known structural change — not necessarily require rebuilding or retraining the entire model on a different overall approach.",
+    "hypothesis": "I expect the reformulation/repackaging event to be the primary driver of the accuracy degradation, given the tight correlation between the affected category and the timing of the relaunch, and the mechanistic reason why a pure historical-pattern-based model would struggle with exactly this kind of event — I'd expect a targeted fix (treating reformulated SKUs similarly to new-product launches, with a different, faster-adapting forecasting approach for a transition period) to resolve most of the degradation without requiring a full model overhaul.",
+    "data": "Overall model MAPE: 12% (3-year baseline) → 28% (last 2 quarters). Reformulated category: represents approximately 18% of total SKU count/volume in the portfolio (a meaningful but clearly minority share) yet accounts for approximately 70% of the total MAPE degradation — a substantial over-representation relative to its portfolio share, strongly implicating it as the concentrated driver rather than a proportionate contributor to a broadly-distributed problem. Non-reformulated categories: MAPE moved from roughly 12% to roughly 15% over the same period — a real but much more modest degradation, plausibly within a normal range of quarter-to-quarter model drift or minor macro/market shifts unrelated to the reformulation event.",
+    "calc": "Decomposing the blended MAPE degradation: if the reformulated category (18% of portfolio) is driving 70% of the degradation while non-reformulated categories (82% of portfolio) are driving only 30% of it, the reformulated category's per-SKU degradation contribution is roughly (70/18) ÷ (30/82) ≈ 3.89 ÷ 0.366 ≈ 10.6x more concentrated than its portfolio share would predict under a uniform-degradation assumption — an overwhelming concentration that makes a coincidental, unrelated explanation very unlikely.\nEstimating the fix's potential impact: if the reformulated category's forecasting could be brought back down toward something closer to the 12-15% range achieved by non-reformulated categories (via a transition-period approach that doesn't rely purely on now-irrelevant pre-reformulation history), the improvement in that category alone, weighted by its 18% portfolio share, would pull the blended MAPE down substantially — very plausibly back into a range close to the 15% seen in non-reformulated categories, which itself may still warrant modest further investigation but represents the bulk of the recoverable accuracy.",
+    "insight": "The magnitude of concentration (a category with less than a fifth of portfolio volume driving over two-thirds of the accuracy degradation) is far too large to be coincidental, and the mechanistic story (a time-series model can't accurately forecast a SKU whose underlying demand-generating process has fundamentally changed) is well understood in forecasting practice — this is a textbook structural-break problem with an identifiable, targeted fix, not evidence that the overall forecasting approach or model has become unreliable and needs wholesale replacement.",
+    "recommendation": "Implement a targeted fix specifically for the reformulated category's SKUs: treat them similarly to new-product launches for a defined transition period (e.g., using analog/comparable-product forecasting methods, a shorter and more heavily-weighted recent-data window, or blending in early post-launch actuals faster than the standard model would) rather than relying on their now largely-irrelevant pre-reformulation sales history, and plan to transition them back to the standard time-series approach once enough post-relaunch history has accumulated to be a reliable basis again (typically several months to a year, depending on category purchase-cycle length). Separately, investigate the smaller but real degradation in non-reformulated categories (12% → 15%) to check whether it reflects a distinct, smaller issue (e.g., a modest macro/promotional-calendar shift) worth a lighter-weight fix, but don't let this secondary issue block implementing the higher-priority, well-diagnosed fix for the reformulated category first.",
+    "risks": [
+      "The 10.6x concentration estimate and the specific 'transition period' fix design are based on the diagnosed pattern, but the actual choice of transition-period forecasting method (analog-product matching, accelerated data-weighting, etc.) needs its own validation — different transition approaches have different accuracy trade-offs, and the best one should be tested against holdout data from the reformulated SKUs before being fully deployed for the next planning cycle.",
+      "This diagnosis assumes the reformulation/repackaging is the dominant driver, but hasn't ruled out a secondary contributing factor specific to that category (e.g., a supply-chain disruption or a major competitor's simultaneous launch in the same category) that could be compounding the reformulation's effect — worth a quick category-specific check before finalizing the fix design, so the transition-period approach accounts for the full picture, not just the reformulation event alone.",
+      "The non-reformulated categories' more modest 12% → 15% MAPE increase, while smaller, still represents real inventory/planning risk if left uninvestigated — treating it as lower priority is reasonable given the current urgency, but it shouldn't be permanently deprioritized once the higher-priority fix is implemented, since a slow, distinct model-drift issue compounding over further quarters could itself become a large problem if ignored indefinitely."
+    ],
+    "cross": [
+      {
+        "q": "Given the urgency (inventory and stockout problems right now), why not just rebuild the whole forecasting model with a more modern approach that might be more robust to this kind of change generally, rather than a targeted fix for one category?",
+        "a": "A full model rebuild is a much larger, slower undertaking with its own real risk — a new approach would need to be validated across the ENTIRE SKU portfolio, including the 82% of categories where the current model has run reliably for 3 years, and there's a real risk of introducing new problems elsewhere while fixing a well-diagnosed, narrower issue; given the urgency stated (stockouts happening now, next planning cycle approaching), a targeted fix for the specific, precisely-diagnosed driver is both faster to implement and lower-risk to the parts of the model that are already working well — I'd treat 'should we modernize the overall forecasting approach' as a separate, lower-urgency strategic conversation to have once the immediate fire is addressed, not something to conflate with fixing this specific, well-understood problem."
+      },
+      {
+        "q": "How would you validate, before the next planning cycle, that your targeted fix for the reformulated category is actually working, given there's limited post-relaunch history to test against?",
+        "a": "I'd use a rolling-origin backtest on whatever post-relaunch data does exist (even a few months), comparing the standard model's forecasts against the proposed transition-period method's forecasts for those known periods, to see which more closely tracked actual post-relaunch demand — even with limited data, a clear directional improvement in the transition method's accuracy over the standard model's would be a reasonable basis for deploying it going into the next cycle; I'd also recommend closely monitoring forecast-vs-actual error specifically for these SKUs in the first cycle after deployment (rather than waiting for the next full quarterly review) so any remaining inaccuracy can be caught and corrected quickly, given how costly the current stockout situation has already been."
+      }
+    ],
+    "synthesis": "This case rewards recognizing a structural-break pattern — a large, identifiable business event (reformulation/repackaging) that mechanistically explains why a historically reliable time-series model would suddenly fail for exactly the affected SKUs — and resisting the urge to over-generalize a narrow, well-understood problem into a justification for a much larger, slower, and riskier full model rebuild; decomposing the aggregate metric degradation by category and checking whether the concentration is proportionate to portfolio share is the key analytical move that turns a scary aggregate number into a precise, solvable problem."
+  },
+  {
+    "diff": "hard",
+    "industry": "Enterprise SaaS — Conflicting Revenue Reporting Between Departments",
+    "title": "Finance and Sales Reported Different Revenue Numbers for the Same Quarter — Reconcile the Discrepancy and Recommend a Single Source of Truth",
+    "prompt": "An enterprise SaaS company's Finance team reported Q3 revenue of $18.2M in the board deck, while the Sales team's internal dashboard shows $21.4M in 'closed-won' bookings for the same quarter — an 18% discrepancy that's causing confusion and eroding trust in the numbers going into Q4 planning. You've been asked to reconcile the two figures and recommend how the company should avoid this in the future.",
+    "clarify": [
+      {
+        "q": "Are Finance and Sales actually measuring the same underlying concept — is Finance's $18.2M revenue-recognized-in-Q3 (accrual accounting) versus Sales' $21.4M bookings/contract-value-signed-in-Q3, which are fundamentally different concepts in a subscription business?",
+        "a": "That's worth checking directly, but as background: this is a SaaS business with mostly annual contracts, and Finance does use standard revenue recognition (recognizing subscription revenue ratably over the contract term, not upfront at signing), while Sales dashboards are commonly built around bookings/TCV (total contract value) at time of signing, which is a different measurement philosophy — but nobody has walked through whether that difference alone accounts for the full $3.2M gap."
+      },
+      {
+        "q": "Does the Sales 'closed-won' figure include any deals that might not actually be fully executed contracts yet — e.g., verbally agreed but not yet signed, or signed but with unusual terms not yet processed by Finance?",
+        "a": "Possibly — Sales sometimes marks a deal 'closed-won' in the CRM once verbal agreement is reached, even if final paperwork/signature is still in progress, which can trail by days to a few weeks."
+      },
+      {
+        "q": "Is there a single shared data source (like the CRM or a data warehouse) that both teams pull from, or does each team maintain separate systems/spreadsheets?",
+        "a": "Separate systems — Sales works primarily from the CRM (Salesforce), while Finance's revenue figure comes from the billing/ERP system after their own revenue-recognition processing; there's no fully automated, single reconciled pipeline between the two today."
+      }
+    ],
+    "mece": "I'll treat this as a metric-definition reconciliation problem first, then a systems/process problem, structured as: (1) definitional gap — quantifying how much of the discrepancy is explained by the fundamental difference between bookings/TCV (Sales' measurement) and ratably-recognized revenue (Finance's measurement) for a subscription business, which is often the single largest driver of this kind of gap and is not itself an error, just two different valid concepts, (2) timing/process gap — quantifying how much is explained by deals marked 'closed-won' in the CRM before final contract execution, which IS a legitimate process gap (not just definitional) since Finance is right not to recognize revenue on unexecuted contracts, (3) genuine data-quality/reconciliation gap — whatever remains after accounting for (1) and (2) that can't be explained by legitimate definitional or timing differences, which would represent an actual data-quality or process issue needing a fix.\n\nL1 — Definitional gap (bookings vs. recognized revenue): for annual contracts, if a deal signed mid-Q3 has its full TCV counted by Sales in Q3 but Finance only recognizes roughly one quarter's worth of that value (since it's recognized ratably over 12 months), a single large new deal alone could create a substantial gap between the two figures — this needs to be quantified specifically, not assumed.\nL1 — Timing/process gap ('closed-won' before execution): quantify how much CRM-marked 'closed-won' value from Q3 was still pending final signature/processing and hadn't reached Finance's system as an executed, billable contract by quarter-close — this is a legitimate reason for Finance to exclude it (premature to recognize revenue on an unexecuted deal), but it's also a process-clarity issue if Sales' dashboards don't distinguish 'closed-won, pending paperwork' from 'closed-won, fully executed.'\nL1 — Residual/data-quality gap: after accounting for (1) and (2), any remaining discrepancy needs direct investigation — could include genuine data-entry errors, deals miscategorized, or a systems-integration gap between CRM and ERP that's dropping or duplicating records.",
+    "hypothesis": "Given this is a SaaS business on annual contracts with two separate, unintegrated systems, I expect the majority of the $3.2M gap to be explained by the definitional difference (bookings/TCV vs. ratably-recognized revenue) combined with the 'closed-won before execution' timing gap, with a smaller residual genuinely attributable to data-quality/process issues — but the exact split needs to be quantified deal-by-deal, not assumed, since the specific recommendation (mostly a communication/labeling fix vs. mostly a systems-integration fix) depends heavily on where the gap actually concentrates.",
+    "data": "Total discrepancy: $3.2M ($21.4M Sales bookings − $18.2M Finance recognized revenue). Illustrative deal-level reconciliation (to be built from real data): of the $21.4M in Q3 CRM 'closed-won' bookings, assume $2.1M represents the full annual TCV of new deals signed mid-to-late Q3, where only a partial-quarter's worth (~$0.4M) would be recognized as Q3 revenue under ratable recognition — a $1.7M definitional gap from this alone. Separately, assume $0.9M in CRM 'closed-won' value was still pending final signature/processing at quarter-close and hadn't reached Finance's billing/ERP system as an executed contract — a legitimate timing exclusion, not yet revenue. That leaves an unexplained residual of approximately $3.2M − $1.7M − $0.9M = $0.6M that needs direct, deal-by-deal investigation as a genuine data-quality or process gap.",
+    "calc": "Reconciliation summary: $1.7M (53% of the gap) — definitional difference (bookings/TCV vs. ratable revenue recognition), a valid measurement-philosophy difference, not an error. $0.9M (28% of the gap) — legitimate timing exclusion (deals not yet fully executed), a valid Finance-side exclusion given no signed, billable contract yet exists. $0.6M (19% of the gap) — genuine residual requiring deal-level investigation; this is the part that represents an actual reconciliation/data-quality problem versus a definitional or timing artifact.\nThis decomposition shows that roughly 81% of the alarming-looking 18% revenue discrepancy is fully explainable by legitimate, non-error differences in what each team is actually measuring — a much less alarming finding than the headline gap suggests, though the remaining ~19% (roughly $0.6M) genuinely needs to be tracked down.",
+    "insight": "The vast majority of this seemingly large discrepancy isn't a data error or a sign that either team's number is 'wrong' — it's the predictable, mechanical result of Sales and Finance legitimately measuring two different things (contract value at signing vs. revenue recognized under accrual accounting) plus a normal signing-to-execution processing lag, and conflating these two valid, different metrics under the single word 'revenue' is what's actually eroding trust — the real fix is as much about clear labeling and shared understanding of what each number means as it is about closing the smaller, genuine data-quality gap.",
+    "recommendation": "First, complete the deal-level reconciliation to confirm the actual split (validate the illustrative $1.7M/$0.9M/$0.6M breakdown against real deal data) and specifically investigate the genuine residual gap for real errors. Then, address the root communication problem directly: establish and clearly label two distinct, consistently-defined metrics — 'Bookings/TCV' (Sales' operational metric, useful for sales performance and pipeline health) and 'Recognized Revenue' (Finance's metric, the one reported externally/to the board) — and ensure every dashboard, report, and internal conversation uses the correct term for the correct metric, rather than letting both get casually called 'revenue.' Recommend building a lightweight automated reconciliation report (even a simple recurring query comparing CRM closed-won records against ERP-recognized revenue) so this gap is visible and explainable every quarter going forward, not just investigated reactively after a board-level discrepancy causes alarm.",
+    "risks": [
+      "The illustrative reconciliation figures ($1.7M / $0.9M / $0.6M) are for demonstrating the analytical approach — the real investigation must trace actual individual deals through both systems to confirm the true split, since getting this wrong (e.g., under- or over-attributing the gap to the 'legitimate' definitional bucket) could mean a genuine data-quality problem goes uninvestigated.",
+      "Relabeling metrics ('Bookings' vs. 'Recognized Revenue') is a necessary fix but a purely cultural/communication one — without an actual systems-level or process-level reconciliation mechanism in place, the same confusion is likely to recur every quarter even with better labels, since the underlying two-systems-with-no-integration structure hasn't changed; the lightweight automated reconciliation report recommendation is important precisely to prevent that recurrence.",
+      "If the genuine residual investigation uncovers a real, non-trivial systemic data-quality issue (e.g., a category of deals that consistently fails to sync correctly between CRM and ERP), the fix could require more significant systems-integration engineering work than the 19%-of-gap figure alone might suggest is warranted — the investigation should assess not just the dollar size of the current-quarter residual but whether it represents a one-off or a recurring structural issue before finalizing how much investment the fix deserves."
+    ],
+    "cross": [
+      {
+        "q": "The board and executive team are understandably rattled by an 18% revenue discrepancy showing up right before Q4 planning — how would you communicate this reconciliation finding in a way that rebuilds confidence rather than sounding like you're making excuses for a bad number?",
+        "a": "I'd lead with the full, transparent breakdown rather than a reassuring headline — showing the specific dollar-for-dollar reconciliation ($1.7M definitional, $0.9M timing, $0.6M genuine residual under investigation) demonstrates rigor and gives the board something concrete and verifiable rather than a vague 'it's fine, don't worry' message; I'd explicitly acknowledge that the ~$0.6M residual is a real, unresolved gap being actively investigated (not glossing over it), which paradoxically builds more trust than claiming the entire discrepancy is explained away, since a fully clean explanation for every dollar would itself look suspicious to a sophisticated board — being honest about what's confirmed versus what's still being chased is the credible way to present this."
+      },
+      {
+        "q": "Sales leadership might push back that Finance's ratable-recognition revenue number understates the real momentum of the business, since it doesn't reflect the full value of deals just signed — how would you handle that tension in your recommendation?",
+        "a": "I'd validate that this is a real and legitimate point, not something to dismiss — bookings/TCV genuinely IS the better metric for understanding sales momentum and pipeline health, which is exactly why I'm recommending it be kept, clearly labeled, and actively used internally for that purpose, rather than being eliminated in favor of only reporting recognized revenue; the fix isn't 'Sales should stop tracking bookings and only care about Finance's number' — it's 'both metrics should coexist, each clearly labeled for what it actually measures and what decisions it's meant to inform,' with recognized revenue being the correct number specifically for external/board reporting (since that's the standard, audited, accrual-accounting figure investors and auditors expect), while bookings remains the right internal operational metric for Sales' own performance tracking."
+      }
+    ],
+    "synthesis": "This case tests whether a candidate can resist treating a scary-looking cross-team metric discrepancy as evidence of an error to be 'fixed,' and instead correctly diagnose how much of it is a legitimate difference in measurement philosophy (bookings vs. ratably-recognized revenue, a common and expected pattern in subscription businesses) versus a genuine timing or data-quality issue — the deal-level reconciliation approach, decomposing the gap into distinct, quantified, explainable buckets, is what turns an alarming, trust-eroding discrepancy into a clear, credible, mostly-explainable story with a small, specific, and actionable residual."
+  },
+  {
+    "diff": "expert",
+    "industry": "Enterprise SaaS — A/B Test Result Under Executive Doubt, Causal Robustness",
+    "title": "An A/B Test Shows a Statistically Significant 8% Revenue Lift From a Pricing-Page Redesign, But the CFO Doubts It's Real — Build the Case For or Against a Full Rollout",
+    "prompt": "A SaaS company ran a properly-powered, pre-registered A/B test on a redesigned pricing page for 6 weeks, reaching the planned sample size. The result: the new pricing page shows a statistically significant 8% lift in trial-to-paid conversion revenue (p<0.01), and the product team wants to roll it out to 100% of traffic immediately. The CFO is skeptical, saying that statistical significance doesn't mean the effect is actually real, and that they've seen too many A/B test wins evaporate after rollout. As the analyst, build a rigorous case for or against the full rollout, addressing the CFO's skepticism directly.",
+    "clarify": [
+      {
+        "q": "Was the 8% lift consistent throughout the 6-week test period, or did it fluctuate — for example, was it much larger in the first week or two and then settle to a smaller, more stable number?",
+        "a": "There was a pattern worth flagging: the lift was closer to 14% in the first 10 days, then gradually settled and stabilized around 6-7% for the remaining ~32 days of the test — the reported 8% is the full-period average."
+      },
+      {
+        "q": "Is the lift consistent across major customer segments (e.g., by company size, by acquisition channel, by geography), or concentrated in a specific segment?",
+        "a": "This hasn't been broken down yet — the 8% is a single overall topline number; segment-level breakdowns haven't been run."
+      },
+      {
+        "q": "Was the test truly randomized at the individual-visitor level with proper isolation (no cross-contamination between test and control, e.g., via shared accounts or repeat visits seeing different variants), and was the primary metric (revenue) measured with a sufficiently long observation window to capture the full trial-to-paid conversion cycle, which for this product typically takes how long?",
+        "a": "Randomization was at the visitor level via a standard, well-implemented experimentation platform, and cross-contamination checks were part of the standard test setup with no flagged issues. Trial-to-paid conversion for this product typically completes within 14 days of trial start. The test ran 6 weeks and the reported revenue metric only counted trials that had a full 14-day window to convert before the test's data cutoff, so the conversion-window matching should be sound."
+      }
+    ],
+    "mece": "I'll build a rigorous causal-robustness case addressing exactly the kind of skepticism the CFO is raising, across four checks: (1) novelty-effect diagnosis — using the observed decay from ~14% to ~6-7% over the test period as direct evidence of (and a corrected estimate for) a novelty effect, rather than treating the full-period 8% average as the right number to act on, (2) segment heterogeneity — checking whether the lift is broad-based or concentrated in a way that changes the rollout recommendation (e.g., a segment-specific redesign rather than a blanket 100% rollout), (3) statistical-vs-practical significance and effect-size stability — confirming the settled ~6-7% range is itself a stable, trustworthy estimate (not still trending down) using the later weeks of data specifically, and (4) implementation-fidelity risk — the well-known 'A/B test wins evaporate after rollout' phenomenon the CFO is referencing is often NOT about the original test being wrong, but about post-rollout implementation differing subtly from the tested variant, or about the test population differing from the full rollout population (e.g., test ran on a subset of traffic/geographies that isn't fully representative) — this needs to be explicitly checked, not dismissed as an untestable worry.\n\nL1 — Novelty-effect diagnosis: split the 6-week test data into early (first ~10 days) versus late (remaining ~32 days) periods and treat the late-period, settled effect size as the more trustworthy estimate of the durable, post-novelty lift — this directly operationalizes and answers the CFO's core worry using the test's own data, rather than either dismissing the worry or being unable to address it.\nL1 — Segment heterogeneity: break the lift down by company size, acquisition channel, and geography to check whether it's genuinely broad-based (supporting a full 100% rollout) or concentrated in a specific segment (which might argue for a targeted rollout to that segment plus continued testing/iteration for others, rather than an all-or-nothing decision).\nL1 — Effect-size stability in the settled period: even within the 'late' ~32-day period, check whether the effect size is stable (e.g., week-by-week) or still trending, to build confidence that 6-7% (not just the full-period 8%) is the right number to extrapolate into a rollout projection.\nL1 — Implementation-fidelity and representativeness: confirm the post-rollout implementation would be pixel/logic-identical to the tested variant (a common, mundane reason for tests-to-not-replicate is a rushed rollout implementation that subtly differs from what was actually tested), and confirm the test traffic was representative of the full traffic that would see the rollout (not, e.g., disproportionately weighted toward a specific channel or time-of-day that won't hold at 100% traffic).",
+    "hypothesis": "I expect the CFO's skepticism to be partially validated by the test's own data (the 14%-to-6-7% decay is real evidence of a novelty effect the headline 8% number obscures) but not fully — I'd expect the settled ~6-7% late-period lift to represent a genuine, durable effect that's still meaningfully positive and worth rolling out, provided the rollout uses the corrected, settled effect-size estimate (not the inflated full-period average) for revenue projections, and provided the segment and implementation-fidelity checks don't surface a reason to expect the tested effect not to replicate.",
+    "data": "Full 6-week period: 8% average revenue lift, p<0.01 (statistically significant against the full-period pooled data). Early period (days 1-10): approximately 14% lift. Late/settled period (days 11-42, ~32 days): approximately 6.5% lift, and week-by-week analysis within this late period shows the effect size roughly stable (ranging 5.8%-7.1% week to week, no further downward trend) — suggesting 6.5% is a genuinely settled estimate, not still decaying. Segment breakdown (once run): the lift is reasonably consistent across company-size tiers and geographies (roughly 5-8% in each major segment), but notably smaller and only marginally significant for one acquisition channel (paid search traffic, ~2% lift, not significant on its own smaller sub-sample) versus a stronger ~9% lift for organic/direct traffic — a real but not alarming degree of heterogeneity. Implementation-fidelity check: confirmed the rollout would use the exact same page-template code as the tested variant (not a 'rebuild' that could introduce subtle differences), and the test traffic's channel mix was reasonably representative of overall traffic (paid search was slightly under-represented in the test relative to its normal ~30% share of total traffic, at ~24% in the test sample — a modest but real representativeness gap worth flagging).",
+    "calc": "CORRECTED EFFECT-SIZE ESTIMATE FOR ROLLOUT PROJECTION:\nUsing the settled late-period ~6.5% lift (not the inflated 8% full-period average) as the basis for revenue projection directly addresses the CFO's novelty-effect concern with the test's own data rather than a generic reassurance.\n\nREPRESENTATIVENESS-ADJUSTED PROJECTION:\nSince paid search (the weaker-lift segment, ~2%) was slightly under-represented in the test (24% vs. its true ~30% share) relative to the full traffic mix, a straight extrapolation of the blended 6.5% settled lift to 100% of (differently-mixed) traffic would slightly OVERSTATE the expected full-rollout lift. Reweighting the settled segment-level lifts to the true channel mix: (30% paid search × ~2%) + (70% organic/direct+other × a settled non-paid-search lift, back-calculated to be modestly above 6.5% given paid search's smaller weight in the test sample, illustratively ~8%) ≈ 0.6% + 5.6% = 6.2% — very close to, but very slightly below, the unadjusted 6.5% settled estimate, meaning the representativeness gap is a real but small effect on the projection, not a first-order concern.\n\nBOTTOM LINE PROJECTED IMPACT: a corrected, representativeness-adjusted expected lift of approximately 6.2% at full rollout — still a clearly positive, meaningful, and statistically well-supported effect, just meaningfully smaller than the naive 8% headline number the product team is currently citing.",
+    "insight": "The CFO's skepticism is well-calibrated in general (many A/B test wins genuinely do evaporate or shrink after rollout) but the specific mechanism for that phenomenon — novelty effects and non-representative test samples — is directly testable and, in this case, only partially explains the situation: there IS a real novelty effect (the 14%-to-6.5% decay confirms it), and there IS a modest representativeness gap (paid search under-sampling), but even after correcting for both, a genuine, statistically credible, and practically meaningful ~6.2% lift remains — this is a case where rigor produces a smaller but still confidently positive number, not a case where rigor reveals the effect was illusory all along.",
+    "recommendation": "Proceed with the rollout, but do so with a corrected expected-impact figure of ~6.2% (not the 8% headline) for internal revenue projections and forecasting, and with two specific risk-mitigations given the analysis: (1) roll out gradually (e.g., ramping from 25% to 100% of traffic over 2-3 weeks) while monitoring the live effect size against the ~6.2% projection, rather than an immediate 100% cutover, specifically to catch early if the real-world effect diverges further from this already-corrected estimate, and (2) flag the weaker paid-search-segment result to the team for further investigation/iteration — that segment's smaller, marginally-significant lift suggests either the redesign resonates less with that traffic type or the paid-search sub-sample was simply underpowered on its own, and it deserves either a follow-up segment-specific test or continued monitoring post-rollout rather than being ignored.",
+    "risks": [
+      "The representativeness-adjusted 6.2% calculation involves a 'back-calculated' non-paid-search settled lift figure that's illustrative for this analysis — the real calculation needs to be run directly from the actual segment-level late-period data, not estimated backward from the blended figure as done here for demonstration purposes.",
+      "A gradual, monitored rollout is a sound risk-mitigation, but it does delay realizing the full benefit of a genuinely positive change — this trade-off (a few extra weeks of gradual rollout vs. a small risk of a worse-than-expected full cutover) should be made explicit to stakeholders as a deliberate choice, not an automatic default, especially if speed has its own real value (e.g., competitive pressure or a fiscal-quarter-end goal).",
+      "This analysis addresses novelty effects and sample representativeness specifically, which is what the CFO's stated concern pointed toward, but doesn't rule out every possible reason a rollout could underperform a test (e.g., a subtle seasonal effect specific to the 6-week test window that wouldn't hold year-round) — the recommended gradual, monitored rollout is partly designed to catch this kind of unanticipated gap too, since live monitoring against the projection is the most robust general safeguard against any unforeseen divergence."
+    ],
+    "cross": [
+      {
+        "q": "You've built a rigorous case, but the CFO's original skepticism was fairly general — '\"statistically significant\" doesn't mean \"actually real\"' — how do you respond directly to that specific framing, beyond just presenting your corrected numbers?",
+        "a": "I'd agree with the CFO's framing explicitly and use it as the organizing structure of my presentation, rather than treating it as an attack to defend against: 'statistically significant' answers the narrow question 'is this pattern unlikely to be pure random noise,' which the p<0.01 result does answer — but it does NOT answer 'is the measured effect size the right one to project forward' or 'does this test's specific sample represent the population we're about to roll out to,' which are exactly the novelty-effect and representativeness questions I dug into separately; presenting it this way validates that the CFO's instinct was correctly pointing at real, checkable gaps between statistical significance and decision-grade certainty, while showing that those specific gaps have now been checked and quantified rather than remaining vague worries — which should be a more convincing answer than simply re-asserting the p-value."
+      },
+      {
+        "q": "If the gradual rollout's live-monitored effect size comes in meaningfully below even your corrected 6.2% projection — say, closer to 2-3% — what would that tell you, and what would you do?",
+        "a": "That would suggest either an unanticipated factor beyond novelty effects and the specific representativeness gap I checked (e.g., a seasonal effect specific to the test window, or some other unmeasured population difference between the test sample and full rollout traffic), or possibly an implementation-fidelity issue I didn't fully catch despite the check I ran; I'd pause the ramp-up at whatever traffic percentage it had reached, do a fresh comparison between the live rollout traffic's characteristics and the original test sample's characteristics to look for a specific explanatory difference, and treat a gap this large as informative rather than just noise — even a genuinely real underlying effect can look smaller in a live monitoring window due to normal variance, so I wouldn't reverse the rollout on a single data point, but I would slow down, investigate specifically, and set a clear, pre-defined threshold and observation window for when a persistent gap this large would trigger reverting the change entirely."
+      }
+    ],
+    "synthesis": "This expert-level case tests whether a candidate can take a vague but legitimate executive worry ('statistical significance doesn't mean real') and translate it into specific, testable, quantifiable sub-questions — novelty-effect decay, segment heterogeneity, sample representativeness, implementation fidelity — using the test's own data rather than either dismissing the concern with 'but p<0.01' or being unable to move past a general acknowledgment that 'rollouts sometimes don't replicate'; the ability to produce a corrected, defensible, somewhat-smaller-but-still-confident effect-size estimate, and to design a rollout process (gradual, monitored) that remains robust even if some residual uncertainty turns out to matter, is the mark of rigorous, decision-grade analytics work rather than either false confidence or unproductive doubt."
+  }
+];
+} catch (err) { console.error('Stage 23 data error:', err); }
+</script>
+<script>
+try {
+  var diffLabel = {easy:"Easier", med:"Medium", hard:"Hard", expert:"Expert"};
+
+  function renderCases(list){
+    var wrap = document.getElementById('caselist');
+    wrap.innerHTML = '';
+    list.forEach(function(c, i){
+      var det = document.createElement('details');
+      det.className = 'case';
+      det.id = 'case-' + (i+1);
+
+      var clarifyHtml = c.clarify.map(function(qa){
+        return '<div class="qa-pair"><div class="q">Q: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
+      }).join('');
+
+      var risksHtml = '<ul>' + c.risks.map(function(r){ return '<li>' + esc(r) + '</li>'; }).join('') + '</ul>';
+
+      var crossHtml = c.cross.map(function(qa){
+        return '<div class="qa-pair"><div class="q">Interviewer: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
+      }).join('');
+
+      det.innerHTML =
+        '<summary><span class="cnum">Case ' + (i+1) + '</span>' +
+        '<span class="cdiff ' + c.diff + '">' + diffLabel[c.diff] + '</span>' +
+        '<span class="cind">' + esc(c.industry) + '</span>' +
+        '<span class="ctitle">' + esc(c.title) + '</span></summary>' +
+        '<div class="case-body">' +
+          '<div class="case-prompt">"' + esc(c.prompt) + '"</div>' +
+          '<div class="case-sec"><h5>Clarifying Questions &amp; Answers</h5>' + clarifyHtml + '</div>' +
+          '<div class="case-sec"><h5>MECE Structure</h5><div class="calc-block">' + esc(c.mece) + '</div></div>' +
+          '<div class="case-sec"><h5>Hypothesis</h5><p>' + esc(c.hypothesis) + '</p></div>' +
+          '<div class="case-sec"><h5>Data &amp; Exhibits</h5><div class="calc-block">' + esc(c.data) + '</div></div>' +
+          '<div class="case-sec"><h5>Calculation</h5><div class="calc-block">' + esc(c.calc) + '</div></div>' +
+          '<div class="case-sec"><h5>Insight</h5><p>' + esc(c.insight) + '</p></div>' +
+          '<div class="case-sec"><h5>Recommendation</h5><p>' + esc(c.recommendation) + '</p></div>' +
+          '<div class="case-sec"><h5>Risks &amp; Caveats</h5>' + risksHtml + '</div>' +
+          '<div class="case-sec"><h5>Interviewer Cross-Questions</h5>' + crossHtml + '</div>' +
+          '<div class="synth-box"><h5>Synthesis</h5><p>' + esc(c.synthesis) + '</p></div>' +
+        '</div>';
+      wrap.appendChild(det);
+    });
+  }
+
+  renderCases(cases);
+
+  document.getElementById('casefilter').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if(!btn) return;
+    document.querySelectorAll('#casefilter button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var diff = btn.getAttribute('data-diff');
+    var filtered = diff === 'all' ? cases : cases.filter(function(c){ return c.diff === diff; });
+    renderCases(filtered);
+  });
+
+  var masteryItems = cases.map(function(c, i){ return 'Case ' + (i+1) + ' — ' + c.title + ': I can walk through the full structure, calculation, and synthesis cold.'; });
+  var STORE = 'masterbook-s23-mastery';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var mBox = document.getElementById('masteryBox');
+  mBox.innerHTML = masteryItems.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+esc(t)+'</span></div>';
+  }).join('');
+  mBox.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 500){ backtop.classList.add('show'); } else { backtop.classList.remove('show'); }
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 23 loaded — cases:', cases.length);
+} catch (err) { console.error('Stage 23 render error:', err); }
+</script>

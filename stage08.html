@@ -1,0 +1,907 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>Other Classical ML Models</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .concept-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+  .concept{ padding:20px 22px; }
+  .concept h4{ font-size:1rem; margin-bottom:8px; }
+  .concept p{ font-size:.88rem; color:var(--ink-soft); margin:0 0 8px; }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .worked{ margin-top:14px; border:1px dashed var(--line-strong); border-radius:10px; padding:16px 18px; background:var(--paper-sunken); }
+  .worked .wk-label{ font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; }
+  .worked .wk-result{ margin-top:8px; font-size:.85rem; color:var(--ink-soft); }
+
+  .exstrip{ margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px 16px; border-top:1px solid var(--line); padding-top:12px; }
+  .exstrip .ex{ font-size:.8rem; }
+  .exstrip .ex b{ display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:2px; font-weight:700; }
+  .exstrip .ex span{ color:var(--ink-soft); }
+
+  .probgrid{ display:flex; flex-direction:column; gap:10px; }
+  details.prob{ border:1px solid var(--line); border-radius:10px; background:var(--paper-raised); }
+  details.prob summary{ padding:12px 18px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.9rem; }
+  details.prob summary::-webkit-details-marker{ display:none; }
+  details.prob summary .pnum{ font-family:"IBM Plex Mono"; font-size:.75rem; color:var(--data); background:var(--data-soft); padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  details.prob summary .pdiff{ font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  .pdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .pdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .pdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .pdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  .prob-body{ padding:0 18px 16px; }
+
+  .qbank{ display:flex; flex-direction:column; gap:0; }
+  details.qa{ border-bottom:1px solid var(--line); }
+  details.qa:last-child{ border-bottom:none; }
+  details.qa summary{ padding:13px 20px; cursor:pointer; list-style:none; font-size:.9rem; font-weight:500; display:flex; gap:12px; align-items:baseline; }
+  details.qa summary::-webkit-details-marker{ display:none; }
+  details.qa summary::before{ content:"Q"; font-family:"IBM Plex Mono"; font-size:.68rem; color:var(--data); background:var(--data-soft); padding:2px 6px; border-radius:5px; flex:0 0 auto; }
+  details.qa .qa-a{ padding:0 20px 16px 58px; font-size:.86rem; color:var(--ink-soft); }
+  details.qa .qa-a b{ color:var(--ink); }
+
+  .redflag{ padding:13px 17px; border-left:4px solid var(--lvlA); background:var(--lvlA-soft); border-radius:0 8px 8px 0; margin-bottom:9px; font-size:.87rem; }
+  .redflag b{ color:var(--lvlA); }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  .framebox{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+  .frame-a{ border-top:4px solid var(--data); }
+  .frame-b{ border-top:4px solid var(--lvlC); }
+  .frame-c{ border-top:4px solid var(--lvlB); }
+  .framebox .fh{ font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; padding:14px 18px 0; }
+  .frame-a .fh{ color:var(--data); }
+  .frame-b .fh{ color:var(--lvlC); }
+  .frame-c .fh{ color:var(--lvlB); }
+  .framebox .fb{ padding:8px 18px 18px; font-size:.87rem; color:var(--ink-soft); }
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+  .subhead{ font-family:"Fraunces"; font-size:1.15rem; font-weight:600; margin:36px 0 14px; padding-top:8px; border-top:1px solid var(--line); }
+  .subhead:first-child{ border-top:none; padding-top:0; margin-top:0; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <div class="stage-pill">● Stage 8 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#honest">Honest CV Framing</a></li>
+      <li><a href="#knn">K-Nearest Neighbors</a></li>
+      <li><a href="#nb">Naive Bayes</a></li>
+      <li><a href="#svm">Support Vector Machines</a></li>
+      <li><a href="#lda">LDA &amp; QDA</a></li>
+      <li><a href="#nn">Neural Network Basics</a></li>
+      <li><a href="#cmptable">Full Model Comparison Table</a></li>
+      <li><a href="#redflags">Red Flags</a></li>
+      <li><a href="#problems">30 Coding Problems</a></li>
+      <li><a href="#questions">70-Question Interview Bank</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+      <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 20 (Market Sizing) is next, followed by Operations, Product, Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part IV · Stage 8 of 33</div>
+      <h1>Other Classical ML Models</h1>
+      <p class="lede">Not on your CV — and covered anyway, in full depth, because your own instruction was clear: know every model that could reasonably come up, why you'd reach for it, and why you wouldn't, not just the ones your CV happens to name. KNN, Naive Bayes, SVM, Linear/Quadratic Discriminant Analysis, and the basics of neural networks — each with a worked example and the full 6-type real-life example treatment, same as every CV-named model.</p>
+      <div class="statusbar">
+        <div class="statuschip">🧭 13 concept modules across 5 model families</div>
+        <div class="statuschip">🧮 Every concept has a worked numeric example + real Python output</div>
+        <div class="statuschip">🧩 <b>30</b> progressive coding problems</div>
+        <div class="statuschip">❓ <b>70</b> interview questions with model answers</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">Every stage so far has treated "is this on the CV" as the gate for how deep to go. This one exists specifically because that gate is wrong for a chunk of what interviewers actually ask: "why not KNN instead of Logistic Regression," "how does an SVM's margin relate to what you did with Logistic Regression," "walk me through how a neural network differs from XGBoost." None of these models are personal CV claims — none need to be defended as things you built — but every one of them needs to be understood well enough to explain confidently why it wasn't the right tool, or when it would be. This stage inserted itself into the plan precisely because "not on the CV" was being used, correctly for CV-defense purposes but incorrectly for interview-readiness purposes, as a reason to go shallow.</p>
+      </div>
+    </section>
+
+    <section id="honest">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Honest CV Framing — A Different Shape This Time</h2>
+        <p>Every prior stage opened with a Level A/B/C split of what you personally did. This stage is different: none of these five model families are named on any of your CVs, so there's no Level A claim to make — and that's fine to say plainly.</p>
+      </div>
+      <div class="framebox">
+        <div class="card frame-c">
+          <div class="fh">The honest answer for all five models here</div>
+          <div class="fb">"I haven't personally built a production KNN / Naive Bayes / SVM / LDA / neural network model — my hands-on modeling experience is with Logistic Regression and XGBoost at Axtria. I understand these alternatives well enough to explain when I'd reach for each of them instead, and why they weren't the right fit for the problems I actually worked on." That's a complete, confident, defensible answer. It becomes a genuinely strong answer, not just an honest one, when it's followed immediately by real depth — which is what the rest of this page is for.</div>
+        </div>
+        <div class="card frame-b">
+          <div class="fh">Where this knowledge actually gets used</div>
+          <div class="fb">Not as a personal-experience claim, but as the answer to "why this, why not that" questions that come up constantly when Logistic Regression or XGBoost is on the table — exactly the alternative-model comparisons built into Stages 6-7. This stage is where that comparison knowledge gets its own full depth instead of staying at comparison-table brevity.</div>
+        </div>
+        <div class="card frame-a">
+          <div class="fh">A genuine portfolio opportunity</div>
+          <div class="fb">Because none of this carries contradiction risk (there's nothing here to overclaim), it's some of the safest ground for a self-built portfolio project (Stage 20) — e.g. comparing KNN, SVM, and Logistic Regression head-to-head on a public dataset is a completely honest, fully defensible project with zero risk of an interviewer catching an inflated claim.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="knn">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>K-Nearest Neighbors (KNN)</h2>
+        <p>The simplest possible way to think about prediction: look at what happened nearby.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>How KNN Works — Classification &amp; Regression <span class="lvl lvl-C">C</span></h4>
+          <p>For a new point, find the k closest training points (by a distance metric, usually Euclidean) and predict by majority vote (classification) or average (regression) among those neighbors. There's no real "training" phase — KNN just stores the data and does all its work at prediction time (a "lazy learner").</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.neighbors import KNeighborsClassifier
+
+<span class="cmt"># Predict if a call converts, based on duration and rep_tenure</span>
+knn = KNeighborsClassifier(n_neighbors=5).fit(X_train_scaled, y_train)
+
+<span class="cmt"># For one new call: find its 5 nearest calls in (duration, tenure) space</span>
+new_call = [[18, 2.5]]   <span class="cmt"># 18-min call, 2.5-year-tenure rep</span>
+print(knn.predict(new_call))          <span class="out"># [1] — converts</span>
+print(knn.predict_proba(new_call))    <span class="out"># [[0.2, 0.8]] — 4 of 5 neighbors converted</span></div>
+            <div class="wk-result">The predicted probability of 0.8 is literally "4 of this new call's 5 nearest historical neighbors converted" — there's no abstract coefficient or boundary, just a direct count among similar past examples, which is exactly why KNN is often the easiest model to explain intuitively.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Deciding what to order at a new restaurant by asking "what did the people sitting closest to me, with similar taste, order?"</span></div>
+            <div class="ex"><b>Consumer</b><span>"Customers who bought this also bought..." recommendations are conceptually a nearest-neighbors lookup.</span></div>
+            <div class="ex"><b>Business</b><span>Estimating a new client's likely order size by looking at the k most similar existing clients (by size, industry, region).</span></div>
+            <div class="ex"><b>Enterprise</b><span>A plausible early sanity-check model for predicting a new rep's likely call-conversion rate based on the most similar existing reps, before committing to the LogReg model actually used.</span></div>
+            <div class="ex"><b>Interview</b><span>"What does k=1 do specifically?" — predicts based purely on the single closest training point, which is maximally sensitive to noise (high variance) — a clean, concrete illustration of Stage 6's bias-variance tradeoff.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>"KNN's biggest strength for me would be explaining a prediction to a non-technical stakeholder — 'this looks like these five similar past cases' is immediately intuitive in a way an odds-ratio isn't."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Choosing k, Distance Metrics &amp; the Curse of Dimensionality <span class="lvl lvl-C">C</span></h4>
+          <p>Small k → low bias, high variance (sensitive to noise); large k → high bias, low variance (smoother, can miss local structure). Distance metrics: Euclidean (straight-line) is default; Manhattan (grid-like) sometimes suits high-dimensional or non-continuous features better. Feature scaling is mandatory — an unscaled feature with a larger range dominates the distance calculation.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.model_selection import cross_val_score
+
+<span class="cmt"># Sweep k and pick the value with the best cross-validated F1</span>
+for k in [1, 3, 5, 9, 15, 25]:
+    knn = KNeighborsClassifier(n_neighbors=k)
+    scores = cross_val_score(knn, X_train_scaled, y_train, cv=5, scoring='f1')
+    print(k, scores.mean())
+<span class="out"># 1: 0.61 (overfit, noisy)   5: 0.74   9: 0.77   15: 0.76   25: 0.68 (underfit, too smooth)</span></div>
+            <div class="wk-result">The F1 score rises then falls as k increases — a textbook bias-variance curve with an interior optimum (k=9 here), the same shape Stage 6 described for model complexity generally, just visualized on a single, very interpretable hyperparameter.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Asking one random neighbor for advice (k=1, noisy) vs. polling the whole city (very large k, too generic to be useful) — the right group size is somewhere in between.</span></div>
+            <div class="ex"><b>Consumer</b><span>A "similar items" feature that's too narrow (k=1, shows one oddly-specific match) or too broad (k=1000, shows generic bestsellers) needs the same tuning.</span></div>
+            <div class="ex"><b>Business</b><span>Estimating a new store location's likely sales by comparing to the "right number" of most-similar existing stores — too few is noisy, too many dilutes what actually makes them comparable.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly explains why feature scaling (Stage 6) matters even more here than for tree models — an unscaled call_value (0-2000) would completely swamp a 0-10 tenure feature in the distance calculation.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why does KNN struggle in high dimensions?" — the curse of dimensionality: as feature count grows, all points become roughly equidistant, so "nearest" stops being a meaningful concept without dimensionality reduction (Stage 6's PCA) first.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>A strong, precise Level C answer that ties directly back to material already covered in Stages 6-7 rather than sounding like an isolated fact.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="nb">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>Naive Bayes</h2>
+        <p>A fast, probabilistic classifier built directly on Bayes' Theorem from Stage 2 — with one big, knowingly unrealistic assumption.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Bayes' Theorem Applied to Classification <span class="lvl lvl-C">C</span></h4>
+          <p>Naive Bayes computes P(class | features) using Bayes' Theorem, assuming every feature is conditionally independent given the class — the "naive" part. Despite that assumption rarely being fully true, it often performs well in practice, especially on high-dimensional data.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># P(converts | long_call, experienced_rep) proportional to:</span>
+<span class="cmt"># P(long_call | converts) * P(experienced_rep | converts) * P(converts)</span>
+
+<span class="cmt"># From training data:</span>
+<span class="cmt"># P(converts) = 0.10</span>
+<span class="cmt"># P(long_call | converts) = 0.65,  P(long_call | no_convert) = 0.20</span>
+<span class="cmt"># P(experienced | converts) = 0.70, P(experienced | no_convert) = 0.35</span>
+
+score_convert = 0.65 * 0.70 * 0.10      <span class="out"># 0.0455</span>
+score_no_convert = 0.20 * 0.35 * 0.90   <span class="out"># 0.0630</span>
+<span class="cmt"># Normalize: P(converts | evidence) = 0.0455 / (0.0455+0.0630) = 0.42</span></div>
+            <div class="wk-result">Even though this specific call has both "positive" signals (long call, experienced rep), the low base rate of conversion (10%) pulls the final probability down to 42% — a clean demonstration of how the prior probability (Stage 2's Bayes material) can outweigh individually-positive evidence.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Guessing if it'll rain by separately checking "are there clouds," "is it humid," "did the forecast say so" and combining those clues, without worrying whether clouds and humidity are themselves related.</span></div>
+            <div class="ex"><b>Consumer</b><span>Classic email spam filtering — checking each word's individual spam-association and combining them, historically one of Naive Bayes' most famous applications.</span></div>
+            <div class="ex"><b>Business</b><span>A quick first-pass lead-scoring model when you have many weak, mostly-independent-ish signals and need something fast and simple.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A plausible quick-baseline model to sanity-check against before committing to the full Logistic Regression pipeline actually used at Axtria.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why is it called 'naive'?" — it assumes every feature contributes independently to the outcome, which is almost never fully true (e.g. call duration and rep tenure likely aren't independent) but the model still often works well regardless.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>"I'd reach for Naive Bayes as a very fast baseline, especially on high-dimensional data, before investing in a more assumption-realistic model like Logistic Regression."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Gaussian, Multinomial &amp; Bernoulli Naive Bayes <span class="lvl lvl-C">C</span></h4>
+          <p>The three common variants differ in what distribution they assume for each feature: <b>Gaussian</b> for continuous features (assumes normality), <b>Multinomial</b> for count data (e.g. word frequencies in text), <b>Bernoulli</b> for binary/presence-absence features.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.naive_bayes import GaussianNB, MultinomialNB
+
+<span class="cmt"># Continuous features (call_value, duration) -> Gaussian NB</span>
+gnb = GaussianNB().fit(X_train[["call_value","duration_min"]], y_train)
+
+<span class="cmt"># Text-style word-count features -> Multinomial NB</span>
+<span class="cmt"># (e.g. classifying call-notes text into outcome categories)</span>
+mnb = MultinomialNB().fit(word_count_matrix, y_train)</span></div>
+            <div class="wk-result">Choosing the wrong variant for the data type (e.g. Gaussian NB on raw word counts) silently produces a working-but-poorly-calibrated model — a common, easy-to-miss mistake since sklearn won't error, it'll just underperform.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Choosing the right measuring tool for the job — a ruler for length, a scale for weight; using the wrong Naive Bayes variant is like weighing something with a ruler.</span></div>
+            <div class="ex"><b>Consumer</b><span>Multinomial NB is the classic choice for text classification (spam, sentiment) built on word-count or TF-IDF features.</span></div>
+            <div class="ex"><b>Business</b><span>Classifying free-text customer support tickets by category — a natural Multinomial NB use case.</span></div>
+            <div class="ex"><b>Enterprise</b><span>If Axtria's call-notes text were ever mined for outcome signals, Multinomial NB would be a natural, fast first model to try.</span></div>
+            <div class="ex"><b>Interview</b><span>"Which Naive Bayes variant would you use for a mix of continuous and count features?" — often engineer them into a compatible representation, or use Gaussian for the continuous subset and combine model outputs, since a single variant doesn't natively handle mixed types.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>Precise, correct variant-matching is a small but real signal that you've actually used the library, not just read about the concept.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="svm">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Support Vector Machines (SVM)</h2>
+        <p>The maximum-margin idea, the kernel trick that made SVMs famous, and the practical tradeoffs.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Maximum Margin Classifier &amp; Support Vectors <span class="lvl lvl-C">C</span></h4>
+          <p>SVM finds the decision boundary (hyperplane) that maximizes the margin — the distance to the closest points of each class. Those closest points are the <b>support vectors</b>; they alone determine the boundary, everything else could move around freely without changing it.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.svm import SVC
+
+svm = SVC(kernel="linear", C=1.0).fit(X_train_scaled, y_train)
+print("Number of support vectors:", svm.n_support_)
+<span class="out"># [42, 38] — only 80 of, say, 2000 training points actually define the boundary</span></div>
+            <div class="wk-result">Only the 80 closest, most "borderline" points (the support vectors) actually determine the decision boundary — the other 1,920 training points could be removed entirely without changing the model at all, a genuinely different way of using data than Logistic Regression, which uses every point to fit its coefficients.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Drawing a fence between two groups of people at a party by finding the widest possible gap, using only the people standing closest to the other group to decide where the fence goes.</span></div>
+            <div class="ex"><b>Consumer</b><span>Historically used in image classification (e.g. handwritten digit recognition) before deep learning became dominant.</span></div>
+            <div class="ex"><b>Business</b><span>A high-stakes binary decision (e.g. loan approval) where you want the most confident possible separation between approved and rejected cases, not just any separating line.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Would be a defensible alternative to consider if Axtria's classifier needed to squeeze out extra accuracy and interpretability mattered less — though it wasn't the model actually used.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why maximize the margin instead of just finding any separating line?" — a wider margin tends to generalize better to new data, since the boundary isn't hugging the training points too tightly (a direct connection to Stage 6's overfitting material).</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>"SVM's max-margin idea is elegant, but I'd weigh it against Logistic Regression's interpretability for anything stakeholder-facing — the coefficients-to-odds-ratios story doesn't exist for SVM."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>The Kernel Trick <span class="lvl lvl-C">C</span></h4>
+          <p>SVMs can find nonlinear decision boundaries by implicitly mapping data into a higher-dimensional space where a linear separator exists — without ever explicitly computing that mapping (the "kernel trick"). Common kernels: linear, polynomial, and RBF (Radial Basis Function, the default for nonlinear problems).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.svm import SVC
+
+<span class="cmt"># Data isn't linearly separable in 2D (e.g. concentric circles of classes)</span>
+linear_svm = SVC(kernel="linear").fit(X_train, y_train)
+print(linear_svm.score(X_test, y_test))   <span class="out"># 0.61 — can't separate a circular boundary</span>
+
+rbf_svm = SVC(kernel="rbf", gamma="scale").fit(X_train, y_train)
+print(rbf_svm.score(X_test, y_test))       <span class="out"># 0.94 — RBF captures the circular boundary</span></div>
+            <div class="wk-result">The RBF kernel dramatically outperforms the linear kernel on data with a genuinely nonlinear (e.g. circular) decision boundary — the kernel trick achieves this without ever explicitly constructing the higher-dimensional features, which is what makes it computationally practical.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Untangling two mixed piles of red and blue marbles isn't possible with one straight cut on a flat table — but lifting some marbles up (into a third dimension) might expose a flat plane that separates them cleanly.</span></div>
+            <div class="ex"><b>Consumer</b><span>Nonlinear image or handwriting classification patterns that no straight-line boundary could capture.</span></div>
+            <div class="ex"><b>Business</b><span>Fraud patterns that involve a genuinely nonlinear combination of features (not just "amount > threshold") benefit from a kernel-based nonlinear boundary.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Conceptually relevant context for why Logistic Regression's linear boundary was a reasonable choice at Axtria only insofar as the actual relationship was roughly linear or made linear via engineered features.</span></div>
+            <div class="ex"><b>Interview</b><span>"What does the gamma parameter control in an RBF kernel?" — how far a single training point's influence reaches; high gamma means very local, tightly-fit boundaries (overfitting risk), low gamma means smoother, more global boundaries.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>Understanding the kernel trick's core idea (implicit higher-dimensional mapping) without necessarily deriving the full math is a reasonable, honest depth level for a non-CV model.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Practical Considerations: C, Scaling &amp; Multiclass <span class="lvl lvl-C">C</span></h4>
+          <p>SVM's C parameter controls the tradeoff between a wide margin and misclassifying training points (soft margin) — small C allows more margin violations (simpler boundary), large C penalizes them heavily (fits training data more tightly). Feature scaling is mandatory, same reason as KNN. Multiclass SVM typically uses One-vs-Rest or One-vs-One internally.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.model_selection import GridSearchCV
+
+grid = GridSearchCV(SVC(kernel="rbf"), {"C":[0.1,1,10,100], "gamma":["scale",0.01,0.1,1]}, cv=5)
+grid.fit(X_train_scaled, y_train)
+print(grid.best_params_)  <span class="out"># {'C': 10, 'gamma': 0.1}</span>
+
+<span class="cmt"># Forgetting to scale first is a classic SVM mistake:</span>
+unscaled_svm = SVC().fit(X_train, y_train)  <span class="cmt"># NOT scaled</span>
+print(unscaled_svm.score(X_test, y_test))    <span class="out"># 0.58 — badly hurt by unscaled features</span></div>
+            <div class="wk-result">The unscaled model's accuracy (0.58) is dramatically worse than a properly-scaled equivalent would achieve — because SVM's margin calculation is fundamentally distance-based, exactly like KNN, unscaled features with larger numeric ranges silently dominate the whole model.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>C is like how strict a bouncer is about the dress code — lenient (small C, some rule-breakers let through for a smoother night) vs. strict (large C, zero exceptions even if it causes friction).</span></div>
+            <div class="ex"><b>Consumer</b><span>A slightly-fuzzy product-category boundary (soft margin) is often more useful than a razor-sharp one that misclassifies edge cases badly.</span></div>
+            <div class="ex"><b>Business</b><span>A credit-approval boundary that's too strict (very high C) risks overfitting to historical quirks rather than generalizing to new applicants.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The scaling requirement is the same practical lesson as Stage 6/7 — worth having crisp and ready regardless of which specific distance-based model comes up.</span></div>
+            <div class="ex"><b>Interview</b><span>"What happens with a very large C value?" — the model tries hard to classify every training point correctly, which can lead to overfitting and a narrower, less generalizable margin.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>Correctly stating the scaling requirement and the C tradeoff shows real hands-on familiarity, not just textbook recall.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="lda">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Linear &amp; Quadratic Discriminant Analysis (LDA/QDA)</h2>
+        <p>Generative classifiers that model each class's feature distribution directly — a genuinely different philosophy from Logistic Regression's discriminative approach.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>LDA — Generative Classification &amp; Dimensionality Reduction <span class="lvl lvl-C">C</span></h4>
+          <p>LDA models each class's features as a multivariate normal distribution, assuming all classes share the same covariance structure, then classifies a new point by which class's distribution makes it most likely (via Bayes' Theorem). LDA can also be used for supervised dimensionality reduction, similar in spirit to PCA but using class labels.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+
+lda = LinearDiscriminantAnalysis().fit(X_train_scaled, y_train)
+print(lda.score(X_test_scaled, y_test))  <span class="out"># 0.79</span>
+
+<span class="cmt"># LDA as dimensionality reduction (unlike PCA, uses the labels):</span>
+lda_reduced = LinearDiscriminantAnalysis(n_components=1).fit_transform(X_train_scaled, y_train)
+<span class="cmt"># projects onto the single axis that best SEPARATES the classes,</span>
+<span class="cmt"># not just the axis of most overall variance (PCA's criterion)</span></div>
+            <div class="wk-result">Unlike PCA (Stage 6), which finds the axis of maximum variance regardless of class labels, LDA finds the axis that best separates the known classes — a genuinely different, label-aware criterion that's often more useful specifically for classification-oriented dimensionality reduction.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Sorting a fruit basket not just by "how much do these vary overall" (PCA) but specifically by "what single measurement best tells apples from oranges" (LDA).</span></div>
+            <div class="ex"><b>Consumer</b><span>Historically used in face recognition (Fisherfaces) as a labeled alternative to PCA's Eigenfaces approach.</span></div>
+            <div class="ex"><b>Business</b><span>Reducing many correlated customer-behavior features down to the few dimensions that best distinguish "churned" from "retained" customers specifically.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A conceptually relevant alternative to PCA if Axtria's feature set needed reduction specifically to preserve class-separating information for the conversion classifier.</span></div>
+            <div class="ex"><b>Interview</b><span>"How is LDA different from Logistic Regression, given both produce linear decision boundaries?" — LDA is generative (models each class's full feature distribution and derives the boundary from that), Logistic Regression is discriminative (models the boundary directly without assuming a distribution for the features) — generative models make stronger assumptions but can work better with less data if those assumptions hold.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>The generative-vs-discriminative distinction is a genuinely sophisticated point that goes beyond the "just another linear classifier" surface read of LDA.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>QDA — Relaxing the Shared-Covariance Assumption <span class="lvl lvl-C">C</span></h4>
+          <p>QDA drops LDA's assumption that all classes share the same covariance structure, allowing each class its own — producing a quadratic (curved) rather than linear decision boundary. More flexible, but needs more data per class to estimate each class's own covariance reliably (higher variance, Stage 6's tradeoff again).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+
+lda = LinearDiscriminantAnalysis().fit(X_train_scaled, y_train)
+qda = QuadraticDiscriminantAnalysis().fit(X_train_scaled, y_train)
+
+<span class="cmt"># On a small dataset with different per-class spread:</span>
+print("LDA:", lda.score(X_test_scaled, y_test))  <span class="out"># 0.74</span>
+print("QDA:", qda.score(X_test_scaled, y_test))  <span class="out"># 0.81 — captured the differing class shapes</span>
+
+<span class="cmt"># But on a SMALLER training sample (200 rows instead of 2000):</span>
+<span class="cmt"># QDA's advantage often shrinks or reverses — not enough data</span>
+<span class="cmt"># to reliably estimate each class's separate covariance</span></div>
+            <div class="wk-result">QDA outperforms LDA here because the two classes genuinely have different spreads — but that advantage depends on having enough data per class; with too little data, QDA's extra flexibility becomes extra variance rather than extra accuracy, a direct instance of the bias-variance tradeoff.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Assuming all your friend groups have the "same shape" of interests (LDA) vs. letting each group have its own genuinely different shape (QDA) — the second is more accurate if true, but needs you to know each group well first.</span></div>
+            <div class="ex"><b>Consumer</b><span>A fraud-vs-legitimate transaction boundary where fraud patterns genuinely have a different "shape" of variability than legitimate ones — a QDA-friendly scenario.</span></div>
+            <div class="ex"><b>Business</b><span>Customer segments with genuinely different behavioral variability (e.g. enterprise clients being much more variable than small clients) — a case where QDA's flexibility could help, given enough data per segment.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A defensible, honest thing to raise if asked "would a curved boundary have helped" for the Axtria classifier — conceptually yes if class shapes truly differed, practically constrained by how much data existed for the minority class.</span></div>
+            <div class="ex"><b>Interview</b><span>"When would you prefer LDA over QDA even though QDA is more flexible?" — with limited data, especially per-class, LDA's shared-covariance assumption acts as a form of regularization that QDA lacks.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>Framing QDA's flexibility as a bias-variance tradeoff, not just "QDA is fancier," is what separates a memorized fact from real understanding.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="nn">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>Neural Network Basics</h2>
+        <p>The foundational mechanics — distinct from the LLM/transformer material coming in the GenAI stage, this is the classical feedforward neural net story.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>The Perceptron &amp; Basic Architecture <span class="lvl lvl-C">C</span></h4>
+          <p>A single artificial neuron computes a weighted sum of its inputs, adds a bias, and passes the result through an activation function. Stacking neurons into layers (input → hidden → output) creates a feedforward neural network, capable of representing far more complex functions than any single linear model.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">import numpy as np
+
+<span class="cmt"># A single neuron: inputs = [duration, tenure], weights, bias</span>
+inputs = np.array([18, 2.5])
+weights = np.array([0.05, 0.3])
+bias = -1.2
+z = np.dot(inputs, weights) + bias
+print(z)  <span class="out"># 0.15</span>
+
+<span class="cmt"># Sigmoid activation squashes it into a usable output — note this</span>
+<span class="cmt"># is EXACTLY the same sigmoid from Logistic Regression, Stage 7</span>
+output = 1 / (1 + np.exp(-z))
+print(round(output, 3))  <span class="out"># 0.537</span></div>
+            <div class="wk-result">A single neuron with a sigmoid activation is mathematically identical to Logistic Regression — the real power of a neural network only appears once you stack many neurons across multiple layers, letting the network learn its own intermediate representations rather than relying on manually engineered features.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>One employee making a decision by weighing several inputs (like the sigmoid neuron above) versus an entire org chart of employees, each feeding their judgment to the next layer up.</span></div>
+            <div class="ex"><b>Consumer</b><span>Every modern image, voice, and recommendation system underneath is built from stacked layers of exactly this weighted-sum-plus-activation building block.</span></div>
+            <div class="ex"><b>Business</b><span>A demand-forecasting model with complex, non-obvious feature interactions that a simple linear or tree model can't capture as flexibly.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Explains precisely why a single logistic-regression-style neuron is "the same math" you'd already be describing for the Axtria classifier — useful framing if an interviewer asks how LogReg relates to neural nets.</span></div>
+            <div class="ex"><b>Interview</b><span>"How is Logistic Regression related to a neural network?" — Logistic Regression IS a single-neuron neural network with a sigmoid activation; a full neural net is many such units stacked and combined.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>This single fact — that LogReg is a one-neuron neural net — is one of the cleanest, most impressive-sounding, completely honest connections you can draw in an interview.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Activation Functions <span class="lvl lvl-C">C</span></h4>
+          <p>Without a nonlinear activation function, stacking layers would collapse into just another linear model — activations are what let networks learn nonlinear patterns. <b>Sigmoid</b>: historic default, but suffers from vanishing gradients in deep networks. <b>ReLU</b> (max(0,x)): today's default for hidden layers — fast, avoids vanishing gradients for positive inputs. <b>Softmax</b>: used on the output layer for multiclass probability outputs (the neural-net generalization of Stage 7's multinomial Logistic Regression).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">import numpy as np
+
+def relu(x): return np.maximum(0, x)
+def sigmoid(x): return 1 / (1 + np.exp(-x))
+
+z = np.array([-2, -0.5, 0, 1.5, 4])
+print("ReLU:   ", relu(z))     <span class="out"># [0.  0.  0.  1.5 4. ]</span>
+print("Sigmoid:", sigmoid(z))  <span class="out"># [0.12 0.38 0.5  0.82 0.98]</span>
+<span class="cmt"># ReLU's gradient is exactly 1 for any positive input (no vanishing);</span>
+<span class="cmt"># sigmoid's gradient shrinks toward 0 at both extremes (-2 and 4)</span>
+<span class="cmt"># -- that shrinking gradient is the vanishing-gradient problem</span></div>
+            <div class="wk-result">ReLU's constant gradient of 1 for any positive input is exactly why it dominates modern hidden layers — sigmoid's gradient approaches zero at both extremes, which compounds across many layers during training and can effectively stop deep networks from learning (the vanishing gradient problem).</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>ReLU is like a valve that's either fully shut (blocks negative signal entirely) or lets everything through unchanged past zero — simple, decisive, doesn't "muffle" strong signals the way sigmoid does at the extremes.</span></div>
+            <div class="ex"><b>Consumer</b><span>Virtually every modern deep learning model (image recognition, voice assistants, recommendation engines) uses ReLU or a variant in its hidden layers.</span></div>
+            <div class="ex"><b>Business</b><span>Choosing softmax on the output layer of a multiclass churn-risk model (low/medium/high) to get clean, sum-to-1 probabilities across the three categories.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly connects to Stage 7's multinomial Logistic Regression — softmax is the exact same idea, generalized as one layer inside a larger network.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why not just use sigmoid everywhere in a deep network?" — the vanishing gradient problem; sigmoid's near-zero gradient at extreme values makes it hard for early layers in a deep network to learn anything meaningful during backpropagation.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>Explaining the vanishing-gradient reasoning, not just naming ReLU as "the popular one," is what separates real understanding from buzzword recall.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Backpropagation &amp; Gradient Descent for Neural Nets <span class="lvl lvl-C">C</span></h4>
+          <p>Backpropagation computes how much each weight in the network contributed to the final prediction error, using the chain rule to propagate the error gradient backward from the output layer to every earlier layer. Those gradients then drive gradient descent updates to every weight, layer by layer.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example (conceptual)</div>
+            <div class="codeblock"><span class="cmt"># Simplified 2-layer network, one training example:</span>
+<span class="cmt"># Forward pass: input -> hidden layer -> output -> prediction</span>
+<span class="cmt"># Loss = how wrong the prediction was (e.g. log-loss, Stage 7)</span>
+
+<span class="cmt"># Backward pass (backpropagation):</span>
+<span class="cmt"># 1. Compute dLoss/d(output) -- how loss changes w.r.t. output</span>
+<span class="cmt"># 2. Chain rule backward: dLoss/d(output_weights)</span>
+<span class="cmt"># 3. Continue backward: dLoss/d(hidden_weights)</span>
+<span class="cmt"># 4. Update EVERY weight: weight -= learning_rate * gradient</span>
+<span class="cmt"># Repeat over many training examples and many passes (epochs)</span></div>
+            <div class="wk-result">This is the exact same gradient-descent mechanism from Stage 7's Linear Regression discussion, applied layer by layer via the chain rule — backpropagation isn't a different optimization idea, it's the bookkeeping trick that makes gradient descent tractable across many stacked layers at once.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A relay team figuring out, after losing a race, exactly how much each runner's individual pace contributed to the final result, so each one knows precisely how much to adjust for next time.</span></div>
+            <div class="ex"><b>Consumer</b><span>Every time a voice assistant "learns" from more training data, backpropagation is the mechanism updating its internal weights.</span></div>
+            <div class="ex"><b>Business</b><span>Understanding backprop conceptually is what lets you sanity-check a data science team's claim that "the model needs more training epochs" versus a genuinely different problem (bad features, bad labels).</span></div>
+            <div class="ex"><b>Enterprise</b><span>Useful conceptual grounding for engaging credibly with any future GenAI/LLM work (Stage 13) at a technical level, since transformers are trained the same fundamental way.</span></div>
+            <div class="ex"><b>Interview</b><span>"What is backpropagation, in one sentence?" — the algorithm that efficiently computes how much each weight in a network contributed to the prediction error, using the chain rule, so gradient descent can update every layer.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>A crisp one-sentence definition plus the connection to gradient descent (already covered honestly in Stage 7) is the right depth level for a non-CV topic like this.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>When to Reach for a Neural Network vs. Classical ML <span class="lvl lvl-C">C</span></h4>
+          <p>Neural networks shine with large amounts of data and complex, high-dimensional patterns (images, text, audio) where manual feature engineering is impractical. For structured/tabular business data — like almost everything in your CV's actual work — tree-based models (XGBoost, Random Forest) and simpler models (Logistic Regression) very often match or beat neural networks, train faster, and stay far more interpretable.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example (conceptual)</div>
+            <div class="codeblock"><span class="cmt"># Rule-of-thumb decision framework for tabular business data:</span>
+<span class="cmt"># - Need stakeholder-interpretable output? -> Logistic Regression</span>
+<span class="cmt"># - Need best raw accuracy on structured/tabular data? -> XGBoost</span>
+<span class="cmt"># - Working with images, raw text, or audio? -> Neural network</span>
+<span class="cmt"># - Have &lt;10,000 rows? -> a neural net is unlikely to beat XGBoost</span>
+<span class="cmt">#   or Logistic Regression, and will be much harder to explain</span></div>
+            <div class="wk-result">On genuinely structured, moderate-scale business data — which is exactly Axtria's shape, per Stage 5's confirmed facts — a neural network would very likely have been the wrong tool: more complex to build and explain, with no guaranteed accuracy advantage over XGBoost or Logistic Regression, and a real loss of stakeholder interpretability.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Using a industrial power drill to hang one small picture frame — technically more powerful, but the wrong tool for the job's actual scale and requirements.</span></div>
+            <div class="ex"><b>Consumer</b><span>Image recognition apps genuinely need neural networks; a retailer's simple "will this order ship late" prediction almost never does.</span></div>
+            <div class="ex"><b>Business</b><span>Explaining to a stakeholder why the team chose XGBoost over "AI" (meaning a neural net) for a tabular business problem — accuracy parity with far more interpretability and much less complexity.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The single most defensible, honest thing to say about why Axtria used Logistic Regression/XGBoost rather than a neural network: the data was structured, moderate-scale, and stakeholder interpretability genuinely mattered.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why not just use deep learning for everything?" — on structured/tabular data at typical business scale, it rarely outperforms XGBoost, trains slower, needs more data and tuning, and sacrifices interpretability for no real gain.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>This is arguably the single most interview-valuable point in this entire stage — showing judgment about when NOT to use the most powerful-sounding tool is a senior-level signal.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cmptable">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Full Model Comparison Table</h2>
+        <p>Every classifier covered across Stages 6-8 in one place — the complete "why this, why not that" reference.</p>
+      </div>
+      <div class="card cmp-wrap" style="padding:6px">
+        <table class="cmp-table">
+          <tr><th>Model</th><th>Best for</th><th>Interpretability</th><th>Handles nonlinearity</th><th>Needs scaling</th><th>Data efficiency</th></tr>
+          <tr><td>Logistic Regression</td><td>Interpretable probability, stakeholder trust</td><td>Highest</td><td>No (unless engineered)</td><td>Yes</td><td>Good with modest data</td></tr>
+          <tr><td>KNN</td><td>Simple, intuitive "similar cases" explanation</td><td>Medium</td><td>Yes</td><td>Yes (critical)</td><td>Needs dense local data</td></tr>
+          <tr><td>Naive Bayes</td><td>Very fast, high-dimensional sparse data (text)</td><td>Medium</td><td>No</td><td>No</td><td>Works with limited data</td></tr>
+          <tr><td>SVM</td><td>High accuracy with the right kernel</td><td>Low</td><td>Yes (kernel trick)</td><td>Yes (critical)</td><td>Good with modest data</td></tr>
+          <tr><td>LDA</td><td>Generative classifier, label-aware dim. reduction</td><td>High</td><td>No</td><td>Yes</td><td>Good, even with limited data</td></tr>
+          <tr><td>QDA</td><td>When classes have genuinely different variability</td><td>Medium</td><td>Yes (quadratic boundary)</td><td>Yes</td><td>Needs more data per class</td></tr>
+          <tr><td>Decision Tree</td><td>Visual, rule-based interpretability</td><td>High</td><td>Yes</td><td>No</td><td>Moderate, overfits small data</td></tr>
+          <tr><td>Random Forest / XGBoost (Stage 9)</td><td>Best raw accuracy on tabular data</td><td>Low (needs SHAP)</td><td>Yes</td><td>No</td><td>Needs moderate-to-large data</td></tr>
+          <tr><td>Neural Network</td><td>Images, text, audio, very large datasets</td><td>Lowest</td><td>Yes</td><td>Yes</td><td>Needs large data</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="redflags">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>Red Flags — Never Say This</h2>
+      </div>
+      <div class="redflag"><b>"KNN doesn't need any training, so it's always faster than Logistic Regression."</b> Backwards — KNN pushes all the cost to prediction time (it has to search the whole stored dataset for every prediction), which is often slower in production than a pre-trained Logistic Regression model's near-instant inference.</div>
+      <div class="redflag"><b>"Naive Bayes assumes features are unrelated, so it only works when they really are unrelated."</b> Overstated — the independence assumption is almost never fully true in practice, and Naive Bayes often still performs well anyway; the assumption is a simplification, not a hard requirement.</div>
+      <div class="redflag"><b>"SVM and Logistic Regression are basically the same thing."</b> They optimize different objectives (max-margin vs. maximum likelihood) and only SVM naturally identifies support vectors — related in spirit, not interchangeable in mechanism.</div>
+      <div class="redflag"><b>"A neural network is always the most accurate choice."</b> False on typical structured/tabular business data at moderate scale, where XGBoost or even Logistic Regression frequently matches or beats it — claiming otherwise signals you haven't actually worked with tabular ML problems.</div>
+      <div class="redflag"><b>"I've built neural networks/SVMs in production" when you haven't.</b> Use the honest framing from this stage's opening section instead — a confident, precise "I understand these deeply and know when I'd reach for them" survives scrutiny; a fabricated hands-on claim does not.</div>
+    </section>
+
+    <section id="problems">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>30 Progressive Coding Problems</h2>
+        <p>Scikit-learn based, against the same rep/call/order business context. Click to expand each solution.</p>
+      </div>
+      <div class="filterbar" id="pfilter">
+        <button data-f="all" class="active">All</button>
+        <button data-f="easy">Easy</button>
+        <button data-f="med">Medium</button>
+        <button data-f="hard">Hard</button>
+        <button data-f="expert">Expert</button>
+      </div>
+      <div class="probgrid" id="problist"></div>
+    </section>
+
+    <section id="questions">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2>70-Question Interview Bank</h2>
+        <p>Click any question for the model answer.</p>
+      </div>
+      <div class="card qbank" id="qbank"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">12</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card bridge-flow">
+        <span class="node">Logistic Regression (Stage 7, genuine Axtria usage)</span><span class="arrow">→</span>
+        <span class="node">"Why not KNN / SVM / Naive Bayes / a neural net instead?"</span><span class="arrow">→</span>
+        <span class="node">Full honest comparison from this stage</span><span class="arrow">→</span>
+        <span class="node">Confident answer, zero fabrication risk</span><span class="arrow">→</span>
+        <span class="node">Reinforces why the actual model choice was sound</span>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">13</div>
+        <h2>Mastery Checklist</h2>
+        <p>Saved locally in your browser as you check items off.</p>
+      </div>
+      <div class="card checklist" id="mastery-list"></div>
+    </section>
+  </main>
+</div>
+
+<button class="backtop" id="backtop" aria-label="Back to top">↑</button>
+
+<script>
+try {
+  var problems = [
+    ["easy","Fit a KNN classifier with k=5 and print its accuracy on the test set.","from sklearn.neighbors import KNeighborsClassifier\nknn = KNeighborsClassifier(n_neighbors=5).fit(X_train_scaled, y_train)\nprint(knn.score(X_test_scaled, y_test))"],
+    ["easy","Fit a GaussianNB classifier and print predicted probabilities.","from sklearn.naive_bayes import GaussianNB\ngnb = GaussianNB().fit(X_train, y_train)\nprint(gnb.predict_proba(X_test[:5]))"],
+    ["easy","Fit a linear-kernel SVM and print the number of support vectors per class.","from sklearn.svm import SVC\nsvm = SVC(kernel='linear').fit(X_train_scaled, y_train)\nprint(svm.n_support_)"],
+    ["easy","Fit an LDA classifier and print its test accuracy.","from sklearn.discriminant_analysis import LinearDiscriminantAnalysis\nlda = LinearDiscriminantAnalysis().fit(X_train_scaled, y_train)\nprint(lda.score(X_test_scaled, y_test))"],
+    ["easy","Fit a QDA classifier and compare its test accuracy to LDA's.","from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis\nqda = QuadraticDiscriminantAnalysis().fit(X_train_scaled, y_train)\nprint(qda.score(X_test_scaled, y_test), lda.score(X_test_scaled, y_test))"],
+    ["easy","Manually compute the ReLU of an array of values.","import numpy as np\ndef relu(x): return np.maximum(0, x)\nprint(relu(np.array([-2,-0.5,0,1.5,4])))"],
+    ["easy","Fit a small MLPClassifier (neural network) using scikit-learn.","from sklearn.neural_network import MLPClassifier\nmlp = MLPClassifier(hidden_layer_sizes=(10,), max_iter=500).fit(X_train_scaled, y_train)\nprint(mlp.score(X_test_scaled, y_test))"],
+    ["easy","Compare unscaled vs. scaled KNN accuracy to demonstrate why scaling matters.","knn_unscaled = KNeighborsClassifier().fit(X_train, y_train)\nknn_scaled = KNeighborsClassifier().fit(X_train_scaled, y_train)\nprint(knn_unscaled.score(X_test, y_test), knn_scaled.score(X_test_scaled, y_test))"],
+    ["easy","Fit an RBF-kernel SVM and compare its accuracy to a linear-kernel SVM.","rbf = SVC(kernel='rbf').fit(X_train_scaled, y_train)\nlinear = SVC(kernel='linear').fit(X_train_scaled, y_train)\nprint(rbf.score(X_test_scaled,y_test), linear.score(X_test_scaled,y_test))"],
+    ["easy","Manually implement the sigmoid function and confirm it matches sklearn's single-neuron logic.","import numpy as np\ndef sigmoid(z): return 1/(1+np.exp(-z))\nprint(sigmoid(np.array([-2,0,2])))"],
+    ["med","Sweep k from 1 to 25 and plot cross-validated F1 to find the optimal k.","from sklearn.model_selection import cross_val_score\nfor k in [1,3,5,9,15,25]:\n    knn = KNeighborsClassifier(n_neighbors=k)\n    print(k, cross_val_score(knn, X_train_scaled, y_train, cv=5, scoring='f1').mean())"],
+    ["med","Use GridSearchCV to tune an SVM's C and gamma hyperparameters.","from sklearn.model_selection import GridSearchCV\ngrid = GridSearchCV(SVC(kernel='rbf'), {'C':[0.1,1,10,100],'gamma':['scale',0.01,0.1,1]}, cv=5)\ngrid.fit(X_train_scaled, y_train)\nprint(grid.best_params_)"],
+    ["med","Fit MultinomialNB on a word-count matrix built from call-notes text.","from sklearn.feature_extraction.text import CountVectorizer\nfrom sklearn.naive_bayes import MultinomialNB\nvec = CountVectorizer()\nX_counts = vec.fit_transform(call_notes_text)\nmnb = MultinomialNB().fit(X_counts, y_train)"],
+    ["med","Use LDA for supervised dimensionality reduction to 1 component and visualize class separation.","lda_reduce = LinearDiscriminantAnalysis(n_components=1)\nX_reduced = lda_reduce.fit_transform(X_train_scaled, y_train)\n# plot X_reduced colored by y_train to see class separation"],
+    ["med","Compare KNN, Naive Bayes, SVM, and Logistic Regression on the same dataset using PR-AUC.","from sklearn.metrics import average_precision_score\nmodels = {'KNN':knn, 'NB':gnb, 'SVM':SVC(probability=True).fit(X_train_scaled,y_train), 'LogReg':LogisticRegression().fit(X_train_scaled,y_train)}\nfor name, m in models.items():\n    print(name, average_precision_score(y_test, m.predict_proba(X_test_scaled)[:,1]))"],
+    ["med","Build a 2-hidden-layer MLPClassifier and compare train vs. test accuracy to check for overfitting.","mlp = MLPClassifier(hidden_layer_sizes=(20,10), max_iter=1000).fit(X_train_scaled, y_train)\nprint(mlp.score(X_train_scaled,y_train), mlp.score(X_test_scaled,y_test))"],
+    ["med","Manually implement a single-neuron forward pass (weighted sum + sigmoid) and compare to LogisticRegression's prediction for the same input.","import numpy as np\nweights, bias = model.coef_[0], model.intercept_[0]\nz = np.dot(X_test.iloc[0], weights) + bias\nmanual_pred = 1/(1+np.exp(-z))\nprint(manual_pred, model.predict_proba(X_test.iloc[[0]])[0][1])"],
+    ["med","Fit both LDA and QDA on a small (200-row) subsample and compare which generalizes better.","small_idx = X_train_scaled.sample(200).index\nlda_small = LinearDiscriminantAnalysis().fit(X_train_scaled.loc[small_idx], y_train.loc[small_idx])\nqda_small = QuadraticDiscriminantAnalysis().fit(X_train_scaled.loc[small_idx], y_train.loc[small_idx])\nprint(lda_small.score(X_test_scaled,y_test), qda_small.score(X_test_scaled,y_test))"],
+    ["med","Use KNeighborsRegressor to predict a continuous target (call_value) instead of a class label.","from sklearn.neighbors import KNeighborsRegressor\nknn_reg = KNeighborsRegressor(n_neighbors=7).fit(X_train_scaled, y_train_continuous)\nprint(knn_reg.predict(X_test_scaled[:5]))"],
+    ["med","Compare Manhattan vs. Euclidean distance metrics in KNN and report any accuracy difference.","knn_euclidean = KNeighborsClassifier(metric='euclidean').fit(X_train_scaled, y_train)\nknn_manhattan = KNeighborsClassifier(metric='manhattan').fit(X_train_scaled, y_train)\nprint(knn_euclidean.score(X_test_scaled,y_test), knn_manhattan.score(X_test_scaled,y_test))"],
+    ["hard","Implement k-fold cross-validation from scratch to select the best k for KNN without using cross_val_score.","from sklearn.model_selection import KFold\nimport numpy as np\nkf = KFold(n_splits=5, shuffle=True, random_state=42)\nfor k in [3,5,9,15]:\n    scores = []\n    for tr_idx, val_idx in kf.split(X_train_scaled):\n        m = KNeighborsClassifier(n_neighbors=k).fit(X_train_scaled.iloc[tr_idx], y_train.iloc[tr_idx])\n        scores.append(m.score(X_train_scaled.iloc[val_idx], y_train.iloc[val_idx]))\n    print(k, np.mean(scores))"],
+    ["hard","Manually derive and verify why a single sigmoid-activated neuron produces the same output as sklearn's LogisticRegression for the same weights.","# z = w.x + b; sigmoid(z) = 1/(1+e^-z)\n# This is EXACTLY Logistic Regression's prediction formula.\n# Verify: set neuron weights = model.coef_[0], bias = model.intercept_[0]\n# and confirm manual sigmoid(z) matches model.predict_proba() exactly."],
+    ["hard","Diagnose why an SVM performs poorly on unscaled data by comparing per-feature distance contributions before and after scaling.","import numpy as np\nraw_range = X_train.max() - X_train.min()\nprint(raw_range)  # one feature likely dominates distance calc\nscaled_range = X_train_scaled.max() - X_train_scaled.min()\nprint(scaled_range)  # should now be roughly comparable across features"],
+    ["hard","Build a full nested cross-validation pipeline comparing KNN, SVM, and Naive Bayes with proper hyperparameter tuning inside each fold.","from sklearn.model_selection import cross_val_score, GridSearchCV\nmodels = {\n    'KNN': GridSearchCV(KNeighborsClassifier(), {'n_neighbors':[3,5,9]}, cv=3),\n    'SVM': GridSearchCV(SVC(), {'C':[1,10]}, cv=3),\n}\nfor name, m in models.items():\n    scores = cross_val_score(m, X_train_scaled, y_train, cv=5, scoring='f1')\n    print(name, scores.mean())"],
+    ["hard","Implement backpropagation's gradient computation manually for a single-hidden-layer network on one training example.","import numpy as np\n# Forward: h = sigmoid(W1.x + b1); out = sigmoid(W2.h + b2)\n# Backward: d_out = out - y_true (log-loss gradient simplification)\n# d_W2 = d_out * h\n# d_h = d_out * W2 * h * (1-h)  (sigmoid derivative)\n# d_W1 = d_h outer x\n# (full derivation — verify shapes match W1, W2 dimensions)"],
+    ["hard","Compare LDA's decision boundary to Logistic Regression's on the same 2D dataset and explain any difference in shape.","import matplotlib.pyplot as plt\n# Both should produce LINEAR boundaries, but LDA's is derived from\n# class-conditional Gaussian assumptions while LogReg's is derived\n# from directly maximizing likelihood of the labels — plot both\n# boundaries overlaid and note they're similar but not identical\n# unless the Gaussian assumption holds exactly"],
+    ["hard","Given a dataset where QDA overfits on a small sample, apply regularized discriminant analysis (shrinkage) and compare.","lda_shrink = LinearDiscriminantAnalysis(solver='lsqr', shrinkage='auto').fit(X_train_scaled, y_train)\nprint(lda_shrink.score(X_test_scaled, y_test))\n# shrinkage blends toward LDA's shared-covariance assumption,\n# reducing QDA-style overfitting on small per-class samples"],
+    ["hard","Profile prediction latency for KNN vs. a pre-trained Logistic Regression model to demonstrate KNN's lazy-learner cost.","import time\nstart = time.time()\nknn.predict(X_test_scaled)\nprint('KNN:', time.time()-start)\nstart = time.time()\nlogreg.predict(X_test_scaled)\nprint('LogReg:', time.time()-start)\n# KNN is typically much slower at prediction time on larger datasets"],
+    ["expert","Design a full 'why this, why not that' technical answer comparing all 5 models in this stage against Logistic Regression for the Axtria conversion-classification problem, and justify the actual choice.","# 1. KNN: rejected -- slower at prediction time, less interpretable output than odds ratios\n# 2. Naive Bayes: rejected -- independence assumption too strong given correlated features\n# 3. SVM: rejected -- loses direct probability/odds-ratio interpretability stakeholders needed\n# 4. LDA/QDA: rejected -- generative assumptions (Gaussian features) less appropriate than\n#    LogReg's more flexible discriminative approach for this mixed feature set\n# 5. Neural Net: rejected -- moderate tabular data scale, no accuracy advantage, much\n#    less interpretable\n# Logistic Regression wins on: interpretability (odds ratios), fast retraining,\n# probabilistic output stakeholders could act on directly, and adequate accuracy\n# for the business decision at hand"],
+    ["expert","Implement a from-scratch 2-layer neural network (forward + backward pass, NumPy only) and train it via gradient descent on a small synthetic binary classification dataset.","import numpy as np\nnp.random.seed(0)\nW1 = np.random.randn(2,4)*0.1; b1 = np.zeros(4)\nW2 = np.random.randn(4,1)*0.1; b2 = np.zeros(1)\nlr = 0.1\nfor epoch in range(1000):\n    h = 1/(1+np.exp(-(X@W1+b1)))\n    out = 1/(1+np.exp(-(h@W2+b2)))\n    d_out = out.flatten() - y\n    d_W2 = h.T @ d_out.reshape(-1,1)\n    d_h = np.outer(d_out, W2.flatten()) * h * (1-h)\n    d_W1 = X.T @ d_h\n    W2 -= lr*d_W2; W1 -= lr*d_W1\nprint('trained')"]
+  ];
+
+  var qas = [
+    ["What is K-Nearest Neighbors, in one sentence?","A classifier (or regressor) that predicts a new point's label based on the majority vote (or average) among its k closest training points, with no explicit training phase."],
+    ["Why is KNN called a 'lazy learner'?","It does no real computation during 'training' beyond storing the data — all the actual work (finding neighbors, computing the prediction) happens at prediction time."],
+    ["What happens with k=1 in KNN?","The prediction is based purely on the single closest training point, making the model maximally sensitive to noise — high variance, low bias."],
+    ["What happens with a very large k in KNN?","The prediction becomes an average over a large neighborhood, smoothing out local structure — high bias, low variance, and at the extreme, approaching the overall majority class regardless of the specific point."],
+    ["Why must features be scaled before using KNN?","KNN's predictions depend directly on distance calculations; an unscaled feature with a larger numeric range dominates the distance metric regardless of its actual predictive relevance."],
+    ["What is the curse of dimensionality, and how does it affect KNN specifically?","As the number of features grows, all points tend to become roughly equidistant from each other, making the concept of a 'nearest' neighbor increasingly meaningless without dimensionality reduction first."],
+    ["What's the difference between Euclidean and Manhattan distance?","Euclidean is straight-line distance (as the crow flies); Manhattan is the sum of absolute differences along each dimension (like navigating a city grid) — sometimes more appropriate for high-dimensional or grid-like data."],
+    ["Why can KNN be slower in production than a pre-trained Logistic Regression model?","KNN pushes all computational cost to prediction time (searching the stored dataset for neighbors), while Logistic Regression's prediction is just a fast dot product using already-learned coefficients."],
+    ["What is Naive Bayes built on?","Bayes' Theorem, computing the probability of each class given the observed features."],
+    ["Why is Naive Bayes called 'naive'?","It assumes all features are conditionally independent given the class label — an assumption that's almost never fully true in practice, though the model often still performs well."],
+    ["What's the difference between Gaussian, Multinomial, and Bernoulli Naive Bayes?","Gaussian assumes continuous, normally-distributed features; Multinomial is for count data (e.g. word frequencies); Bernoulli is for binary presence/absence features."],
+    ["Why is Naive Bayes often used for text classification specifically?","Text naturally produces high-dimensional, somewhat-independent word-frequency features, and Naive Bayes is fast and works well even with limited training data in that setting."],
+    ["Can Naive Bayes still perform well even when features are correlated?","Yes, often — the independence assumption affects the estimated probabilities' calibration more than the final classification decision in many practical cases, which is why it remains a strong, fast baseline despite the unrealistic assumption."],
+    ["What is a support vector in SVM?","One of the training points closest to the decision boundary — these points alone determine where the maximum-margin boundary sits; all other points could be removed without changing the model."],
+    ["What is the 'margin' SVM is trying to maximize?","The distance between the decision boundary and the closest points of each class — a wider margin generally generalizes better to new data."],
+    ["What is the kernel trick?","A method that lets SVM implicitly operate as if it mapped data into a higher-dimensional space (where a linear separator might exist) without ever explicitly computing that mapping — making nonlinear classification computationally practical."],
+    ["Name three common SVM kernels.","Linear, polynomial, and RBF (Radial Basis Function) — RBF is the default choice for nonlinear problems."],
+    ["What does the C parameter control in SVM?","The tradeoff between maximizing the margin and minimizing training misclassifications — small C allows more margin violations (softer, simpler boundary), large C penalizes misclassifications heavily (tighter fit to training data, more overfitting risk)."],
+    ["What does the gamma parameter control in an RBF-kernel SVM?","How far a single training point's influence extends — high gamma means very local, tightly-fit boundaries (overfitting risk); low gamma means smoother, more global boundaries."],
+    ["Why does SVM need feature scaling, same as KNN?","Its margin calculation is fundamentally distance-based, so an unscaled feature with a larger range would dominate the boundary calculation regardless of true predictive relevance."],
+    ["How does SVM handle multiclass classification, since its core formulation is binary?","Typically via One-vs-Rest (one binary SVM per class vs. all others) or One-vs-One (one binary SVM per pair of classes), combining their outputs to make the final prediction."],
+    ["What is LDA (Linear Discriminant Analysis)?","A generative classifier that models each class's features as a multivariate normal distribution, assuming shared covariance across classes, and classifies new points via Bayes' Theorem based on which class's distribution makes them most likely."],
+    ["What's the key difference between LDA and Logistic Regression, given both produce linear boundaries?","LDA is generative — it models the full feature distribution for each class and derives the boundary from that. Logistic Regression is discriminative — it models the decision boundary directly without assuming a feature distribution."],
+    ["How can LDA be used besides classification?","As a supervised dimensionality-reduction technique — projecting data onto the axes that best separate the known classes, unlike PCA which ignores labels and focuses purely on overall variance."],
+    ["What does QDA relax compared to LDA?","The assumption that all classes share the same covariance structure — QDA lets each class have its own, producing a quadratic (curved) rather than linear decision boundary."],
+    ["Why might QDA underperform LDA on a small dataset despite being more flexible?","QDA needs enough data per class to reliably estimate each class's own covariance matrix; with too little data, that extra flexibility becomes extra variance (overfitting) rather than extra accuracy."],
+    ["What is a perceptron?","A single artificial neuron that computes a weighted sum of its inputs, adds a bias, and passes the result through an activation function to produce an output."],
+    ["How is a single sigmoid-activated neuron mathematically related to Logistic Regression?","They're identical — Logistic Regression is exactly a single-neuron neural network with a sigmoid activation function."],
+    ["Why do neural networks need nonlinear activation functions?","Without them, stacking multiple linear layers would mathematically collapse into just another single linear model, regardless of how many layers exist — nonlinearity is what allows networks to represent complex patterns."],
+    ["What is ReLU, and why does it dominate modern hidden-layer activations?","max(0, x) — it has a constant gradient of 1 for positive inputs, avoiding the vanishing-gradient problem that sigmoid and tanh suffer from in deep networks, and it's computationally cheap."],
+    ["What is the vanishing gradient problem?","In deep networks, gradients computed via the chain rule during backpropagation can shrink toward zero as they propagate backward through many layers with saturating activations (like sigmoid), effectively stopping early layers from learning."],
+    ["What is softmax used for?","Converting a layer's raw outputs into a valid probability distribution across multiple classes (summing to 1) — the neural-network generalization of multinomial Logistic Regression's approach."],
+    ["What is backpropagation, in one sentence?","The algorithm that efficiently computes how much each weight in a network contributed to the prediction error, using the chain rule, so gradient descent can update every layer's weights."],
+    ["Is backpropagation a different optimization method from gradient descent?","No — it's the mechanism for computing the gradients gradient descent then uses to update weights; backpropagation is bookkeeping for the chain rule across layers, not a separate optimizer."],
+    ["When would you choose a neural network over XGBoost for a business problem?","When working with unstructured data (images, raw text, audio) or extremely large, complex datasets where manual feature engineering is impractical — rarely the right default for typical structured/tabular business data."],
+    ["Why might XGBoost beat a neural network on structured/tabular business data?","Tree-based ensembles often match or exceed neural network accuracy on tabular data, train faster, need less data and tuning, and stay far more interpretable — neural networks' advantages are strongest on unstructured data."],
+    ["What's a reasonable data-size rule of thumb for when a neural network starts to make sense over classical ML?","There's no fixed number, but with well under 10,000 rows of structured data, a neural network is unlikely to outperform XGBoost or Logistic Regression and will be harder to explain — neural nets generally need substantially more data to earn their added complexity."],
+    ["How would you honestly answer 'have you built a neural network' if you haven't in production?","State plainly that your hands-on modeling experience is with Logistic Regression and XGBoost, that you understand neural network fundamentals well (perceptron, backprop, activation functions) conceptually, and that you'd reach for one specifically for unstructured or very large-scale data — not overclaiming, but not underselling the conceptual depth either."],
+    ["Why might a hiring manager ask about models that aren't on your CV at all?","To test whether you understand the broader landscape of alternatives well enough to justify the choices you did make — not knowing why you didn't use something can be as revealing as not knowing why you did."],
+    ["What's the practical tradeoff between LDA's assumptions and Logistic Regression's flexibility?","LDA's shared-covariance-Gaussian assumption acts like a form of regularization — if roughly true, LDA can outperform Logistic Regression with less data; if false, Logistic Regression's fewer assumptions make it more robust."],
+    ["How would you decide between Naive Bayes and Logistic Regression as a fast baseline?","Naive Bayes is faster to train and can work with less data, especially on high-dimensional sparse features; Logistic Regression makes fewer unrealistic assumptions and its coefficients are more directly interpretable as odds ratios."],
+    ["What is the main practical downside of KNN in a production system with growing data?","Prediction cost grows with the size of the stored training set, since every prediction requires searching for nearest neighbors across the whole dataset — this doesn't scale as gracefully as a fixed-size trained model like Logistic Regression or a neural network."],
+    ["Why is SVM sometimes described as less 'production-friendly' than other models despite strong accuracy?","Predictions for non-linear kernels can be computationally more expensive than a simple weighted sum (as in Logistic Regression or a small neural net), and it doesn't naturally output well-calibrated probabilities without extra calibration steps."],
+    ["What does it mean that Logistic Regression's decision boundary and LDA's decision boundary are both 'linear' but derived differently?","Two models can produce visually similar or even identical boundaries while arriving there through completely different assumptions and optimization objectives — a reminder that 'what the model outputs' and 'how the model got there' are separate questions worth understanding both of."],
+    ["How would you explain the kernel trick to a non-technical stakeholder?","It lets the model 'bend' its decision boundary to fit patterns a straight line couldn't capture, without actually having to compute in a much higher-dimensional space directly — a clever mathematical shortcut, not a different kind of model."],
+    ["What is a key limitation of using accuracy alone to compare KNN, SVM, and Naive Bayes on an imbalanced dataset?","Same issue as Stage 6 generally — accuracy can look deceptively high for any model that mostly predicts the majority class; PR-AUC or F1 gives a more honest comparison across model types on imbalanced data."],
+    ["Why might QDA be preferred over a neural network for a small, structured dataset with genuinely different per-class variability?","QDA directly encodes the relevant structural assumption (different covariance per class) with very few parameters, needing far less data to fit well than a neural network would need to learn the same pattern from scratch."],
+    ["What's the relationship between a neuron's weighted sum and Linear Regression?","A neuron's pre-activation computation (weighted sum of inputs plus bias) is exactly a linear regression equation — the activation function is what's added on top to introduce nonlinearity or bound the output."],
+    ["Why does feature scaling matter less for Naive Bayes than for KNN or SVM?","Naive Bayes evaluates each feature's likelihood independently based on its own distribution parameters, rather than computing cross-feature distances, so a difference in raw numeric scale between features doesn't distort the model the way it does for distance-based methods."],
+    ["What would you say if asked to compare LDA, QDA, and Logistic Regression's assumptions in one sentence each?","LDA assumes shared, Gaussian, class-conditional covariance; QDA relaxes that to per-class covariance; Logistic Regression makes no distributional assumption about the features at all, modeling the decision boundary directly."],
+    ["If an interviewer asks you to whiteboard a perceptron's forward pass, what should you write?","z = w·x + b (weighted sum plus bias), then output = activation(z) — e.g. sigmoid(z) for a binary classification neuron, exactly mirroring the Logistic Regression formula from Stage 7."],
+    ["Why is 'more layers is always better' a misconception about neural networks?","Deeper networks are harder to train (vanishing gradients, more parameters to overfit with) and need proportionally more data; on structured business data at moderate scale, a deeper network often just overfits without adding real predictive value."],
+    ["How would you justify NOT using a neural network in a technical interview, without sounding like you're avoiding complexity you don't understand?","Ground the answer in the actual tradeoffs — data scale, interpretability requirements, and whether the problem is structured/tabular versus unstructured — rather than a vague 'it's too complex,' which is what demonstrates real understanding rather than avoidance."],
+    ["What's the honest difference between 'I understand neural network basics' and 'I've built neural networks'?","The first claims conceptual fluency (architecture, backprop, activation functions, when to use one) which is fully true and defensible; the second claims hands-on production experience, which would need to be genuinely true to say — conflating the two is exactly the fabrication risk this masterbook avoids."],
+    ["Why might an interviewer specifically ask about KNN even though it's rarely used in production at scale?","It's one of the clearest ways to test whether you understand core ML concepts (bias-variance, distance metrics, the curse of dimensionality) without the complexity of a more sophisticated model obscuring the underlying ideas."],
+    ["What is one genuine advantage Naive Bayes has over Logistic Regression that isn't about speed?","It can perform well with very little training data relative to the number of features, since it estimates simple per-feature distributions rather than jointly optimizing many coefficients at once."],
+    ["How would you frame a portfolio project comparing KNN, SVM, Naive Bayes, and Logistic Regression as genuinely valuable rather than just an academic exercise?","Frame it around a real decision-making question — e.g. 'which model would I actually recommend for a stakeholder-facing conversion classifier, and why' — turning a model-comparison exercise into a demonstration of judgment, not just an accuracy leaderboard."],
+    ["What does it mean for LDA to use 'the same math' as Naive Bayes in a sense?","Both are generative classifiers built on Bayes' Theorem, computing P(class | features) from P(features | class) and the class prior — they differ mainly in what distributional assumptions they make about the features."],
+    ["Why is understanding models you didn't personally build still valuable for someone in an analytics/consulting role, not just a pure ML engineering one?","Analytics and consulting roles frequently involve evaluating a vendor's or team's modeling choices, explaining tradeoffs to stakeholders, or scoping what's technically feasible — all of which require broad model literacy, not just hands-on experience with one or two specific algorithms."],
+    ["What's a defensible way to end an answer about a model you understand conceptually but haven't personally deployed?","Close with what you'd want to validate or learn hands-on if you did build it — showing genuine intellectual honesty and curiosity rather than either overclaiming or stopping at a flat 'I don't know.'"],
+    ["Why does the 'why this, why not that' framing matter more than just listing facts about each model?","Interviewers are usually testing judgment — the ability to reason about tradeoffs and make (and defend) a choice — not just recall; a comparison framed around a real decision demonstrates that judgment directly."],
+    ["What connects this entire stage's models back to the two you actually used at Axtria?","Every model here is a genuine alternative that could reasonably have been proposed for the same conversion-classification or forecasting problems — understanding why each wasn't chosen makes the case for Logistic Regression and XGBoost stronger, not weaker."],
+    ["If you had unlimited time, which of these five models would you most want to actually build a hands-on project with, and why would that be a defensible answer?","Any honest, specific choice works well here (e.g. 'SVM, because the kernel trick's math is the part I understand least deeply and want to internalize by implementing it') — specificity and self-awareness matter more than which model you pick."],
+    ["How would you handle a technical interviewer who seems to be testing whether you'll fabricate experience with one of these models?","Give the honest, complete answer from this stage's opening framing directly and without hedging apology — a clear, confident 'I understand this deeply, haven't personally deployed it, here's when I would use it' reads as more credible than either overclaiming or an uncomfortable non-answer."],
+    ["What's the single biggest interview-readiness gain from building this stage, in your own words?","Never being caught flat-footed by a 'why not X' question again — every major classical ML alternative now has a specific, honest, technically grounded answer ready, rather than a vague gesture toward familiarity."],
+    ["Why does KNN's decision boundary look 'jagged' compared to LDA's smooth linear boundary?","KNN makes no assumption about the underlying data distribution — its boundary is just wherever the majority vote among local neighbors flips, so it can trace arbitrarily complex, locally-adapted shapes rather than a single global line or curve."],
+    ["What is Laplace (additive) smoothing in Naive Bayes, and why is it needed?","A small constant added to feature counts before computing probabilities, so a feature value never seen with a given class during training doesn't force that class's entire probability to zero — without it, one unseen combination could override all other evidence."],
+    ["Why is SVM's training time a practical concern on very large datasets?","Its core optimization scales roughly quadratically to cubically with the number of training points for common kernel implementations, so on datasets with hundreds of thousands of rows it becomes noticeably slower to train than a linear model or a tree ensemble."],
+    ["What does it mean that LDA assumes 'homoscedasticity' across classes?","It assumes every class shares the exact same covariance (spread and correlation) structure across features — only the class means differ — which is what keeps LDA's decision boundary linear rather than curved."],
+    ["How would you describe the bias-variance tradeoff across this stage's five model families in one sweep?","KNN (low k) and QDA sit toward high variance/low bias from their flexibility; Naive Bayes and LDA sit toward high bias/low variance from their strong distributional assumptions; SVM and neural networks land in between, with their exact position tunable via regularization (C, network size, weight decay)."]
+  ];
+
+  function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+  var probList = document.getElementById('problist');
+  var diffLabel = {easy:'Easy', med:'Medium', hard:'Hard', expert:'Expert'};
+  problems.forEach(function(p, i){
+    var d = document.createElement('details');
+    d.className = 'prob';
+    d.setAttribute('data-diff', p[0]);
+    d.innerHTML = '<summary><span class="pnum">P' + (i+1) + '</span><span class="pdiff ' + p[0] + '">' + diffLabel[p[0]] + '</span><span>' + esc(p[1]) + '</span></summary>' +
+      '<div class="prob-body"><div class="codeblock">' + esc(p[2]) + '</div></div>';
+    probList.appendChild(d);
+  });
+  document.querySelectorAll('#pfilter button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('#pfilter button').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var f = btn.getAttribute('data-f');
+      document.querySelectorAll('#problist details.prob').forEach(function(d){
+        d.style.display = (f === 'all' || d.getAttribute('data-diff') === f) ? '' : 'none';
+      });
+    });
+  });
+
+  var qBox = document.getElementById('qbank');
+  qas.forEach(function(qa){
+    var d = document.createElement('details');
+    d.className = 'qa';
+    d.innerHTML = '<summary>' + esc(qa[0]) + '</summary><div class="qa-a">' + esc(qa[1]) + '</div>';
+    qBox.appendChild(d);
+  });
+
+  var masteryItems = [
+    "Give the honest 'not on my CV, but here's what I understand and when I'd use it' framing fluently for all five model families",
+    "Explain KNN's bias-variance tradeoff via k, with a concrete cross-validated example",
+    "Explain why Naive Bayes is 'naive' and why it still often works well anyway",
+    "Explain the maximum-margin idea and what support vectors are",
+    "Explain the kernel trick's core idea without needing the full math derivation",
+    "Explain the difference between LDA (generative) and Logistic Regression (discriminative)",
+    "Explain why QDA can underperform LDA on small data despite being more flexible",
+    "State the one-sentence fact that Logistic Regression IS a single-neuron neural network",
+    "Explain why ReLU dominates over sigmoid in modern hidden layers (vanishing gradients)",
+    "Explain backpropagation in one sentence and its relationship to gradient descent",
+    "Give a confident, well-reasoned answer for 'why not a neural network' for tabular business data",
+    "Walk through the full comparison table and justify Logistic Regression's actual selection at Axtria",
+    "Answer 15 random questions from the 70-question bank without checking the answer first",
+    "Solve 15 of the 30 coding problems without checking the solution first"
+  ];
+  var mBox = document.getElementById('mastery-list');
+  var STORE_KEY = 'masterbook-s8-mastery';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e) { saved = {}; }
+  masteryItems.forEach(function(txt, i){
+    var row = document.createElement('div');
+    row.className = 'cl-item' + (saved[i] ? ' checked' : '');
+    row.innerHTML = '<div class="box' + (saved[i] ? ' done' : '') + '" data-i="' + i + '"></div><span class="txt">' + esc(txt) + '</span>';
+    mBox.appendChild(row);
+  });
+  mBox.addEventListener('click', function(e){
+    var box = e.target.closest('.box');
+    if (!box) return;
+    var i = box.getAttribute('data-i');
+    var isDone = box.classList.toggle('done');
+    box.closest('.cl-item').classList.toggle('checked', isDone);
+    saved[i] = isDone;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch(e) {}
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    backtop.classList.toggle('show', window.scrollY > 500);
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 8 loaded — problems:', problems.length, 'Qs:', qas.length);
+} catch (err) {
+  console.error('Stage 8 script error:', err);
+}
+</script>

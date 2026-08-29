@@ -1,0 +1,846 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>Structured Problem Solving &amp; Consulting Frameworks</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .concept-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+  .concept{ padding:20px 22px; }
+  .concept h4{ font-size:1rem; margin-bottom:8px; }
+  .concept p{ font-size:.88rem; color:var(--ink-soft); margin:0 0 8px; }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .worked{ margin-top:14px; border:1px dashed var(--line-strong); border-radius:10px; padding:16px 18px; background:var(--paper-sunken); }
+  .worked .wk-label{ font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; }
+  .worked .wk-result{ margin-top:8px; font-size:.85rem; color:var(--ink-soft); }
+
+  .exstrip{ margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px 16px; border-top:1px solid var(--line); padding-top:12px; }
+  .exstrip .ex{ font-size:.8rem; }
+  .exstrip .ex b{ display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:2px; font-weight:700; }
+  .exstrip .ex span{ color:var(--ink-soft); }
+
+  .probgrid{ display:flex; flex-direction:column; gap:10px; }
+  details.prob{ border:1px solid var(--line); border-radius:10px; background:var(--paper-raised); }
+  details.prob summary{ padding:12px 18px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.9rem; }
+  details.prob summary::-webkit-details-marker{ display:none; }
+  details.prob summary .pnum{ font-family:"IBM Plex Mono"; font-size:.75rem; color:var(--data); background:var(--data-soft); padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  details.prob summary .pdiff{ font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  .pdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .pdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .pdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .pdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  .prob-body{ padding:0 18px 16px; }
+
+  .qbank{ display:flex; flex-direction:column; gap:0; }
+  details.qa{ border-bottom:1px solid var(--line); }
+  details.qa:last-child{ border-bottom:none; }
+  details.qa summary{ padding:13px 20px; cursor:pointer; list-style:none; font-size:.9rem; font-weight:500; display:flex; gap:12px; align-items:baseline; }
+  details.qa summary::-webkit-details-marker{ display:none; }
+  details.qa summary::before{ content:"Q"; font-family:"IBM Plex Mono"; font-size:.68rem; color:var(--data); background:var(--data-soft); padding:2px 6px; border-radius:5px; flex:0 0 auto; }
+  details.qa .qa-a{ padding:0 20px 16px 58px; font-size:.86rem; color:var(--ink-soft); }
+  details.qa .qa-a b{ color:var(--ink); }
+
+  .redflag{ padding:13px 17px; border-left:4px solid var(--lvlA); background:var(--lvlA-soft); border-radius:0 8px 8px 0; margin-bottom:9px; font-size:.87rem; }
+  .redflag b{ color:var(--lvlA); }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  .framebox{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+  .frame-a{ border-top:4px solid var(--data); }
+  .frame-b{ border-top:4px solid var(--lvlC); }
+  .frame-c{ border-top:4px solid var(--lvlB); }
+  .framebox .fh{ font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; padding:14px 18px 0; }
+  .frame-a .fh{ color:var(--data); }
+  .frame-b .fh{ color:var(--lvlC); }
+  .frame-c .fh{ color:var(--lvlB); }
+  .framebox .fb{ padding:8px 18px 18px; font-size:.87rem; color:var(--ink-soft); }
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+  .subhead{ font-family:"Fraunces"; font-size:1.15rem; font-weight:600; margin:36px 0 14px; padding-top:8px; border-top:1px solid var(--line); }
+  .subhead:first-child{ border-top:none; padding-top:0; margin-top:0; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <a class="backlink" href="stage14.html">← Stage 14 · Product Management</a>
+    <div class="stage-pill">● Stage 15 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#honest">Honest CV Framing</a></li>
+      <li><a href="#hypothesis">Hypothesis-Driven Problem Solving</a></li>
+      <li><a href="#mece">MECE &amp; Issue Trees</a></li>
+      <li><a href="#frameworks">The Standard Framework Library</a></li>
+      <li><a href="#mechanics">Case Interview Mechanics</a></li>
+      <li><a href="#altmodels">Alternative Approaches — Why This, Why Not That</a></li>
+      <li><a href="#cmptable">Framework Selection Comparison Table</a></li>
+      <li><a href="#redflags">Red Flags</a></li>
+      <li><a href="#problems">30 Progressive Problems</a></li>
+      <li><a href="#questions">80-Question Interview Bank</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 20 (Market Sizing) is next, followed by Operations, Product, Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part X · Stage 15 of 33</div>
+      <h1>Structured Problem Solving &amp; Consulting Frameworks</h1>
+      <p class="lede">"Structured Problem Solving" is a named skill on your Consulting CV, and it's the real discipline behind the thematic issue framework you built from 100+ Hero Electronics interviews and the requirements/solution design you owned at NanoCloud. This stage builds the formal toolkit — hypothesis-driven thinking, MECE, issue trees, the standard framework library, and real case-interview mechanics (clarifying questions, cross-questions) — that Stages 16–26's full 120-case bank will apply category by category.</p>
+      <div class="statusbar">
+        <div class="statuschip">🧩 8 concept modules: Hypothesis-Driven Approach → MECE/Issue Trees → Framework Library → Case Mechanics</div>
+        <div class="statuschip">🧮 Every concept has a worked structuring example with a real issue tree or calculation</div>
+        <div class="statuschip">🧩 <b>30</b> progressive structuring problems</div>
+        <div class="statuschip">❓ <b>80</b> interview questions with model answers</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">A case interview isn't testing whether you've memorized a framework — it's testing whether you can take a genuinely ambiguous, open-ended business problem and impose real structure on it live, out loud, while an interviewer actively pushes back. That's a distinct skill from knowing "the profitability framework" exists. This stage builds the underlying discipline (hypothesis-driven thinking, true MECE structuring, issue-tree construction) and the interview mechanics (asking sharp clarifying questions, handling cross-questions without freezing) that make every framework in Stages 16-26 actually usable under real pressure — the same structuring instinct you already demonstrated turning 100+ raw interviews into a prioritized issue framework, now formalized and interview-ready.</p>
+      </div>
+    </section>
+
+    <section id="honest">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Honest CV Framing</h2>
+        <p>"Structured Problem Solving" is a genuine, named skill on your Consulting CV — backed by real structuring work, though not formal MBB-style case-interview experience.</p>
+      </div>
+      <div class="framebox">
+        <div class="card frame-a">
+          <div class="fh">Level A — What I actually did</div>
+          <div class="fb">Structured 100+ raw user interviews at Hero Electronics into a thematic issue framework that directly drove prioritization decisions — real, hands-on issue-structuring work. Owned requirements definition and solution design at NanoCloud, which required breaking an ambiguous client problem (unclear network capacity issues) into a structured, actionable set of workstreams. "Business &amp; Commercial Strategy, Business Transformation, Structured Problem Solving, Competitive &amp; Market Analysis" appears as a named skill line on the Consulting CV.</div>
+        </div>
+        <div class="card frame-b">
+          <div class="fh">Level B — What I should understand deeply</div>
+          <div class="fb">Advanced to the semi-finals (top 10 universities) of the MakeMyTrip case competition, proposing GenAI-driven travel-bundling recommendations from market research — real, competitive, structured business problem-solving under time pressure, though a competition setting rather than a live client engagement or a formal case interview. This is genuine evidence of structuring ability under pressure, honestly framed as competition experience.</div>
+        </div>
+        <div class="card frame-c">
+          <div class="fh">Level C — Honest framing for anything beyond that</div>
+          <div class="fb">If asked whether I've done formal MBB-style case interview prep or worked as a strategy consultant running client cases day to day, the honest answer is: "My structuring experience comes from real analytical and product work — turning ambiguous problems into structured frameworks — plus a competitive case competition, not a career as a practicing management consultant. I've built deep case-interview fluency through structured practice, which is what the next 11 stages demonstrate." Never claim formal consulting-firm case experience that didn't happen.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="hypothesis">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>Hypothesis-Driven Problem Solving</h2>
+        <p>The single biggest difference between a strong and a weak case performance: starting from a testable hypothesis instead of aimlessly exploring data.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>The Hypothesis-Driven Approach vs. Bottom-Up Exploration <span class="lvl lvl-B">B</span></h4>
+          <p>A <b>hypothesis-driven approach</b> means forming an initial, testable best-guess answer to the problem EARLY — before all the data is in — then structuring your analysis specifically to prove or disprove it, rather than exhaustively exploring every possible angle bottom-up. This is how real strategy work (and real case interviews) actually run: time is limited, so the highest-value moves are the ones that most efficiently confirm or kill your leading hypothesis.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Prompt: "Our client, a mid-size grocery chain, has seen profits decline</span>
+<span class="cmt">-- 20% over the last year. What's going on and what should they do?"</span>
+
+WEAK (bottom-up, unfocused):
+  "Let me look at revenue... and costs... and market share... and
+   competitors... and customer satisfaction... and store locations..."
+  -&gt; no prioritization, wastes limited case time on low-value branches
+
+STRONG (hypothesis-driven):
+  Initial hypothesis: "Given profits (not just revenue) declined, and grocery
+  is a low-margin, high-cost-sensitivity business, my leading hypothesis is
+  a COST-side issue -- likely input costs or labor -- rather than a demand
+  problem, since a demand drop would usually show up as revenue decline too,
+  and the prompt specifically flags PROFIT, not revenue."
+  -&gt; structures the entire analysis to test cost drivers FIRST, only
+     pivoting to revenue-side drivers if cost data doesn't explain the gap</span></div>
+            <div class="wk-result">The hypothesis-driven candidate doesn't randomly explore every branch of a profitability tree — they reason from the prompt's specific wording (profit, not revenue) to form a leading hypothesis (cost-side issue) and prioritize testing it first, which is exactly how a real consultant allocates scarce analysis time, and exactly what separates a focused, confident case performance from a scattered one.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A doctor forms a leading diagnosis from initial symptoms and orders the specific tests that would confirm or rule it out, rather than ordering every possible test in the hospital.</span></div>
+            <div class="ex"><b>Consumer</b><span>A mechanic who hears "the car won't start" and "the lights still work" immediately suspects the starter or ignition, not the battery — testing the leading hypothesis first, not everything.</span></div>
+            <div class="ex"><b>Business</b><span>A real consulting engagement has a fixed number of weeks — hypothesis-driven scoping is what keeps a team from wasting the first two weeks exploring dead ends.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Precisely the instinct that shaped the NanoCloud engagement — forming a working hypothesis about where coverage/capacity issues were concentrated before commissioning exhaustive heatmap analysis everywhere.</span></div>
+            <div class="ex"><b>Interview</b><span>"What if your initial hypothesis turns out to be wrong?" — that's a normal, expected outcome, not a failure — you state it was disproven by the data, explain what that rules out, and form a new, better-informed hypothesis; the interviewer is watching HOW you adapt, not whether your first guess was right.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd describe forming an early hypothesis about where the biggest issues were concentrated, then structuring the 100+ Hero Electronics interviews to test and refine it, as a direct real-world example of this exact approach."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>The Case Interview Flow &amp; Synthesis <span class="lvl lvl-C">C</span></h4>
+          <p>A well-run case moves through a repeatable arc: (1) listen to the prompt and take clean notes, (2) ask clarifying questions, (3) lay out a structure/framework out loud, (4) state a hypothesis, (5) work through quantitative/qualitative analysis using data the interviewer provides, (6) synthesize findings into an insight, (7) make a clear recommendation, (8) name risks and next steps. The <b>synthesis</b> step — a crisp, top-down "so what" — is the single most commonly under-practiced part, even by candidates who structure well.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — a real synthesis</div>
+            <div class="codeblock"><span class="cmt">-- WEAK synthesis (recites findings, no clear answer):</span>
+"So we found that labor costs went up 15%, input costs went up 8%, and
+ revenue was roughly flat. There's a lot going on here."
+
+<span class="cmt">-- STRONG synthesis (leads with the answer, structured, actionable):</span>
+"The client's profit decline is primarily a COST problem, not a demand
+ problem -- labor costs rose 15% (driven by a new minimum wage law) while
+ revenue held flat. I'd recommend two moves: renegotiate supplier contracts
+ to offset the smaller 8% input-cost rise, and evaluate labor-scheduling
+ efficiency before considering price increases, since a price increase in
+ a low-margin, price-sensitive category like grocery carries real volume risk."</span></div>
+            <div class="wk-result">The strong synthesis leads with the actual answer in the first sentence ("this is a cost problem, not a demand problem") before any supporting detail — exactly how a real executive audience wants to hear a recommendation (top-down, "so what" first), rather than a chronological recap of everything that was analyzed, which is the single most common synthesis mistake.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Answering "how was your trip" with "great, the flights were smooth and the hotel was perfect" (leads with the verdict) versus a rambling minute-by-minute account before ever saying whether it was good.</span></div>
+            <div class="ex"><b>Consumer</b><span>A good product review headline states the verdict first ("solid budget pick with one dealbreaker flaw") rather than burying it after paragraphs of specs.</span></div>
+            <div class="ex"><b>Business</b><span>An executive with five minutes wants the recommendation first, supporting evidence second — exactly the top-down communication style real consulting work demands.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The same discipline behind turning 100+ raw Hero Electronics interviews into a clear, prioritized thematic framework rather than a long, unstructured list of every quote collected.</span></div>
+            <div class="ex"><b>Interview</b><span>"How long should a case synthesis take?" — roughly 30-60 seconds; long enough to state the answer, the top 2-3 supporting reasons, and a recommendation, short enough that it reads as confident and rehearsed rather than a rambling recap.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd lead any case synthesis with the answer first, exactly the way I structured the final prioritized findings from the Hero Electronics research rather than presenting a raw list of themes."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="mece">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>MECE &amp; Issue Trees</h2>
+        <p>The structuring discipline every framework in Stages 16-26 is built on top of.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>The MECE Principle <span class="lvl lvl-B">B</span></h4>
+          <p><b>MECE</b> (Mutually Exclusive, Collectively Exhaustive) means breaking a problem into categories that don't overlap (mutually exclusive) and that together cover the entire problem space (collectively exhaustive) — the structural backbone of every good issue tree or framework. A branch that's overlapping (not mutually exclusive) risks double-counting; a branch set that's incomplete (not collectively exhaustive) risks missing the actual root cause entirely.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Breaking down "Profit" -- classic MECE structure:</span>
+Profit = Revenue - Costs
+  Revenue = Price x Volume
+  Costs   = Fixed Costs + Variable Costs
+
+<span class="cmt">-- NOT MECE (overlapping AND incomplete) -- a common beginner mistake:</span>
+"Profit issues could be from: Marketing problems, Sales problems,
+ or Customer problems"
+<span class="cmt">-- overlapping: a sales problem often IS a customer/marketing problem too</span>
+<span class="cmt">-- incomplete: doesn't explicitly cover cost-side issues at all</span>
+
+<span class="cmt">-- MECE fix:</span>
+Profit = Revenue - Costs
+  Revenue driver issues:  Price-side OR Volume-side (mutually exclusive,
+                            together fully explain any revenue change)
+  Cost driver issues:     Fixed-cost OR Variable-cost (same logic)</span></div>
+            <div class="wk-result">The "Marketing/Sales/Customer" breakdown feels intuitive but fails MECE on both counts — it's genuinely possible to double-count an issue across two of those buckets, and it silently omits the entire cost side of the problem; the Price×Volume / Fixed+Variable structure is boring by comparison but mathematically guaranteed to be both non-overlapping and complete, which is exactly why the standard frameworks in this stage look "obvious" — they're MECE by construction.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Sorting a junk drawer into "sharp objects," "electronics," and "other" is MECE; sorting into "kitchen stuff," "useful stuff," and "small stuff" is not — those categories overlap and aren't exhaustive.</span></div>
+            <div class="ex"><b>Consumer</b><span>A well-designed product return form's reason dropdown (defective / wrong item / no longer needed / other) aims for MECE so every return gets one clear, non-overlapping category.</span></div>
+            <div class="ex"><b>Business</b><span>A non-MECE root-cause analysis risks a team "solving" an issue twice in two different workstreams, or missing the actual driver because no category covered it.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly the discipline behind avoiding double-counted or missed root causes when synthesizing the Hero Electronics interview themes into a clean, non-overlapping issue framework.</span></div>
+            <div class="ex"><b>Interview</b><span>"How do you check if your structure is MECE on the fly?" — ask "could this specific issue plausibly sit in two of my buckets at once?" (exclusivity check) and "is there a real-world cause I haven't given ANY bucket to?" (exhaustiveness check) — both checkable in seconds before committing to a structure out loud.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This is exactly the self-check I'd apply live in a case — before presenting a structure, quickly verifying it's genuinely MECE rather than just intuitively organized."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Building a Full Issue Tree <span class="lvl lvl-B">B</span></h4>
+          <p>An <b>issue tree</b> takes a central question and MECE-decomposes it top-down into progressively more granular sub-branches, each still MECE relative to its siblings, until branches are concrete enough to actually investigate with data — the visual/structural tool that operationalizes hypothesis-driven MECE thinking into something you can talk through live.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — full 3-level issue tree</div>
+            <div class="codeblock">Central question: "Why did the grocery chain's profit decline 20%?"
+
+Level 1 (MECE):        Revenue decline?  |  Cost increase?
+                                              |
+Level 2 (under Cost,        Fixed costs up?  |  Variable costs up?
+MECE):                                             |
+Level 3 (under Variable        Input/COGS up?  |  Labor costs up?
+costs, MECE):                                        |
+                                                 -&gt; INVESTIGATE: minimum
+                                                    wage law change (data
+                                                    point provided by
+                                                    interviewer on request)</span></div>
+            <div class="wk-result">Each level stays strictly MECE relative to its own siblings (Revenue vs. Cost; Fixed vs. Variable; Input vs. Labor) while getting progressively more specific, until the tree reaches a genuinely investigable, data-answerable branch (did a minimum wage law actually pass) — this top-down, level-by-level MECE discipline is what turns a vague "why did profit decline" into a concrete, testable path to the real answer, rather than an unstructured brainstorm.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Diagnosing "why won't my car start" by branching systematically (electrical vs. fuel vs. mechanical, then sub-branching each) rather than randomly checking parts.</span></div>
+            <div class="ex"><b>Consumer</b><span>A tech support flowchart's decision tree (is it plugged in? -&gt; is the outlet working? -&gt; ...) is a simple, applied issue tree.</span></div>
+            <div class="ex"><b>Business</b><span>A real root-cause investigation into a KPI decline (like the ones Stage 12's Power BI dashboards would surface) should follow exactly this top-down, level-by-level MECE drill-down.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The formal version of the same thematic drill-down used to structure the 100+ Hero Electronics interviews — repeated survey feedback → MECE-sorted issue categories → root-cause-level themes.</span></div>
+            <div class="ex"><b>Interview</b><span>"How deep should an issue tree go before you start analyzing?" — deep enough that the bottom-level branches are concrete and directly answerable with data or a clarifying question — going deeper than that wastes case time on detail you don't yet know you need.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd build exactly this kind of level-by-level issue tree live in a case, the same structuring discipline I used to break Hero Electronics feedback down from broad themes into specific, actionable root causes."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="frameworks">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>The Standard Framework Library</h2>
+        <p>The small set of reusable, MECE-by-construction structures every case in Stages 16-26 draws from — not a script to recite, but a starting scaffold to adapt.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Profitability, 3Cs &amp; 4Ps <span class="lvl lvl-C">C</span></h4>
+          <p>The <b>Profitability framework</b> (Profit = Revenue − Costs, each further decomposed) is the workhorse for cost/margin problems. The <b>3Cs</b> (Company, Customers, Competitors) frames a broader strategic situation. The <b>4Ps</b> (Product, Price, Place, Promotion) frames a marketing/go-to-market question. None are meant to be recited verbatim — the skill is picking (or blending) the right one for the actual prompt and customizing the branches to the specific business.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — choosing and adapting a framework</div>
+            <div class="codeblock"><span class="cmt">-- Prompt: "Our client's new product launch underperformed. Why?"</span>
+
+WRONG framework choice: Reciting the full generic Profitability tree
+  -&gt; a launch problem usually isn't primarily a cost-structure question
+
+RIGHT framework choice: A blended 4Ps + 3Cs structure, CUSTOMIZED:
+  Product:    Did it actually meet a real customer need? (JTBD-style, Stage 14)
+  Price:      Was it priced against the right competitive set?
+  Place:      Was distribution/availability actually adequate at launch?
+  Promotion:  Did awareness/marketing reach the target segment?
+  + Competitor response: did a competitor react faster than expected?</span></div>
+            <div class="wk-result">Reciting the Profitability framework on a launch-underperformance prompt would waste the case's limited time on cost-structure branches that are unlikely to be the real driver — recognizing that this is fundamentally a 4Ps-shaped question, then blending in a competitive-response branch from 3Cs, demonstrates real judgment rather than framework memorization, which is exactly what a sharp interviewer is listening for.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Using a different mental checklist for "why did my houseplant die" (light/water/soil) versus "why is my car making a noise" (engine/brakes/tires) — the right structure fits the actual problem, not a one-size-fits-all list.</span></div>
+            <div class="ex"><b>Consumer</b><span>Why a retailer diagnosing weak sales of one SKU checks price/placement/marketing for that item specifically, not a generic company-wide cost review.</span></div>
+            <div class="ex"><b>Business</b><span>An interviewer who's seen the same memorized framework recited word-for-word on every single prompt type immediately identifies a candidate who hasn't internalized WHY each framework fits its specific problem shape.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly the judgment call needed when scoping any real ambiguous problem — like recognizing the NanoCloud engagement was fundamentally a coverage/capacity-optimization question, not a generic "improve the business" prompt.</span></div>
+            <div class="ex"><b>Interview</b><span>"When would you NOT use a named framework at all?" — when the prompt is specific and unusual enough that a custom, purpose-built structure fits better than forcing it into a generic template — interviewers explicitly reward custom structures that are genuinely well-reasoned and MECE.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd explain framework selection exactly this way — as a toolbox to draw from and customize, the same instinct I'd apply recognizing which structure actually fit the NanoCloud problem rather than a generic template."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Porter's Five Forces &amp; the Value Chain <span class="lvl lvl-C">C</span></h4>
+          <p><b>Porter's Five Forces</b> (competitive rivalry, threat of new entrants, threat of substitutes, buyer power, supplier power) frames industry attractiveness/competitive dynamics — most useful for market-entry and competitive-strategy prompts. The <b>Value Chain</b> (inbound logistics → operations → outbound logistics → marketing/sales → service, plus support activities) frames where in a business's operations value or cost actually sits — most useful for operations and cost-structure prompts.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Prompt: "Should our client enter the meal-kit delivery market?"</span>
+
+Five Forces applied:
+  Rivalry:          High -- several established players already competing hard
+  New entrants:      Medium -- some capital/logistics barrier, not huge
+  Substitutes:        High -- restaurant delivery, grocery delivery, cooking
+                       from scratch all substitute directly
+  Buyer power:        High -- low switching cost, many alternatives
+  Supplier power:      Low-Medium -- many food suppliers available
+
+-&gt; Overall: a structurally UNATTRACTIVE industry (high rivalry + high
+   substitute threat + high buyer power) -- entry would need a genuinely
+   differentiated angle to succeed, not just "enter and compete on price"</span></div>
+            <div class="wk-result">Running all five forces explicitly (not just vaguely gesturing at "competition") produces a specific, defensible verdict — high rivalry, high substitute threat, and high buyer power combine into a structurally unattractive industry — which directly shapes the recommendation toward "only enter with real differentiation" rather than a generic "yes, growing market" answer that ignores competitive structure entirely.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Deciding whether to open a lemonade stand on a street that already has three others (high rivalry) next to a park with easy substitutes (a nearby store) — the same structural-attractiveness logic as Five Forces.</span></div>
+            <div class="ex"><b>Consumer</b><span>Why some product categories (razors, subscriptions) see constant price wars — a Five-Forces-style read explains it as high rivalry plus low switching costs (buyer power).</span></div>
+            <div class="ex"><b>Business</b><span>A market-entry recommendation without any competitive-structure analysis is a common, exposed weak point — "the market is growing" alone says nothing about whether a NEW entrant can actually capture value in it.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The kind of structural read that should sit behind any AI/GenAI competitive positioning question in Stage 24's case bank — is the space structurally attractive to enter, or crowded with strong substitutes.</span></div>
+            <div class="ex"><b>Interview</b><span>"Which of the five forces usually matters most?" — depends entirely on the industry; there's no universal answer, and naming the one that's clearly dominant for THIS specific prompt (rather than reciting all five with equal weight) shows sharper judgment.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd apply this same structural-attractiveness lens if asked to evaluate a new market or product opportunity, grounding the recommendation in competitive structure rather than surface-level market size alone."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="mechanics">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Case Interview Mechanics</h2>
+        <p>The live, interactive skills that separate a well-prepared candidate from one who's only memorized frameworks — asking good questions and handling real pushback.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Asking Sharp Clarifying Questions <span class="lvl lvl-B">B</span></h4>
+          <p>Good clarifying questions narrow genuine ambiguity in the prompt (goal, scope, timeframe, definition of success) — not questions whose answers wouldn't change your approach. Asking too few risks solving the wrong problem; asking too many (or vague, low-value ones) wastes case time and reads as stalling rather than genuine structuring.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Prompt: "Our client wants to grow revenue. What should they do?"</span>
+
+WEAK clarifying questions (low-value, don't change approach):
+  "What industry is the client in?" (should already be given/askable once)
+  "Is the client a real company?" (irrelevant to the analysis)
+
+STRONG clarifying questions (narrow real ambiguity, change your approach):
+  "What's the client's specific growth TARGET and timeframe -- are we
+   talking 5% this year, or doubling revenue in 3 years? These call for
+   very different strategies (organic vs. M&amp;A/new markets)."
+  "Is 'grow revenue' the true underlying goal, or a proxy for growing
+   PROFIT -- would the client accept revenue growth that came with
+   margin compression?"</span></div>
+            <div class="wk-result">Both strong questions would materially change the actual structure and recommendation — a 5%-this-year target points toward operational/pricing levers, while doubling-in-3-years likely requires M&amp;A or new-market entry; clarifying revenue-vs-profit prevents recommending a move (like an aggressive discount-driven volume push) that technically grows revenue while destroying the client's real underlying goal.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Asking "what's your budget and timeline" before recommending a renovation contractor — the answer genuinely changes which recommendation makes sense.</span></div>
+            <div class="ex"><b>Consumer</b><span>A good salesperson asks "what will you mainly use this for" before recommending a laptop — a real, structure-changing clarifying question, not small talk.</span></div>
+            <div class="ex"><b>Business</b><span>A consulting team that starts analysis before confirming the client's TRUE success metric risks weeks of work solving the wrong problem.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Exactly the discipline that should have opened the NanoCloud engagement — clarifying whether "unclear capacity issues" meant a cost problem, a service-quality problem, or both, before committing to a specific optimization approach.</span></div>
+            <div class="ex"><b>Interview</b><span>"How many clarifying questions is too many?" — there's no fixed number; the test is whether each one would genuinely change your structure or approach — 2-4 sharp, structure-changing questions beats 8 generic ones every time.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd ask exactly this kind of scope-narrowing question upfront on any ambiguous case, the same instinct that should open any real client engagement like NanoCloud's."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Handling Interviewer Cross-Questions &amp; Pushback <span class="lvl lvl-B">B</span></h4>
+          <p>A genuinely challenging interviewer will probe your assumptions, present contradicting data, or ask "what if you're wrong" — this is a normal, expected part of a real case, not a sign you've failed. The strongest response acknowledges the challenge directly, reasons through it out loud, and either defends the original position with sharper logic or updates the position — never gets defensive or pretends the challenge wasn't valid.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — real cross-questioning</div>
+            <div class="codeblock">Candidate: "I'd recommend the client raise prices 10% to offset rising
+            input costs, since the client has strong brand loyalty."
+
+Interviewer (pushback): "Actually, our data shows a 10% price increase
+  historically causes an 18% volume drop for this client. Does that
+  change your recommendation?"
+
+WEAK response: "Oh... um, I guess maybe a smaller increase then?"
+  (no real reasoning shown, just backing down)
+
+STRONG response: "Yes, that changes it significantly -- let me check
+  the math. A 10% price rise with an 18% volume drop is a net REVENUE
+  decline [walks through the calculation], so a blanket price increase
+  is actually the wrong lever here. I'd instead look at cost-side
+  options first -- renegotiating supplier contracts -- and consider a
+  more targeted price increase only on the least price-sensitive SKUs,
+  rather than an across-the-board increase."</span></div>
+            <div class="wk-result">The strong response doesn't just concede — it re-derives the math live (showing 10% price × declining volume can net to a revenue LOSS, not gain), explains precisely why the new data changes the recommendation, and proposes a specific, better-reasoned alternative — demonstrating exactly the real-time analytical adaptability interviewers are testing for, versus a candidate who either stubbornly defends a now-wrong position or collapses without re-reasoning.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A doctor who updates a diagnosis calmly and explains why when a new test result contradicts the first theory, rather than either ignoring the new result or panicking.</span></div>
+            <div class="ex"><b>Consumer</b><span>A good customer-service rep who recalculates and revises a recommendation on the spot when new information changes what's actually best for you.</span></div>
+            <div class="ex"><b>Business</b><span>Real strategy work constantly involves new data contradicting an initial hypothesis — the skill being tested is composed, rigorous adaptation, not being right the first time.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly the skill demonstrated handling a stakeholder challenge on the $10M allocation mechanism (Stage 10/27) — showing the reasoning, not just the final number, when pressed.</span></div>
+            <div class="ex"><b>Interview</b><span>"What does an interviewer actually want to see in a cross-question response?" — genuine, visible reasoning (not memorized talking points), composure, and a willingness to update a position when the logic actually demands it — not stubbornness, and not instant, unreasoned capitulation either.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd handle case pushback exactly this way — showing the recalculated logic live, the same rigor I'd want to demonstrate defending any real number, like the Axtria allocation figures, under a skeptical interviewer's questioning."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="altmodels">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>Alternative Approaches — Why This, Why Not That</h2>
+        <p>Structuring itself involves real methodology choices — the comparative reasoning that shows genuine consulting judgment, not framework recitation.</p>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p><b>Why hypothesis-driven over exhaustive bottom-up analysis?</b> Hypothesis-driven scoping concentrates limited case (or engagement) time on the highest-value branches first; pure bottom-up exploration is more thorough but far slower and often runs out of time before reaching the actual answer — bottom-up occasionally wins when the problem space is genuinely unfamiliar and no reasonable leading hypothesis exists yet, but that's the exception, not the default.</p>
+        <p><b>Why a custom-built structure over a named framework?</b> A custom structure, built live and explicitly justified as MECE, demonstrates real structuring skill and often fits an unusual prompt better; a named framework (Profitability, 3Cs, 4Ps) is faster to deploy and immediately legible to the interviewer — the strongest candidates default to a named framework as a starting scaffold, then visibly customize it to the specific prompt rather than reciting it unmodified.</p>
+        <p><b>Why MECE over a "just brainstorm broadly" approach?</b> MECE structuring guarantees no double-counting and (when done well) no major blind spots, at the cost of feeling more rigid; unstructured brainstorming can surface more creative or unexpected angles but risks both redundant analysis and genuinely missing the real driver — MECE is the right default for the core structuring step, with room for creative angles within a MECE branch.</p>
+        <p style="margin-bottom:0"><b>Why practice with a full framework library instead of one flexible general-purpose structure?</b> Different problem shapes (profitability vs. market entry vs. pricing) have genuinely different natural structures, and knowing the standard library lets you recognize a prompt's shape quickly and start structuring immediately rather than reinventing a structure under time pressure every single time — the library is a starting-point accelerant, not a constraint, which is why Stages 16-26 each open with the specific framework(s) that category's cases draw from.</p>
+      </div>
+    </section>
+
+    <section id="cmptable">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Framework Selection Comparison Table</h2>
+      </div>
+      <div class="card cmp-wrap">
+        <table class="cmp-table">
+          <tr><th>Framework</th><th>Best for</th><th>Core structure</th><th>Weak fit for</th></tr>
+          <tr><td>Profitability</td><td>Cost/margin decline, "why did profit drop"</td><td>Profit = Revenue − Costs, each decomposed</td><td>Pure growth/expansion questions with no profit-decline signal</td></tr>
+          <tr><td>3Cs (Company/Customer/Competitor)</td><td>Broad strategic situation assessments</td><td>Three lenses on the same situation</td><td>Narrow, single-lever questions (e.g. one pricing decision)</td></tr>
+          <tr><td>4Ps (Product/Price/Place/Promotion)</td><td>Marketing/GTM/launch performance questions</td><td>Four marketing-mix levers</td><td>Cost-structure or operations-heavy questions</td></tr>
+          <tr><td>Porter's Five Forces</td><td>Market entry, industry attractiveness</td><td>Rivalry, entrants, substitutes, buyer/supplier power</td><td>Internal operational efficiency questions</td></tr>
+          <tr><td>Value Chain</td><td>Operations, cost-structure, where-value-sits questions</td><td>Sequential primary + support activities</td><td>External market/competitive questions</td></tr>
+          <tr><td>Custom MECE structure</td><td>Unusual prompts no standard framework fits well</td><td>Built live, justified MECE on the spot</td><td>Time-pressured cases where a fast, legible start matters most</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="redflags">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>Red Flags — Never Say This</h2>
+      </div>
+      <div class="redflag"><b>"Let me just recite the profitability framework for every case."</b> Signals framework memorization without judgment — reveals no ability to recognize when a different structure fits the actual prompt better.</div>
+      <div class="redflag"><b>"My structure doesn't need to be MECE, as long as it covers the important stuff."</b> Misses the entire point of MECE — an overlapping or incomplete structure risks double-counted analysis or a missed root cause, which is exactly the failure mode MECE exists to prevent.</div>
+      <div class="redflag"><b>"I'll just start analyzing without asking any clarifying questions."</b> Risks solving the wrong problem entirely — skipping genuine scope-narrowing questions is a classic sign of an underprepared candidate rushing to look busy.</div>
+      <div class="redflag"><b>"When the interviewer pushed back, I just went along with whatever they suggested."</b> Capitulating without re-reasoning shows no real analytical backbone — the interviewer is testing whether you can reason through new information, not whether you'll agree with anything they say.</div>
+      <div class="redflag"><b>"I never state a hypothesis until I've seen ALL the data."</b> Confuses thoroughness with rigor — a hypothesis-driven approach starts with a testable best guess specifically BECAUSE full data is rarely available upfront, in a case or in real consulting work.</div>
+    </section>
+
+    <section id="problems">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>30 Progressive Problems</h2>
+        <p>From spotting a non-MECE structure through building a full issue tree and handling live interviewer pushback.</p>
+      </div>
+      <div class="filterbar" id="probfilter">
+        <button data-f="all" class="active">All</button>
+        <button data-f="easy">Easy</button>
+        <button data-f="med">Medium</button>
+        <button data-f="hard">Hard</button>
+        <button data-f="expert">Expert</button>
+      </div>
+      <div class="probgrid" id="probgrid"></div>
+    </section>
+
+    <section id="questions">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2>80-Question Interview Bank</h2>
+        <p>Split into Structured Problem Solving, MECE &amp; Issue Trees (40 questions) and Framework Library &amp; Case Mechanics (40 questions), comfortably exceeding the 75-question Consulting spec minimum.</p>
+      </div>
+      <div class="subhead">Structured Problem Solving, MECE &amp; Issue Trees (40 questions)</div>
+      <div class="card qbank" id="qbankStructuring"></div>
+      <div class="subhead">Framework Library &amp; Case Interview Mechanics (40 questions)</div>
+      <div class="card qbank" id="qbankFrameworks"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">12</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card bridge-flow">
+        <span class="node">100+ raw interviews (Hero Electronics)</span><span class="arrow">→</span>
+        <span class="node">MECE thematic issue framework</span><span class="arrow">→</span>
+        <span class="node">Requirements &amp; solution design (NanoCloud)</span><span class="arrow">→</span>
+        <span class="node">MakeMyTrip case competition (semifinal)</span><span class="arrow">→</span>
+        <span class="node">Formal structuring toolkit — ready for the full case bank (Stages 16-26)</span>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">13</div>
+        <h2>Mastery Checklist</h2>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+
+    <div class="card" style="padding:22px 26px; margin-top:60px;">
+      <p style="margin:0; font-size:.9rem; color:var(--ink-soft)">Next: <b>Stage 16 — Profitability Cases</b> (20 full cases, full quota, real interview depth). Say "go" whenever you're ready.</p>
+    </div>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  var problems = [
+    ["easy","Identify why 'Marketing problems, Sales problems, Customer problems' is NOT a MECE breakdown of a profit decline.","It's overlapping (a sales issue often IS a customer issue) and incomplete (omits cost-side drivers entirely)."],
+    ["easy","Write a MECE 2-branch breakdown of 'Profit'.","Profit = Revenue - Costs (mutually exclusive: a dollar of profit change is either a revenue or cost effect, not both; collectively exhaustive: nothing else determines profit)."],
+    ["easy","Write a MECE 2-branch breakdown of 'Revenue'.","Revenue = Price x Volume."],
+    ["easy","List the 5 forces in Porter's Five Forces.","Competitive rivalry, threat of new entrants, threat of substitutes, buyer power, supplier power."],
+    ["easy","List the 4Ps.","Product, Price, Place, Promotion."],
+    ["easy","List the 3Cs.","Company, Customers, Competitors."],
+    ["easy","Name the 8-step case interview flow described in this stage.","Listen/take notes, ask clarifying questions, lay out structure, state a hypothesis, analyze, synthesize, recommend, name risks/next steps."],
+    ["easy","Give one weak (low-value) and one strong (structure-changing) clarifying question for 'our client wants to grow revenue.'","Weak: 'What industry is the client in?' (should be given). Strong: 'What's the specific growth target and timeframe -- 5% this year or doubling in 3 years?' (changes the whole strategy)."],
+    ["easy","What does 'hypothesis-driven' mean in one sentence?","Forming a testable best-guess answer early and structuring analysis to efficiently prove or disprove it, rather than exploring every angle bottom-up."],
+    ["easy","Why should a case synthesis lead with the answer, not a chronological recap?","Because a real audience (or interviewer) wants the 'so what' first, with supporting detail second -- top-down communication, not a play-by-play."],
+    ["med","Given the prompt 'a SaaS client's churn rate doubled,' write a 2-level MECE issue tree.","Level 1: Product-side issue OR External/market-side issue. Level 2 (under Product-side): Onboarding/activation problem OR Ongoing value/retention problem."],
+    ["med","Diagnose why 'the client should just cut costs everywhere' fails as a case recommendation.","It's not grounded in an issue tree or hypothesis -- it doesn't identify WHICH costs are actually elevated or why, and risks cutting a cost driver that isn't actually the problem, or cutting something value-generating."],
+    ["med","Choose and justify a framework for: 'Our client's flagship product is losing market share to a new entrant.' ","Blend of Porter's Five Forces (assess the new entrant's structural threat) and 4Ps (check if the client's own product/price/promotion has drifted) -- justified because this is both a competitive-structure and a marketing-mix question."],
+    ["med","Write a strong hypothesis (with reasoning) for: 'A regional airline's on-time performance has declined 15% over 6 months.'","Hypothesis: likely an operations/scheduling issue rather than external weather, since a 6-month sustained decline (not a seasonal spike) points to something structural like fleet maintenance delays or crew scheduling, which should be tested first."],
+    ["med","Given interviewer pushback: 'Our data shows customer satisfaction actually IMPROVED despite the churn increase -- does that change your hypothesis?', respond appropriately.","Yes -- it rules out a satisfaction/product-quality driver and points toward an external cause (competitor offer, pricing change, or a segment-specific issue) or a satisfaction-churn disconnect (e.g. price sensitivity independent of satisfaction) -- I'd pivot the tree toward pricing/competitive branches next."],
+    ["med","Write a MECE cost breakdown one level deeper than Fixed/Variable for a manufacturing client.","Variable costs = Raw materials/input costs + Direct labor + Other variable overhead (packaging, shipping per unit) -- mutually exclusive cost categories that together account for all variable cost."],
+    ["med","Explain why 'ask as many clarifying questions as possible' is bad case advice.","Asking questions whose answers wouldn't change your approach wastes limited case time and can read as stalling rather than genuine structuring -- the goal is a small number of genuinely structure-changing questions."],
+    ["med","Write a 30-second synthesis for a case where the finding is: revenue is flat, but costs rose 12% due to a new regulatory compliance requirement.","This is a cost problem driven by a new regulatory requirement, not a demand issue -- revenue held flat while compliance costs added 12% to the cost base. I'd recommend evaluating which compliance costs are fixed vs. one-time, and explore phased implementation or process automation to bring the ongoing cost impact down, rather than assuming this is permanent margin erosion."],
+    ["med","Identify the MECE flaw in this breakdown of 'market entry risk': 'Financial risk, Operational risk, Risk of failure.'","'Risk of failure' is not a distinct category -- it's actually the outcome/sum of the other risk categories materializing, not a parallel, mutually exclusive branch alongside them."],
+    ["med","Given a case where your hypothesis was wrong, write a strong verbal pivot (2-3 sentences).","That data rules out my initial cost-side hypothesis, so let me pivot to the revenue side of the tree -- specifically, whether this is a volume or a pricing issue, since the client's overall cost structure appears to have stayed stable given what we've seen."],
+    ["hard","Build a full 3-level MECE issue tree for: 'A regional bank's net interest income declined 10% this year,' reaching a concrete, data-testable bottom branch.","L1: Interest income down OR interest expense up. L2 (income): loan volume down OR yield/rate down. L3 (yield): competitive rate pressure OR shift toward lower-yield loan products -- testable via loan portfolio mix data."],
+    ["hard","Write a full hypothesis-driven opening (hypothesis + structure + first data request) for: 'Our client, an airline, wants to know if they should add a new route.'","Hypothesis: profitability depends primarily on whether projected demand justifies the fixed costs of a new route, given competitive presence on that route. Structure: (1) Demand-side: market size, growth, competitive intensity (2) Cost-side: fixed costs (aircraft, gates, staffing) vs. expected load factor (3) Strategic fit: does it feed the existing hub network. First data request: current competitor presence and estimated passenger demand on the route."],
+    ["hard","Simulate a full cross-question exchange (2 rounds) for a case recommending a price increase, including your responses.","Round 1 -- Interviewer: 'What if a competitor doesn't raise prices?' Response: 'Then we risk losing price-sensitive volume to them -- I'd want elasticity data segmented by customer type before committing to an across-the-board increase.' Round 2 -- Interviewer: 'Data shows your most loyal customers are also your most price-sensitive.' Response: 'That's a critical finding -- it means a blanket increase risks losing exactly the customers we most want to retain, so I'd recommend a more targeted increase on lower-loyalty segments only, or a value-add bundle instead of a pure price change for the loyal segment.'"],
+    ["hard","Write a MECE, custom (non-named-framework) structure for: 'Should a university launch an online-only degree program?' and justify why no standard framework fits perfectly.","Custom structure: (1) Demand: is there real unmet demand from a working-adult segment the current in-person program doesn't serve (2) Cannibalization: would it pull students from the existing in-person program rather than adding net new (3) Delivery capability: does the university have or can it build the operational/technical capability (4) Brand/accreditation risk. Justification: this blends market-entry, internal-capability, and brand-risk questions in a way no single named framework (Five Forces, 4Ps, Profitability) cleanly covers alone."],
+    ["hard","Diagnose what's wrong with this synthesis and rewrite it: 'We looked at a lot of data. Revenue is down, but so is a competitor's. Costs went up a bit. It's complicated, but I think there's an opportunity here.'","Wrong: buries the answer, vague ('a bit', 'complicated'), no clear recommendation. Rewrite: 'The client's revenue decline appears to be an industry-wide trend, not a company-specific problem, since a key competitor saw a similar drop -- this points away from a company execution issue and toward macro/market conditions. Given costs also rose modestly, I'd recommend focusing on cost discipline in the near term rather than aggressive revenue-recovery spending, while monitoring whether the industry-wide decline reverses.'"],
+    ["hard","Build a full issue tree AND a hypothesis-driven prioritization plan for: 'A hospital's patient wait times have increased 30%,' given only 20 minutes of case time.","Tree: L1: Demand up OR Capacity/throughput down. L2 (capacity): Staffing down OR Process/scheduling inefficiency up. Prioritization: given the prompt specifies WAIT TIME (not overall patient volume complaints), hypothesize capacity/throughput is more likely than demand -- spend the first 8 minutes testing staffing/scheduling data, reserve remaining time for demand-side only if capacity data doesn't fully explain the 30% figure."],
+    ["expert","Write a complete case opening (structure, hypothesis, and 3 clarifying questions with justification for each) for: 'A national coffee chain wants to know why same-store sales growth has slowed.' Then simulate one interviewer pushback and your response.","Clarifying Qs: (1) 'Is this slowdown company-wide or concentrated in specific regions/stores?' -- changes whether this is a strategic or local-execution question (2) 'Has anything changed in pricing or menu in this period?' -- rules in/out a self-inflicted driver (3) 'What's the competitive landscape done in the same window?' -- separates company-specific from industry-wide effects. Hypothesis: given same-STORE (not total) sales, this is likely a per-location demand or execution issue rather than a store-count/expansion effect, most likely traffic-driven rather than ticket-size-driven given typical coffee-purchase consistency. Structure: Traffic (visit frequency, new vs. repeat) vs. Ticket size (price, upsell rate), each vs. competitive/macro context. Pushback: 'Ticket size actually rose 8%, but total traffic fell 15%.' Response: 'That confirms this is a traffic problem, not a pricing/ticket problem -- I'd pivot fully to why fewer customers are visiting: competitive substitution, a service/experience issue, or a broader category shift away from in-store coffee purchases, and prioritize whichever the client can act on fastest.'"],
+    ["expert","Design a full framework-selection decision tree covering all 6 frameworks in this stage's comparison table, mapping each to 2 example prompt types.","Profitability -> 'profit/margin declined', 'cost structure review'. 3Cs -> 'assess overall competitive position', 'should we respond to a competitor's move'. 4Ps -> 'new product launch underperformed', 'should we change our pricing strategy'. Five Forces -> 'should we enter market X', 'is this industry still attractive'. Value Chain -> 'where in our operations is cost concentrated', 'should we outsource X function'. Custom MECE -> any prompt combining multiple of the above dimensions in an unusual way, or a genuinely novel problem shape none of the named frameworks fit cleanly."],
+    ["expert","Write a full worked example demonstrating the MECE 'double-check' technique (exclusivity test + exhaustiveness test) applied live to a candidate's own proposed structure for 'why did our nonprofit's donations decline,' catching and fixing one MECE flaw.","Initial (flawed) structure: 'Donor problems, Marketing problems, Economic problems.' Exclusivity test: could one issue sit in two buckets? Yes -- 'donors giving less due to their own financial situation' could be coded as either Donor or Economic. Exhaustiveness test: is anything real missing? Yes -- internal factors like a change in how donations are solicited/processed aren't covered by any bucket. Fixed structure: 'Donor-base changes (size/composition) vs. Donor behavior changes (giving less per donor) vs. Organization-side changes (solicitation process, campaign execution)' -- exclusive because each bucket addresses a genuinely different lever, exhaustive because it now covers external donor factors, individual behavior, AND internal execution."],
+    ["expert","Given the prompt 'A B2B logistics company's on-time delivery rate has fallen from 96% to 88% over two quarters,' build a full 3-level MECE issue tree, state a hypothesis, and write the first clarifying question you'd ask.","Clarifying question first: 'Is this decline concentrated in specific routes/regions or company-wide?' -- changes whether this is a localized operational issue or a systemic one. Tree -- L1: Internal capacity/execution issue OR External/demand-side issue. L2 (internal): Fleet/driver capacity constrained OR Process/routing inefficiency. L3 (fleet/driver): Driver turnover up OR Fleet utilization/maintenance issue. Hypothesis: given a sustained 2-quarter decline rather than a single-event dip, this is more likely a structural internal capacity issue (e.g. driver turnover or fleet aging) than a one-off external shock, so I'd prioritize testing driver headcount and fleet-utilization data first."]
+  ];
+
+  var qasStructuring = [
+    ["What does MECE stand for?","Mutually Exclusive, Collectively Exhaustive -- categories that don't overlap and together cover the entire problem space."],
+    ["Why does a non-MECE structure risk double-counting?","If two categories overlap, a single real issue can be attributed to (and potentially 'solved' or counted) in more than one branch, distorting the analysis."],
+    ["Why does a non-MECE structure risk missing the real answer?","If the categories aren't collectively exhaustive, the actual root cause might not be covered by ANY branch, so no amount of analysis within the structure would ever surface it."],
+    ["Give the two quick self-checks for verifying a structure is MECE.","Exclusivity check: could a single issue plausibly sit in two of my buckets at once? Exhaustiveness check: is there a real-world cause that isn't covered by any bucket?"],
+    ["What is an issue tree?","A top-down, MECE decomposition of a central question into progressively more granular sub-branches, each still MECE relative to its siblings, until branches are concrete enough to investigate with data."],
+    ["Why should an issue tree go 'deep enough but not too deep' before analysis begins?","Deep enough that bottom-level branches are concrete and directly answerable with data or a clarifying question; too deep wastes limited case time speculating about detail that isn't yet known to be relevant."],
+    ["What does 'hypothesis-driven' mean?","Forming a testable best-guess answer early, before all data is available, and structuring analysis specifically to efficiently prove or disprove it."],
+    ["Why is hypothesis-driven analysis usually better than exhaustive bottom-up exploration under time pressure?","It concentrates limited analysis time on the highest-value branches first, rather than spreading effort evenly (or randomly) across every possible angle."],
+    ["When might bottom-up exploration actually be the better approach?","When the problem space is genuinely unfamiliar and no reasonable leading hypothesis can yet be formed -- the exception, not the default."],
+    ["What should happen when your hypothesis turns out to be wrong?","State plainly that the data disproved it, explain what that rules out, and form a new, better-informed hypothesis -- a normal, expected part of the process, not a failure."],
+    ["List the 8 steps of a well-run case interview flow.","Listen/take notes, ask clarifying questions, lay out a structure, state a hypothesis, analyze data, synthesize findings, make a recommendation, name risks/next steps."],
+    ["What makes a synthesis 'weak' versus 'strong'?","Weak: chronologically recaps findings without a clear verdict. Strong: leads with the actual answer/recommendation first, then the top 2-3 supporting reasons -- top-down, not bottom-up."],
+    ["Roughly how long should a case synthesis take?","About 30-60 seconds -- long enough to state the answer, key supporting reasons, and a recommendation; short enough to read as confident and rehearsed."],
+    ["What distinguishes a 'strong' clarifying question from a 'weak' one?","A strong question would genuinely change your structure or approach depending on the answer; a weak one wouldn't change anything regardless of the answer."],
+    ["Why is asking too many clarifying questions a problem?","It wastes limited case time and can read as stalling rather than genuine structuring -- 2-4 sharp, structure-changing questions beats many generic ones."],
+    ["Give an example of a clarifying question that would change a growth-strategy case's entire approach.","'What's the growth target and timeframe -- 5% this year, or doubling in 3 years?' -- a modest near-term target points to operational/pricing levers, while an aggressive long-term target likely requires M&A or new-market entry."],
+    ["Why might 'grow revenue' need to be clarified as possibly meaning 'grow profit'?","A client's true goal might be profit, not revenue -- clarifying this upfront prevents recommending a move (like heavy discounting) that grows revenue while destroying the actual underlying goal."],
+    ["What should a candidate do when an interviewer presents data that contradicts their hypothesis?","Acknowledge it directly, re-reason through the implications out loud (ideally re-deriving any relevant math), and either defend the original position with sharper logic or visibly update it -- never get defensive or silently capitulate without reasoning."],
+    ["Why is capitulating to interviewer pushback without re-reasoning a red flag?","It shows no real analytical backbone -- the interviewer is testing whether you can reason through new information, not simply agree with anything they say."],
+    ["Why is stubbornly defending a disproven position also a red flag?","It shows an inability to update on new evidence, which is exactly the kind of poor judgment a real client engagement can't afford."],
+    ["What's the honest answer if asked about formal management-consulting case experience?","My structuring experience comes from real analytical and product work (Hero Electronics research synthesis, NanoCloud requirements/solution design) plus a competitive case competition (MakeMyTrip semifinal) -- not a career practicing as a management consultant, though I've built deep case-interview fluency through structured practice."],
+    ["Why is 'Marketing problems, Sales problems, Customer problems' not MECE for a profit decline?","It's overlapping (a sales problem is often also a customer problem) and incomplete (it omits cost-side drivers entirely)."],
+    ["Write the standard MECE breakdown of Profit.","Profit = Revenue - Costs; Revenue = Price x Volume; Costs = Fixed Costs + Variable Costs."],
+    ["Why is 'Risk of failure' not a valid MECE branch alongside 'Financial risk' and 'Operational risk'?","It's not a parallel, distinct category -- it's the outcome/sum of the other risk categories materializing, not a mutually exclusive risk driver alongside them."],
+    ["What's the value of stating a hypothesis even when you're not fully confident in it?","It focuses the analysis on the highest-value branches first and gives the interviewer a clear signal of your reasoning -- confidence in the PROCESS, not certainty in the answer, is what's being tested."],
+    ["How would you build an issue tree for a prompt with almost no given information?","Start from the broadest MECE split relevant to the prompt's central question (e.g. revenue vs. cost, or internal vs. external), then use targeted clarifying questions to narrow which branch to drill into first, rather than guessing details."],
+    ["What's the risk of jumping straight into analysis without laying out a structure first?","Analysis without structure tends to become unfocused and hard for the interviewer (or a real stakeholder) to follow, and increases the risk of missing a MECE branch entirely."],
+    ["Why does real consulting work also rely on hypothesis-driven thinking, not just case interviews?","Engagements have fixed timelines and budgets -- hypothesis-driven scoping is what prevents a team from spending the first weeks of a project on unfocused, low-value exploration."],
+    ["Give a daily-life analogy for hypothesis-driven diagnosis.","A doctor forms a leading diagnosis from initial symptoms and orders the specific tests that would confirm or rule it out, rather than ordering every possible test."],
+    ["What's the honest framing for the MakeMyTrip case competition experience?","Real, competitive, structured problem-solving under time pressure (advanced to semifinals, top 10 universities) -- genuine evidence of structuring ability, though a competition setting rather than a live client engagement or formal case interview."],
+    ["Why should a candidate verbally narrate their structure rather than silently think and then announce only the final answer?","The interviewer is evaluating the REASONING process, not just the final answer -- narrating the structure live is how that reasoning becomes visible and assessable."],
+    ["What's a common mistake when transitioning from structure to analysis?","Diving into calculations before confirming the structure covers the actual question, or before stating a clear hypothesis about which branch is most likely to matter."],
+    ["Why is 'I never state a hypothesis until I've seen all the data' poor practice?","It confuses thoroughness with rigor -- hypothesis-driven approaches exist specifically because full data is rarely available upfront, in a case or in real work."],
+    ["How should a candidate handle a clarifying question the interviewer says they don't have an answer for?","State a reasonable assumption explicitly, note that the approach could shift if that assumption turns out to be wrong, and proceed -- rather than getting stuck waiting for an answer that isn't coming."],
+    ["What's the relationship between MECE and hypothesis-driven thinking?","MECE ensures your structure covers the problem space without gaps or overlap; hypothesis-driven thinking then prioritizes WHICH MECE branch to investigate first -- they work together, not as alternatives."],
+    ["Why might reciting the same named framework on every case type be a red flag?","It signals framework memorization without judgment -- an interviewer wants to see recognition of which structure actually fits THIS specific prompt, and customization when needed."],
+    ["Give an example of a case where a fully custom (non-named) structure would outperform a named framework.","A prompt blending market-entry, internal-capability, and brand-risk questions (like a university launching an online degree program) doesn't cleanly fit any single named framework -- a custom, explicitly-justified MECE structure fits better."],
+    ["What's the real skill being tested by interviewer cross-questions?","Real-time analytical adaptability -- the ability to reason through new or contradicting information live and either sharpen or revise a position, not simply agreeableness or stubbornness."],
+    ["Why is 'a lot of data was found, it's complicated' a weak synthesis opener?","It buries any actual verdict and signals the candidate hasn't yet distilled the analysis into a clear, actionable answer -- exactly the opposite of the top-down communication a synthesis needs."],
+    ["Give a 30-second answer to 'what's your approach to a case interview?'","I start by listening carefully and asking a small number of clarifying questions that would genuinely change my approach, then lay out a MECE structure -- often a named framework adapted to the specific prompt -- state a leading hypothesis, work through the analysis prioritizing the highest-value branch first, and close with a synthesis that leads with the answer, followed by supporting logic, a clear recommendation, and named risks."]
+  ];
+
+  var qasFrameworks = [
+    ["What does the Profitability framework decompose?","Profit into Revenue minus Costs, with Revenue further split into Price x Volume, and Costs into Fixed + Variable."],
+    ["When is the Profitability framework the wrong starting point?","For pure growth/expansion questions with no profit-decline signal in the prompt -- it's built for cost/margin problems specifically."],
+    ["What do the 3Cs stand for and what's each used for?","Company (internal capabilities/position), Customers (needs/segments/behavior), Competitors (competitive landscape) -- three lenses for assessing a broad strategic situation."],
+    ["What do the 4Ps stand for and when are they most useful?","Product, Price, Place, Promotion -- most useful for marketing/go-to-market/launch-performance questions."],
+    ["List Porter's Five Forces.","Competitive rivalry, threat of new entrants, threat of substitutes, buyer power, supplier power."],
+    ["What does Porter's Five Forces assess, and what's it best used for?","Overall industry attractiveness/competitive structure -- best for market-entry and competitive-strategy prompts."],
+    ["What does a 'structurally unattractive' Five Forces read imply for a market-entry recommendation?","Entry would need a genuinely differentiated angle to succeed rather than simply entering and competing on standard terms, since high rivalry/substitute threat/buyer power all compress achievable margins."],
+    ["What is the Value Chain framework, and what's it best used for?","A sequence of primary activities (inbound logistics, operations, outbound logistics, marketing/sales, service) plus support activities -- best for operations, cost-structure, and 'where does value/cost actually sit' questions."],
+    ["Why is the Value Chain a poor fit for an external market-entry question?","It's an internal-operations lens; it doesn't address competitive structure or market attractiveness, which Five Forces or 3Cs cover instead."],
+    ["When should a candidate build a fully custom structure instead of using a named framework?","When the prompt is specific/unusual enough that forcing it into a generic template would miss the real shape of the problem -- a custom, explicitly MECE structure fits better."],
+    ["What's the risk of reciting a named framework unmodified on every prompt?","It signals memorization rather than judgment -- the framework's generic branches may not fit the specific business or question, wasting analysis time on low-relevance areas."],
+    ["Give an example of blending two frameworks for one prompt.","A product-launch-underperformance prompt might blend 4Ps (product/price/place/promotion execution) with a competitor-response branch from 3Cs, since a competitor's faster reaction could also explain underperformance."],
+    ["Why does knowing the standard framework library speed up case performance even though frameworks should be customized?","Recognizing a prompt's shape lets you start structuring immediately from a sensible scaffold, rather than reinventing a structure from scratch under time pressure every single time."],
+    ["What's the honest way to describe your framework fluency if you haven't worked as a management consultant?","Built through deliberate, structured practice across a full case bank, applied to real structuring experience from product/research work and a competitive case competition -- not from a consulting career, but genuinely rehearsed and interview-ready."],
+    ["Why is the interviewer's cross-question 'what if you're wrong' considered a normal, expected part of a case?","Real strategy work constantly involves hypotheses being tested and sometimes disproven by new data -- the interviewer is testing composed, rigorous adaptation, which is a realistic on-the-job skill, not an unusual trap."],
+    ["What should a strong response to interviewer pushback include?","Direct acknowledgment of the new information, visible re-reasoning (ideally re-deriving any relevant math), and either a sharper defense of the original position or a clearly explained update to it."],
+    ["Give an example of pushback that should change a pricing recommendation.","Interviewer data showing a price increase would cause a volume drop large enough to make the NET revenue effect negative -- this should shift the recommendation away from a blanket price increase toward cost-side or segmented pricing options."],
+    ["Why is 'my recommendation doesn't change no matter what data you show me' always a wrong answer?","It signals an inability to update reasoning based on evidence, which is the opposite of the analytical adaptability a case interview (and real consulting work) is testing for."],
+    ["What's the difference between a case interview and a real consulting engagement in terms of structure and hypothesis use?","The core discipline (MECE structuring, hypothesis-driven prioritization, synthesis) is identical; a case compresses this into 20-40 minutes with data given piece by piece, while a real engagement runs over weeks/months with data gathered by the team itself."],
+    ["Why should a candidate write down (or clearly track) their issue tree during a case rather than keeping it purely mental?","It keeps the structure visible and consistent as the case progresses, prevents dropping a MECE branch partway through, and lets the candidate reference it explicitly when synthesizing at the end."],
+    ["What's a good way to practice framework selection judgment specifically (not just framework recall)?","Practice reading many different prompt types and, before solving anything, explicitly stating which framework(s) fit and why -- building the pattern-recognition skill of matching problem SHAPE to structure, not just memorizing framework contents."],
+    ["Why might an interviewer intentionally give an ambiguous or incomplete prompt?","To test whether the candidate asks genuinely narrowing clarifying questions rather than assuming a specific interpretation and potentially solving the wrong problem."],
+    ["What's the danger of over-relying on the 3Cs framework for every case?","It's a broad situational-assessment tool; forcing it onto a narrow, single-lever question (like one specific pricing decision) produces a diffuse, unfocused analysis rather than a sharp, decision-relevant one."],
+    ["How would you defend a Five-Forces-based 'don't enter this market' recommendation if the interviewer says 'but the market is growing fast'?","Market growth alone doesn't guarantee a NEW entrant can profitably capture value in it -- if rivalry, substitute threat, and buyer power are all high, growth may simply be absorbed by existing incumbents or trigger a price war that erodes any new entrant's margins; I'd want evidence of a genuine differentiation angle before recommending entry despite the unattractive structure."],
+    ["What's the value of explicitly justifying WHY a chosen framework fits, out loud, rather than just naming it?","It demonstrates the underlying judgment (not just recall) the interviewer is actually assessing, and gives them the chance to redirect early if the framework choice doesn't fit their intended problem."],
+    ["Why is a value chain analysis often paired with a profitability breakdown in cost-focused cases?","Profitability shows THAT costs are elevated and roughly where (fixed vs. variable); the value chain helps pinpoint WHICH specific operational stage the elevated cost is concentrated in, informing a more targeted recommendation."],
+    ["What's a defensible answer if an interviewer asks you to solve a case type you've never specifically practiced?","Acknowledge it's an unfamiliar shape, then apply the same underlying hypothesis-driven, MECE-structuring discipline used across every other case type -- the toolkit, not memorized category-specific scripts, is what should transfer."],
+    ["Why is 'the framework tells me the answer' a misunderstanding of what frameworks are for?","A framework only provides a starting structure for organizing analysis -- it doesn't generate the answer itself; the actual insight comes from the data and reasoning applied within that structure."],
+    ["Give a 2-minute answer connecting this whole stage back to your real experience.","My structuring instincts come from real work, not case-interview drilling alone: I broke down 100+ raw Hero Electronics interviews into a MECE thematic issue framework that directly drove prioritization, and I owned requirements definition and solution design at NanoCloud, which meant imposing structure on a genuinely ambiguous client problem before any technical work could start. I also competed in the MakeMyTrip case competition, advancing to the semifinals among the top 10 universities, which is real evidence of structured problem-solving under real time pressure, honestly framed as competition rather than client experience. What this stage adds is the formal toolkit -- hypothesis-driven prioritization, rigorous MECE structuring and issue-tree construction, the standard framework library, and live case mechanics like clarifying questions and handling interviewer pushback -- which Stages 16 through 26 then apply across a full 120-case bank spanning profitability, market entry, growth, pricing, market sizing, operations, product, analytics, AI/GenAI, fintech, and pharma cases."],
+    ["What's the single most important discipline this stage emphasizes for any case or real structuring problem?","Structure before analysis, hypothesis before exhaustive exploration, and a synthesis that leads with the answer -- the same evidence-based, top-down rigor applied consistently throughout the rest of this masterbook."],
+    ["Why does the Profitability framework sometimes need a segment cut (by product line, region, or customer) layered on top of the basic Revenue/Cost split?","A company-wide profit decline can mask an offsetting mix -- e.g. one region growing while another collapses -- so segmenting the P&L is often what actually reveals where the real problem is concentrated, rather than stopping at the aggregate Price x Volume / Fixed + Variable split."],
+    ["When comparing 3Cs and Five Forces for a competitive-positioning question, what's the key structural difference?","3Cs is a 3-lens situational snapshot (Company, Customers, Competitors) useful for a broad 'where do we stand' read; Five Forces is specifically an industry-structure/attractiveness lens with 5 defined forces -- Five Forces fits better when the question is really 'is this market/industry structurally favorable,' while 3Cs fits a more general strategic-assessment prompt."],
+    ["Give an example of a case where the 4Ps framework alone would be insufficient and needs a second lens.","A product launch that underperformed due to a well-funded competitor's aggressive response needs 4Ps (to check the client's own product/price/place/promotion execution) PLUS a competitive lens (3Cs or Five Forces) to capture the competitor-reaction driver that 4Ps alone doesn't structurally cover."],
+    ["What's a common candidate error when applying the Value Chain framework?","Listing every value chain stage generically without prioritizing which stage is actually most likely to hold the client's specific cost or value problem, producing an unfocused survey instead of a hypothesis-driven drill-down."],
+    ["Why is 'buyer power' in Five Forces sometimes counterintuitive to identify correctly?","Buyer power isn't about how much buyers spend -- it's about how much leverage they have over price/terms (driven by factors like buyer concentration, switching costs, and price sensitivity), so a market with many small, price-insensitive buyers can have LOW buyer power even with large total spend."],
+    ["How should a candidate respond if an interviewer says 'I don't think that framework fits this problem' mid-case?","Acknowledge directly, briefly explain the reasoning that led to the original choice, then pivot to a revised or custom structure on the spot -- treating it as useful redirection rather than a failure, since flexibility under real-time feedback is itself part of what's being evaluated."],
+    ["What's the difference between using a framework as a checklist versus using it as a hypothesis-generation tool?","As a checklist, a candidate mechanically walks through every branch regardless of relevance; as a hypothesis-generation tool, the framework's branches are used to quickly identify which one or two are MOST likely to hold the answer, then prioritized -- the second approach is what strong performance looks like."],
+    ["Give a real-life (non-case) example of applying Five Forces informally.","Deciding whether to open a small business in a neighborhood already dense with similar shops (high rivalry), where a large chain could easily enter (low entry barriers), and customers can easily switch to delivery apps (high substitute threat) -- an informal but genuine Five Forces read before committing capital."],
+    ["Why might an interviewer deliberately withhold whether a case is 'meant' to use a named framework at all?","To test whether the candidate can recognize when a problem doesn't map cleanly onto any standard framework and needs an explicitly custom, justified MECE structure instead of forcing a mismatched template."],
+    ["Summarize, in one framework-selection sentence each, when to reach for Profitability, 3Cs, 4Ps, Five Forces, Value Chain, and a custom structure.","Profitability: profit/margin declined. 3Cs: broad competitive-position assessment needed. 4Ps: marketing-mix or launch-performance question. Five Forces: market-entry or industry-attractiveness question. Value Chain: internal operations/cost-location question. Custom: the prompt's shape doesn't cleanly match any of the above."]
+  ];
+} catch (err) { console.error('Stage 15 data error:', err); }
+</script>
+<script>
+try {
+  var probGrid = document.getElementById('probgrid');
+  problems.forEach(function(p, i){
+    var diff = p[0], q = p[1], code = p[2];
+    var det = document.createElement('details');
+    det.className = 'prob';
+    det.setAttribute('data-diff', diff);
+    det.innerHTML = '<summary><span class="pnum">P' + (i+1) + '</span><span class="pdiff ' + diff + '">' + diff + '</span><span>' + esc(q) + '</span></summary>' +
+      '<div class="prob-body"><div class="codeblock">' + code.replace(/\n/g,'<br>') + '</div></div>';
+    probGrid.appendChild(det);
+  });
+  document.getElementById('probfilter').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('#probfilter button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var f = btn.getAttribute('data-f');
+    document.querySelectorAll('#probgrid details.prob').forEach(function(d){
+      d.style.display = (f === 'all' || d.getAttribute('data-diff') === f) ? '' : 'none';
+    });
+  });
+
+  function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+  function renderQA(containerId, bank){
+    var box = document.getElementById(containerId);
+    bank.forEach(function(qa){
+      var det = document.createElement('details');
+      det.className = 'qa';
+      det.innerHTML = '<summary>' + esc(qa[0]) + '</summary><div class="qa-a"><b>A:</b> ' + esc(qa[1]) + '</div>';
+      box.appendChild(det);
+    });
+  }
+  renderQA('qbankStructuring', qasStructuring);
+  renderQA('qbankFrameworks', qasFrameworks);
+
+  var masteryItems = [
+    "Explain MECE and apply the exclusivity + exhaustiveness self-check live",
+    "Build a full 3-level issue tree for a novel prompt",
+    "Explain hypothesis-driven thinking and form a real hypothesis under time pressure",
+    "Deliver a 30-60 second synthesis that leads with the answer",
+    "Ask 2-4 genuinely structure-changing clarifying questions for a new prompt",
+    "Handle a live interviewer cross-question by re-reasoning, not capitulating or getting defensive",
+    "Correctly choose and justify a framework (or blend) for 6 different prompt shapes",
+    "Build a custom MECE structure when no named framework fits well",
+    "Give the honest Level A/B/C answer for consulting/case experience",
+    "Answer all 5 Red Flags correctly without hesitation"
+  ];
+  var mBox = document.getElementById('masteryBox');
+  var STORE_KEY = 'masterbook-s15-mastery';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e) { saved = {}; }
+  masteryItems.forEach(function(txt, i){
+    var row = document.createElement('div');
+    row.className = 'cl-item' + (saved[i] ? ' checked' : '');
+    row.innerHTML = '<div class="box' + (saved[i] ? ' done' : '') + '" data-i="' + i + '"></div><span class="txt">' + esc(txt) + '</span>';
+    mBox.appendChild(row);
+  });
+  mBox.addEventListener('click', function(e){
+    var box = e.target.closest('.box');
+    if (!box) return;
+    var i = box.getAttribute('data-i');
+    var isDone = box.classList.toggle('done');
+    box.closest('.cl-item').classList.toggle('checked', isDone);
+    saved[i] = isDone;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch(e) {}
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    backtop.classList.toggle('show', window.scrollY > 500);
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 15 loaded — problems:', problems.length, 'Structuring Qs:', qasStructuring.length, 'Frameworks Qs:', qasFrameworks.length);
+} catch (err) {
+  console.error('Stage 15 script error:', err);
+}
+</script>

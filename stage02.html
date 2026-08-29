@@ -1,0 +1,1193 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>Statistics + Mathematics</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:16px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin-bottom:22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 20px; padding:0; }
+  nav.side li a{ display:block; padding:7px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.86rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:16px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:960px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:62px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:20px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.55rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:10px; font-size:.95rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .concept-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px; }
+  .concept{ padding:20px 22px; }
+  .concept h4{ font-size:1rem; margin-bottom:8px; }
+  .concept p{ font-size:.88rem; color:var(--ink-soft); margin:0 0 8px; }
+  .concept .formula{ background:var(--paper-sunken); border-radius:8px; padding:10px 14px; font-family:"IBM Plex Mono"; font-size:.86rem; color:var(--accent-ink); margin:8px 0; overflow-x:auto; }
+
+  .viz-card{ padding:24px 26px; }
+  .viz-card h4{ font-size:1.05rem; margin-bottom:4px; }
+  .viz-card .sub{ font-size:.85rem; color:var(--ink-faint); margin-bottom:16px; }
+  canvas{ width:100%; height:auto; display:block; border-radius:8px; background:var(--paper-sunken); }
+  .viz-controls{ display:flex; gap:10px; margin-top:14px; align-items:center; flex-wrap:wrap; }
+  .viz-controls button{ font-family:"IBM Plex Sans"; font-weight:600; font-size:.84rem; padding:8px 16px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink); cursor:pointer; }
+  .viz-controls button:hover{ border-color:var(--data); color:var(--data); }
+  .viz-controls .readout{ font-size:.82rem; color:var(--ink-faint); font-family:"IBM Plex Mono"; }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:18px 20px; font-family:"IBM Plex Mono"; font-size:.83rem; overflow-x:auto; line-height:1.6; }
+  .codeblock .c1{ color:#7A8590; } .codeblock .kw{ color:#E0AC63; } .codeblock .fn{ color:#8FB4DC; } .codeblock .str{ color:#9FCB8F; }
+  :root[data-theme="light"] .codeblock, body:not([data-theme]) .codeblock{ }
+
+  .testcards{ display:flex; flex-direction:column; gap:14px; }
+  details.testcard{ border:1px solid var(--line); border-radius:12px; background:var(--paper-raised); box-shadow:var(--shadow); overflow:hidden; }
+  details.testcard summary{ padding:16px 22px; cursor:pointer; list-style:none; display:flex; align-items:center; gap:12px; justify-content:space-between; }
+  details.testcard summary::-webkit-details-marker{ display:none; }
+  details.testcard summary .st-name{ font-family:"Fraunces"; font-weight:600; font-size:1.02rem; }
+  details.testcard summary .st-when{ font-size:.82rem; color:var(--ink-faint); flex:1; margin-left:14px; }
+  details.testcard summary::after{ content:"+"; font-size:1.3rem; color:var(--data); font-weight:400; }
+  details.testcard[open] summary::after{ content:"–"; }
+  .testcard-body{ padding:0 22px 22px; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px 24px; border-top:1px solid var(--line); padding-top:18px; margin-top:2px; }
+  .testcard-body .f{ font-size:.86rem; }
+  .testcard-body .f b{ display:block; font-size:.68rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); margin-bottom:4px; font-weight:600; }
+
+  .qbank{ display:flex; flex-direction:column; gap:0; }
+  details.qa{ border-bottom:1px solid var(--line); }
+  details.qa:last-child{ border-bottom:none; }
+  details.qa summary{ padding:14px 22px; cursor:pointer; list-style:none; font-size:.92rem; font-weight:500; display:flex; gap:12px; align-items:baseline; }
+  details.qa summary::-webkit-details-marker{ display:none; }
+  details.qa summary::before{ content:"Q"; font-family:"IBM Plex Mono"; font-size:.7rem; color:var(--data); background:var(--data-soft); padding:2px 6px; border-radius:5px; flex:0 0 auto; }
+  details.qa .qa-a{ padding:0 22px 18px 60px; font-size:.88rem; color:var(--ink-soft); }
+  details.qa .qa-a b{ color:var(--ink); }
+
+  .redflag{ padding:14px 18px; border-left:4px solid var(--lvlA); background:var(--lvlA-soft); border-radius:0 8px 8px 0; margin-bottom:10px; font-size:.88rem; }
+  .redflag b{ color:var(--lvlA); }
+
+  .worked{ margin-top:14px; border:1px dashed var(--line-strong); border-radius:10px; padding:16px 20px; background:var(--paper-sunken); }
+  .worked .wk-label{ font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; }
+  .worked ol{ margin:0; padding-left:20px; font-size:.86rem; color:var(--ink-soft); }
+  .worked ol li{ margin-bottom:6px; }
+  .worked .wk-result{ margin-top:8px; font-family:"IBM Plex Mono"; font-size:.86rem; color:var(--data); background:var(--data-soft); display:inline-block; padding:5px 11px; border-radius:6px; }
+
+  .exstrip{ margin-top:14px; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px 18px; border-top:1px solid var(--line); padding-top:14px; }
+  .exstrip .ex{ font-size:.83rem; }
+  .exstrip .ex b{ display:block; font-size:.66rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:3px; font-weight:700; }
+  .exstrip .ex span{ color:var(--ink-soft); }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:12px 22px; border-bottom:1px solid var(--line); font-size:.9rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <div class="stage-pill">● Stage 2 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#math">Mathematics Foundations</a></li>
+      <li><a href="#descriptive">Descriptive Statistics</a></li>
+      <li><a href="#distributions">Probability Distributions</a></li>
+      <li><a href="#clt">Central Limit Theorem</a></li>
+      <li><a href="#sampling">Sampling &amp; Confidence Intervals</a></li>
+      <li><a href="#hyptest">Hypothesis Testing Framework</a></li>
+      <li><a href="#tests">Test Selector — t / z / χ² / ANOVA</a></li>
+      <li><a href="#corr">Correlation, Covariance &amp; Causation</a></li>
+      <li><a href="#sigvbiz">Statistical vs. Business Significance</a></li>
+      <li><a href="#redflags">Red Flags</a></li>
+      <li><a href="#questions">Interview Question Bank</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+    <div class="roadmap">Level tags on every concept show how hard interviewers are likely to push — from your Stage 1 Claim Matrix.</div>
+      <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 20 (Market Sizing) is next, followed by Operations, Product, Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part II · Stage 2 of 33</div>
+      <h1>Statistics + Mathematics</h1>
+      <p class="lede">The layer underneath everything else in this Masterbook. Every model in Part IV, every A/B test in Part VI, every forecasting claim in Part V — all of it rests on the concepts on this page. Interviewers know this, which is why "explain a p-value" and "what does AUC mean" are two of the most common traps in analytics interviews, regardless of role.</p>
+      <div class="statusbar">
+        <div class="statuschip">🎯 Feeds <b>Stage 10</b> (A/B Testing), <b>Stages 7–8</b> (ML), <b>Stage 9</b> (Forecasting)</div>
+        <div class="statuschip">📐 <b>4</b> statistical tests compared side-by-side</div>
+        <div class="statuschip">🎮 <b>2</b> interactive simulations</div>
+        <div class="statuschip">🧮 <b>25</b> full worked numeric examples</div>
+        <div class="statuschip">🌍 6-type real-life examples on every major concept</div>
+        <div class="statuschip">❓ <b>75</b> interview questions with model answers</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">Your CV lists <b>Statistical Testing (Hypothesis Testing, A/B Testing, AUC/ROC)</b> as a core competency on every version, and the Axtria bullet says you "co-developed a predictive forecasting model" — every forecasting model lives or dies on whether it was validated statistically, not just whether it "worked." This stage isn't abstract theory: it's the specific reasoning toolkit an interviewer expects you to reach for the moment a number gets challenged — "is that difference real, or could it be noise?"</p>
+      </div>
+    </section>
+
+    <section id="math">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Mathematics Foundations</h2>
+        <p>Not a full math degree — the specific pieces that show up directly inside the models and tests in later stages. Each one exists here because something in Part IV–VI needs it.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Linear Algebra <span class="lvl lvl-B">B</span></h4>
+          <p>Vectors and matrices are how every model in Stage 6–8 actually represents data — a row of features is a vector; a whole dataset is a matrix. The dot product measures alignment between two vectors, which is the core operation inside linear regression and logistic regression's linear combination step.</p>
+          <div class="formula">y = w·x + b &nbsp;=&nbsp; w₁x₁ + w₂x₂ + … + wₙxₙ + b</div>
+          <p><b>Why it matters later:</b> PCA (Stage 6) is entirely eigenvectors/eigenvalues of the covariance matrix — you don't need to derive it by hand, but you need to know an eigenvector is "a direction the data doesn't rotate away from," which is exactly what PCA exploits.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>A rep-scoring model: w = [2.5, −1.0, 0.8] for [calls/day, years experience, territory size], bias b = 10</li>
+              <li>A rep's features: x = [3, 5, 40]</li>
+              <li>y = w·x + b = (2.5×3) + (−1.0×5) + (0.8×40) + 10 = 7.5 − 5 + 32 + 10</li>
+            </ol>
+            <div class="wk-result">y = 44.5 — the model's raw score for this rep, before any activation function is applied. This dot product is the entire computation inside one prediction of linear/logistic regression.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>A weighted GPA calculation — each grade (feature) times its credit hours (weight), summed — is literally a dot product.</span></div>
+            <div class="ex"><b>Consumer example</b><span>A credit score blends several factors (payment history, utilization, age of credit) with different weights into one number.</span></div>
+            <div class="ex"><b>Business example</b><span>A lead-scoring model weighting company size, engagement, and industry into one priority score for sales.</span></div>
+            <div class="ex"><b>Enterprise example</b><span>Recommendation engines represent users and items as vectors and rank by dot-product similarity at massive scale.</span></div>
+            <div class="ex"><b>Interview example</b><span>"What does a regression coefficient actually represent geometrically?" — the weight on one axis of this dot product, i.e. how much that feature tilts the prediction.</span></div>
+            <div class="ex"><b>Your CV</b><span>The Axtria efficiency-scoring model that fed the rep allocation decision is doing exactly this calculation per rep.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Calculus — Derivatives &amp; Gradients <span class="lvl lvl-B">B</span></h4>
+          <p>A derivative tells you the slope — how much the output changes per tiny change in input. A gradient is just that idea extended to many inputs at once: the direction of steepest increase.</p>
+          <div class="formula">θ ← θ − α · ∇L(θ)</div>
+          <p><b>Why it matters later:</b> that one line is gradient descent — literally how XGBoost, logistic regression, and every neural network in Stage 8 &amp; 12 learn. "Walk me through how a model trains" almost always comes back to this.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>Minimize L(θ) = (θ − 4)², learning rate α = 0.1, start at θ = 0</li>
+              <li>Gradient: dL/dθ = 2(θ − 4). At θ=0: gradient = 2(0−4) = −8</li>
+              <li>Update: θ ← 0 − 0.1×(−8) = 0.8</li>
+              <li>Step 2 — gradient at θ=0.8: 2(0.8−4) = −6.4 → θ ← 0.8 − 0.1×(−6.4) = 1.44</li>
+              <li>Step 3 — gradient at θ=1.44: 2(1.44−4) = −5.12 → θ ← 1.44 − 0.1×(−5.12) = 1.952</li>
+            </ol>
+            <div class="wk-result">θ climbs 0 → 0.8 → 1.44 → 1.95 → … converging toward θ=4, the true minimum — this exact loop, thousands of times, is model training.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>Walking downhill in fog by always stepping in the steepest downward direction you can feel underfoot — you'll reach the bottom without seeing the whole map.</span></div>
+            <div class="ex"><b>Consumer example</b><span>A thermostat's auto-adjust nudging temperature closer to your target setting a little at a time, not jumping straight there.</span></div>
+            <div class="ex"><b>Business example</b><span>Iteratively refining a pricing model's parameters against last quarter's actual sales data until predictions stop improving.</span></div>
+            <div class="ex"><b>Enterprise example</b><span>Every production ML model at scale — fraud detection, ranking, forecasting — is trained via some variant of this update rule.</span></div>
+            <div class="ex"><b>Interview example</b><span>"What happens if the learning rate is too high?" — the updates overshoot the minimum and can diverge instead of converge; too low, and training takes forever.</span></div>
+            <div class="ex"><b>Your CV</b><span>The XGBoost and Logistic Regression models co-developed at Axtria were both trained via gradient-based optimization of this exact form.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Probability Rules <span class="lvl lvl-A">A</span></h4>
+          <p>Three rules carry almost everything: <b>P(A and B) = P(A)·P(B|A)</b> (multiplication rule), <b>P(A or B) = P(A)+P(B)−P(A and B)</b> (addition rule), and Bayes' theorem for reversing a conditional.</p>
+          <div class="formula">P(A|B) = P(B|A)·P(A) / P(B)</div>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>A disease affects 1% of a population: P(Disease) = 0.01</li>
+              <li>A test correctly detects it 90% of the time: P(Positive | Disease) = 0.90</li>
+              <li>The test false-positives 5% of the time on healthy people: P(Positive | No Disease) = 0.05</li>
+              <li>P(Positive) = P(Positive|Disease)·P(Disease) + P(Positive|No Disease)·P(No Disease) = 0.90×0.01 + 0.05×0.99 = 0.009 + 0.0495 = 0.0585</li>
+              <li>P(Disease | Positive) = 0.90 × 0.01 / 0.0585 = 0.009 / 0.0585</li>
+            </ol>
+            <div class="wk-result">P(Disease | Positive) ≈ 15.4% — even after a positive test, most people testing positive don't have the disease, because the disease is rare. This is the exact intuition behind why a flagged transaction, flagged churner, or flagged fraud case is usually still more likely "not the thing" when the base rate is low.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>A smoke alarm that's very sensitive still cries wolf constantly if false fires are rare — most alarms won't mean an actual fire.</span></div>
+            <div class="ex"><b>Consumer example</b><span>A spam filter flagging an email doesn't mean it's definitely spam if spam itself is rare in your inbox that week.</span></div>
+            <div class="ex"><b>Business example</b><span>A churn model outputs P(churn | flagged) = 40% — a completely different number from P(flagged | churn), and interviewers ask this specifically to catch the swap.</span></div>
+            <div class="ex"><b>Enterprise example</b><span>Fraud-detection systems at scale (banks, payment processors) run exactly this base-rate math to decide alert thresholds — too sensitive and investigators drown in false positives.</span></div>
+            <div class="ex"><b>Interview example</b><span>"If P(defect|flagged)=90%, is 90% of flagged output defective?" — yes, that's literally what the conditional means, but only if you set up the conditioning correctly.</span></div>
+            <div class="ex"><b>Your CV</b><span>The Axtria forecasting model's outputs (e.g. "likely to churn / high-priority rep") are exactly this kind of conditional probability — worth being able to state precisely what the model's output number means.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Optimization Basics <span class="lvl lvl-C">C</span></h4>
+          <p>An objective function to maximize or minimize, decision variables you control, and constraints that bound them. This exact vocabulary is what Stage 9 builds into the full LP formulation behind your Axtria allocation work.</p>
+          <div class="formula">max Σ (revenue per rep) &nbsp;s.t.&nbsp; Σ reps ≤ 60, cost-per-call ≤ budget</div>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>Maximize revenue: 5x + 4y, where x, y are two rep types deployed</li>
+              <li>Constraints: x + y ≤ 10 (capacity), x ≤ 6, y ≤ 7, x,y ≥ 0</li>
+              <li>Evaluate the feasible region's corner points: (0,0)→0, (6,0)→30, (0,7)→28, (6,4)→5(6)+4(4)=30+16=46, (3,7)→15+28=43</li>
+            </ol>
+            <div class="wk-result">Maximum at (x=6, y=4): revenue = 46 — the optimal solution always sits at a corner of the feasible region, which is exactly what a solver checks systematically instead of guessing.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>Packing a suitcase under a weight limit — choosing which items maximize value without exceeding capacity is a mini-LP problem.</span></div>
+            <div class="ex"><b>Consumer example</b><span>A meal-delivery app deciding how many of each dish to prep given kitchen capacity and demand forecasts.</span></div>
+            <div class="ex"><b>Business example</b><span>Allocating a fixed budget across marketing channels to maximize expected leads.</span></div>
+            <div class="ex"><b>Enterprise example</b><span>Airlines solving crew-scheduling and seat-pricing as large-scale LP/IP problems daily.</span></div>
+            <div class="ex"><b>Interview example</b><span>"How would you decide the optimal rep count?" — define the objective, decision variables, and constraints exactly like this, then solve.</span></div>
+            <div class="ex"><b>Your CV</b><span>This is the literal structure behind the confirmed LP-plus-heuristics allocation of ~60 reps at Axtria, built out fully in Stage 9.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="descriptive">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>Descriptive Statistics</h2>
+        <p>The vocabulary every other section assumes you already have cold.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Central tendency <span class="lvl lvl-A">A</span></h4>
+          <p><b>Mean</b> — the average; sensitive to outliers. <b>Median</b> — the middle value; robust to outliers. <b>Mode</b> — the most frequent value; the only one that works on categorical data.</p>
+          <p><b>Interview trap:</b> "average revenue per user" can be badly misleading if a handful of enterprise accounts skew it — that's exactly when you reach for median instead, and naming that tradeoff unprompted signals real fluency.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>10 deal sizes ($K): 39, 40, 40, 41, 42, 42, 43, 44, 45, 500</li>
+              <li>Mean = (39+40+40+41+42+42+43+44+45+500)/10 = 876/10 = 87.6</li>
+              <li>Median = average of 5th and 6th sorted values = (42+42)/2 = 42</li>
+            </ol>
+            <div class="wk-result">Mean = $87.6K, Median = $42K — one $500K enterprise deal drags the mean far above what a "typical" deal actually looks like. Reporting only the mean here would badly mislead a stakeholder.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>"Average" salary at a small company sounds high the moment the founder's salary is included — the median employee's pay tells a truer story.</span></div>
+            <div class="ex"><b>Consumer example</b><span>"Average" home price in a neighborhood can be skewed by one mansion; median price is what a typical buyer should expect.</span></div>
+            <div class="ex"><b>Business example</b><span>Average deal size skewed by one enterprise account — exactly the example above.</span></div>
+            <div class="ex"><b>Enterprise example</b><span>Executive dashboards often report both mean and median revenue per account specifically to avoid this distortion.</span></div>
+            <div class="ex"><b>Interview example</b><span>"Why report median instead of mean here?" — because the distribution is skewed by outliers, and median better represents the typical case.</span></div>
+            <div class="ex"><b>Your CV</b><span>Cost-per-call and rep efficiency metrics at Axtria are exactly the kind of business metric worth checking for skew before summarizing with a single number.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Spread <span class="lvl lvl-A">A</span></h4>
+          <p><b>Variance</b> — average squared distance from the mean. <b>Standard deviation</b> — the square root of variance, back in the original units, which is why it's the one people actually report.</p>
+          <div class="formula">σ² = Σ(xᵢ − μ)² / n</div>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>5 call durations (minutes): 4, 6, 5, 7, 3 → mean = 25/5 = 5</li>
+              <li>Deviations from mean: −1, 1, 0, 2, −2</li>
+              <li>Squared deviations: 1, 1, 0, 4, 4 → sum = 10</li>
+              <li>Population variance = 10/5 = 2; standard deviation = √2 ≈ 1.41</li>
+            </ol>
+            <div class="wk-result">σ ≈ 1.41 minutes — the typical call duration deviates from the 5-minute average by about a minute and a half.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>Two commutes can both average 30 minutes, but one is always 28-32 while the other swings 10-50 — same mean, very different variance.</span></div>
+            <div class="ex"><b>Business example</b><span>Two reps with the same average call-handling time can have very different consistency — variance is what separates "reliable" from "erratic but averages out."</span></div>
+            <div class="ex"><b>Interview example</b><span>"Why do we square the deviations instead of just averaging them?" — plain deviations sum to zero by definition of the mean; squaring makes them all positive so they don't cancel out.</span></div>
+            <div class="ex"><b>Your CV</b><span>Cost-per-call variance across reps at Axtria is exactly what "rep efficiency modeling" needs to account for — a low-average, high-variance rep is a different problem than a high-average, low-variance one.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Shape &amp; outliers <span class="lvl lvl-B">B</span></h4>
+          <p>Skewness tells you if the distribution leans — right-skewed data (like income or cost-per-call) has a long tail of high values, which is exactly the kind of distribution that makes "mean" misleading. Outliers get flagged with IQR (values beyond 1.5× the interquartile range) or z-score thresholds.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>9 sorted values: 12, 14, 15, 16, 18, 19, 20, 21, 95</li>
+              <li>Q1 (25th percentile, position 2.5) ≈ interpolate between 14, 15 → 14.5</li>
+              <li>Q3 (75th percentile, position 6.5) ≈ interpolate between 19, 20 → 19.5</li>
+              <li>IQR = 19.5 − 14.5 = 5. Upper fence = Q3 + 1.5×IQR = 19.5 + 7.5 = 27</li>
+            </ol>
+            <div class="wk-result">95 &gt; 27 → flagged as an outlier by the IQR rule, and worth investigating rather than silently averaging in.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>One flight delayed by 10 hours shouldn't define "typical delay" for an airline that's usually on time — that's an outlier, not the norm.</span></div>
+            <div class="ex"><b>Business example</b><span>One giant order in a batch of transaction data can distort average order value unless flagged and handled deliberately.</span></div>
+            <div class="ex"><b>Interview example</b><span>"How do you decide whether to remove an outlier?" — check the cause first: a data-entry error is safe to fix or drop; a real extreme business event usually should stay or be analyzed separately.</span></div>
+            <div class="ex"><b>Your CV</b><span>The NanoCloud "50+ network heatmaps" data almost certainly needed exactly this kind of outlier screening before being converted into coverage recommendations.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="distributions">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>Probability Distributions</h2>
+        <p>The three you'll actually be asked about, and when each one is the right model for real data.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Normal (Gaussian) <span class="lvl lvl-A">A</span></h4>
+          <p>Symmetric bell curve. Applies whenever a quantity is the sum of many small independent effects — heights, measurement error, and (per the CLT below) sample means in general, even when the underlying data isn't normal itself.</p>
+          <p><b>68-95-99.7 rule:</b> ~68% of values fall within 1 std dev of the mean, ~95% within 2, ~99.7% within 3 — see it live below.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>Call durations are approximately normal: mean = 5.0 min, SD = 1.2 min</li>
+              <li>What fraction of calls last longer than 7.4 minutes?</li>
+              <li>z = (7.4 − 5.0) / 1.2 = 2.0</li>
+              <li>By the 68-95-99.7 rule, 95% of values fall within ±2 SD, leaving 5% split across both tails</li>
+            </ol>
+            <div class="wk-result">≈ 2.5% of calls last longer than 7.4 minutes — the single upper tail beyond +2 SD.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>Adult heights cluster tightly around an average with fewer and fewer people the further you get from it in either direction.</span></div>
+            <div class="ex"><b>Business example</b><span>Call durations, deal cycle times, and measurement error in almost any process tend toward this shape.</span></div>
+            <div class="ex"><b>Interview example</b><span>"What percent of values fall beyond 2 standard deviations?" — about 5% total, 2.5% per tail, straight from the empirical rule.</span></div>
+            <div class="ex"><b>Your CV</b><span>Flagging unusually long or short calls at Axtria for review is exactly this z-score logic in practice.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Binomial <span class="lvl lvl-B">B</span></h4>
+          <p>Counts successes across a fixed number of independent yes/no trials. This is the exact distribution behind A/B test conversion rates — "how many of these 1,000 visitors converted" is a binomial question.</p>
+          <div class="formula">P(X=k) = C(n,k)·pᵏ·(1−p)ⁿ⁻ᵏ</div>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>10 sales calls, each with p = 0.3 probability of converting, independently</li>
+              <li>P(exactly 3 conversions) = C(10,3) × 0.3³ × 0.7⁷</li>
+              <li>C(10,3) = 120; 0.3³ = 0.027; 0.7⁷ ≈ 0.0824</li>
+              <li>120 × 0.027 × 0.0824 ≈ 0.267</li>
+            </ol>
+            <div class="wk-result">≈ 26.7% chance of exactly 3 conversions out of 10 calls at a 30% true conversion rate.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>Flipping a biased coin 10 times and asking the chance of exactly 3 heads.</span></div>
+            <div class="ex"><b>Business example</b><span>Modeling how many of a batch of sales calls convert, given a known base conversion rate.</span></div>
+            <div class="ex"><b>Interview example</b><span>"Why binomial and not normal here?" — discrete, fixed number of independent yes/no trials; normal is a continuous approximation that only works well for larger n.</span></div>
+            <div class="ex"><b>Your CV</b><span>A/B test conversion counts (CV competency: A/B Testing) are fundamentally binomial data before any normal-approximation test is applied to them.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Poisson <span class="lvl lvl-C">C</span></h4>
+          <p>Counts rare events over a fixed interval of time or space, e.g. support tickets per hour, network failures per day — relevant background for the NanoCloud downtime/turnaround claims.</p>
+          <div class="formula">P(X=k) = λᵏe⁻λ / k!</div>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>Average λ = 3 network incidents per week</li>
+              <li>P(exactly 5 incidents in a week) = e⁻³ × 3⁵ / 5!</li>
+              <li>e⁻³ ≈ 0.0498; 3⁵ = 243; 5! = 120</li>
+              <li>0.0498 × 243 / 120 ≈ 0.1008</li>
+            </ol>
+            <div class="wk-result">≈ 10.1% chance of exactly 5 incidents in a week that normally averages 3 — useful context for deciding whether a "bad week" is genuinely unusual.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>Number of emails you receive in an hour — rare-ish, countable events over a fixed window.</span></div>
+            <div class="ex"><b>Business example</b><span>Support tickets per day, or network incidents per week, for capacity/staffing planning.</span></div>
+            <div class="ex"><b>Interview example</b><span>"When is Poisson wrong to use?" — when events aren't independent (one failure triggers cascading failures) or the rate isn't stable over the interval.</span></div>
+            <div class="ex"><b>Your CV</b><span>NanoCloud's downtime and turnaround-time claims are exactly the kind of metric a Poisson framing would sit behind operationally.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card viz-card" style="margin-top:16px">
+        <h4>The Normal Curve — live</h4>
+        <div class="sub">Drag to change the standard deviation and watch the 68–95–99.7 bands move.</div>
+        <canvas id="normCanvas" width="880" height="320"></canvas>
+        <div class="viz-controls">
+          <input type="range" id="sdSlider" min="10" max="60" value="30" style="flex:1;min-width:160px">
+          <span class="readout" id="sdReadout">σ = 30</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="clt">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Central Limit Theorem — deep dive</h2>
+        <p>The single most-tested statistics concept in analytics interviews, because it's the reason hypothesis testing is allowed to exist at all.</p>
+      </div>
+      <div class="card" style="padding:24px 26px">
+        <p><b>What it says:</b> take repeated samples of size n from <i>any</i> population — no matter how skewed or weird its shape — and the distribution of the <i>sample means</i> approaches a Normal distribution as n grows, centered on the true population mean.</p>
+        <p><b>Why it exists / the problem it solves:</b> without it, every statistical test would need a different formula for every possible underlying data shape. The CLT is what lets one framework (z-tests, t-tests, confidence intervals) apply broadly, because it's making a claim about the sampling distribution of the mean, not about the raw data's shape.</p>
+        <p><b>Intuition:</b> imagine rolling a single die — the outcomes (1–6) are uniformly spread, not remotely bell-shaped. But if you roll 5 dice and take the <i>average</i>, and repeat that thousands of times, the distribution of those averages piles up in the middle and thins at the edges — a bell curve emerges purely from averaging, even though no single die roll is ever "bell-shaped." That's the CLT, and you can watch it happen below.</p>
+        <div class="worked">
+          <div class="wk-label">Worked example — how sample size shrinks the standard error</div>
+          <ol>
+            <li>A population of call durations has true standard deviation σ = 10 minutes</li>
+            <li>Standard error of the sample mean: SE = σ/√n</li>
+            <li>At n=25: SE = 10/√25 = 10/5 = 2.0</li>
+            <li>At n=100: SE = 10/√100 = 10/10 = 1.0</li>
+            <li>At n=400: SE = 10/√400 = 10/20 = 0.5</li>
+          </ol>
+          <div class="wk-result">Quadrupling the sample size halves the standard error — this is exactly why larger samples give tighter, more trustworthy confidence intervals, and why the CLT's "approaches normal, with shrinking spread" is a quantifiable, not just qualitative, claim.</div>
+        </div>
+        <div class="exstrip">
+          <div class="ex"><b>Daily-life analogy</b><span>Any single commute takes a wildly different time day to day, but your <i>average</i> commute time over a month settles into a predictable, bell-shaped range.</span></div>
+          <div class="ex"><b>Consumer example</b><span>One restaurant review can be a 1-star outlier; the <i>average</i> of thousands of reviews is stable and bell-shaped around the restaurant's true quality.</span></div>
+          <div class="ex"><b>Business example</b><span>Daily revenue is noisy and skewed, but the average of 30 days of revenue behaves predictably — which is why monthly/quarterly reporting is more stable than daily.</span></div>
+          <div class="ex"><b>Enterprise example</b><span>A telecom network's per-second latency is erratic, but average latency over an hour, aggregated across thousands of sessions, is what SLAs are actually built on.</span></div>
+          <div class="ex"><b>Interview example</b><span>"Our data isn't normal — can we still use a t-test?" — yes, because the CLT applies to the sampling distribution of the mean, not the raw data, once n is reasonably large (rule of thumb: n≥30).</span></div>
+          <div class="ex"><b>Your CV</b><span>The Axtria forecasting model's cost-per-call and rep-efficiency metrics are averaged across reps and time periods — the CLT is exactly why those averages can be trusted and statistically tested, even though individual calls vary wildly.</span></div>
+        </div>
+      </div>
+      <div class="card viz-card" style="margin-top:16px">
+        <h4>CLT in action — averaging dice rolls</h4>
+        <div class="sub">Each click draws 300 samples of 5 dice, plots the <i>average</i> of each sample. Watch a uniform process turn into a bell curve.</div>
+        <canvas id="cltCanvas" width="880" height="320"></canvas>
+        <div class="viz-controls">
+          <button id="cltRoll">Draw 300 samples</button>
+          <button id="cltReset">Reset</button>
+          <span class="readout" id="cltReadout">0 samples drawn</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="sampling">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Sampling &amp; Confidence Intervals</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p>A confidence interval is a range built from your sample that's designed to contain the true population value a known percentage of the time <i>across repeated sampling</i> — a 95% CI means: if you repeated this study infinitely, 95% of the intervals you'd construct would contain the true value. It does <b>not</b> mean "there's a 95% probability the true value is in this specific interval" — the true value is fixed, not random; the interval is what varies from sample to sample. This exact distinction is a favorite interview trap.</p>
+        <div class="formula">CI = x̄ ± z · (σ / √n)</div>
+        <p style="margin-top:10px"><b>Business framing:</b> "average deal size is $42K ± $3K at 95% confidence" is a far more honest and useful statement to a stakeholder than a single point estimate, because it communicates the uncertainty a point estimate hides.</p>
+        <div class="worked">
+          <div class="wk-label">Worked example</div>
+          <ol>
+            <li>Sample of n=100 reps, average cost-per-call x̄ = $18.50, sample standard deviation σ = $6.00</li>
+            <li>Standard error: SE = σ/√n = 6.00/√100 = 6.00/10 = 0.60</li>
+            <li>For 95% confidence, z = 1.96</li>
+            <li>Margin of error: 1.96 × 0.60 = 1.176 ≈ 1.18</li>
+            <li>CI = 18.50 ± 1.18</li>
+          </ol>
+          <div class="wk-result">95% CI = [$17.32, $19.68] — "we're 95% confident the true average cost-per-call across all reps lies between $17.32 and $19.68," not a claim about any single rep.</div>
+        </div>
+        <div class="exstrip">
+          <div class="ex"><b>Daily-life analogy</b><span>A weather forecast of "70–75°F tomorrow" is a confidence interval — a range the true temperature is expected to fall in, not one exact promised number.</span></div>
+          <div class="ex"><b>Consumer example</b><span>"Delivery in 20–30 minutes" is functionally a confidence interval on delivery time, built from historical delivery data.</span></div>
+          <div class="ex"><b>Business example</b><span>"We expect $17.32–$19.68 average cost-per-call" is more honest to a client than a single number that implies false precision.</span></div>
+          <div class="ex"><b>Enterprise example</b><span>SLA commitments ("99.9% uptime ± monitoring margin") are built from confidence intervals over historical performance data.</span></div>
+          <div class="ex"><b>Interview example</b><span>"Your CI is really wide — what does that tell you?" — either high variance in the underlying data, or too small a sample; both are legitimate answers, and naming which one applies shows real understanding.</span></div>
+          <div class="ex"><b>Your CV</b><span>The $10M revenue figure and the 28% NanoCloud performance improvement are point estimates — being ready to frame either with an honest uncertainty range, if asked, is stronger than presenting them as exact.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="hyptest">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>Hypothesis Testing Framework</h2>
+        <p>The exact reasoning skeleton behind every A/B test, every "is this real or noise" question, and the framework Stage 10 builds on directly.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Null &amp; Alternative Hypotheses <span class="lvl lvl-A">A</span></h4>
+          <p><b>H₀ (null):</b> the default, "nothing changed" position — e.g. the new page design has no effect on conversion. <b>H₁ (alternative):</b> the effect you're trying to find evidence for. You never "prove" H₀ true — you either reject it or fail to reject it.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>H₀: a new self-service dashboard has no effect on average decision time (true mean = 15 min); H₁: mean ≠ 15 min</li>
+              <li>Sample: n=36 stakeholders, observed mean = 12.8 min, sample SD = 4.2 min</li>
+              <li>t = (12.8 − 15) / (4.2/√36) = −2.2 / 0.70 ≈ −3.14</li>
+              <li>Critical t at df=35, α=0.05 two-tailed ≈ ±2.03</li>
+            </ol>
+            <div class="wk-result">|−3.14| &gt; 2.03 → reject H₀. The dashboard is associated with a statistically significant reduction in decision time, not just a random fluctuation around 15 minutes.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>"This new route isn't actually faster" is your default assumption (H₀) until enough trips convince you otherwise.</span></div>
+            <div class="ex"><b>Business example</b><span>Did the new self-service tool actually speed up decisions — exactly the example above.</span></div>
+            <div class="ex"><b>Interview example</b><span>"Why start by assuming no effect?" — it's the conservative, skeptical default; the burden of proof is on the data to show a real effect, not on the null to prove nothing happened.</span></div>
+            <div class="ex"><b>Your CV</b><span>The Axtria self-service decision-support tool bullet is a natural place to have this exact hypothesis-test framing ready.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>p-value <span class="lvl lvl-A">A</span></h4>
+          <p>The probability of seeing a result <i>at least as extreme</i> as what you observed, <b>if H₀ were true</b>. A small p-value means your data would be surprising under the null — it does <b>not</b> mean "probability the null is true," and it does not mean "probability your result is due to chance." Both are the single most common p-value misinterpretation, and interviewers ask this specifically to check for it.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>H₀: the new outreach script has no effect on call-to-conversion rate</li>
+              <li>Control (old script): 400 calls, 48 conversions → p̂A = 0.120</li>
+              <li>Treatment (new script): 400 calls, 68 conversions → p̂B = 0.170</li>
+              <li>Pooled proportion: (48+68)/800 = 0.145; SE = √[0.145×0.855×(1/400+1/400)] ≈ 0.0250</li>
+              <li>z = (0.170 − 0.120) / 0.0250 = 0.050 / 0.0250 = 2.00</li>
+              <li>Two-tailed p-value for z=2.00 ≈ 0.0455</li>
+            </ol>
+            <div class="wk-result">p ≈ 0.046 — below the standard 0.05 threshold, so you'd reject H₀: if the script truly had no effect, seeing a gap this large (or larger) would happen only ~4.6% of the time by chance.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>Flipping a coin 20 times and getting 17 heads is surprising if the coin is fair — the p-value quantifies exactly how surprising.</span></div>
+            <div class="ex"><b>Consumer example</b><span>A supplement brand claims "clinically proven" — the p-value behind that claim tells you how surprising the trial's results would be if the supplement actually did nothing.</span></div>
+            <div class="ex"><b>Business example</b><span>A new outreach script raising conversion from 12% to 17%, p=0.046 — likely a real effect, not noise, at the standard 5% threshold.</span></div>
+            <div class="ex"><b>Enterprise example</b><span>Pharma trials (relevant to Axtria's industry context) require pre-registered significance thresholds precisely because p-values are easy to misuse if you test repeatedly until one looks good.</span></div>
+            <div class="ex"><b>Interview example</b><span>"p=0.06 — is that not significant, so no effect?" — it's above the conventional 0.05 cutoff, but that's a somewhat arbitrary line; report the actual value and effect size rather than a binary yes/no.</span></div>
+            <div class="ex"><b>Your CV</b><span>Any claim that the Axtria forecasting model's output "replaced manual reporting" implicitly assumes its predictions were validated as better-than-chance — this is the exact test that claim rests on.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Type I &amp; Type II Error <span class="lvl lvl-A">A</span></h4>
+          <p><b>Type I (α):</b> rejecting H₀ when it's actually true — a false positive (you ship a "winning" variant that wasn't really better). <b>Type II (β):</b> failing to reject H₀ when it's actually false — a false negative (you miss a real effect). They trade off against each other for a fixed sample size.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>1,000 flagged transactions reviewed; true fraud rate is 5% → 50 actually fraudulent, 950 actually legitimate</li>
+              <li>Test has 90% power → detects 45 of the 50 real fraud cases, misses 5 (Type II errors)</li>
+              <li>Test has a 5% false-positive rate on legitimate transactions → flags 0.05×950 ≈ 47.5 legitimate transactions incorrectly (Type I errors)</li>
+            </ol>
+            <div class="wk-result">≈ 45 true catches, ≈ 5 missed fraud cases (Type II), ≈ 48 false alarms on innocent transactions (Type I) — a concrete count behind the abstract error-rate percentages.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>A smoke detector that's too sensitive gives false alarms (Type I); one that's not sensitive enough misses real fires (Type II).</span></div>
+            <div class="ex"><b>Business example</b><span>Fraud detection thresholds — exactly the example above.</span></div>
+            <div class="ex"><b>Interview example</b><span>"Which error is worse here?" — depends on the cost: missing real fraud (Type II) vs. annoying legitimate customers with false flags (Type I); the "right" threshold depends on that cost tradeoff, not a fixed rule.</span></div>
+            <div class="ex"><b>Your CV</b><span>The Axtria forecasting model's rep-allocation decisions carry exactly this tradeoff — allocating to the wrong rep (false positive) vs. missing an efficient one (false negative).</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Power &amp; Effect Size <span class="lvl lvl-B">B</span></h4>
+          <p><b>Power</b> (1−β) is the probability of correctly detecting a real effect — typically targeted at 80%. <b>Effect size</b> is how big the difference actually is, independent of sample size — a huge sample can make a trivially small, meaningless effect "statistically significant," which is exactly why effect size matters alongside the p-value.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — Cohen's d</div>
+            <ol>
+              <li>Group A (old training): mean score = 20, SD = 5</li>
+              <li>Group B (new training): mean score = 25, SD = 5</li>
+              <li>Cohen's d = (mean B − mean A) / pooled SD = (25 − 20) / 5 = 1.0</li>
+            </ol>
+            <div class="wk-result">d = 1.0 is conventionally a "large" effect (0.2=small, 0.5=medium, 0.8+=large) — a big enough true effect that even a fairly small sample can detect it at 80% power, unlike a d=0.1 effect which would need a much larger sample.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>A tiny, barely-noticeable taste difference needs a huge blind taste-test panel to detect reliably; an obvious difference needs only a handful of tasters.</span></div>
+            <div class="ex"><b>Business example</b><span>Comparing training program effectiveness on rep performance scores — exactly the example above.</span></div>
+            <div class="ex"><b>Interview example</b><span>"Your test wasn't significant — was there no effect?" — could mean no real effect, or could mean the study was underpowered to detect a real but modest effect size; these are different conclusions.</span></div>
+            <div class="ex"><b>Your CV</b><span>Before running any A/B test on Axtria's tools, sizing the required sample against an expected/minimum meaningful effect avoids wasting a stakeholder review cycle on an underpowered test.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tests">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Test Selector — t-test, z-test, χ², ANOVA</h2>
+        <p>The four tests that come up constantly. Click each to expand the full breakdown — question answered, assumptions, hypotheses, business example, and a runnable Python snippet.</p>
+      </div>
+      <div class="testcards">
+        <details class="testcard">
+          <summary><span class="st-name">t-test</span><span class="st-when">Compare means of two groups, small/unknown-variance samples</span></summary>
+          <div class="testcard-body">
+            <div class="f"><b>Question it answers</b>Is the mean of Group A different from Group B?</div>
+            <div class="f"><b>When to use</b>Comparing two group means (e.g. two A/B variants) when population variance is unknown — the common real-world case</div>
+            <div class="f"><b>Assumptions</b>Roughly normal data (or large enough n via CLT), independent observations, similar variances (Welch's t-test relaxes this last one)</div>
+            <div class="f"><b>H₀ / H₁</b>H₀: μA = μB &nbsp;|&nbsp; H₁: μA ≠ μB (two-sided) or μA &gt; μB (one-sided)</div>
+            <div class="f"><b>Test statistic</b>t = (x̄A − x̄B) / SE(difference)</div>
+            <div class="f"><b>Business example</b>Did the new pricing page increase average order value?</div>
+            <div class="f" style="grid-column:1/-1">
+              <b>Python</b>
+              <div class="codeblock">from scipy import stats
+t_stat, p_value = stats.ttest_ind(group_a, group_b, equal_var=False)
+print(f"t={t_stat:.3f}, p={p_value:.4f}")</div>
+            </div>
+            <div class="f" style="grid-column:1/-1">
+              <div class="worked" style="margin-top:0">
+                <div class="wk-label">Worked example</div>
+                <ol>
+                  <li>Page A (old): n=15 sessions, average order value x̄A = $64, sA = $12</li>
+                  <li>Page B (new): n=15 sessions, average order value x̄B = $71, sB = $13</li>
+                  <li>SE(diff) ≈ √(12²/15 + 13²/15) = √(9.6 + 11.3) = √20.9 ≈ 4.57</li>
+                  <li>t = (71 − 64) / 4.57 ≈ 1.53</li>
+                  <li>df ≈ 27 (Welch approx.); two-tailed p for t=1.53 ≈ 0.137</li>
+                </ol>
+                <div class="wk-result">p ≈ 0.137 — above 0.05, so with this sample size you can't conclude Page B truly increased order value; a $7 gap this large could plausibly happen from sampling noise alone. The honest read: promising trend, underpowered sample.</div>
+              </div>
+              <div class="exstrip">
+                <div class="ex"><b>Daily-life analogy</b><span>Comparing average commute time between two routes you've each driven a handful of times — a few trips isn't enough to be sure one route is truly faster.</span></div>
+                <div class="ex"><b>Business example</b><span>Did the redesigned checkout page raise average order value? Exactly the scenario above.</span></div>
+                <div class="ex"><b>Interview example</b><span>"Why not just compare the two averages directly?" — because any gap could be sampling noise; the t-test quantifies how likely a gap this large is if there's truly no difference.</span></div>
+                <div class="ex"><b>Your CV</b><span>Comparing cost-per-call or rep efficiency before/after a process change at Axtria or NanoCloud is a natural t-test scenario.</span></div>
+              </div>
+            </div>
+          </div>
+        </details>
+        <details class="testcard">
+          <summary><span class="st-name">z-test</span><span class="st-when">Compare proportions or means with known variance, large samples</span></summary>
+          <div class="testcard-body">
+            <div class="f"><b>Question it answers</b>Is this proportion/mean different from a known benchmark or another group?</div>
+            <div class="f"><b>When to use</b>Large samples (n &gt; ~30) with known or well-estimated population variance — the standard test for A/B <i>conversion rate</i> comparisons</div>
+            <div class="f"><b>Assumptions</b>Large sample size, known population variance (or large-n approximation), independent observations</div>
+            <div class="f"><b>H₀ / H₁</b>H₀: pA = pB &nbsp;|&nbsp; H₁: pA ≠ pB</div>
+            <div class="f"><b>Test statistic</b>z = (p̂A − p̂B) / SE(difference)</div>
+            <div class="f"><b>Business example</b>Did the new checkout flow increase conversion rate from 3.1% to 3.6%?</div>
+            <div class="f" style="grid-column:1/-1">
+              <b>Python</b>
+              <div class="codeblock">from statsmodels.stats.proportion import proportions_ztest
+count = [312, 360]   # conversions
+nobs  = [10000, 10000] # visitors
+z_stat, p_value = proportions_ztest(count, nobs)
+print(f"z={z_stat:.3f}, p={p_value:.4f}")</div>
+            </div>
+            <div class="f" style="grid-column:1/-1">
+              <div class="worked" style="margin-top:0">
+                <div class="wk-label">Worked example (full calculation in §07 p-value card above)</div>
+                <ol>
+                  <li>Control: 400 calls, 48 conversions (12.0%) vs. Treatment: 400 calls, 68 conversions (17.0%)</li>
+                  <li>z ≈ 2.00, two-tailed p ≈ 0.046</li>
+                </ol>
+                <div class="wk-result">Same underlying math as the p-value example above — a z-test is simply a hypothesis test framed with the z-statistic. Reject H₀ at the 5% level.</div>
+              </div>
+              <div class="exstrip">
+                <div class="ex"><b>Daily-life analogy</b><span>Comparing the free-throw percentage of two basketball players across a full season (large n) — z-tests fit large-sample proportion comparisons.</span></div>
+                <div class="ex"><b>Business example</b><span>Did a new outreach script's conversion rate genuinely beat the old one, at scale?</span></div>
+                <div class="ex"><b>Interview example</b><span>"Why z-test here and not t-test?" — large sample, comparing proportions with a well-approximated variance under CLT, not small-sample means.</span></div>
+                <div class="ex"><b>Your CV</b><span>The A/B Testing competency on every CV version is most often literally this test in production.</span></div>
+              </div>
+            </div>
+          </div>
+        </details>
+        <details class="testcard">
+          <summary><span class="st-name">Chi-square (χ²)</span><span class="st-when">Test relationships between categorical variables</span></summary>
+          <div class="testcard-body">
+            <div class="f"><b>Question it answers</b>Are two categorical variables independent, or is there a relationship?</div>
+            <div class="f"><b>When to use</b>Categorical vs. categorical (e.g. device type vs. converted/not-converted) — a contingency-table test, not a means comparison</div>
+            <div class="f"><b>Assumptions</b>Independent observations, expected cell counts ≥ 5 in most cells</div>
+            <div class="f"><b>H₀ / H₁</b>H₀: the two variables are independent &nbsp;|&nbsp; H₁: they're associated</div>
+            <div class="f"><b>Test statistic</b>χ² = Σ (Observed − Expected)² / Expected</div>
+            <div class="f"><b>Business example</b>Does device type (mobile/desktop) relate to which pricing plan customers pick?</div>
+            <div class="f" style="grid-column:1/-1">
+              <b>Python</b>
+              <div class="codeblock">from scipy.stats import chi2_contingency
+chi2, p_value, dof, expected = chi2_contingency(contingency_table)
+print(f"chi2={chi2:.3f}, p={p_value:.4f}")</div>
+            </div>
+            <div class="f" style="grid-column:1/-1">
+              <div class="worked" style="margin-top:0">
+                <div class="wk-label">Worked example</div>
+                <ol>
+                  <li>200 mobile users: 30 chose Plan A, 70 chose Plan B → row total 100</li>
+                  <li>200 desktop users: 55 chose Plan A, 45 chose Plan B → row total 100</li>
+                  <li>Column totals: Plan A = 85, Plan B = 115, Grand total = 200</li>
+                  <li>Expected(mobile, A) = (100×85)/200 = 42.5; Expected(mobile, B) = 57.5; Expected(desktop, A) = 42.5; Expected(desktop, B) = 57.5</li>
+                  <li>χ² = Σ(O−E)²/E = (30−42.5)²/42.5 + (70−57.5)²/57.5 + (55−42.5)²/42.5 + (45−57.5)²/57.5 ≈ 3.68+2.72+3.68+2.72 = 12.79</li>
+                  <li>df = (2−1)(2−1) = 1; p-value for χ²=12.79, df=1 ≈ 0.00035</li>
+                </ol>
+                <div class="wk-result">p ≈ 0.0003 — strong evidence device type and plan choice are associated; mobile users skew toward Plan B, desktop users toward Plan A.</div>
+              </div>
+              <div class="exstrip">
+                <div class="ex"><b>Daily-life analogy</b><span>Checking whether people's ice-cream flavor choice differs by which neighborhood they live in — two categorical variables, is there a relationship?</span></div>
+                <div class="ex"><b>Business example</b><span>Does device type relate to which pricing plan customers pick — exactly the example above.</span></div>
+                <div class="ex"><b>Interview example</b><span>"Your expected cell count is 3 — is that a problem?" — yes, chi-square gets unreliable below ~5 expected per cell; consider Fisher's exact test instead for small samples.</span></div>
+                <div class="ex"><b>Your CV</b><span>Segmenting NanoCloud client outcomes by client size/industry to see if satisfaction or approval rates differ by category is a natural chi-square use.</span></div>
+              </div>
+            </div>
+          </div>
+        </details>
+        <details class="testcard">
+          <summary><span class="st-name">ANOVA</span><span class="st-when">Compare means across three or more groups</span></summary>
+          <div class="testcard-body">
+            <div class="f"><b>Question it answers</b>Is at least one group mean different among 3+ groups?</div>
+            <div class="f"><b>When to use</b>More than two groups (e.g. A/B/<b>C</b> testing three page variants at once) — avoids the inflated false-positive rate from running many pairwise t-tests</div>
+            <div class="f"><b>Assumptions</b>Normality within groups, independent observations, similar variances across groups (homoscedasticity)</div>
+            <div class="f"><b>H₀ / H₁</b>H₀: μ1 = μ2 = μ3 &nbsp;|&nbsp; H₁: at least one mean differs</div>
+            <div class="f"><b>Test statistic</b>F = (variance between groups) / (variance within groups)</div>
+            <div class="f"><b>Business example</b>Do three different email subject lines produce different open rates?</div>
+            <div class="f" style="grid-column:1/-1">
+              <b>Python</b>
+              <div class="codeblock">from scipy import stats
+f_stat, p_value = stats.f_oneway(group_a, group_b, group_c)
+print(f"F={f_stat:.3f}, p={p_value:.4f}")
+# significant? -> run a post-hoc test (Tukey HSD) to see WHICH pair differs</div>
+            </div>
+            <div class="f" style="grid-column:1/-1">
+              <div class="worked" style="margin-top:0">
+                <div class="wk-label">Worked example (simplified, equal group sizes)</div>
+                <ol>
+                  <li>Subject line A: open rates across 5 sends — 20%, 22%, 19%, 21%, 23% → mean = 21%</li>
+                  <li>Subject line B: 25%, 27%, 24%, 26%, 28% → mean = 26%</li>
+                  <li>Subject line C: 20%, 21%, 19%, 22%, 20% → mean = 20.4%</li>
+                  <li>Grand mean = (21+26+20.4)/3 ≈ 22.47%</li>
+                  <li>Between-group variance is driven mainly by B sitting well above A and C; within-group variance is small (each group is tightly clustered)</li>
+                  <li>F = (variance between groups) / (variance within groups) works out large here because between-group spread dominates within-group noise → F ≈ 24.8, p &lt; 0.001</li>
+                </ol>
+                <div class="wk-result">p &lt; 0.001 — at least one subject line differs. A Tukey HSD post-hoc test would then show B significantly beats both A and C, while A vs. C isn't significantly different.</div>
+              </div>
+              <div class="exstrip">
+                <div class="ex"><b>Daily-life analogy</b><span>Comparing average commute time across three different departure times, not just two — ANOVA is the "more than two groups" version of a t-test.</span></div>
+                <div class="ex"><b>Business example</b><span>Do three different email subject lines produce different open rates — exactly the example above.</span></div>
+                <div class="ex"><b>Interview example</b><span>"Why not just run three separate t-tests?" — because each test at 5% alpha compounds the false-positive risk across multiple comparisons; ANOVA tests all groups in one pass.</span></div>
+                <div class="ex"><b>Your CV</b><span>Comparing network performance improvement across 3+ NanoCloud client segments, or rep-efficiency across multiple sales regions at Axtria, is a natural ANOVA scenario.</span></div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="corr">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>Correlation, Covariance &amp; Causation</h2>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Covariance <span class="lvl lvl-B">B</span></h4>
+          <p>Direction of the relationship between two variables — positive, negative, or none — but the magnitude isn't interpretable on its own because it's in the product of the two variables' units.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>Marketing spend x ($K): 10, 20, 30, 40, 50 → mean = 30</li>
+              <li>Revenue y ($K): 15, 18, 25, 25, 32 → mean = 23</li>
+              <li>Deviations x: −20,−10,0,10,20 &nbsp;|&nbsp; Deviations y: −8,−5,2,2,9</li>
+              <li>Products: 160, 50, 0, 20, 180 → sum = 410</li>
+              <li>Covariance = 410/5 = 82</li>
+            </ol>
+            <div class="wk-result">Cov = 82 (in $K×$K units) — positive, so spend and revenue move together, but this raw number alone doesn't tell you how <i>strong</i> the relationship is. That's what correlation (next card) fixes.</div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Correlation (r) <span class="lvl lvl-A">A</span></h4>
+          <p>Covariance, normalized to a unitless −1 to +1 scale, so magnitude becomes meaningfully comparable. r = 0.8 between marketing spend and revenue is a strong linear association — but association is not causation.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example (continuing from covariance above)</div>
+            <ol>
+              <li>Var(x) = (400+100+0+100+400)/5 = 1000/5 = 200 → SD(x) = √200 ≈ 14.14</li>
+              <li>Var(y) = (64+25+4+4+81)/5 = 178/5 = 35.6 → SD(y) ≈ 5.97</li>
+              <li>r = Cov(x,y) / (SD(x)×SD(y)) = 82 / (14.14×5.97) = 82 / 84.4</li>
+            </ol>
+            <div class="wk-result">r ≈ 0.97 — a very strong positive linear relationship between marketing spend and revenue in this small dataset.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>Hours studied and exam score usually move together — more of one tends to come with more of the other.</span></div>
+            <div class="ex"><b>Business example</b><span>Marketing spend and revenue — exactly the example above.</span></div>
+            <div class="ex"><b>Interview example</b><span>"r=0.97 — is this a good model?" — a strong correlation isn't the same as a validated causal driver; still needs the causation check on the next card.</span></div>
+            <div class="ex"><b>Your CV</b><span>Cost-per-call vs. rep efficiency at Axtria is exactly the kind of pair worth correlating before building it into the allocation model.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Correlation ≠ Causation <span class="lvl lvl-A">A</span></h4>
+          <p>Ice cream sales and drowning deaths correlate — heat is the confounder driving both. Any correlation-based claim needs to survive "what's the confounder?" before it becomes a business recommendation.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <ol>
+              <li>Temperature (°C): 20, 25, 30, 35, 40</li>
+              <li>Ice cream sales (units): 100, 150, 220, 280, 350 — rises with temperature</li>
+              <li>Drownings (count): 2, 3, 5, 6, 9 — also rises with temperature</li>
+              <li>Computing r(ice cream, drownings) directly, using the same method as the correlation card above, gives r ≈ 0.99</li>
+            </ol>
+            <div class="wk-result">A near-perfect correlation between ice cream sales and drownings — with zero causal link. Both are driven by the same third variable (temperature: more people swim and more people buy ice cream on hot days). The math doesn't distinguish "confounded" from "causal" — only domain reasoning or an experiment can.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>People who carry umbrellas are more likely to see rain — the umbrella doesn't cause the rain; both are driven by the forecast/clouds.</span></div>
+            <div class="ex"><b>Consumer example</b><span>"Customers who read reviews buy more" — do reviews cause purchases, or do already-interested buyers just read more reviews (reverse causation)?</span></div>
+            <div class="ex"><b>Business example</b><span>Reps with more training hours close more deals — could be training's effect, or your best reps simply choose to train more (selection, not causation).</span></div>
+            <div class="ex"><b>Enterprise example</b><span>A/B testing exists specifically to move from correlation to causation at scale, by randomizing the one variable you're testing and holding everything else constant.</span></div>
+            <div class="ex"><b>Interview example</b><span>"Your model shows X correlates with churn — should we intervene on X?" — only if there's a causal mechanism, ideally validated by an experiment, not just an observed correlation.</span></div>
+            <div class="ex"><b>Your CV</b><span>The Axtria forecasting model informing "quarterly market-share strategy" is a correlation-to-decision pipeline — worth being ready to explain what validates the causal read, not just the statistical association.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Multicollinearity <span class="lvl lvl-B">B</span></h4>
+          <p>When predictor variables are highly correlated with <i>each other</i>, regression coefficients become unstable and hard to interpret individually — a direct callback for Stage 7's Logistic Regression module, where this is a named interview trap.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — VIF and coefficient instability</div>
+            <ol>
+              <li>Predictors: years of experience (x1) and age (x2), correlated at r=0.95 with each other</li>
+              <li>Regressing x1 on the other predictors gives R² = 0.90 for that sub-model</li>
+              <li>VIF(x1) = 1 / (1 − R²) = 1 / (1 − 0.90) = 1 / 0.10 = 10</li>
+              <li>Rule of thumb: VIF &gt; 5–10 signals problematic multicollinearity</li>
+            </ol>
+            <div class="wk-result">VIF=10 flags a real problem: on slightly different samples, this model's fitted coefficients might swing from x1=+3.2, x2=+0.1 to x1=−1.8, x2=+4.9 — wildly different individual coefficients, even though their <i>combined</i> effect stays roughly stable. Individually, neither coefficient can be trusted or interpreted.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life analogy</b><span>If height and shoe size are both in a model predicting basketball skill, it becomes hard to say which one "really" matters — they move together.</span></div>
+            <div class="ex"><b>Business example</b><span>Years of experience and age in a compensation model — nearly redundant predictors that destabilize individual coefficient interpretation.</span></div>
+            <div class="ex"><b>Interview example</b><span>"Your logistic regression coefficient flipped sign after adding a feature — why?" — classic multicollinearity symptom; check VIF before trusting any individual coefficient's story.</span></div>
+            <div class="ex"><b>Your CV</b><span>Rep efficiency and cost-per-call at Axtria could plausibly be correlated with each other — worth being ready to say how that was checked before both went into the model.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="sigvbiz">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>Statistical vs. Business Significance</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p>A large enough sample can make a 0.1% conversion lift statistically significant — real, not noise — while still being far too small to justify the engineering cost of shipping it. Statistical significance answers "is this effect real?"; business significance answers "is this effect big enough to matter?" A strong interview answer always addresses both, not just the p-value.</p>
+        <div class="worked">
+          <div class="wk-label">Worked example</div>
+          <ol>
+            <li>Conversion A = 5.00%, Conversion B = 5.05%, n = 5,000,000 visitors per group</li>
+            <li>SE(difference) = √[2 × 0.05 × 0.95 / 5,000,000] ≈ √(0.000000019) ≈ 0.000138</li>
+            <li>z = 0.0005 / 0.000138 ≈ 3.62 → p ≈ 0.0003 — statistically significant</li>
+          </ol>
+          <div class="wk-result">Real and statistically significant — but a 0.05 percentage-point lift. Whether that's worth shipping depends entirely on the absolute revenue it represents at your scale, not on the p-value alone.</div>
+        </div>
+        <div class="exstrip">
+          <div class="ex"><b>Daily-life analogy</b><span>A diet proven to make you lose "a statistically significant" 0.1 lb over a year isn't a diet worth following, even if the effect is real.</span></div>
+          <div class="ex"><b>Business example</b><span>A 0.05pp conversion lift at massive scale — exactly the example above.</span></div>
+          <div class="ex"><b>Interview example</b><span>"Your test is significant — should we ship it?" — ask about effect size and implementation cost before answering yes.</span></div>
+          <div class="ex"><b>Your CV</b><span>The $10M Axtria outcome is exactly the kind of number that should be framed with both statistical validity and business magnitude, not treated as self-evidently important because it's large.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="redflags">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2>Red Flags — statements that expose shallow knowledge</h2>
+      </div>
+      <div class="redflag"><b>"The p-value is the probability the null hypothesis is true."</b> — Wrong. It's the probability of the observed data (or more extreme), assuming H₀ is true. The null is either true or false; it doesn't have a probability in frequentist testing.</div>
+      <div class="redflag"><b>"It's statistically significant, so it matters."</b> — Significance and business impact are different questions; always report effect size alongside p-value.</div>
+      <div class="redflag"><b>"Correlation of 0.9, so X causes Y."</b> — Needs a confounder check, ideally a controlled experiment, before any causal claim.</div>
+      <div class="redflag"><b>"95% confidence interval means 95% probability the true value is in this range."</b> — The true value is fixed; it's the interval-construction procedure that's correct 95% of the time across repeated sampling.</div>
+      <div class="redflag"><b>"We didn't find significance, so there's no effect."</b> — Failing to reject H₀ isn't proof H₀ is true — it may just mean the sample was underpowered to detect a real, smaller effect.</div>
+    </section>
+
+    <section id="questions">
+      <div class="sec-head">
+        <div class="num">12</div>
+        <h2>Interview Question Bank</h2>
+        <p>The full 75, with model answers — the minimum your instructions set for Statistics. Stage 20 aggregates this alongside every other stage's bank into the master 1,000+ question set. Click any question to reveal the answer.</p>
+      </div>
+      <div class="card qbank" id="qbankList"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">13</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card bridge-flow">
+        <span class="node">Hypothesis Testing</span><span class="arrow">→</span>
+        <span class="node">A/B Testing (CV competency)</span><span class="arrow">→</span>
+        <span class="node">Forecasting model validation (Axtria)</span><span class="arrow">→</span>
+        <span class="node">Bi-weekly stakeholder reviews</span><span class="arrow">→</span>
+        <span class="node">Portfolio &amp; launch decisions</span>
+      </div>
+      <div class="card bridge-flow" style="margin-top:12px">
+        <span class="node">CLT + Confidence Intervals</span><span class="arrow">→</span>
+        <span class="node">"$10M revenue" claim</span><span class="arrow">→</span>
+        <span class="node">Honest uncertainty framing, not a bare point estimate</span>
+      </div>
+      <div class="card" style="padding:20px 24px;margin-top:12px">
+        <p style="margin:0"><b>"Did YOU actually run these tests?"</b> — honest framing: "the forecasting model's validation used standard train/test evaluation and statistical checks on prediction error; I understand the full hypothesis-testing methodology end-to-end and applied it directly when interpreting A/B results and model outputs for stakeholders." Adjust to your real involvement — this is a template, not a script to recite verbatim.</p>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">14</div>
+        <h2>Mastery Checklist</h2>
+        <p>Click to check off — saved in this browser.</p>
+      </div>
+      <div class="card checklist" id="masteryList"></div>
+    </section>
+  </main>
+</div>
+
+<button class="backtop" id="backtop" title="Back to top" aria-label="Back to top">↑</button>
+
+<script>
+(function(){
+  // back to top
+  var btn = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){ btn.classList.toggle('show', window.scrollY > 500); });
+  btn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  // ---- Normal curve viz ----
+  var nc = document.getElementById('normCanvas');
+  var nctx = nc.getContext('2d');
+  var sdSlider = document.getElementById('sdSlider');
+  var sdReadout = document.getElementById('sdReadout');
+  function isDark(){
+    try{
+      var t = document.documentElement.getAttribute('data-theme');
+      if(t === 'dark') return true;
+      if(t === 'light') return false;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }catch(e){ return false; }
+  }
+  function drawNormal(sd){
+    var w = nc.width, h = nc.height;
+    nctx.clearRect(0,0,w,h);
+    var dark = isDark();
+    var mean = w/2;
+    var baseline = h - 30;
+    // bands
+    var bands = [[3, dark?'#2A2338':'#E5DEEE'], [2, dark?'#1D2C3C':'#DCE7F2'], [1, dark?'#173330':'#DCEEEA']];
+    bands.forEach(function(b){
+      var half = b[0]*sd;
+      nctx.fillStyle = b[1];
+      nctx.fillRect(mean-half, 20, half*2, baseline-20);
+    });
+    // curve
+    nctx.beginPath();
+    nctx.strokeStyle = dark ? '#5FC1B6' : '#1E6E68';
+    nctx.lineWidth = 2.5;
+    for(var x=0;x<w;x++){
+      var z = (x-mean)/sd;
+      var y = baseline - Math.exp(-0.5*z*z) * (baseline-30);
+      if(x===0) nctx.moveTo(x,y); else nctx.lineTo(x,y);
+    }
+    nctx.stroke();
+    // baseline
+    nctx.strokeStyle = dark ? '#454650' : '#C7C2B0';
+    nctx.lineWidth = 1;
+    nctx.beginPath(); nctx.moveTo(0,baseline); nctx.lineTo(w,baseline); nctx.stroke();
+    // labels
+    nctx.fillStyle = dark ? '#B9B6AC' : '#4E566B';
+    nctx.font = '12px "IBM Plex Mono"';
+    nctx.textAlign = 'center';
+    [-3,-2,-1,0,1,2,3].forEach(function(k){
+      nctx.fillText(k+'σ', mean+k*sd, baseline+18);
+    });
+  }
+  function refreshNorm(){ sdReadout.textContent = 'σ = ' + sdSlider.value; drawNormal(parseInt(sdSlider.value,10)); }
+  sdSlider.addEventListener('input', refreshNorm);
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', refreshNorm);
+  refreshNorm();
+
+  // ---- CLT dice simulation ----
+  var cc = document.getElementById('cltCanvas');
+  var cctx = cc.getContext('2d');
+  var cltReadout = document.getElementById('cltReadout');
+  var bins = new Array(26).fill(0); // sample means range 1..6, 0.2 width bins approx
+  var totalSamples = 0;
+  function rollSampleMean(){
+    var sum = 0;
+    for(var i=0;i<5;i++){ sum += 1 + Math.floor(Math.random()*6); }
+    return sum/5; // range 1..6
+  }
+  function drawCLT(){
+    var w = cc.width, h = cc.height;
+    var dark = isDark();
+    cctx.clearRect(0,0,w,h);
+    var maxBin = Math.max.apply(null, bins.concat([1]));
+    var barW = w / bins.length;
+    var baseline = h - 30;
+    cctx.fillStyle = dark ? '#D6A24F' : '#A2701F';
+    bins.forEach(function(count, i){
+      var barH = (count/maxBin) * (baseline-20);
+      cctx.fillRect(i*barW+2, baseline-barH, barW-4, barH);
+    });
+    cctx.strokeStyle = dark ? '#454650' : '#C7C2B0';
+    cctx.beginPath(); cctx.moveTo(0,baseline); cctx.lineTo(w,baseline); cctx.stroke();
+    cctx.fillStyle = dark ? '#B9B6AC' : '#4E566B';
+    cctx.font = '12px "IBM Plex Mono"';
+    cctx.textAlign = 'center';
+    [1,2,3,4,5,6].forEach(function(v){
+      var x = ((v-1)/5) * w;
+      cctx.fillText(v, x, baseline+18);
+    });
+    cltReadout.textContent = totalSamples + ' samples drawn';
+  }
+  document.getElementById('cltRoll').addEventListener('click', function(){
+    for(var i=0;i<300;i++){
+      var m = rollSampleMean();
+      var idx = Math.min(25, Math.floor(((m-1)/5)*26));
+      bins[idx]++;
+      totalSamples++;
+    }
+    drawCLT();
+  });
+  document.getElementById('cltReset').addEventListener('click', function(){
+    bins = new Array(26).fill(0); totalSamples = 0; drawCLT();
+  });
+  drawCLT();
+
+  // ---- Question bank ----
+  var qas = [
+    ["What is a p-value, in plain terms?","The probability of observing a result at least as extreme as what you saw, <b>assuming the null hypothesis is true</b>. It is not the probability the null is true, and not the probability your result is due to chance."],
+    ["Why do we never 'accept' the null hypothesis?","We can only reject it or fail to reject it — failing to find evidence against H₀ isn't proof H₀ is correct, it may just mean the test was underpowered."],
+    ["Explain Type I vs Type II error with a business example.","Type I: shipping a redesign that isn't actually better (false positive). Type II: killing a redesign that actually was better, because the test didn't detect it (false negative). The tradeoff is set by your significance threshold and sample size."],
+    ["Why does the Central Limit Theorem matter practically?","It's why we can apply standard hypothesis tests to sample means regardless of the underlying data's shape — the sampling distribution of the mean approaches normal as n grows, even for skewed raw data."],
+    ["What's the difference between a t-test and a z-test?","Both compare means/proportions, but t-tests are used when population variance is unknown (the common case) and sample sizes are smaller; z-tests assume known variance or rely on large-sample approximations."],
+    ["When would you use ANOVA instead of multiple t-tests?","When comparing 3+ groups — running many pairwise t-tests inflates the false-positive rate (multiple comparisons problem); ANOVA tests all groups at once, then a post-hoc test like Tukey HSD identifies which pairs differ."],
+    ["What does a 95% confidence interval actually mean?","If you repeated the sampling process many times, 95% of the intervals constructed this way would contain the true population parameter. It is not a 95% probability the true value sits in this one specific interval."],
+    ["Explain multicollinearity and why it's a problem.","When predictor variables are highly correlated with each other, individual regression coefficients become unstable and hard to interpret — you can't cleanly attribute effect to one variable vs. another. Detected via VIF (variance inflation factor); fixed by removing/combining correlated features or regularization."],
+    ["Correlation is 0.9 between two variables — what do you check before claiming causation?","Whether there's a plausible mechanism, whether a confounding variable could explain both, temporal order (does the cause precede the effect), and ideally whether a controlled experiment or natural experiment supports it."],
+    ["What's the difference between statistical and practical significance?","Statistical significance means the effect is unlikely to be due to chance; practical (business) significance means the effect is large enough to matter. A large enough sample can make a trivial effect statistically significant."],
+    ["How would you explain AUC-ROC to a non-technical stakeholder?","It measures how well the model ranks positive cases above negative ones across every possible decision threshold — 0.5 is random guessing, 1.0 is perfect separation. In plain terms: if you pick one true positive and one true negative at random, AUC is the probability the model scores the positive one higher."],
+    ["What assumptions does a t-test rely on, and what happens if they're violated?","Roughly normal data (or CLT kicks in with large n), independent observations, similar variances between groups. If variances differ a lot, use Welch's t-test instead of the standard pooled-variance version; if independence is violated, the test's error rates become unreliable."],
+    ["Your A/B test shows p=0.04 — is the result definitely real?","Not definitively — p=0.04 means this outcome (or more extreme) would occur ~4% of the time under the null. At a 5% threshold it clears the bar, but check effect size, sample size adequacy, and whether you ran multiple tests (multiple-comparisons risk) before treating it as settled."],
+    ["What's a Type I error rate (alpha) typically set at, and why?","Usually 0.05 by convention — a 5% tolerance for false positives. It's a business/statistical tradeoff, not a law of nature; a high-stakes decision might use a stricter 0.01."],
+    ["Explain the multiple comparisons problem.","Running many statistical tests increases the chance that at least one shows 'significance' purely by chance. Testing 20 independent hypotheses at α=0.05 gives roughly a 64% chance of at least one false positive. Corrections like Bonferroni address this."],
+    ["What's the difference between variance and standard deviation, and why report SD?","Variance is in squared units (hard to interpret); standard deviation is the square root, back in the original units, which is why it's the one typically communicated to stakeholders."],
+    ["Why might mean and median diverge a lot in a real business dataset?","Skewed data — e.g. a few very high-value enterprise deals pull the mean up while the median stays representative of the 'typical' customer. Reporting only the mean can misrepresent the typical case."],
+    ["What's the difference between a one-tailed and two-tailed test?","A one-tailed test checks for an effect in one specific direction only (e.g. 'is B better than A'); two-tailed checks for any difference in either direction. Two-tailed is more conservative and the more common default unless you have a strong prior reason to only care about one direction."],
+    ["Describe power in your own words, and what increases it.","Power is the probability of correctly detecting a real effect when one exists. It increases with larger sample size, larger true effect size, lower variance in the data, and a higher chosen alpha (which is itself a tradeoff)."],
+    ["When is chi-square the right test instead of a t-test?","When both variables are categorical, not continuous — chi-square tests independence/association between categories (e.g. device type vs. converted-or-not), whereas t-tests compare a continuous outcome's mean across groups."],
+    ["Why can't you just look at raw conversion rate differences without a test?","Because any difference could be due to random sampling noise rather than a real underlying effect — the test quantifies how likely the observed gap is under the assumption of no real difference."],
+    ["What's the relationship between confidence level and interval width?","Higher confidence (e.g. 99% vs 95%) requires a wider interval to be more certain of capturing the true value — confidence and precision trade off against each other for a fixed sample size."],
+    ["How would you detect if your A/B test had a Sample Ratio Mismatch (SRM)?","Check whether the actual traffic split between variants matches the intended split (e.g. 50/50) using a chi-square goodness-of-fit test — a significant SRM invalidates the test results because it signals a randomization or tracking bug."],
+    ["What's a confounding variable? Give a business example.","A variable that influences both the presumed cause and effect, creating a spurious association. Example: ice cream sales and drowning both rise with heat — heat is the confounder, not a causal link between the two."],
+    ["Why would an interviewer ask about assumptions instead of just the test formula?","Because knowing when a test's assumptions are violated — and what to do instead — is what separates someone who memorized a formula from someone who understands when it actually applies."],
+    ["What does 'independent observations' mean in a testing context, and why does it matter?","Each data point shouldn't influence or be correlated with another — e.g. repeated measurements from the same user counted as separate independent visitors would violate this and understate the true variance, inflating false-positive risk."],
+    ["Explain skewness in one sentence, with a business example.","Skewness measures asymmetry in a distribution — customer spend is often right-skewed, with most customers spending modestly and a long tail of high spenders pulling the mean above the median."],
+    ["Why is 'the model is 95% accurate' often a misleading statement on its own?","Accuracy alone hides class imbalance — if only 5% of cases are positive, a model that always predicts 'negative' is 95% accurate while being useless; precision, recall, and AUC are needed for the full picture."],
+    ["What's the difference between a parameter and a statistic?","A parameter describes the true population (usually unknown, e.g. true population mean μ); a statistic is computed from a sample and used to estimate the parameter (e.g. sample mean x̄)."],
+    ["How would you explain standard error vs standard deviation?","Standard deviation measures spread within a single sample/population; standard error measures how much a sample statistic (like the mean) would vary across repeated samples — it shrinks as sample size grows, which is why larger samples give tighter confidence intervals."],
+    ["Give an example where a statistically significant result should still be ignored.","A massive-sample A/B test finds a 0.02% lift in conversion, p<0.001 — real, but far too small to justify the engineering/maintenance cost of shipping it. Statistical significance without meaningful effect size."],
+    ["How does the CLT justify using a t-test even when raw data isn't normal?","The t-test is really testing the sampling distribution of the mean, not the raw data's distribution — by the CLT, that sampling distribution approaches normal as sample size grows, even when individual observations are skewed."],
+    ["What's the difference between a population and a sample?","A population is the entire group you care about; a sample is a subset used to estimate population parameters, because measuring the whole population is usually impossible or too costly."],
+    ["What is degrees of freedom, intuitively?","The number of values in a calculation that are free to vary. For sample variance, once the mean is fixed, only n−1 of the values are still free — the last one is determined by the rest, hence the n−1 in the denominator."],
+    ["Why is sample variance divided by n−1, not n?","Dividing by n underestimates the true population variance because the sample mean used in the formula is itself estimated from the same data, using up one degree of freedom. Dividing by n−1 (Bessel's correction) gives an unbiased estimator."],
+    ["What's the Law of Large Numbers, and how does it differ from the CLT?","LLN says the sample mean converges to the true population mean as sample size grows. CLT says the <i>distribution</i> of that sample mean becomes approximately normal as sample size grows. LLN is about convergence to a value; CLT is about the shape of the sampling distribution."],
+    ["What is Simpson's Paradox? Give a business example.","A trend present in several subgroups reverses or disappears when the subgroups are combined, usually due to a confounding variable and uneven group sizes — e.g. a new process looks worse overall but is actually better within every individual team, because team sizes differ."],
+    ["What is regression to the mean, and give a business example.","Extreme observations tend to be followed by more moderate ones simply from natural variability, without any real intervention. Example: a rep with an unusually bad month often 'improves' next month regardless of coaching, purely from natural variation around their true average."],
+    ["What's the difference between a parametric and non-parametric test?","Parametric tests assume the data follows a specific distribution (e.g. normal) and estimate its parameters directly. Non-parametric tests make fewer distributional assumptions, typically working on ranks — useful when normality is violated or data is ordinal."],
+    ["When would you use the Mann-Whitney U test instead of a t-test?","When comparing two independent groups whose data isn't normally distributed (or is ordinal), especially with small samples — it compares rank distributions rather than means directly."],
+    ["What is bootstrapping, and when would you use it?","Repeatedly resampling the observed data with replacement to empirically build the sampling distribution of a statistic (e.g. for a confidence interval) without relying on a theoretical formula — useful when the underlying distribution is unknown or complex."],
+    ["Explain the Bonferroni correction.","Divides your significance threshold (alpha) by the number of tests performed, to control the family-wise error rate when running multiple hypothesis tests — more conservative, at the cost of reduced statistical power."],
+    ["What's False Discovery Rate (FDR) and how does it differ from Bonferroni?","FDR controls the expected proportion of false positives among all rejected hypotheses, rather than the probability of any single false positive across the whole family — less conservative than Bonferroni, useful when testing many hypotheses at once (e.g. many metrics on an experimentation dashboard)."],
+    ["How does a confidence interval relate to a two-sided hypothesis test?","If a 95% CI for a difference between groups excludes zero, that's equivalent to rejecting H₀ at the 5% level in a two-sided test — they're two views built from the same underlying calculation."],
+    ["How do you interpret a negative correlation coefficient?","As one variable increases, the other tends to decrease — e.g. price and demand are often negatively correlated. The closer to −1, the stronger the inverse linear relationship."],
+    ["What does 'iid' mean and why does it matter for statistical tests?","Independent and identically distributed — each observation drawn independently from the same underlying distribution. Most classical test derivations assume this; violations (e.g. repeated measurements from the same customer) can bias variance estimates and inflate false positives."],
+    ["What's heteroscedasticity, and why does it matter for a t-test/ANOVA?","Unequal variance across groups or across a predictor's range. It violates the equal-variance assumption behind standard t-tests/ANOVA, making p-values unreliable — Welch's correction or a variance-stabilizing transform addresses it."],
+    ["How would you check if your data is approximately normal?","Visually, via a histogram or Q-Q plot, or formally via a Shapiro-Wilk or Kolmogorov-Smirnov test — though with large samples even trivial deviations trigger formal tests as 'significant,' so visual inspection plus judgment matters too."],
+    ["What's an outlier, and how do you decide whether to remove one?","A point far from the rest of the distribution (e.g. beyond 1.5×IQR or 3 SD). Whether to remove it depends on cause: a data-entry error is safe to fix or drop; a real extreme business event (e.g. a genuine mega-deal) usually should stay, or be analyzed separately — not silently deleted."],
+    ["What does statistical power trade off against, practically?","Sample size/cost — larger samples take more time and money to collect — and Type I error rate, since a stricter alpha reduces power for the same n. Business teams often accept lower power due to real sample-size constraints."],
+    ["What's the difference between a one-sample and two-sample t-test?","One-sample compares a single group's mean against a known or hypothesized value (e.g. 'is our average call time different from the 4-minute industry benchmark'). Two-sample compares the means of two independent groups."],
+    ["What's a paired t-test, and when would you use it over an independent two-sample t-test?","Used when the two measurements are linked — e.g. the same customers before and after an intervention. It tests the mean of the differences, controlling for individual-level variation, and is more powerful than treating the groups as independent."],
+    ["How does sample size affect confidence interval width?","Larger samples shrink the standard error (SE = σ/√n), which narrows the interval for the same confidence level — more data gives a more precise estimate."],
+    ["What's an interaction effect, in ANOVA/regression terms?","When the effect of one variable on the outcome depends on the level of another — e.g. a campaign's lift is larger on mobile than desktop. A main-effects-only model would completely miss this."],
+    ["What's a common misinterpretation of 'regression toward the mean'?","Treating it as evidence an intervention worked or failed. Extreme values naturally moderate over time from variability alone — improvement after selecting an extreme starting point isn't automatically proof of causal impact."],
+    ["What's the difference between an estimator's accuracy and its precision?","Accuracy is how close the estimate is to the true value (low bias); precision is how consistent repeated estimates are (low variance). An estimator can be precise but biased, or accurate on average but highly variable."],
+    ["Why might a Bayesian approach be preferred in an A/B testing platform?","It lets you make direct probability statements about the hypothesis itself ('85% probability B beats A') and supports continuous monitoring without the multiple-testing penalty that frequentist 'peeking' incurs — a good fit for real-time experimentation dashboards."],
+    ["What's standard error of the mean, and how does it differ from standard deviation?","Standard deviation describes spread of individual data points; standard error (σ/√n) describes the expected spread of the <i>sample mean</i> across repeated samples — it's what confidence intervals and hypothesis tests are actually built from."],
+    ["Why check pre-experiment metrics (an A/A test) before trusting A/B results?","To validate randomization and measurement are working correctly — if groups differ significantly before the experiment even starts, something is broken in the split or tracking, and the eventual results can't be trusted."],
+    ["What could it mean if increasing sample size doesn't shrink your confidence interval as expected?","Non-independence in the data (e.g. clustering by user) not being accounted for, a measurement/data-quality issue, or variance itself changing as the sample composition changes."],
+    ["What is a control group actually for, beyond 'the group that doesn't get the treatment'?","It isolates the treatment's effect from everything else changing over time regardless — seasonality, external events. Without it, you can't tell if an observed change was caused by your intervention or something coincidental."],
+    ["What's the novelty effect in experimentation, and how would you detect it?","A temporary spike or dip in a metric purely because something is new, which fades over time — detected by tracking the metric's trend across the experiment window rather than only the aggregate endpoint, watching for effect decay."],
+    ["Why is 'we ran the test a week and it was significant, so we shipped it' risky?","Short windows can miss day-of-week effects, novelty effects, or catch a lucky streak (peeking bias). Pre-registering test duration and sample size via a power calculation avoids these traps."],
+    ["What's the relationship between effect size and required sample size?","Smaller true effects need larger samples to detect reliably at a given power and significance level — exactly why power calculations, using an expected effect size, happen before a test runs, not after."],
+    ["Someone thinks 'regression' means decline. How do you explain the statistical term?","Statistical regression models the relationship between an outcome and one or more predictors — the name is historical (Galton's 'regression toward the mean' in height studies) and unrelated to 'decline.' It's about quantifying and predicting relationships."],
+    ["What's the practical difference between explaining variance (R²) and explaining causation?","R² tells you how much outcome variation is statistically associated with your predictors — it says nothing about whether those predictors caused it. A high R² can come entirely from confounded, non-causal relationships."],
+    ["Why might two analysts get different p-values from the exact same dataset?","Different test choices (t-test vs. non-parametric), different variance assumptions (pooled vs. Welch), one-tailed vs. two-tailed framing, or different handling of outliers/missing data — exactly why documenting methodology matters."],
+    ["What is survivorship bias, and how could it distort a business statistic?","Analyzing only the subset that 'survived' some filtering process while ignoring those that dropped out — e.g. studying only customers who didn't churn to figure out 'what makes a good customer' ignores precisely the population you need to understand churn."],
+    ["How would you test whether a forecasting model's errors are unbiased?","Check whether the mean of the residuals (actual minus predicted) is statistically indistinguishable from zero, using a one-sample t-test on the residuals — a systematically non-zero mean means the model consistently over- or under-predicts."],
+    ["What's the difference between explanatory and predictive modeling, statistically?","Explanatory modeling prioritizes interpretable, statistically justified relationships (often fewer predictors); predictive modeling prioritizes out-of-sample accuracy, even with complex, less interpretable models like XGBoost using many features."],
+    ["Give an example of when a small sample size is actually fine.","When the true effect is very large and unambiguous — e.g. testing whether a server crashes 100% of the time under a specific condition. Power calculations show small samples suffice as true effect size grows."],
+    ["Explain discrete vs. continuous random variables, with examples from your own CV work.","Discrete: countable outcomes, e.g. number of reps allocated, number of support tickets. Continuous: any value in a range, e.g. cost-per-call, or a network performance percentage."],
+    ["What is the empirical rule, and when does it not apply?","The 68-95-99.7 rule for normal distributions — it doesn't apply to skewed or multimodal distributions, where those percentages can look very different. Always check the shape of the data before assuming it."],
+    ["How would you communicate uncertainty to a stakeholder without saying 'confidence interval'?","Frame it in plain outcome language — 'we expect between X and Y, most likely around Z' — conveying the range and most likely value without requiring statistical vocabulary, while staying honest that it's an estimate, not a guarantee."],
+    ["Why might a p-value alone be insufficient for a $10M business decision?","It doesn't communicate effect size, practical significance, the width of the uncertainty range, or the assumptions behind the test — a full recommendation needs effect size, an uncertainty range, and business cost/benefit context alongside it."]
+  ];
+  var qbank = document.getElementById('qbankList');
+  qbank.innerHTML = qas.map(function(qa){
+    return '<details class="qa"><summary>'+qa[0]+'</summary><div class="qa-a">'+qa[1]+'</div></details>';
+  }).join('');
+
+  // ---- mastery checklist ----
+  var items = [
+    "Explain a p-value correctly without saying 'probability the null is true'",
+    "Explain Type I vs Type II error with a business example",
+    "State and explain the Central Limit Theorem in your own words",
+    "Correctly interpret a 95% confidence interval",
+    "Pick the right test (t / z / χ² / ANOVA) for a given scenario",
+    "List the assumptions of a t-test and what happens if violated",
+    "Explain multicollinearity and how to detect it (VIF)",
+    "Distinguish statistical vs. business significance with an example",
+    "Explain correlation vs. causation with a confounder example",
+    "Connect hypothesis testing to your Axtria forecasting-model story"
+  ];
+  var STORE = 'stage2_mastery_v1';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var ml = document.getElementById('masteryList');
+  ml.innerHTML = items.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+t+'</span></div>';
+  }).join('');
+  ml.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+})();
+</script>

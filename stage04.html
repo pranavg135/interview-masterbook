@@ -1,0 +1,770 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>Python + Pandas</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .concept-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+  .concept{ padding:20px 22px; }
+  .concept h4{ font-size:1rem; margin-bottom:8px; }
+  .concept p{ font-size:.88rem; color:var(--ink-soft); margin:0 0 8px; }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .worked{ margin-top:14px; border:1px dashed var(--line-strong); border-radius:10px; padding:16px 18px; background:var(--paper-sunken); }
+  .worked .wk-label{ font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; }
+  .worked .wk-result{ margin-top:8px; font-size:.85rem; color:var(--ink-soft); }
+
+  .exstrip{ margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px 16px; border-top:1px solid var(--line); padding-top:12px; }
+  .exstrip .ex{ font-size:.8rem; }
+  .exstrip .ex b{ display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:2px; font-weight:700; }
+  .exstrip .ex span{ color:var(--ink-soft); }
+
+  .probgrid{ display:flex; flex-direction:column; gap:10px; }
+  details.prob{ border:1px solid var(--line); border-radius:10px; background:var(--paper-raised); }
+  details.prob summary{ padding:12px 18px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.9rem; }
+  details.prob summary::-webkit-details-marker{ display:none; }
+  details.prob summary .pnum{ font-family:"IBM Plex Mono"; font-size:.75rem; color:var(--data); background:var(--data-soft); padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  details.prob summary .pdiff{ font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  .pdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .pdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .pdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .pdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  .prob-body{ padding:0 18px 16px; }
+
+  .qbank{ display:flex; flex-direction:column; gap:0; }
+  details.qa{ border-bottom:1px solid var(--line); }
+  details.qa:last-child{ border-bottom:none; }
+  details.qa summary{ padding:13px 20px; cursor:pointer; list-style:none; font-size:.9rem; font-weight:500; display:flex; gap:12px; align-items:baseline; }
+  details.qa summary::-webkit-details-marker{ display:none; }
+  details.qa summary::before{ content:"Q"; font-family:"IBM Plex Mono"; font-size:.68rem; color:var(--data); background:var(--data-soft); padding:2px 6px; border-radius:5px; flex:0 0 auto; }
+  details.qa .qa-a{ padding:0 20px 16px 58px; font-size:.86rem; color:var(--ink-soft); }
+  details.qa .qa-a b{ color:var(--ink); }
+
+  .redflag{ padding:13px 17px; border-left:4px solid var(--lvlA); background:var(--lvlA-soft); border-radius:0 8px 8px 0; margin-bottom:9px; font-size:.87rem; }
+  .redflag b{ color:var(--lvlA); }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <div class="stage-pill">● Stage 4 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#fundamentals">Python Fundamentals</a></li>
+      <li><a href="#numpy">NumPy</a></li>
+      <li><a href="#pandas">Pandas</a></li>
+      <li><a href="#viz">Visualization</a></li>
+      <li><a href="#redflags">Red Flags</a></li>
+      <li><a href="#problems">Coding Problems</a></li>
+      <li><a href="#questions">75-Question Interview Bank</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+      <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 20 (Market Sizing) is next, followed by Operations, Product, Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part III · Stage 4 of 33</div>
+      <h1>Python + Pandas</h1>
+      <p class="lede">Python and Pandas sit right under SQL on every version of your CV — the layer where raw extracted data becomes a modeling-ready feature table. This stage covers core Python, NumPy, the full Pandas workflow, and basic visualization, all built around one consistent rep/call/order dataset.</p>
+      <div class="statusbar">
+        <div class="statuschip">🐍 21 concept modules, fundamentals → Pandas performance</div>
+        <div class="statuschip">🧮 Every concept has runnable code + real output</div>
+        <div class="statuschip">🧩 <b>41</b> progressively difficult coding problems</div>
+        <div class="statuschip">❓ <b>75</b> interview questions with model answers</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">SQL pulls the data; Python and Pandas are what shape it into the feature table that actually feeds the XGBoost/Logistic Regression model at Axtria, and what most interview take-home assignments are built in. It's also the second most common live-coding format after SQL, usually as a Pandas manipulation exercise rather than pure algorithms.</p>
+      </div>
+    </section>
+
+    <section id="fundamentals">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Python Fundamentals</h2>
+        <p>Data types, data structures, control flow, functions, error handling, files/modules, OOP, and the iterator/generator pattern.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Variables &amp; Data Types <span class="lvl lvl-A">A</span></h4>
+          <p>Python is dynamically typed — a variable's type is inferred at runtime and can change. Core types: int, float, str, bool, and None.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">x = 5          <span class="cmt"># int</span>
+x = x / 2      <span class="cmt"># now a float: 2.5</span>
+print(type(x)) <span class="cmt"># &lt;class 'float'&gt;</span>
+print(0.1 + 0.2 == 0.3)  <span class="cmt"># False — floating point precision</span></div>
+            <div class="wk-result">0.1 + 0.2 actually equals 0.30000000000000004 in binary floating point — a classic gotcha behind "why doesn't my equality check work" bugs.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Interview</b><span>"Why compare floats with math.isclose() instead of ==?" — binary floating point can't represent most decimals exactly.</span></div>
+            <div class="ex"><b>Your CV</b><span>Cost-per-call thresholds at Axtria are exactly the kind of float comparison this bites.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Lists, Tuples, Sets, Dictionaries <span class="lvl lvl-A">A</span></h4>
+          <p>List: ordered, mutable. Tuple: ordered, immutable (hashable, usable as dict keys). Set: unordered, unique elements, O(1) membership check. Dict: key-value pairs, O(1) average lookup.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">reps = ["Meera", "Karan", "Meera"]
+unique_reps = set(reps)          <span class="cmt"># {'Meera', 'Karan'}</span>
+rep_scores = {"Meera": 92, "Karan": 87}
+print(rep_scores.get("Divya", 0)) <span class="cmt"># 0 — safe default, no KeyError</span></div>
+            <div class="wk-result">.get() with a default avoids a KeyError for a missing key — the safe pattern vs. rep_scores["Divya"], which would crash.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Interview</b><span>"Why use a set to dedupe instead of a list + loop?" — O(1) average membership check vs. O(n) scanning a list each time.</span></div>
+            <div class="ex"><b>Your CV</b><span>Deduplicating client names across NanoCloud exports is exactly a set/dict use case.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Loops &amp; Comprehensions <span class="lvl lvl-A">A</span></h4>
+          <p>List/dict/set comprehensions build a new collection in one readable line — generally preferred over an explicit loop + .append() for simple transformations.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">durations = [4, 12, 6, 25, 3]
+long_calls = [d for d in durations if d > 10]
+print(long_calls)  <span class="cmt"># [12, 25]</span>
+
+efficiency = {r: s/100 for r, s in rep_scores.items()}
+print(efficiency)  <span class="cmt"># {'Meera': 0.92, 'Karan': 0.87}</span></div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Interview</b><span>"When would you NOT use a comprehension?" — when the logic is complex enough that readability suffers; a regular loop is clearer at that point.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>Functions, *args/**kwargs &amp; Lambda <span class="lvl lvl-A">A</span></h4>
+          <p>*args collects extra positional arguments into a tuple; **kwargs collects extra keyword arguments into a dict. lambda defines a small anonymous function inline.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">def score(base, *bonuses, **flags):
+    total = base + sum(bonuses)
+    if flags.get("penalize"):
+        total -= 5
+    return total
+
+print(score(80, 5, 3, penalize=True))  <span class="cmt"># 83</span>
+
+reps_sorted = sorted(rep_scores.items(), key=lambda x: x[1], reverse=True)</div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Your CV</b><span>The rep-scoring function behind Axtria's allocation model would naturally take this shape.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>Exception Handling <span class="lvl lvl-A">A</span></h4>
+          <p>try/except/else/finally — catch specific exception types (never a bare except:), and use finally for cleanup that must always run.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">def safe_divide(a, b):
+    try:
+        return a / b
+    except ZeroDivisionError:
+        return None
+    finally:
+        print("attempted division")
+
+print(safe_divide(10, 0))  <span class="cmt"># prints "attempted division", returns None</span></div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Interview trap</b><span>A bare `except:` silently swallows ALL errors, including ones you didn't anticipate (like a typo) — always catch specific exception types.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>File Handling &amp; Modules <span class="lvl lvl-B">B</span></h4>
+          <p>The `with` statement (context manager) guarantees a file gets closed even if an error occurs mid-read — always preferred over manual open()/close().</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">with open("call_log.csv") as f:
+    header = f.readline()
+<span class="cmt"># file is automatically closed here, even if an exception happened above</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>OOP / Classes <span class="lvl lvl-B">B</span></h4>
+          <p>__init__ sets up instance state; methods define behavior; inheritance lets a subclass reuse and extend a parent class's behavior.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">class Rep:
+    def __init__(self, name, region):
+        self.name = name
+        self.region = region
+        self.calls = []
+
+    def log_call(self, duration):
+        self.calls.append(duration)
+
+    @property
+    def avg_duration(self):
+        return sum(self.calls) / len(self.calls) if self.calls else 0
+
+m = Rep("Meera", "West")
+m.log_call(5); m.log_call(7)
+print(m.avg_duration)  <span class="cmt"># 6.0</span></div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Your CV</b><span>Modeling each rep as an object with call history is a natural OOP structure behind an efficiency-scoring pipeline.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>Iterators &amp; Generators <span class="lvl lvl-B">B</span></h4>
+          <p>A generator (using `yield`) produces values lazily, one at a time, instead of building the whole list in memory — critical for large datasets.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">def call_batches(calls, batch_size=1000):
+    for i in range(0, len(calls), batch_size):
+        yield calls[i:i+batch_size]
+
+<span class="cmt"># processes one batch at a time; never holds all batches in memory simultaneously</span></div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Interview</b><span>"Why use a generator instead of returning a full list?" — memory efficiency on large datasets; values are produced on demand, not all at once.</span></div><div class="ex"><b>Your CV</b><span>Processing Axtria's full call history in batches rather than loading everything into memory at once.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="numpy">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>NumPy</h2>
+        <p>The array library everything in Pandas and scikit-learn is built on top of.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Arrays &amp; Vectorization <span class="lvl lvl-A">A</span></h4>
+          <p>A NumPy array is a fixed-type, contiguous block of memory — operations run in compiled C, not the Python interpreter loop, which is why vectorized NumPy code is dramatically faster than an equivalent Python for-loop.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">import numpy as np
+durations = np.array([4, 12, 6, 25, 3])
+efficiency = durations / durations.max()  <span class="cmt"># vectorized, no loop</span>
+print(efficiency)  <span class="cmt"># [0.16 0.48 0.24 1.  0.12]</span></div>
+            <div class="wk-result">Every element divided by the max in one vectorized operation — no explicit Python loop, and much faster at scale.</div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Interview</b><span>"Why is NumPy faster than a Python list loop?" — vectorized operations run in compiled C under the hood, avoiding Python's per-element interpreter overhead.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>Broadcasting, Indexing &amp; Boolean Masking <span class="lvl lvl-B">B</span></h4>
+          <p>Broadcasting lets NumPy apply an operation between arrays of different (but compatible) shapes without explicit loops. Boolean masks filter arrays using a condition.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">mask = durations > 10
+print(durations[mask])   <span class="cmt"># [12 25]</span>
+print(durations.mean(), durations.std())  <span class="cmt"># 10.0, 8.09...</span></div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Your CV</b><span>Flagging outlier calls at Axtria for review is exactly a boolean-mask filter.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pandas">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>Pandas</h2>
+        <p>DataFrames, filtering, groupby, merging, reshaping, cleaning, and datetime/string handling — the actual daily toolkit.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>DataFrames &amp; Series <span class="lvl lvl-A">A</span></h4>
+          <p>A DataFrame is a 2D labeled table; a Series is a single labeled column. `.loc` selects by label, `.iloc` selects by integer position — mixing them up is a classic bug.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">import pandas as pd
+df = pd.DataFrame({
+    "rep": ["Meera","Karan","Divya"],
+    "region": ["West","West","East"],
+    "calls": [42, 38, 51]
+})
+print(df.loc[df.rep=="Meera", "calls"])   <span class="cmt"># label-based: 42</span>
+print(df.iloc[0, 2])                       <span class="cmt"># position-based: 42</span></div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Interview trap</b><span>.iloc[0] after filtering doesn't mean "the first matching row" — it means literal position 0, which may not exist post-filter. Use .loc or reset_index() instead.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>Filtering &amp; Selection <span class="lvl lvl-A">A</span></h4>
+          <p>Boolean masks, `.query()`, and chained conditions with `&`/`|` (not `and`/`or`, which don't work element-wise on Series).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">west_high = df[(df.region=="West") & (df.calls > 40)]
+<span class="cmt"># equivalent: df.query("region=='West' and calls>40")</span></div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Interview trap</b><span>Using `and`/`or` instead of `&`/`|` between two boolean Series raises "ambiguous truth value" — Python's and/or aren't overloadable element-wise.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>GroupBy &amp; Aggregation <span class="lvl lvl-A">A</span></h4>
+          <p>Split-apply-combine: split into groups, apply a function to each, combine results — Pandas' equivalent of SQL's GROUP BY.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">summary = df.groupby("region").agg(
+    total_calls=("calls","sum"),
+    avg_calls=("calls","mean"),
+    num_reps=("rep","count")
+).reset_index()
+print(summary)
+<span class="cmt">#   region  total_calls  avg_calls  num_reps
+#   East    51           51.0       1
+#   West    80           40.0       2</span></div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Your CV</b><span>The per-region rep-efficiency summary behind the Axtria allocation decision is exactly this groupby.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>Merge, Join &amp; Concat <span class="lvl lvl-A">A</span></h4>
+          <p>`merge()` mirrors SQL joins (how='inner'/'left'/'right'/'outer'); `concat()` stacks DataFrames along an axis (rows or columns), like SQL's UNION.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">orders = pd.DataFrame({"rep":["Meera","Karan"], "revenue":[12000, 9500]})
+merged = df.merge(orders, on="rep", how="left")
+<span class="cmt"># Divya (no orders) keeps her row with revenue=NaN, exactly like SQL's LEFT JOIN</span></div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Interview trap</b><span>merge() can silently multiply rows on a one-to-many key, just like a SQL join — always check `df.shape` before/after.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>Pivot &amp; Melt <span class="lvl lvl-B">B</span></h4>
+          <p>`pivot_table()` reshapes long data into wide (rows→columns); `melt()` does the reverse, wide into long.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">pivoted = df.pivot_table(index="region", values="calls", aggfunc="sum")
+long_form = pivoted.reset_index().melt(id_vars="region", var_name="metric", value_name="value")</div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Apply, Map &amp; Transform <span class="lvl lvl-B">B</span></h4>
+          <p>`.map()` — element-wise on a Series. `.apply()` — row/column-wise on a DataFrame, or element-wise on a Series with custom logic. `.transform()` — like apply but returns an object of the same shape, useful for broadcasting a groupby result back onto every row.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">df["region_avg_calls"] = df.groupby("region")["calls"].transform("mean")
+<span class="cmt"># every row gets its region's average, aligned back to the original shape — no merge needed</span></div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Interview</b><span>"When would you use transform instead of a groupby+merge?" — when you need the group aggregate broadcast back to every original row, without a separate join step.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>Missing Values &amp; Duplicates <span class="lvl lvl-A">A</span></h4>
+          <p>`.isna()`/`.fillna()`/`.dropna()` for missing data; `.duplicated()`/`.drop_duplicates()` for exact or partial-key duplicates.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">df["revenue"] = df["revenue"].fillna(0)
+clean = df.drop_duplicates(subset=["rep"], keep="last")</div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Interview trap</b><span>fillna(0) is only correct if 0 is a meaningful default — filling a missing revenue with 0 could badly bias an average; sometimes dropping or flagging is more honest.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>Datetime &amp; String Operations <span class="lvl lvl-A">A</span></h4>
+          <p>`pd.to_datetime()` parses dates; the `.dt` accessor extracts components. `.str` accessor applies vectorized string operations across a Series.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">df["call_date"] = pd.to_datetime(df["call_date"])
+df["month"] = df["call_date"].dt.to_period("M")
+df["rep_clean"] = df["rep"].str.strip().str.title()</div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Performance <span class="lvl lvl-B">B</span></h4>
+          <p>Vectorized operations (built-in Pandas/NumPy methods) are almost always faster than `.apply()` with a Python function, which is faster than an explicit `for` loop over rows — in that order.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Slow: row-by-row Python loop</span>
+for i, row in df.iterrows():
+    df.loc[i, "flag"] = row["calls"] > 40
+
+<span class="cmt"># Fast: vectorized</span>
+df["flag"] = df["calls"] > 40</div>
+            <div class="wk-result">Same result, but the vectorized version can be 10-100x faster on a large DataFrame, since it avoids the per-row Python overhead of iterrows().</div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Interview</b><span>"Your Pandas pipeline is slow on 10M rows — first thing you'd check?" — any .iterrows()/.apply() that could be rewritten as a vectorized operation.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="viz">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Visualization</h2>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Matplotlib <span class="lvl lvl-B">B</span></h4>
+          <p>The foundational plotting library — lower-level, more manual control, and what most other Python viz libraries (including Seaborn) render through underneath.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">import matplotlib.pyplot as plt
+df.groupby("region")["calls"].sum().plot(kind="bar")
+plt.ylabel("Total Calls")
+plt.title("Calls by Region")
+plt.show()</div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Seaborn <span class="lvl lvl-C">C</span></h4>
+          <p>Built on Matplotlib, with better defaults for statistical plots (distributions, categorical comparisons) and native Pandas DataFrame support.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">import seaborn as sns
+sns.boxplot(data=df, x="region", y="calls")
+<span class="cmt"># one line to see the full distribution + outliers per region, not just the mean</span></div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Your CV</b><span>A boxplot of call durations per rep is a natural exploratory step before building the Axtria efficiency model.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="redflags">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Red Flags</h2>
+      </div>
+      <div class="redflag"><b>"I looped over rows with .iterrows() because it was easier to read."</b> — Fine for a one-off 50-row script; a real production concern on anything large. Always ask if it vectorizes.</div>
+      <div class="redflag"><b>"I used a bare except: to catch everything."</b> — Silently hides real bugs (typos, wrong types) alongside the error you meant to catch.</div>
+      <div class="redflag"><b>"merge() gave me more rows than expected, so I just deduped after."</b> — Deduping after the fact can hide which rows were wrong; check for the row-multiplication cause first.</div>
+      <div class="redflag"><b>"I filled all my NaNs with 0 to make it work."</b> — Only valid if 0 is a real, meaningful default for that column — otherwise it silently biases every downstream aggregate.</div>
+    </section>
+
+    <section id="problems">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>41 Progressive Coding Problems</h2>
+        <p>Beginner → advanced, Python and Pandas mixed. Click to reveal a solution.</p>
+      </div>
+      <div class="filterbar">
+        <button class="active" data-f="all">All (40)</button>
+        <button data-f="easy">Easy</button>
+        <button data-f="med">Medium</button>
+        <button data-f="hard">Hard</button>
+        <button data-f="expert">Expert</button>
+      </div>
+      <div class="probgrid" id="probList"></div>
+    </section>
+
+    <section id="questions">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>75-Question Interview Bank</h2>
+      </div>
+      <div class="card qbank" id="qbankList"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card bridge-flow">
+        <span class="node">SQL extraction</span><span class="arrow">→</span>
+        <span class="node">Pandas cleaning &amp; feature engineering</span><span class="arrow">→</span>
+        <span class="node">NumPy-backed model training</span><span class="arrow">→</span>
+        <span class="node">Rep allocation decision</span>
+      </div>
+      <div class="card" style="padding:20px 24px;margin-top:12px">
+        <p style="margin:0"><b>"Did YOU write the Python/Pandas pipeline?"</b> — honest framing: "the data cleaning, feature engineering, and analysis code was mine directly; the production deployment/orchestration around it was a shared responsibility." Adjust to your real involvement.</p>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>Mastery Checklist</h2>
+      </div>
+      <div class="card checklist" id="masteryList"></div>
+    </section>
+  </main>
+</div>
+
+<button class="backtop" id="backtop" title="Back to top" aria-label="Back to top">↑</button>
+
+<script>
+(function(){
+  var btn = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){ btn.classList.toggle('show', window.scrollY > 500); });
+  btn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  var problems = [
+    ["easy","Write a function that returns the average of a list of numbers.","def avg(nums):\n    return sum(nums) / len(nums) if nums else 0"],
+    ["easy","Reverse a string without using [::-1].","def reverse(s):\n    result = ''\n    for ch in s:\n        result = ch + result\n    return result"],
+    ["easy","Check if a string is a palindrome.","def is_palindrome(s):\n    s = s.lower().replace(' ', '')\n    return s == s[::-1]"],
+    ["easy","Count the frequency of each word in a list.","from collections import Counter\ndef word_freq(words):\n    return dict(Counter(words))"],
+    ["easy","Find the second-largest number in a list.","def second_largest(nums):\n    return sorted(set(nums))[-2]"],
+    ["easy","Remove duplicates from a list while preserving order.","def dedupe(lst):\n    seen = set()\n    out = []\n    for x in lst:\n        if x not in seen:\n            seen.add(x); out.append(x)\n    return out"],
+    ["easy","Write a function using *args to sum any number of arguments.","def total(*args):\n    return sum(args)"],
+    ["easy","Create a DataFrame from a dict and print its shape.","df = pd.DataFrame({'a':[1,2,3],'b':[4,5,6]})\nprint(df.shape)  # (3, 2)"],
+    ["easy","Filter a DataFrame for rows where a column exceeds a threshold.","result = df[df['calls'] > 40]"],
+    ["easy","Sort a DataFrame by one column descending.","df.sort_values('calls', ascending=False)"],
+    ["easy","Add a new column that's the ratio of two existing columns.","df['ratio'] = df['revenue'] / df['calls']"],
+    ["easy","Count missing values per column.","df.isna().sum()"],
+    ["easy","Get summary statistics for all numeric columns.","df.describe()"],
+    ["easy","Rename a column in a DataFrame.","df.rename(columns={'calls':'num_calls'}, inplace=True)"],
+    ["easy","Select rows by a list of allowed values in a column.","df[df['region'].isin(['West','East'])]"],
+    ["med","Write a function that flattens a nested list (one level deep).","def flatten(nested):\n    return [x for sub in nested for x in sub]"],
+    ["med","Implement FizzBuzz for numbers 1 to 30.","for i in range(1,31):\n    if i%15==0: print('FizzBuzz')\n    elif i%3==0: print('Fizz')\n    elif i%5==0: print('Buzz')\n    else: print(i)"],
+    ["med","Write a decorator that times a function's execution.","import time, functools\ndef timer(func):\n    @functools.wraps(func)\n    def wrapper(*a, **kw):\n        start = time.time()\n        result = func(*a, **kw)\n        print(f'{func.__name__} took {time.time()-start:.4f}s')\n        return result\n    return wrapper"],
+    ["med","Write a generator that yields Fibonacci numbers up to n.","def fib(n):\n    a, b = 0, 1\n    while a < n:\n        yield a\n        a, b = b, a+b"],
+    ["med","Group a DataFrame by two columns and compute multiple aggregates.","df.groupby(['region','tier']).agg(total=('revenue','sum'), avg=('revenue','mean'))"],
+    ["med","Merge two DataFrames and identify rows only present in the left one.","merged = df1.merge(df2, on='id', how='left', indicator=True)\nleft_only = merged[merged['_merge']=='left_only']"],
+    ["med","Create a pivot table showing total revenue by region and month.","df.pivot_table(index='region', columns='month', values='revenue', aggfunc='sum')"],
+    ["med","Use groupby + transform to flag rows above their group's average.","df['above_avg'] = df['calls'] > df.groupby('region')['calls'].transform('mean')"],
+    ["med","Write a function that validates an email format using regex.","import re\ndef is_valid_email(s):\n    return bool(re.match(r'^[\\w.-]+@[\\w.-]+\\.\\w+$', s))"],
+    ["med","Implement a simple LRU cache using functools.","from functools import lru_cache\n@lru_cache(maxsize=128)\ndef expensive(n):\n    return n**2"],
+    ["med","Convert a wide DataFrame to long format with melt.","df.melt(id_vars='region', var_name='month', value_name='revenue')"],
+    ["med","Find rows in a DataFrame with duplicate values in a subset of columns.","df[df.duplicated(subset=['rep','region'], keep=False)]"],
+    ["med","Write a class with a classmethod alternate constructor.","class Rep:\n    def __init__(self, name):\n        self.name = name\n    @classmethod\n    def from_dict(cls, d):\n        return cls(d['name'])"],
+    ["med","Compute a rolling 3-period average in Pandas.","df['rolling_avg'] = df['revenue'].rolling(window=3).mean()"],
+    ["med","Bucket a numeric column into quartiles using pd.qcut.","df['quartile'] = pd.qcut(df['revenue'], 4, labels=['Q1','Q2','Q3','Q4'])"],
+    ["hard","Implement binary search on a sorted list.","def binary_search(arr, target):\n    lo, hi = 0, len(arr)-1\n    while lo <= hi:\n        mid = (lo+hi)//2\n        if arr[mid]==target: return mid\n        elif arr[mid]<target: lo = mid+1\n        else: hi = mid-1\n    return -1"],
+    ["hard","Detect if a linked list has a cycle (Floyd's algorithm).","def has_cycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow is fast: return True\n    return False"],
+    ["hard","Write a custom context manager using a class (__enter__/__exit__).","class Timer:\n    def __enter__(self):\n        self.start = time.time(); return self\n    def __exit__(self, *exc):\n        print(time.time()-self.start)"],
+    ["hard","Implement quicksort.","def quicksort(arr):\n    if len(arr)<=1: return arr\n    pivot = arr[len(arr)//2]\n    left=[x for x in arr if x<pivot]\n    mid=[x for x in arr if x==pivot]\n    right=[x for x in arr if x>pivot]\n    return quicksort(left)+mid+quicksort(right)"],
+    ["hard","Given a DataFrame of calls, compute each rep's longest consecutive-day calling streak.","df['date']=pd.to_datetime(df['call_date']).dt.date\ndf=df.drop_duplicates(['rep','date']).sort_values(['rep','date'])\ndf['grp']=(pd.to_datetime(df['date'])-pd.to_timedelta(df.groupby('rep').cumcount(),unit='D'))\nstreaks=df.groupby(['rep','grp']).size().groupby('rep').max()"],
+    ["hard","Write a function to merge overlapping intervals.","def merge_intervals(intervals):\n    intervals.sort()\n    out=[intervals[0]]\n    for s,e in intervals[1:]:\n        if s<=out[-1][1]: out[-1][1]=max(out[-1][1],e)\n        else: out.append([s,e])\n    return out"],
+    ["hard","Implement a simple memoized recursive Fibonacci and compare speed to the naive version.","import functools\n@functools.lru_cache(None)\ndef fib(n):\n    return n if n<2 else fib(n-1)+fib(n-2)\n# naive fib(35) takes seconds; memoized is instant"],
+    ["hard","Build a feature matrix from raw call logs: rep, avg_duration, num_calls, conversion_rate — all via groupby/agg.","features = calls_df.groupby('rep_id').agg(\n    avg_duration=('duration_min','mean'),\n    num_calls=('call_id','count'),\n    conversion_rate=('outcome', lambda x: (x=='Converted').mean())\n)"],
+    ["hard","Write a function that detects outliers using the IQR method on a Pandas Series.","def iqr_outliers(s):\n    q1,q3 = s.quantile([.25,.75])\n    iqr = q3-q1\n    return s[(s < q1-1.5*iqr) | (s > q3+1.5*iqr)]"],
+    ["expert","Implement a basic version of groupby from scratch using only dictionaries.","def my_groupby(rows, key_fn):\n    groups = {}\n    for row in rows:\n        groups.setdefault(key_fn(row), []).append(row)\n    return groups"],
+    ["expert","Given millions of call records too large for memory, describe/implement a chunked processing approach in Pandas.","total = 0\nfor chunk in pd.read_csv('calls.csv', chunksize=100_000):\n    total += chunk['duration_min'].sum()\n# processes the file in bounded-memory pieces instead of loading it all at once"]
+  ];
+  var probList = document.getElementById('probList');
+  var diffLabel = {easy:'Easy', med:'Medium', hard:'Hard', expert:'Expert'};
+  probList.innerHTML = problems.map(function(p, i){
+    return '<details class="prob" data-diff="'+p[0]+'"><summary><span class="pnum">#'+(i+1)+'</span><span class="pdiff '+p[0]+'">'+diffLabel[p[0]]+'</span>'+p[1]+'</summary><div class="prob-body"><div class="codeblock">'+p[2].replace(/</g,'&lt;')+'</div></div></details>';
+  }).join('');
+  document.querySelectorAll('.filterbar button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.filterbar button').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      var f = b.getAttribute('data-f');
+      document.querySelectorAll('.prob').forEach(function(pr){
+        pr.style.display = (f==='all' || pr.getAttribute('data-diff')===f) ? '' : 'none';
+      });
+    });
+  });
+
+  var qas = [
+    ["What's the difference between a list and a tuple?","Lists are mutable and typically hold homogeneous, variable-length data; tuples are immutable, hashable (usable as dict keys), and typically represent a fixed-structure record."],
+    ["Why is a dictionary lookup O(1) on average?","Python dicts are implemented as hash tables — the key's hash determines its storage slot directly, avoiding a linear scan."],
+    ["What's the difference between == and is?","== compares values for equality; is compares object identity (same object in memory). Two equal-valued but distinct objects satisfy == but not is."],
+    ["Explain mutable default arguments and why they're dangerous.","A mutable default (e.g. def f(x=[])) is created once at function definition time and shared across all calls that don't pass their own — mutations persist between calls, a classic bug source."],
+    ["What's the difference between deep copy and shallow copy?","A shallow copy duplicates the outer object but nested objects are still shared references; a deep copy recursively duplicates everything, so nested mutations don't affect the original."],
+    ["Explain list comprehension vs generator expression.","A list comprehension [x for x in y] builds the full list in memory immediately; a generator expression (x for x in y) produces values lazily, one at a time, using less memory for large sequences."],
+    ["What does *args and **kwargs actually do?","*args collects extra positional arguments into a tuple; **kwargs collects extra keyword arguments into a dict — lets a function accept a flexible number of arguments."],
+    ["What's a decorator, and why would you use one?","A function that wraps another function to add behavior (logging, timing, caching) without modifying the original function's code."],
+    ["Explain Python's GIL (Global Interpreter Lock) at a high level.","A lock ensuring only one thread executes Python bytecode at a time in a single process — limits true parallelism for CPU-bound multithreaded code, though I/O-bound code and multiprocessing aren't limited the same way."],
+    ["What's the difference between multiprocessing and multithreading in Python?","Multithreading shares memory but is limited by the GIL for CPU-bound work; multiprocessing runs separate processes with separate memory, sidestepping the GIL, better for CPU-bound parallelism."],
+    ["What does the `with` statement do?","Invokes a context manager, guaranteeing setup/teardown (like opening and closing a file) runs correctly even if an exception occurs inside the block."],
+    ["Explain the difference between @staticmethod and @classmethod.","@staticmethod doesn't receive the class or instance automatically; @classmethod receives the class itself (cls) as its first argument, commonly used for alternate constructors."],
+    ["What's method resolution order (MRO) in Python?","The order Python searches parent classes for a method/attribute in multiple inheritance, computed via the C3 linearization algorithm — accessible via ClassName.__mro__."],
+    ["What's a Python generator, and why use one over a list?","A function using yield that produces values lazily one at a time — dramatically less memory use for large or infinite sequences, since the full sequence is never materialized."],
+    ["Explain try/except/else/finally.","try holds the risky code; except catches specific exception types; else runs only if no exception occurred; finally always runs, for cleanup regardless of success or failure."],
+    ["Why should you avoid a bare `except:`?","It catches every exception, including ones you didn't anticipate (typos, KeyboardInterrupt), hiding real bugs instead of handling the specific error you expected."],
+    ["What's the difference between a module and a package?","A module is a single .py file; a package is a directory of modules containing an __init__.py (in older Python versions) that lets it be imported as a namespace."],
+    ["How does Python's `is not None` differ from `!= None`?","`is not None` checks identity against the singleton None object — the idiomatic, unambiguous choice; `!= None` relies on __ne__ and could theoretically be overridden by a custom class."],
+    ["Explain what `__init__` and `__new__` each do.","__new__ actually creates the instance (rarely overridden); __init__ initializes the already-created instance's attributes — __new__ runs first."],
+    ["What are dunder (magic) methods, and give an example.","Methods with double underscores that let a class integrate with Python's built-in syntax — e.g. __len__ lets len(obj) work, __eq__ lets == work."],
+    ["How would you make a custom class sortable?","Implement __lt__ (and typically the other comparison dunders, or use functools.total_ordering to derive them from just __eq__ and __lt__)."],
+    ["What's the difference between a Pandas Series and a NumPy array?","A Series is a labeled 1D array (has an index) built on top of NumPy, adding alignment-by-label and integrated missing-value handling; a raw NumPy array is unlabeled."],
+    ["Why is .loc different from .iloc?",".loc selects by label (the index/column name); .iloc selects by integer position — mixing them up after filtering (where positions shift) is a common bug."],
+    ["What happens if you use `df[df.a > 5]['b'] = 10`?","Chained assignment — Pandas can't guarantee whether it's modifying a view or a copy, often raising a SettingWithCopyWarning; use df.loc[df.a>5, 'b']=10 instead."],
+    ["Explain the difference between merge(), join(), and concat() in Pandas.","merge() combines on column values (like a SQL join); join() combines on index by default; concat() stacks DataFrames along an axis without a join condition, like SQL's UNION."],
+    ["What's the difference between axis=0 and axis=1 in Pandas?","axis=0 operates down columns (row-wise operations, e.g. summing each column); axis=1 operates across rows (e.g. summing each row) — a frequently confused parameter."],
+    ["How would you check if a Pandas column has any missing values?","df['col'].isna().any(), or df.isna().sum() for a per-column count."],
+    ["What's the difference between dropna() and fillna()?","dropna() removes rows/columns containing missing values; fillna() replaces missing values with a specified value or method (e.g. forward-fill)."],
+    ["Explain vectorization and why it matters in Pandas.","Applying an operation to an entire Series/array at once using optimized, compiled code, instead of looping row by row in Python — dramatically faster, especially at scale."],
+    ["Why is .apply() often slower than a vectorized operation?",".apply() still calls a Python function once per row/element under the hood, incurring Python-level overhead per call, unlike a fully vectorized NumPy/Pandas operation."],
+    ["What does groupby().transform() do differently from groupby().agg()?","agg() collapses each group to one summary row; transform() returns a result the same length as the original data, broadcasting the group's result back to every original row."],
+    ["How would you find duplicate rows based on a subset of columns?","df[df.duplicated(subset=['col1','col2'], keep=False)] — returns all rows involved in a duplicate, not just the extras."],
+    ["Explain the difference between pivot_table() and pivot().","pivot() requires unique index/column combinations and errors on duplicates; pivot_table() handles duplicates by aggregating them (default mean), making it more forgiving for real-world data."],
+    ["What's method chaining in Pandas, and why is it useful?","Calling multiple Pandas methods in sequence (df.dropna().groupby(...).agg(...)) — improves readability and avoids intermediate variable clutter, at some cost to step-by-step debuggability."],
+    ["How would you profile which part of a slow Pandas pipeline is the bottleneck?","Time each step individually (or use %timeit / cProfile), and check for any .iterrows()/.apply() with a Python function that could be vectorized."],
+    ["What's the difference between inplace=True and reassigning a DataFrame?","inplace=True modifies the DataFrame in place and returns None; reassignment (df = df.dropna()) returns a new object — inplace can be riskier to debug and is often discouraged in modern Pandas style."],
+    ["How would you convert a string column to datetime and extract the month?","pd.to_datetime(df['col']), then df['col'].dt.month."],
+    ["What's the risk of using `df['col'].str.contains()` without handling NaN?","NaN in the column raises an error or returns NaN in the mask unless you pass na=False, which can silently break a boolean filter downstream."],
+    ["Explain broadcasting in NumPy with an example.","Applying an operation between arrays of different but compatible shapes without explicit loops — e.g. adding a scalar to every element of an array, or a (3,) array to every row of a (5,3) array."],
+    ["Why might two NumPy arrays with the same values not be equal with ==?","== on NumPy arrays returns an element-wise boolean array, not a single True/False — comparing the whole arrays for equality needs np.array_equal()."],
+    ["What's the difference between a Python list and a NumPy array in terms of type?","A NumPy array is homogeneously typed (all elements same dtype) and fixed-size, enabling vectorized C-level operations; a Python list can hold mixed types and is more flexible but slower for numeric work."],
+    ["How would you handle a memory error when loading a huge CSV into Pandas?","Use chunksize in read_csv() to process in batches, specify dtypes explicitly to reduce memory footprint, or read only needed columns via usecols."],
+    ["What's the difference between .values and .to_numpy() in Pandas?","Both convert a Series/DataFrame to a NumPy array; .to_numpy() is the newer, more explicit and consistently-behaved recommended method."],
+    ["Explain what a Python decorator with arguments requires structurally.","An extra outer function layer — a decorator factory that takes the arguments and returns the actual decorator function, which then wraps the target function."],
+    ["What's the output of `print(0.1 + 0.2 == 0.3)` and why?","False — binary floating point can't represent 0.1 or 0.2 exactly, so their sum isn't bit-for-bit equal to the float representation of 0.3."],
+    ["How would you safely compare two floats for equality?","math.isclose(a, b) or checking abs(a-b) < some small tolerance, rather than ==."],
+    ["What's the time complexity of checking membership in a list vs. a set?","O(n) for a list (linear scan); O(1) average for a set (hash-based lookup) — meaningful at scale."],
+    ["Explain what `enumerate()` does and why it's preferred over manual index tracking.","Returns (index, value) pairs while iterating — cleaner and less error-prone than manually incrementing a counter variable."],
+    ["What's the difference between `range()` in Python 2 and Python 3?","Python 2's range() built a full list immediately; Python 3's range() is a lazy, memory-efficient sequence-like object (similar in spirit to a generator) — Python 2 had xrange() for the lazy version."],
+    ["How would you flatten a nested dictionary structure?","Recursively walk the dict, building compound keys (e.g. 'parent.child') for nested values — no single built-in, typically a custom recursive function."],
+    ["What's the purpose of `__repr__` vs `__str__`?","__repr__ is meant to be an unambiguous, ideally eval-able developer-facing representation; __str__ is a readable, user-facing string — print() uses __str__, falling back to __repr__ if __str__ isn't defined."],
+    ["How would you implement a simple singleton pattern in Python?","Override __new__ to return the same instance every time, or use a module-level instance (modules are singletons by nature in Python)."],
+    ["What's the difference between a shallow and deep understanding of Python's mutability rules?","Knowing lists/dicts are mutable while tuples/strings/numbers are immutable is shallow; knowing WHY this causes bugs (shared references, function default arguments, aliasing) is the deeper, interview-differentiating understanding."],
+    ["Explain what happens when you pass a list to a function and modify it inside.","Lists are passed by object reference — mutations inside the function (like .append()) affect the original list outside, unlike reassigning the parameter name, which doesn't."],
+    ["What's the difference between `copy.copy()` and `copy.deepcopy()`?","copy.copy() makes a shallow copy (nested objects still shared); copy.deepcopy() recursively copies nested objects too, fully independent from the original."],
+    ["How would you efficiently check if two lists have any elements in common?","Convert both to sets and check if the intersection is non-empty: bool(set(a) & set(b)) — much faster than a nested loop for large lists."],
+    ["What's a common pitfall when using a mutable object as a dictionary key?","Dict keys must be hashable, and mutable objects (like lists) aren't hashable — attempting to use one raises a TypeError; use a tuple instead if you need a compound immutable key."],
+    ["Explain what `zip()` does, with an example use case.","Pairs up elements from multiple iterables position-wise — e.g. zip(names, scores) to iterate over corresponding name/score pairs together."],
+    ["How would you merge two dictionaries in modern Python?","{**d1, **d2} (later keys override earlier ones), or d1 | d2 in Python 3.9+."],
+    ["What's the difference between a Python set and a frozenset?","A set is mutable; a frozenset is immutable and hashable, so it can itself be used as a dictionary key or a member of another set."],
+    ["Explain what 'Pythonic' code generally means, with an example.","Idiomatic code that uses the language's own conventions and built-ins effectively — e.g. `for item in items` instead of manually indexing with a while loop and counter."],
+    ["What's the difference between a bound method and an unbound function reference in a class?","instance.method is bound — it automatically passes `self`; ClassName.method (unbound/accessed via the class) requires explicitly passing an instance as the first argument."],
+    ["How would you handle circular imports between two modules?","Restructure to remove the cycle (move shared code to a third module), or import inside the function/method rather than at the top of the file, deferring the import until it's actually needed."],
+    ["What's the output type of a Pandas groupby before you call an aggregate function?","A DataFrameGroupBy object — a lazy grouping structure, not yet computed data; the aggregate function (e.g. .sum()) triggers the actual computation."],
+    ["Why might `df.groupby('col').mean()` silently drop some columns?","Non-numeric columns are automatically excluded from a plain .mean() unless explicitly selected or numeric_only is handled — surprising if you expected all columns."],
+    ["What's the difference between `Series.map()` and `Series.apply()`?","map() is for simple element-wise substitution (via a dict or function); apply() is more general-purpose and can apply more complex functions, including ones returning multiple values."],
+    ["How would you efficiently count how many rows match multiple conditions in a DataFrame?","((df.col1 > 5) & (df.col2 == 'West')).sum() — booleans sum as 1s and 0s."],
+    ["What's the purpose of `reset_index()` after a groupby operation?","groupby()'s result uses the grouping column(s) as the index; reset_index() turns that index back into regular columns, useful before merging or further tabular operations."],
+    ["Explain what `df.info()` tells you that `df.describe()` doesn't.","info() shows column dtypes, non-null counts, and memory usage — structural/data-quality info; describe() shows statistical summaries (mean, std, quartiles) for numeric columns only by default."],
+    ["What's a common reason a Pandas merge produces unexpected NaNs?","A type mismatch on the join key (e.g. one side is a string '101', the other an int 101) causes no matches, even though the values look the same visually."],
+    ["How would you read only specific columns from a large CSV to save memory?","pd.read_csv('file.csv', usecols=['col1','col2'])."],
+    ["What's the difference between wide-format and long-format data, and when is each useful?","Wide format has one row per entity with many columns per attribute (good for viewing); long format has one row per entity-attribute pair (good for grouping/plotting/melting into models) — pivot/melt convert between them."],
+    ["How would you explain a Pandas SettingWithCopyWarning to someone debugging it?","Pandas can't always tell if you're modifying the original DataFrame or a temporary copy/view of it — the fix is usually to use .loc[] for the assignment, or explicitly call .copy() when you intend to create an independent copy."],
+    ["What's the difference between `.apply()` on a Series versus on a DataFrame?","On a Series, apply() calls the function once per element. On a DataFrame, apply() calls the function once per column (axis=0, default) or once per row (axis=1) — the function receives a whole Series (that column or row), not a scalar."],
+    ["Why might vectorized Pandas/NumPy code outperform an equivalent Python for-loop by 10-100x?","Vectorized operations run in compiled C code over contiguous memory (NumPy arrays), avoiding per-element Python bytecode interpretation, object overhead, and interpreter loop costs — the loop still happens, just inside optimized C rather than the Python VM."]
+  ];
+  var qbank = document.getElementById('qbankList');
+  qbank.innerHTML = qas.map(function(qa){
+    return '<details class="qa"><summary>'+qa[0]+'</summary><div class="qa-a">'+qa[1]+'</div></details>';
+  }).join('');
+
+  var items = [
+    "Explain mutable vs immutable types and why it matters for function defaults",
+    "Write a groupby + agg + transform pipeline from memory",
+    "Explain why a vectorized Pandas operation beats .iterrows()",
+    "Debug a chained-assignment SettingWithCopyWarning",
+    "Explain merge()'s how= options and connect them to SQL join types from Stage 3",
+    "Write a generator and explain its memory advantage over a list",
+    "Solve at least 30 of the 41 coding problems without checking the solution first",
+    "Connect a groupby/feature-engineering example directly to your Axtria CV story"
+  ];
+  var STORE = 'stage4_mastery_v1';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var ml = document.getElementById('masteryList');
+  ml.innerHTML = items.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+t+'</span></div>';
+  }).join('');
+  ml.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+})();
+</script>

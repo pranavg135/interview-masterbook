@@ -1,0 +1,798 @@
+<meta name="robots" content="noindex, nofollow">
+
+
+<title>AI/GenAI Case Bank</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+
+  .caselist{ display:flex; flex-direction:column; gap:14px; }
+  details.case{ border:1px solid var(--line); border-radius:12px; background:var(--paper-raised); box-shadow:var(--shadow); overflow:hidden; }
+  details.case summary{ padding:16px 22px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.98rem; font-weight:600; }
+  details.case summary::-webkit-details-marker{ display:none; }
+  details.case summary .cnum{ font-family:"IBM Plex Mono"; font-size:.72rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:3px 9px; border-radius:6px; flex:0 0 auto; }
+  details.case summary .cdiff{ font-size:.66rem; font-weight:700; padding:3px 9px; border-radius:6px; flex:0 0 auto; text-transform:uppercase; letter-spacing:.03em; }
+  .cdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .cdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .cdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .cdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  details.case summary .cind{ font-size:.72rem; font-weight:500; color:var(--ink-faint); flex:0 0 auto; }
+  details.case summary .ctitle{ flex:1; }
+  .case-body{ padding:0 22px 24px; border-top:1px solid var(--line); }
+  .case-prompt{ margin:18px 0; padding:15px 18px; background:var(--paper-sunken); border-left:4px solid var(--ink-faint); border-radius:0 8px 8px 0; font-style:italic; font-size:.93rem; }
+  .case-sec{ margin-top:20px; }
+  .case-sec h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .case-sec h5::before{ content:""; width:14px; height:2px; background:var(--accent); display:inline-block; }
+  .case-sec p, .case-sec li{ font-size:.9rem; color:var(--ink-soft); margin:0 0 6px; }
+  .qa-pair{ margin-bottom:10px; padding:10px 14px; background:var(--paper-sunken); border-radius:8px; }
+  .qa-pair .q{ font-size:.88rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .qa-pair .a{ font-size:.87rem; color:var(--ink-soft); }
+  .case-sec ul{ margin:0; padding-left:20px; }
+  .case-sec .calc-block{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:14px 16px; font-family:"IBM Plex Mono"; font-size:.79rem; overflow-x:auto; line-height:1.65; white-space:pre; margin-top:4px; }
+  .case-sec .result-tag{ display:inline-block; margin-top:8px; font-family:"IBM Plex Mono"; font-size:.8rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:5px 11px; border-radius:6px; }
+  .synth-box{ margin-top:20px; padding:15px 18px; background:var(--accent-soft); border-radius:8px; border-left:4px solid var(--accent); }
+  .synth-box h5{ color:var(--accent-ink); }
+  .synth-box p{ color:var(--ink); font-weight:500; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <a class="backlink" href="stage14.html">← Stage 14 · Product Management</a>
+    <a class="backlink" href="stage15.html">← Stage 15 · Structured Problem Solving &amp; Frameworks</a>
+    <a class="backlink" href="stage16.html">← Stage 16 · Profitability Case Bank</a>
+    <a class="backlink" href="stage17.html">← Stage 17 · Market Entry Case Bank</a>
+    <a class="backlink" href="stage18.html">← Stage 18 · Growth Case Bank</a>
+    <a class="backlink" href="stage19.html">← Stage 19 · Pricing Case Bank</a>
+    <a class="backlink" href="stage20.html">← Stage 20 · Market Sizing Case Bank</a>
+    <a class="backlink" href="stage21.html">← Stage 21 · Operations Case Bank</a>
+    <a class="backlink" href="stage22.html">← Stage 22 · Product Case Bank</a>
+    <a class="backlink" href="stage23.html">← Stage 23 · Analytics Case Bank</a>
+    <div class="stage-pill">● Stage 24 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#howtouse">How to Use This Case Bank</a></li>
+      <li><a href="#cases">The 10 AI/GenAI Cases</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 26 (Pharma) is next, completing the case-bank block.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part X · Stage 24 of 33</div>
+      <h1>AI/GenAI Case Bank</h1>
+      <p class="lede">10 full AI/GenAI cases at full interview depth: prompting-vs-fine-tuning decisions, hallucination diagnosis, retrieval-strategy trade-offs, evaluation-framework design, RAG failure diagnosis, autonomy-level governance, bias diagnosis in model outputs, cost-driver decomposition, and human-oversight design under regulatory and safety constraints — each solved with a genuine structural approach, worked reasoning, and a real recommendation, walked through exactly as a real case interview runs, including interviewer pushback and model answers.</p>
+      <div class="statusbar">
+        <div class="statuschip">🤖 <b>10</b> full AI/GenAI cases, zero compressed</div>
+        <div class="statuschip">🧮 Every case has genuine worked reasoning, not just terminology</div>
+        <div class="statuschip">🗣️ Every case includes interviewer cross-questions with model answers</div>
+        <div class="statuschip">🔀 Spans customer support, internal tools, coding assistants, healthcare, and content moderation</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">AI/GenAI cases are the newest and fastest-moving case type in the whole Masterbook, and the discipline that separates a strong answer from a buzzword-heavy one is the same discipline underlying every other stage: name the actual decision or failure mode precisely, reason about it with real trade-offs (latency vs. quality, autonomy vs. oversight, cost vs. capability, precision vs. recall), and back the recommendation with a structural argument rather than a vague appeal to "AI best practices." The pattern that separates a strong answer from a weak one is resisting the urge to treat every problem as a model-capability problem, and instead checking whether the real driver is a data problem, a retrieval/chunking problem, an evaluation-design gap, a governance gap, or a genuine model-quality limitation before proposing a fix. This stage applies that discipline to 10 genuinely distinct AI/GenAI situations, from a straightforward prompting-vs-fine-tuning decision to an expert-level post-incident guardrail redesign after a costly autonomous-agent failure, so the underlying rigorous, mechanism-first AI reasoning becomes second nature.</p>
+      </div>
+    </section>
+
+    <section id="howtouse">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>How to Use This Case Bank</h2>
+        <p>Every case follows the exact same 10-part structure, so you can drill any single part in isolation or run the whole case end to end.</p>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <div class="bridge-flow">
+          <span class="node">Prompt</span><span class="arrow">→</span>
+          <span class="node">Clarifying Qs</span><span class="arrow">→</span>
+          <span class="node">MECE Structure</span><span class="arrow">→</span>
+          <span class="node">Hypothesis</span><span class="arrow">→</span>
+          <span class="node">Data</span><span class="arrow">→</span>
+          <span class="node">Calculation</span><span class="arrow">→</span>
+          <span class="node">Insight</span><span class="arrow">→</span>
+          <span class="node">Recommendation</span><span class="arrow">→</span>
+          <span class="node">Risks</span><span class="arrow">→</span>
+          <span class="node">Cross-Qs</span><span class="arrow">→</span>
+          <span class="node">Synthesis</span>
+        </div>
+        <p style="margin:14px 0 0">Recommended drill: read only the <b>prompt</b>, pause the page, and before reaching for a solution, name which layer of the problem is actually at fault — the underlying model, the data feeding it, the retrieval/context pipeline, the evaluation approach, or the human-oversight design around it — since AI/GenAI interview questions punish generic "use better prompts" or "fine-tune it" answers that skip this diagnosis. AI/GenAI cases especially reward being explicit about the trade-off being made (autonomy vs. safety, cost vs. quality, speed vs. accuracy) rather than presenting a recommendation as if it were free of downside. The 10 cases are tagged by difficulty (easier / medium / hard / expert) and filterable below the case list heading.</p>
+      </div>
+    </section>
+
+    <section id="cases">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>The 10 AI/GenAI Cases</h2>
+        <p>Full quota, full depth — every case fully interactive, none compressed to structure-plus-answer-only.</p>
+      </div>
+      <div class="filterbar" id="casefilter">
+        <button class="active" data-diff="all">All (10)</button>
+        <button data-diff="easy">Easier</button>
+        <button data-diff="med">Medium</button>
+        <button data-diff="hard">Hard</button>
+        <button data-diff="expert">Expert</button>
+      </div>
+      <div class="caselist" id="caselist"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">None of these 10 companies or AI/GenAI situations are Pranav's own work experience, and none should ever be presented as such — they're deliberate practice cases. The honest bridge is the METHOD: diagnosing which layer of an AI system is actually responsible for a failure before proposing a fix, reasoning explicitly about autonomy, cost, and safety trade-offs instead of treating them as afterthoughts, and grounding a recommendation in a structural argument rather than AI-hype language is the same rigorous, mechanism-first discipline behind the GenAI/LLM/RAG/Agents work in Stage 13 and the evidence-first reasoning drilled across every other case bank in this Masterbook. If an interviewer asks "have you made an AI or GenAI product decision before," the honest and strong answer is: "Not as a standalone AI-product role, but I've built the underlying habits — diagnosing whether an AI failure is a data, retrieval, evaluation, or model problem, reasoning explicitly about autonomy and safety trade-offs, and defending a recommendation under skeptical pushback — through real technical work, and I've drilled a full bank of AI/GenAI cases spanning deployment strategy, evaluation design, bias diagnosis, cost management, and governance to build that judgment on top of that foundation."</p>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Mastery Checklist</h2>
+        <p>One item per case — check off once you can walk through that case's full structure, calculation, and synthesis cold, without re-reading it.</p>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  var cases = [
+  {
+    "diff": "easy",
+    "industry": "Customer Support SaaS — Chatbot Build Approach",
+    "title": "Should a Customer Support Team Deploy Its AI Chatbot Using Prompt Engineering on a Base Model, or Fine-Tune a Model on Support Transcripts?",
+    "prompt": "A mid-sized SaaS company wants to deploy an AI chatbot to handle Tier-1 customer support questions (billing, account settings, common troubleshooting). The team is debating whether to build it with careful prompt engineering plus retrieval over their help docs (using an off-the-shelf foundation model), or to fine-tune a model on 3 years of historical support-ticket transcripts. Which approach should they take?",
+    "clarify": [
+      {
+        "q": "How well-organized and complete is the existing help-doc/knowledge-base content — would it actually cover most Tier-1 questions if surfaced correctly?",
+        "a": "Reasonably well-organized — the help center covers roughly 85% of the question types that show up in Tier-1 tickets, based on a quick tagging exercise, though it's not perfectly up to date."
+      },
+      {
+        "q": "What's driving the appeal of fine-tuning on historical transcripts specifically — is there something about tone, format, or content that the team feels prompting alone can't achieve?",
+        "a": "The main appeal cited is that support agents' actual response style is well-liked by customers, and the team hopes fine-tuning could replicate that tone and structure more naturally than prompting."
+      },
+      {
+        "q": "How often does the help-doc content and product itself change — is this a fast-moving product with frequent feature updates?",
+        "a": "Yes, fairly fast-moving — the product ships meaningful updates roughly every 2-3 weeks, and help docs are updated alongside those releases."
+      }
+    ],
+    "mece": "I'll evaluate this as a build-approach decision across three lenses: (1) content coverage and freshness — since retrieval-augmented prompting pulls from the live help-doc content while fine-tuning bakes historical transcript knowledge into the model weights, freshness and update-cadence matter a lot given how fast the product changes, (2) the specific problem fine-tuning is meant to solve — tone/style replication — and whether that's actually better achieved through fine-tuning or through prompting techniques (few-shot examples, style instructions) that don't carry fine-tuning's costs, (3) maintenance burden and cost — fine-tuning requires retraining cycles to stay current, while a retrieval-based approach updates automatically whenever the underlying docs update.\n\nL1 — Coverage/freshness: with help docs covering ~85% of Tier-1 questions and the product shipping updates every 2-3 weeks, a retrieval-based system pulling live doc content stays current automatically, while a fine-tuned model's knowledge is frozen at its training cutoff and would need frequent, costly retraining to avoid giving outdated answers about recently-changed features.\nL1 — Tone replication: check whether the desired tone/style can be achieved via prompting (a style guide in the system prompt, a few well-chosen example responses) — a well-known and generally effective technique — before assuming fine-tuning is required to replicate it.\nL1 — Maintenance burden: retrieval-based prompting only requires keeping the help-doc content current (which the team is already doing); fine-tuning requires a recurring retraining pipeline, evaluation before each redeploy, and infrastructure to manage model versions — a materially higher ongoing operational burden for a team that may not have ML infrastructure expertise in-house.",
+    "hypothesis": "Given the fast product-release cadence and the fact that tone/style is generally achievable through prompting techniques without fine-tuning's costs and staleness risk, I expect retrieval-augmented prompting on a foundation model to be the stronger approach here — fine-tuning would add significant ongoing maintenance burden to solve a problem (tone matching) that prompting can likely solve well enough on its own.",
+    "data": "Help-doc coverage: ~85% of Tier-1 question types. Product release cadence: every 2-3 weeks. Historical support transcripts available for fine-tuning: 3 years' worth, but response style and product itself have changed materially over that period, meaning older transcripts may model outdated tone/product behavior. Team's in-house ML/fine-tuning infrastructure experience: limited, based on team composition (mostly product and support engineers, no dedicated ML engineers mentioned).",
+    "calc": "There's no complex quantitative calculation needed for this case — the decision hinges on qualitative but concrete trade-offs: a retrieval-based system's 'staleness window' is essentially zero (it reflects docs as of the last content sync, likely near-real-time), while a fine-tuned model's staleness window is however long since its last retraining run — given 2-3 week release cycles, keeping a fine-tuned model current would require retraining roughly every 2-3 weeks to match, which is an unrealistic cadence for a team without dedicated ML infrastructure, versus updating a retrieval index whenever docs change, a much lighter-weight and already-partially-existing process.",
+    "insight": "The core problem with fine-tuning here isn't that it wouldn't work technically — it's a mismatch between the approach's maintenance requirements (frequent retraining to stay current with a fast-moving product) and the team's actual operational capacity, while the specific benefit fine-tuning was expected to provide (tone matching) is achievable through prompting techniques that don't carry that same ongoing cost.",
+    "recommendation": "Build the chatbot using retrieval-augmented prompting on a foundation model: retrieve relevant help-doc content per query and combine it with a well-crafted system prompt that includes explicit style guidance and a small number of example responses demonstrating the desired tone, rather than fine-tuning on historical transcripts. This keeps the system's knowledge automatically current with product changes and avoids building a retraining pipeline the team isn't well-resourced to maintain. Revisit fine-tuning only if, after launch, prompting-based tone matching proves insufficient despite iteration, and even then, consider it as a refinement layered on top of the retrieval system rather than a replacement for it.",
+    "risks": [
+      "Prompting-based tone matching, while generally effective, may not perfectly replicate the specific, nuanced style the team has in mind — this should be validated with real user testing before assuming it's 'good enough,' rather than taking it on faith.",
+      "The 85% help-doc coverage figure means 15% of Tier-1 questions won't be well-served by retrieval alone — the team needs a clear fallback plan (escalation to a human agent, or a clear 'I don't have information on that' response) for the uncovered gap, regardless of which build approach is chosen.",
+      "If help-doc content quality or organization degrades over time (a common failure mode as products scale and docs teams fall behind), the retrieval system's answer quality will degrade correspondingly — this makes doc-maintenance discipline a real dependency for this approach's long-term success, not a one-time setup cost."
+    ],
+    "cross": [
+      {
+        "q": "The support team lead is emotionally attached to the idea of fine-tuning on their agents' actual transcripts, feeling it would make the bot feel more 'authentically them' — how would you handle that in your recommendation?",
+        "a": "I'd validate the underlying goal (wanting the bot to sound authentically like the team) as legitimate, while reframing the SOLUTION — showing that a well-crafted style guide plus several real example responses in the prompt can capture 'authentically them' just as effectively without the maintenance burden, and proposing a quick side-by-side test (a few sample queries answered by the prompting approach vs. what a hypothetical fine-tuned version might sound like) so the team can evaluate the actual output quality rather than deciding based on which approach sounds more sophisticated; if the prompting approach's outputs genuinely don't capture the desired tone after real iteration, that's useful evidence to revisit the decision, but I wouldn't want to choose the higher-maintenance path on an assumption alone."
+      },
+      {
+        "q": "How would you handle the 15% of Tier-1 questions not well-covered by the current help docs, both at launch and over time?",
+        "a": "At launch, I'd have the bot recognize when it lacks confident retrieval matches for a query and gracefully hand off to a human agent rather than guessing — this protects against the exact hallucination risk that under-covered topics create; over time, I'd track which queries trigger this fallback most often and feed that back to the docs team as a prioritized content-gap list, turning the chatbot's own usage data into a continuous improvement loop for the underlying knowledge base, which benefits both the bot and any human agents who also reference those docs."
+      }
+    ],
+    "synthesis": "This case tests a foundational GenAI build-approach judgment: recognizing that fine-tuning and retrieval-augmented prompting solve different problems (baking in style/behavior patterns vs. injecting current, factual knowledge), and that the maintenance burden of each approach — especially staleness risk for a fast-changing domain — is often the deciding factor, not raw capability; a strong candidate matches the technique to both the specific problem and the team's actual operational capacity to sustain it."
+  },
+  {
+    "diff": "easy",
+    "industry": "Marketing Tech — GenAI Writing Assistant Hallucination",
+    "title": "A GenAI Writing Assistant Is Fabricating Statistics and Sources in Its Outputs — What's the First Fix to Try?",
+    "prompt": "A marketing tech company's AI writing assistant (used by customers to draft blog posts and marketing copy) has been flagged by several users for confidently stating specific statistics and citing sources that turn out to be fabricated. The product team wants this fixed quickly. What would you investigate and try first?",
+    "clarify": [
+      {
+        "q": "Is the assistant currently connected to any retrieval system or external data source, or is it generating purely from the base model's own training knowledge with no grounding?",
+        "a": "No retrieval or grounding — it's currently a direct prompt-to-generation setup with no connection to any external fact source or search capability."
+      },
+      {
+        "q": "Does the current system prompt give the model any explicit instruction about how to handle requests for specific facts, statistics, or citations it isn't certain about?",
+        "a": "No — the system prompt is fairly generic ('You are a helpful marketing writing assistant') with no specific guidance about factual claims or citation behavior."
+      },
+      {
+        "q": "Are users generally asking for content that requires specific factual grounding (like 'write a post citing recent industry statistics'), or is this happening even on more general creative requests?",
+        "a": "Both, but the flagged cases are concentrated on requests that explicitly ask for statistics, data points, or supporting sources — general creative copy without factual claims isn't triggering complaints."
+      }
+    ],
+    "mece": "I'll frame this as a grounding-and-instruction problem, since the two most common root causes of this exact symptom (confident fabrication of specific facts/citations) are (1) lack of grounding — the model has no access to real, current data and is generating plausible-sounding but invented specifics from its training-time patterns, and (2) lack of explicit instruction — without being told how to behave when uncertain, models tend to default to confident-sounding completions rather than expressing uncertainty or declining to fabricate, structured as: (1) diagnose whether this is purely a grounding gap (confirmed by the concentration on fact-requiring prompts) worth addressing with retrieval, (2) diagnose whether prompt-level instruction changes alone (telling the model explicitly not to fabricate stats/sources, and how to behave when it lacks real data) can reduce the problem as a fast, low-effort first step, (3) sequence these as complementary fixes — instruction-level fixes are fast to test and ship, while retrieval/grounding is a more substantial build that solves the problem more fundamentally.\n\nL1 — Grounding gap: with zero retrieval or external data connection and the complaints concentrated exactly on fact-requiring requests, this strongly matches the classic 'ungrounded generation' failure mode where a model pattern-matches plausible-sounding specifics rather than retrieving real ones.\nL1 — Instruction gap: a generic system prompt with no explicit guidance on factual-claim behavior is a known, common, and easily fixable contributor — models are more likely to hallucinate confidently when not explicitly told to express uncertainty or avoid fabricating specifics.\nL1 — Fix sequencing: instruction-level prompt changes are fast (hours, not weeks) to test and deploy and should be tried first as an immediate mitigation, while building real retrieval/grounding for statistics and citations is a more substantial, higher-value fix to pursue in parallel for the underlying problem.",
+    "hypothesis": "Given the complete lack of grounding and generic system prompt, I expect a combination of (a) explicit prompt instructions telling the model to avoid presenting unverified statistics/sources as fact, and instead flag when it lacks real data or suggest the user verify specifics themselves, plus (b) as a fast first mitigation, to meaningfully reduce the fabrication problem even before a full retrieval/grounding system is built — though I'd expect prompting alone to reduce, not eliminate, the problem, since the underlying lack of real data access is the more fundamental issue.",
+    "data": "Complaint concentration: flagged cases are specifically on requests involving statistics, data points, or citations — not general creative copy. Current setup: no retrieval, generic system prompt with no factual-claim guidance. This pattern (confident fabrication concentrated on fact-requiring prompts, in an ungrounded system with no anti-hallucination instruction) is a well-documented and common failure mode for LLM applications that generate content requiring specific factual grounding without retrieval.",
+    "calc": "No quantitative calculation is central to this case — the analytical work is diagnostic pattern-matching (confirming the symptom matches the known 'ungrounded generation + no explicit instruction' failure mode) and fix-sequencing by speed-to-impact: an updated system prompt (explicitly instructing the model to avoid presenting unverified statistics as fact, to use qualifying language like 'according to industry estimates' only when genuinely appropriate, and to flag rather than fabricate when it lacks real data) can be tested and deployed within hours, versus building a retrieval/grounding pipeline (connecting to a real statistics/citation database or search capability) which is a multi-week engineering effort — the fast fix should ship first as an immediate mitigation while the fuller fix is built.",
+    "insight": "This is a textbook case of an LLM product being deployed without addressing its most well-known and predictable failure mode — generating specific, verifiable-sounding facts without either grounding (real data access) or explicit instruction constraining that behavior — and the fix doesn't require novel research, just applying two standard, well-established mitigations in the right order: fast instruction-level prompting now, more substantial retrieval/grounding as the durable fix.",
+    "recommendation": "Immediately update the system prompt with explicit instructions against fabricating statistics, data points, or citations, directing the model to either avoid specific numerical/source claims it can't verify, use appropriately hedged language, or explicitly note that the user should verify any specific figures — deploy this as a fast first mitigation. In parallel, scope and build a retrieval-grounding capability (connecting the assistant to a real, current source of industry statistics or requiring users to supply source material the assistant can accurately reference) as the more durable fix, since prompting alone reduces but doesn't eliminate the underlying lack of real data access.",
+    "risks": [
+      "Prompt-level instructions to avoid fabrication can sometimes cause the model to become overly hedgy or unhelpful even on requests where it could give reasonably useful general guidance — this trade-off should be tested and tuned (e.g., through a review of a sample of outputs after the prompt change) rather than assumed to be purely beneficial with no downside.",
+      "This fix doesn't address hallucination risk on non-statistical claims (e.g., subtly incorrect but non-numerical factual assertions), which could still occur even after this specific fix — ongoing monitoring for other hallucination patterns, not just the flagged stats/citations issue, should continue.",
+      "Users may still request specific statistics after the prompt change and receive a hedged 'I can't verify this' response, which could feel unhelpful compared to the previous (wrong but confident) behavior — the product team should be prepared for this trade-off and consider it a necessary cost of fixing a trust-damaging problem, and monitor whether it meaningfully affects user satisfaction or task completion."
+    ],
+    "cross": [
+      {
+        "q": "The product team is worried that adding hedging language will make the tool feel less confident and useful to customers — how would you address that concern?",
+        "a": "I'd reframe the trade-off explicitly: a confidently WRONG statistic is far more damaging to user trust and to the company's reputation (since users might publish fabricated stats under their own brand's name) than an appropriately hedged response that's honest about its limitations — I'd propose testing the updated prompt with a representative sample of real use cases to measure how often the hedging actually degrades a genuinely useful response versus how often it correctly prevents a harmful fabrication, giving the team real data to weigh the trade-off rather than an abstract worry; I'd also note that the durable fix (real grounding/retrieval) removes this trade-off entirely by giving the model real data to cite confidently and accurately, which is the actual long-term solution."
+      },
+      {
+        "q": "How would you actually measure whether the prompt-level fix worked, before investing in the fuller retrieval/grounding build?",
+        "a": "I'd set up a structured evaluation: pull a sample of real user prompts that request statistics/citations (both from the flagged complaints and a broader sample), run them through both the old and new system prompts, and have a human reviewer (or a careful rubric-based process) assess whether the model appropriately avoided fabrication versus the old baseline — tracking a clear before/after rate of 'confidently stated an unverifiable specific fact' as the primary metric; I'd also monitor real user-reported complaints post-deployment as a live signal, since a meaningful reduction in flagged incidents would validate the fix is working in practice, not just in a controlled evaluation sample."
+      }
+    ],
+    "synthesis": "This case tests whether a candidate recognizes hallucination as a predictable, well-understood failure mode with standard mitigations (grounding via retrieval, and explicit instruction against unverified claims) rather than a mysterious or unfixable AI quirk, and can sequence a fast, low-effort mitigation ahead of a more substantial, durable fix — appropriately triaging based on urgency and effort rather than jumping straight to the most complete but slowest solution."
+  },
+  {
+    "diff": "easy",
+    "industry": "Enterprise Software — Internal Knowledge Search Tool",
+    "title": "Should a Company's Internal AI Knowledge-Search Tool Use Semantic (Embedding-Based) Search or Traditional Keyword Search Over Its Document Retrieval?",
+    "prompt": "A company is building an internal AI assistant that lets employees ask natural-language questions and get answers pulled from thousands of internal documents (policies, wikis, past project reports). The team is deciding whether the underlying document retrieval should use semantic (embedding-based/vector) search or traditional keyword search. Which should they use, and why?",
+    "clarify": [
+      {
+        "q": "What kind of questions do employees typically ask — precise lookups (like 'what is the exact PTO carryover limit'), or more conceptual/exploratory questions (like 'how do we typically handle a client escalation')?",
+        "a": "A mix, but a meaningful share are exploratory/conceptual — employees often don't know the exact terminology used in a policy document and describe what they're looking for in their own words."
+      },
+      {
+        "q": "Do the internal documents use fairly consistent, standardized terminology, or does the same concept get referred to by different terms across different documents/teams?",
+        "a": "Inconsistent terminology is a known problem — different teams and documents from different eras use different terms for overlapping concepts (e.g., 'client escalation process' vs. 'issue elevation procedure' vs. 'red-flag handling')."
+      },
+      {
+        "q": "Are there any specific, precise lookups (like exact policy numbers, specific dates, exact dollar figures) that need to be retrieved with high precision, where a close-but-not-exact semantic match could actually be actively wrong or misleading?",
+        "a": "Yes — some documents contain specific figures (reimbursement limits, specific compliance deadlines) where an approximately-similar but wrong document would be actively harmful if surfaced instead of the correct one."
+      }
+    ],
+    "mece": "I'll evaluate this across the two dimensions that most directly determine which retrieval approach fits: (1) query-type match — semantic search excels at conceptual, natural-language queries where the user's words don't exactly match document terminology, exactly the exploratory-question pattern described, while keyword search excels at precise, exact-term lookups, (2) terminology consistency — semantic/embedding-based search is specifically well-suited to environments with inconsistent terminology across documents (like this company's known cross-team terminology drift), since it matches on meaning rather than exact word overlap, (3) precision-critical content risk — for specific, high-stakes exact-value lookups (reimbursement limits, compliance deadlines), pure semantic search's tendency to surface 'close enough' matches could be actively dangerous, arguing for either a hybrid approach or keyword-level precision specifically for this content type.\n\nL1 — Query-type match: exploratory, natural-language questions (a meaningful and stated share of actual usage) are exactly where semantic search outperforms keyword search, since it doesn't require the user to guess exact document terminology.\nL1 — Terminology consistency: the confirmed cross-team terminology inconsistency is a strong, specific signal favoring semantic search, since keyword search would systematically fail on queries using different-but-equivalent terms than what a given document uses.\nL1 — Precision-critical risk: pure semantic/vector retrieval can surface a document that's topically similar but factually wrong for precise, high-stakes lookups — this specific risk argues for a hybrid approach (combining semantic and keyword/exact-match signals) rather than semantic search alone, especially for the flagged high-stakes content categories.",
+    "hypothesis": "Given the combination of exploratory query patterns and known cross-team terminology inconsistency, I expect semantic search to be the better PRIMARY retrieval mechanism, but given the explicit risk flagged around precision-critical content (reimbursement limits, compliance deadlines), I'd recommend a hybrid retrieval approach (combining semantic search with keyword/exact-match signals, and potentially a re-ranking step) rather than semantic search alone, specifically to protect against the failure mode of surfacing a topically-similar-but-wrong document for high-stakes precise lookups.",
+    "data": "Query mix: meaningful share exploratory/conceptual (exact proportion not yet measured, but confirmed as a real pattern), remainder more precise lookups. Terminology: confirmed inconsistency across teams/document eras for overlapping concepts. High-stakes precision content: confirmed presence of documents with specific figures (reimbursement limits, compliance deadlines) where a wrong-but-similar match would be actively harmful, not just unhelpful.",
+    "calc": "This case doesn't require a numeric calculation — the reasoning is a structured matching of retrieval-method strengths against the specific, confirmed characteristics of this company's document set and query patterns. The key logical step is recognizing that 'semantic vs. keyword' isn't a strict either/or in modern retrieval-augmented systems — a hybrid approach (semantic search for recall on conceptual queries, combined with keyword/exact-match boosting or a re-ranking layer that up-weights precise term matches, especially for flagged high-stakes document categories) captures the benefit of both approaches while mitigating semantic search's specific, flagged risk for precision-critical content.",
+    "insight": "This isn't a case where one method is simply 'better' — the two confirmed characteristics of this environment (terminology inconsistency favoring semantic search broadly, and a specific carve-out of high-stakes precise-value content where semantic search's approximate-matching nature is actively risky) point toward a hybrid retrieval architecture rather than a pure either/or choice, with special handling or exact-match safeguards specifically for the flagged high-stakes document category.",
+    "recommendation": "Build the retrieval system as a hybrid: use semantic/embedding-based search as the primary mechanism to handle the exploratory, terminology-varied queries that are a meaningful share of real usage, but combine it with keyword-based exact-match signals (and consider a re-ranking step that up-weights precise term matches) especially for the flagged high-stakes precision-critical document category (reimbursement limits, compliance deadlines) — and add clear source citations/links in every answer so users can verify the specific figure against the original document rather than trusting the AI's restated number blindly, which is a critical safeguard regardless of retrieval method for exactly this kind of high-stakes content.",
+    "risks": [
+      "A hybrid retrieval system is more complex to build and tune than either pure approach, requiring careful weighting between semantic and keyword signals and likely some iteration to get right — the team should budget for this added complexity rather than assuming a hybrid system works well 'out of the box.'",
+      "Even with citations included, some users may still trust the AI's restated figure without clicking through to verify — this is a genuine, only partially mitigated risk for high-stakes content, and the team should consider whether certain especially high-stakes categories (e.g., compliance deadlines with legal/financial consequences) warrant an even more conservative approach, like always requiring the user to view the source document directly rather than displaying the AI's paraphrased answer at all.",
+      "The exact proportion of exploratory-vs-precise queries hasn't been measured yet — this analysis is based on a qualitatively confirmed pattern, and the team should validate with real usage data (once available) whether the hybrid weighting is calibrated appropriately for the actual query mix, adjusting the semantic-vs-keyword balance if the real data differs meaningfully from the assumed pattern."
+    ],
+    "cross": [
+      {
+        "q": "Building a hybrid system sounds more complex and slower to ship than just picking one approach — why not launch with pure semantic search first (given it seems to fit the majority query pattern) and add keyword/hybrid capability later if needed?",
+        "a": "I'd push back on that sequencing specifically because of the flagged risk profile — this isn't a case where the downside of getting it wrong is just 'unhelpful search results,' it's a case where a wrong reimbursement figure or a wrong compliance deadline could have real financial or legal consequences for the company or an employee who trusts the answer; given that risk is already known and named before launch (not a hypothetical edge case discovered later), I'd want at least a basic safeguard for that specific content category from day one — even if the full, well-tuned hybrid system comes later, a simpler interim safeguard (like flagging or routing recognized high-stakes query patterns to a stricter, more exact-match-weighted path, or requiring source-document display rather than paraphrased answers for flagged document categories) should ship at launch rather than being deferred as a 'nice to have' improvement."
+      },
+      {
+        "q": "How would you identify, in practice, which documents or query types should be treated as 'high-stakes precision-critical' and routed through the more conservative path?",
+        "a": "I'd start with the categories already flagged as known risks (reimbursement limits, compliance deadlines) and tag those specific document types explicitly in the system rather than trying to infer high-stakes-ness purely algorithmically at launch; I'd also build a feedback mechanism for employees to flag any answer that turned out to be wrong or misleading, which over time would surface additional high-stakes categories the initial tagging missed, and I'd periodically review those flags with whichever internal team owns each document category (HR for reimbursement policy, compliance/legal for regulatory deadlines) to keep the high-stakes tagging list current as new policies and documents are added."
+      }
+    ],
+    "synthesis": "This case tests whether a candidate can move past a false binary ('semantic vs. keyword search, pick one') to recognize that the right answer is often a hybrid architecture matched to the specific, confirmed characteristics of the use case — and, critically, whether they can identify and specifically design around a named high-stakes failure mode (a wrong-but-plausible answer for precision-critical content) rather than treating retrieval-method selection as a purely generic, one-size-fits-all technical choice."
+  },
+  {
+    "diff": "med",
+    "industry": "Enterprise SaaS — Pre-Launch LLM Evaluation Framework Design",
+    "title": "Design an Evaluation Framework for an LLM-Powered Support Chatbot Before It Launches to Customers",
+    "prompt": "A company has built an LLM-powered support chatbot (using retrieval-augmented generation over their help docs) and it's performing well in informal internal testing. Before launching it to real customers, the team asks you to design a proper evaluation framework. What would it include, and how would you structure the evaluation process?",
+    "clarify": [
+      {
+        "q": "What does 'performing well in informal testing' actually mean here — has anyone tried a structured set of test queries, or is this based on a few team members trying it casually and being generally impressed?",
+        "a": "The latter — a handful of team members tried various questions casually over a few days and were generally impressed, but there's been no structured, systematic testing."
+      },
+      {
+        "q": "Are there specific failure modes the team is most worried about — hallucination, tone/brand-voice mismatch, failure to escalate appropriately to a human, something else?",
+        "a": "All of those are concerns, but hallucination (giving confidently wrong information, especially about billing or account-specific details) and knowing when to escalate to a human are the two the team is most anxious about, given the potential customer trust impact."
+      },
+      {
+        "q": "Is there an existing set of real historical support tickets/questions that could be used as a basis for test cases, or would test cases need to be created from scratch?",
+        "a": "Yes — there's a large archive of historical support tickets with the questions customers actually asked and the correct resolutions, which could be mined for realistic test cases."
+      }
+    ],
+    "mece": "I'll structure the evaluation framework across three complementary layers, since informal casual testing is known to systematically miss both edge cases and structured failure patterns: (1) a structured test-set built from real historical data — covering common question types, edge cases, and known-tricky scenarios, rather than relying on ad hoc casual queries, (2) failure-mode-specific evaluation criteria — since the team named hallucination and escalation-judgment as top concerns, the evaluation should include dedicated test categories and scoring rubrics for exactly these two failure modes, not just an overall 'was this a good answer' judgment, (3) an evaluation PROCESS, not just a one-time test — including how outputs get scored (human review vs. automated), what pass/fail or quality thresholds gate launch, and how evaluation continues post-launch (since new failure modes will surface with real, unpredictable customer queries that no pre-launch test set can fully anticipate).\n\nL1 — Structured test-set construction: mine the historical ticket archive for a representative sample of common question types PLUS a deliberately curated set of edge cases and known-tricky scenarios (ambiguous questions, questions the help docs don't fully cover, questions requiring escalation) — a test set built only from 'easy, common' cases would give false confidence, since it wouldn't stress-test the failure modes that matter most.\nL1 — Failure-mode-specific scoring: for hallucination specifically, need a rubric checking whether every specific factual claim (especially billing/account-specific details) is verifiably grounded in retrieved source content, not just 'does this sound plausible'; for escalation judgment, need a rubric checking whether the bot correctly recognizes queries it shouldn't attempt to answer confidently (account-specific sensitive issues, queries outside its knowledge scope) and hands off appropriately rather than guessing.\nL1 — Evaluation as an ongoing process: define clear pass/fail thresholds for pre-launch gating (e.g., hallucination rate below X% on the test set, correct-escalation rate above Y%), plus a post-launch monitoring plan (sampling real customer interactions for ongoing review, a user-feedback/flagging mechanism) since a static pre-launch test set can't anticipate every real-world query pattern.",
+    "hypothesis": "I expect the current 'performing well in informal testing' assessment to be significantly overstating actual readiness, since casual, unstructured testing by a small number of familiar internal users is a well-known poor predictor of real-world performance — particularly for the two named risk areas (hallucination and escalation judgment), which specifically require deliberately adversarial or edge-case test scenarios that casual testers are unlikely to stumble into naturally; I'd expect a properly structured evaluation to surface meaningful failure rates that the informal testing missed entirely.",
+    "data": "Historical ticket archive: large, with real customer questions and correct resolutions — a strong basis for a structured test set. Current evaluation basis: a handful of team members, casual testing, a few days, no structured methodology, no explicit scoring rubric or failure-mode-specific test cases. Named top concerns: hallucination (especially billing/account-specific) and escalation judgment.",
+    "calc": "PROPOSED TEST-SET COMPOSITION (illustrative sizing):\n- 150-200 test cases sampled from historical tickets covering the most common question categories, weighted toward category frequency in real ticket volume (ensuring the evaluation reflects real-world query distribution, not an arbitrary/uniform sample).\n- 50-75 deliberately curated edge cases: ambiguous questions, questions touching billing/account-specific details (the named hallucination risk area), questions that should trigger escalation (account security issues, disputes, anything outside documented policy), and questions the help docs don't clearly cover (testing whether the bot appropriately expresses uncertainty rather than fabricating an answer).\n- A held-out sample of entirely novel test queries (not drawn from historical tickets) to check generalization beyond the exact patterns represented in historical data.\n\nSCORING APPROACH: Human review (support-team subject matter experts, not just the product team) scoring each response on: (a) factual accuracy/groundedness — does every specific claim trace back to verifiable source content, (b) escalation appropriateness — did the bot correctly recognize when NOT to attempt a confident answer, (c) tone/brand-voice fit, (d) overall resolution quality. A minimum passing threshold should be set for (a) and (b) specifically, given these are the named top risk areas, rather than only tracking an aggregate quality score that could mask a specific, serious failure-mode weakness.",
+    "insight": "The core gap isn't that the chatbot is necessarily bad — it's that 'performing well' has never actually been rigorously tested against the specific failure modes the team is most worried about, and informal casual testing systematically undersamples exactly the edge cases (ambiguous queries, billing-specific questions, escalation-triggering scenarios) where those failure modes are most likely to surface; a proper structured evaluation is likely to reveal a materially different picture than the current informal impression, and launching based on informal testing alone carries real, currently-unmeasured risk.",
+    "recommendation": "Do not launch based on the current informal testing. Build the structured, three-part test set described above (common cases weighted by real frequency, deliberately curated edge cases targeting the named risk areas, and a held-out generalization sample), have it scored by support-team subject matter experts against explicit rubrics for factual accuracy/groundedness and escalation appropriateness specifically, and set minimum passing thresholds on those two dimensions as a launch gate — not just an overall quality impression. Post-launch, implement ongoing sampling and review of real customer interactions plus a user-flagging mechanism, since real-world query diversity will inevitably surface failure patterns beyond what any pre-launch test set anticipated.",
+    "risks": [
+      "Building and scoring a properly structured evaluation set takes real time and support-team-expert effort — this recommendation trades launch speed for risk reduction, and the team should be given a clear, bounded timeline for the evaluation phase (not an open-ended delay) so this doesn't become an excuse for indefinite postponement.",
+      "Human-reviewer scoring, even with explicit rubrics, has some inherent subjectivity — for at-scale ongoing monitoring post-launch, the team may eventually want to explore semi-automated evaluation techniques (e.g., using a separate model to flag likely-hallucinated claims for human review, rather than reviewing 100% of interactions manually) to make ongoing evaluation sustainable at higher volume, though pre-launch, thorough human review is worth the investment given the stakes.",
+      "Even a well-designed pre-launch test set, however thorough, cannot fully anticipate the full diversity of real customer phrasing and edge cases — the post-launch monitoring and feedback-flagging mechanism is not optional or secondary; it's an essential, ongoing part of the evaluation framework, not just a pre-launch gate."
+    ],
+    "cross": [
+      {
+        "q": "The team is eager to launch and might see this recommendation as overly cautious, especially since informal testing has gone well so far — how would you make the case for the delay this evaluation requires?",
+        "a": "I'd reframe informal testing's positive results as informative but insufficient rather than wrong — a handful of familiar internal testers asking naturally-occurring questions over a few days is a reasonable first signal that the basic system works, but it's specifically NOT designed to stress-test the two failure modes the team itself named as top concerns (hallucination on billing/account details, escalation judgment), since casual testers are unlikely to naturally construct the kind of ambiguous or edge-case queries that would surface those specific risks; I'd frame the structured evaluation not as doubting the team's work, but as directly answering the two questions they're already anxious about with real evidence instead of an informal impression, which protects both customer trust and the team's own credibility if something goes wrong post-launch that a cheap, bounded evaluation phase could have caught."
+      },
+      {
+        "q": "Suppose the structured evaluation reveals the hallucination rate on billing/account-specific questions is unacceptably high, but everything else scores well — would you recommend delaying the entire launch, or is there a middle-ground option?",
+        "a": "I'd recommend a middle-ground, scoped launch rather than an all-or-nothing delay: since the evaluation would have specifically identified billing/account-specific questions as the problem area, the bot could launch handling the well-performing question categories (general troubleshooting, account-settings how-tos, policy questions) while being configured to automatically escalate billing/account-specific queries to a human agent rather than attempting to answer them — this captures most of the launch's value quickly while directly containing the specific, identified risk, and the team can continue working on the billing/account-specific failure mode (likely needing better retrieval grounding for that content, or explicit instruction changes) before expanding the bot's scope to cover it confidently."
+      }
+    ],
+    "synthesis": "This case tests whether a candidate recognizes that informal, unstructured testing systematically fails to surface the specific failure modes that matter most (especially for named, high-stakes risk areas like hallucination and escalation judgment), and can design a structured evaluation framework — built from real data, targeting named risks with explicit rubrics and thresholds, and continuing as an ongoing process rather than a one-time gate — that actually answers the questions the team is anxious about, rather than accepting a comfortable but unrigorous informal impression as sufficient evidence to launch."
+  },
+  {
+    "diff": "med",
+    "industry": "Enterprise SaaS — RAG System Retrieval/Chunking Diagnosis",
+    "title": "A RAG-Based Internal Knowledge Assistant Gives Wrong Answers Even Though the Correct Information Exists in the Source Documents — Diagnose the Cause",
+    "prompt": "A company's internal knowledge assistant, built using retrieval-augmented generation (RAG) over their policy documents, is giving noticeably wrong or incomplete answers to a subset of questions — even though the team has manually confirmed the correct, complete information genuinely exists in the underlying source documents. What would you investigate to diagnose why?",
+    "clarify": [
+      {
+        "q": "Has anyone checked whether the retrieval step is actually pulling the correct source document/section for these specific failing questions, or has the investigation only looked at the final generated answer?",
+        "a": "Only the final answer has been reviewed so far — nobody has checked what content the retrieval step actually surfaced for these specific failing queries."
+      },
+      {
+        "q": "How are the source documents being chunked/split before being indexed for retrieval — is it a simple fixed-size split, or something more structure-aware (like splitting by section/heading)?",
+        "a": "A simple fixed-size character/token-count split, applied uniformly across all documents regardless of their internal structure (headings, tables, lists)."
+      },
+      {
+        "q": "Are the failing questions concentrated in documents with a particular structure — e.g., long tables, numbered lists, multi-step procedures — or spread evenly across different document types?",
+        "a": "Worth checking, but hasn't been broken down yet — that's exactly the kind of pattern that needs to be investigated."
+      }
+    ],
+    "mece": "Since the final answer is wrong despite correct source content existing, I'll structure this as a pipeline-stage diagnosis, isolating whether the failure is happening at retrieval (wrong or incomplete content surfaced) or at generation (correct content surfaced but the model still produces a wrong answer), specifically: (1) retrieval-stage check — directly inspect what chunks the retrieval step actually returns for several failing queries, since a fixed-size chunking strategy with no structural awareness is a well-known cause of retrieval problems (splitting a table or numbered list mid-way, separating a heading from its content, cutting a multi-step procedure across chunk boundaries), (2) chunking-structure correlation — check whether failures concentrate in structurally complex documents (tables, lists, multi-step procedures), which would strongly implicate the naive fixed-size chunking as the root cause, (3) generation-stage check (if retrieval is confirmed correct) — only if retrieval is confirmed to surface the right content, investigate whether the generation step itself is failing to use that content correctly, a distinct and less likely but still possible failure mode.\n\nL1 — Retrieval-stage inspection: for several specific failing queries, directly log and review what chunks the retrieval system actually returns — if the correct information isn't among the returned chunks, or is present but split/fragmented in a way that loses critical context (e.g., a table row separated from its column headers), that's direct evidence retrieval, not generation, is the problem.\nL1 — Chunking-structure correlation: fixed-size chunking applied uniformly, with no awareness of document structure, is a well-documented failure mode specifically for documents containing tables, numbered/multi-step procedures, or content where meaning depends on surrounding structural context — checking whether the failing-question documents disproportionately have this kind of structure would directly confirm this mechanism.\nL1 — Generation-stage check: only relevant if retrieval is confirmed to be surfacing the correct, complete, properly-contextualized content — if that's confirmed and the answer is STILL wrong, the investigation would need to shift to prompt/generation-level issues (e.g., the model failing to correctly parse a table represented as chunked text, or an instruction-following issue), which is a different and less likely diagnosis given the naive-chunking setup already described.",
+    "hypothesis": "Given the confirmed use of naive, structure-unaware fixed-size chunking, I expect the root cause to be a retrieval-stage failure specifically caused by chunking — documents with tables, numbered lists, or multi-step procedures being split at arbitrary character/token boundaries in a way that fragments critical context (e.g., separating a table's data rows from their column headers, or splitting a procedure's step 3 from steps 1-2), causing the retrieval system to either miss the fully correct context or surface fragmented, context-poor chunks that lead the generation step to produce an incomplete or wrong answer even when relevant content was technically retrieved.",
+    "data": "Chunking method: naive fixed-size split, uniform across all document types, no structural awareness. Failure pattern: confirmed wrong/incomplete answers despite correct source content existing; retrieval-content inspection not yet performed. To be investigated: correlation between failing questions and document structural complexity (tables, lists, multi-step procedures).",
+    "calc": "No quantitative calculation is central here — the diagnostic method is a direct pipeline-stage inspection: pulling the actual retrieved chunks for, say, 15-20 of the failing queries and manually checking (a) whether the correct source content appears among the returned chunks at all, and (b) if it does appear, whether it retains enough surrounding context (headers, adjacent table rows/columns, preceding procedure steps) to be usable and unambiguous on its own. If a large majority of these failing cases show chunking-related fragmentation (content technically present but stripped of necessary context, or split across multiple non-adjacent chunks not all of which get retrieved together), that directly confirms chunking as the dominant root cause rather than a generation-stage problem.",
+    "insight": "This is a classic and well-understood RAG failure mode: naive, structure-unaware chunking is one of the most common causes of 'the right information exists but the system still gives a wrong answer' symptoms, because it treats all document content as undifferentiated text to be split by size alone, destroying the structural relationships (table headers to rows, procedure step ordering, heading-to-content association) that give many chunks their actual meaning — the fix is a chunking-strategy problem, not fundamentally a retrieval-algorithm or generation-model problem.",
+    "recommendation": "Implement structure-aware chunking: split documents along natural structural boundaries (sections/headings, complete tables kept intact or chunked with headers repeated in each piece, complete numbered procedures kept together rather than split mid-sequence) rather than uniform fixed-size splitting. For particularly complex structural elements (large tables, long multi-step procedures), consider specialized handling — e.g., converting tables to a format that preserves row/column relationships even when chunked, or treating each numbered procedure as an atomic, non-splittable retrieval unit. Re-run the failing test queries against the re-chunked index to confirm the fix resolves the specific failure pattern before considering the investigation closed.",
+    "risks": [
+      "Structure-aware chunking is more complex to implement than uniform fixed-size splitting and may require format-specific handling for different document types (tables, lists, plain prose) — this is a real engineering investment, not a trivial configuration change, and should be scoped accordingly rather than assumed to be a quick fix.",
+      "Even after improving chunking, some complex documents (very large tables, deeply nested procedures) may still be genuinely difficult to chunk in a way that preserves full context within retrieval-system size constraints — for these cases, the team may need a different strategy entirely (e.g., a document-level rather than chunk-level retrieval approach for specifically flagged complex documents), and shouldn't assume structure-aware chunking alone solves every case.",
+      "This diagnosis assumes retrieval-stage chunking is the dominant cause based on the described setup and known failure patterns — but the actual investigation (inspecting real retrieved chunks for real failing queries) must be performed to confirm this before committing to the re-chunking fix, since a smaller subset of failures could still be genuinely generation-stage issues that a chunking fix wouldn't resolve."
+    ],
+    "cross": [
+      {
+        "q": "How would you prioritize which documents to re-chunk first, given that re-processing the entire document corpus with a new, more complex chunking strategy will take real time and engineering effort?",
+        "a": "I'd prioritize based on the confirmed correlation between failure patterns and document structural complexity — starting with the document types most represented among the actual failing queries (e.g., if tables and multi-step procedures are confirmed as the dominant pattern, prioritize re-chunking documents heavy in those structures first), rather than re-processing the entire corpus uniformly; this gets the highest-impact fix shipped fastest, and the team can then expand to re-chunk the remainder of the corpus on a normal engineering timeline once the highest-value fix is validated and live."
+      },
+      {
+        "q": "Suppose after re-chunking, retrieval is confirmed to now surface the correct, well-contextualized content for the previously-failing queries, but the generated answers are STILL sometimes wrong — what would you investigate next?",
+        "a": "That would shift the diagnosis to the generation stage specifically — I'd check whether the model is being given too many or too fragmented chunks at once (context overload, where relevant information gets 'lost' among too much retrieved text), whether the prompt's instructions for how to synthesize information from multiple chunks are clear, and specifically test whether the model correctly parses structured content (like a table) when it's presented as chunked text in the prompt, since some models handle tabular data represented as plain text less reliably than clearly-formatted content — I'd run a smaller, controlled test giving the model only the confirmed-correct, well-contextualized chunk directly (bypassing the full retrieval pipeline) to isolate whether the generation step itself, given clean input, produces a correct answer, which would pinpoint whether the remaining problem is prompt/generation-level or still something upstream."
+      }
+    ],
+    "synthesis": "This case tests a foundational RAG-system debugging skill: separating a 'wrong answer' symptom into its actual pipeline stage (retrieval vs. generation) through direct inspection rather than guessing, and recognizing naive, structure-unaware chunking as a specific, well-known, and highly diagnosable root cause for exactly the 'right information exists but the system still fails' pattern — the discipline of checking what was actually retrieved before assuming the generation model is at fault is the key analytical move."
+  },
+  {
+    "diff": "med",
+    "industry": "Developer Tools — AI Coding Assistant Autonomy Level",
+    "title": "Should a New AI Coding Assistant Feature Execute Code Changes Fully Autonomously, or Require Human Review Before Each Change Is Applied?",
+    "prompt": "A developer tools company is launching a new AI coding assistant feature that can read a codebase, identify bugs or requested changes, and generate code fixes. The team is debating whether the assistant should be allowed to apply its changes directly to the codebase autonomously, or whether every change should require explicit human review and approval before being applied. How would you decide, and does the answer differ by situation?",
+    "clarify": [
+      {
+        "q": "What range of task types is this assistant meant to handle — simple, mechanical fixes (like formatting or a clearly-specified typo fix) versus more complex, judgment-requiring changes (like refactoring logic or fixing a subtle bug)?",
+        "a": "The intended range is broad — from simple mechanical fixes to more complex bug fixes and even some feature-level changes, though the team hasn't yet segmented these into different autonomy tiers."
+      },
+      {
+        "q": "Is there existing test coverage in target codebases that could serve as an automated correctness check before a change is applied, or would changes typically need to be evaluated by a human regardless?",
+        "a": "Test coverage varies significantly by codebase and even by module within a codebase — some areas are well-tested, others have little to no test coverage."
+      },
+      {
+        "q": "What's the actual risk/cost of a bad autonomous change getting applied — is this assistant working on production codebases directly, or against a staging/branch environment where changes go through normal review before reaching production regardless?",
+        "a": "Good distinction — the current plan has the assistant work against a feature branch, with changes still needing to go through the company's normal PR/code-review process before merging to the main branch, not directly against production."
+      }
+    ],
+    "mece": "I'll frame this as a risk-calibrated autonomy design decision, structured across: (1) task-complexity tiering — since the intended task range spans mechanical fixes to complex feature-level changes, autonomy level should likely vary by task complexity/risk rather than being a single blanket policy, (2) automated-verification availability — since test coverage varies by codebase/module, the presence or absence of a reliable automated correctness check (existing tests) is a key factor in how much autonomy is safe to grant for a given change, (3) existing safety-net context — since changes already flow through a feature-branch-plus-PR-review workflow before reaching production, the actual incremental risk of the AI assistant applying changes 'autonomously' (to a branch, not production) is lower than it would be if the assistant had direct production access, which should inform how conservative the autonomy policy needs to be.\n\nL1 — Task-complexity tiering: mechanical, low-risk changes (formatting, clearly-specified simple fixes) plausibly warrant higher autonomy than complex, judgment-requiring changes (logic refactors, subtle bug fixes, feature-level changes) where an AI's mistake is more likely and more costly — a single blanket autonomy policy across this full range is likely miscalibrated for at least some portion of it.\nL1 — Automated-verification availability: for a codebase/module with strong existing test coverage, a change that passes the full test suite provides a real, automated correctness signal that meaningfully de-risks higher autonomy; for poorly-tested code, there's no reliable automated check, meaning human review is doing much more of the actual risk-mitigation work and shouldn't be skipped.\nL1 — Existing safety net: because changes still flow through a feature-branch-plus-PR-review process before reaching production, 'full autonomy' in this context means the AI can commit to a branch and open a PR, not that it can unilaterally change production code — this existing safety net meaningfully changes the risk calculus compared to a scenario with no human review anywhere in the pipeline.",
+    "hypothesis": "I expect the right answer to be a tiered, risk-calibrated autonomy policy rather than a single blanket choice — allowing higher autonomy (applying changes directly to the feature branch, potentially even auto-opening a PR) for low-complexity, well-tested changes, while requiring explicit human review and approval before applying more complex or judgment-requiring changes, especially in poorly-tested code where there's no automated correctness signal to lean on — and I'd expect the existing feature-branch-plus-PR-review safety net to make even the 'high autonomy' tier meaningfully safer than a scenario with no downstream human checkpoint at all.",
+    "data": "Task range: mechanical/simple fixes through complex feature-level changes, not yet tiered. Test coverage: variable by codebase/module, no uniform baseline. Deployment safety net: feature-branch workflow with mandatory PR review before merge to main/production — an existing human checkpoint downstream of whatever autonomy level the assistant itself operates at.",
+    "calc": "PROPOSED TIERED AUTONOMY FRAMEWORK:\nTier 1 (High autonomy — apply directly to branch, auto-generate PR): changes that are both low-complexity (formatting, clearly-specified mechanical fixes, changes with a narrow, well-defined scope) AND in a well-tested module (full test suite passes post-change as an automated correctness gate) — this tier benefits from both a low inherent risk profile and a real automated verification signal, plus the existing PR-review safety net as a final check.\nTier 2 (Human-review-required before applying): changes that are either higher-complexity (logic refactors, subtle bug fixes, feature-level changes) OR in a poorly-tested module (no reliable automated correctness signal) — even one of these two risk factors present should route the change through explicit human review before it's applied to the branch at all, not just relying on the downstream PR-review process to catch problems after the fact.\nTier 3 (Human-review-required, with elevated scrutiny): changes that are BOTH high-complexity AND in poorly-tested code — the highest-risk combination, where the AI assistant's suggestion should be treated as a draft/starting point for a human developer to actively evaluate and potentially substantially revise, not a change to rubber-stamp-approve.\nThis tiering ensures the level of human oversight scales with actual risk (a function of both change complexity and available automated verification), rather than either universally requiring review (slowing down genuinely low-risk, well-verified changes unnecessarily) or universally allowing autonomy (missing review specifically where it matters most).",
+    "insight": "The right autonomy policy isn't a single yes/no choice — it's a function of two largely independent risk factors (task complexity and automated-verification availability) that should be assessed per-change, and the existing feature-branch-plus-PR-review safety net means even the 'high autonomy' tier isn't truly unsupervised, which allows for a genuinely higher-autonomy fast path for the lowest-risk, best-verified changes without compromising safety on the changes that actually warrant caution.",
+    "recommendation": "Implement the tiered autonomy framework described above, with clear, explicit criteria (not vague judgment calls) for classifying a given change into Tier 1, 2, or 3 — ideally partly automatable (test-suite pass/fail is directly checkable; complexity classification could use heuristics like lines-changed, files-touched, or a preliminary AI self-assessment of its own change's risk level, validated against human judgment during an initial rollout period). Launch with a conservative initial calibration (biasing toward more human review than the framework might strictly require) and use real usage data — tracking how often human reviewers actually catch problems in each tier — to calibrate the tiering thresholds over time, tightening autonomy where the data shows it's consistently safe and keeping or increasing review requirements where problems are found.",
+    "risks": [
+      "A complexity-classification heuristic (whether automated or AI-self-assessed) could itself be wrong — misclassifying a genuinely complex or risky change as 'simple' would route it into the high-autonomy tier inappropriately; the initial conservative calibration and ongoing monitoring of what human reviewers catch in each tier is specifically designed to catch and correct this risk over time, but it's a real, ongoing risk that shouldn't be assumed away.",
+      "Full test-suite passage is a necessary but not sufficient correctness signal — tests can be incomplete or miss important edge cases even in 'well-tested' code, so Tier 1's automated verification, while valuable, shouldn't be treated as a guarantee of correctness, and the downstream PR-review process remains an important final check even for high-autonomy-tier changes.",
+      "This framework assumes the feature-branch-plus-PR-review safety net remains in place for all autonomy tiers — if the company later considers extending higher autonomy to bypass PR review entirely (e.g., for Tier 1 changes, auto-merging without human PR approval), that would be a materially different and riskier decision requiring its own separate analysis, not an automatic extension of this framework's logic."
+    ],
+    "cross": [
+      {
+        "q": "Some engineering leaders might argue that requiring human review for Tier 2 and 3 defeats much of the productivity benefit of an AI coding assistant — how would you respond to that concern?",
+        "a": "I'd point out that even Tier 2/3 changes still save significant developer time even with required review — having the AI generate a well-reasoned draft fix that a human then reviews and refines is typically much faster than a human diagnosing and writing the fix entirely from scratch, so 'requires review' doesn't mean 'no productivity benefit,' it means the review step shifts from 'writing the code' to 'evaluating and refining AI-drafted code,' which is usually a meaningfully faster task; I'd also emphasize that Tier 1's higher autonomy specifically captures the segment of changes (low-complexity, well-tested) where the full productivity benefit of skipping explicit review is both achievable AND safe, so the framework isn't sacrificing autonomy broadly, it's targeting it specifically where the risk profile supports it."
+      },
+      {
+        "q": "How would you handle a situation where the AI assistant's own self-assessment of a change's complexity is used as part of the tiering logic, but the assistant is systematically overconfident about how simple its own changes are?",
+        "a": "I'd treat the AI's self-assessment as one input to be validated against real outcomes, not a trusted, unquestioned classifier from day one — during an initial rollout period, I'd have human reviewers double-check a sample of the AI's Tier 1 (self-assessed-as-simple) classifications specifically to measure the self-assessment's actual accuracy, and if it shows a pattern of overconfidence (classifying genuinely risky changes as simple), I'd either recalibrate the self-assessment prompt/logic, add additional objective heuristics as a check (like lines-changed or files-touched thresholds that can override an overly-confident self-assessment), or in the worst case, deprioritize self-assessment as an input entirely in favor of more objective, verifiable complexity signals until the self-assessment's reliability can be demonstrated with real data."
+      }
+    ],
+    "synthesis": "This case tests whether a candidate can move past a binary 'autonomous or human-reviewed' framing to design a risk-calibrated system that scales oversight to actual risk (a function of both task complexity and available automated verification), while correctly accounting for existing safety nets already in the pipeline (the feature-branch-plus-PR-review process) rather than either ignoring that context or assuming it eliminates the need for any additional safeguards — the ability to decompose 'how much autonomy' into a structured, criteria-based tiering system rather than a single global policy is the core signal being tested."
+  },
+  {
+    "diff": "hard",
+    "industry": "Social Media / Content Platform — AI Content Moderation Bias",
+    "title": "An LLM-Powered Content Moderation System Is Disproportionately Flagging Posts Written in African American Vernacular English (AAVE) as Toxic — Diagnose and Recommend a Fix",
+    "prompt": "A social media platform's LLM-based content moderation system automatically flags posts for review or removal based on a toxicity score. An internal audit has found the system flags posts written in African American Vernacular English (AAVE) at a meaningfully higher rate than posts with similar actual content/sentiment written in more standard English, even when human reviewers judge the AAVE posts to be non-toxic. Diagnose the likely cause and recommend a fix.",
+    "clarify": [
+      {
+        "q": "How was the toxicity-scoring model built — is it a fine-tuned classifier trained on a labeled toxicity dataset, or is it using a general-purpose LLM prompted to judge toxicity?",
+        "a": "It's a fine-tuned classifier, trained on a large, crowd-sourced toxicity-labeling dataset (posts labeled as toxic/non-toxic by human annotators) — a fairly standard approach for this kind of system."
+      },
+      {
+        "q": "Is there any information available about the composition/demographics of the human annotators who created the training labels, or about how the labeling guidelines were written?",
+        "a": "Limited information, but this is a well-documented issue in the toxicity-classification research literature — crowd-sourced toxicity datasets have repeatedly been shown to reflect annotator bias, where dialect features associated with AAVE (certain grammatical patterns, vocabulary, code-switching) get mislabeled as toxic or aggressive by annotators unfamiliar with or biased against the dialect, independent of actual content sentiment."
+      },
+      {
+        "q": "Does the flagging disparity hold up even after controlling for actual post content/sentiment as judged by human review — i.e., is this a real, confirmed bias rather than a confound (like AAVE-associated posts genuinely containing more flagged content for some other real reason)?",
+        "a": "Yes, the audit specifically controlled for this — pairs of posts with equivalent human-judged sentiment/content, one in AAVE and one in standard English, still showed the AAVE version flagged at a meaningfully higher rate, confirming this isn't simply a confound of different actual content."
+      }
+    ],
+    "mece": "Given this is a fine-tuned classifier and the confirmed disparity holds after controlling for actual content, I'll frame this as a training-data bias diagnosis, structured across: (1) root-cause mechanism — training-data annotator bias is a well-documented, specific, and highly plausible mechanism given what's known about crowd-sourced toxicity datasets and AAVE specifically, distinct from other possible causes like a data-representation gap (AAVE simply underrepresented in training data) or a tokenization/preprocessing issue, (2) confirming the specific mechanism — since multiple plausible mechanisms exist (annotator bias vs. underrepresentation vs. tokenization issues), the fix should be informed by which mechanism(s) are actually driving this system's specific behavior, requiring targeted diagnostic work rather than assuming the most commonly-cited mechanism applies here without verification, (3) fix design — given the likely mechanism(s), design both a near-term mitigation (to reduce the current harm quickly) and a more durable, data/model-level fix (addressing the root cause in training data and/or model behavior).\n\nL1 — Root-cause mechanism (annotator bias): well-documented in NLP fairness research — annotators, especially without specific training or diverse representation, have been repeatedly shown to rate AAVE text as more toxic/aggressive than equivalent-sentiment standard-English text, likely reflecting unconscious dialect-based bias or unfamiliarity with AAVE grammatical/lexical patterns being misread as aggression.\nL1 — Alternative/compounding mechanisms: (a) data underrepresentation — if AAVE-written posts were a small share of training data, the model may have learned less reliable patterns for this dialect generally, independent of annotator bias specifically; (b) tokenization/preprocessing issues — if the model's tokenizer or preprocessing pipeline doesn't handle AAVE-specific spelling/grammar patterns well, this could introduce a distinct technical bias; these should be checked in addition to, not instead of, the annotator-bias hypothesis.\nL1 — Fix design: a near-term mitigation (e.g., adjusting the flagging threshold specifically to reduce false-positive harm while a durable fix is built, or adding a human-review step specifically for borderline AAVE-flagged content) versus a durable fix (re-annotating or supplementing training data with better-guided or more diverse annotation specifically addressing dialect bias, and retraining/fine-tuning the classifier on the corrected data) should be sequenced, given the durable fix takes materially longer.",
+    "hypothesis": "Given this is a well-documented pattern in NLP fairness research and the audit specifically confirmed the disparity holds after controlling for actual content, I expect annotator bias in the original crowd-sourced training-label data to be the primary driver — but I'd want to specifically check for compounding factors (data underrepresentation, tokenization issues) before finalizing a fix, since a fix that only addresses annotator bias might leave a secondary, compounding cause unaddressed.",
+    "data": "Confirmed: content-controlled audit shows AAVE posts flagged at a meaningfully higher rate than equivalent-sentiment standard-English posts. Training data: crowd-sourced toxicity-labeling dataset, annotator demographics/guidelines not well-documented internally. This pattern matches well-established findings in published NLP fairness research on toxicity-classification datasets specifically with respect to AAVE.",
+    "calc": "DIAGNOSTIC STEPS TO CONFIRM MECHANISM(S):\n1. Audit a sample of the original training data's toxic-labeled examples specifically for AAVE-dialect features, checking whether human-judged (by dialect-aware reviewers) non-toxic AAVE examples were disproportionately labeled 'toxic' in the original crowd-sourced annotation — direct evidence of annotator bias in the training labels themselves.\n2. Check the proportion of AAVE-written text in the overall training dataset relative to its real-world prevalence on the platform — significant underrepresentation would support the data-underrepresentation hypothesis as a compounding factor.\n3. Run a controlled test feeding the model AAVE text with intentionally varied spelling/tokenization to check whether preprocessing artifacts (not just learned semantic bias) contribute to the disparity.\n\nThese three checks would clarify whether the fix needs to address (1) label quality/bias specifically, (2) data volume/representation, (3) technical preprocessing, or some combination — each has a different, specific remediation, and treating this as a single undifferentiated 'bias problem' risks an incomplete fix.",
+    "insight": "This is very likely NOT primarily a problem with the model's core architecture or capability — it's a training-DATA problem, most likely rooted in biased human annotation labels (a well-documented pattern for exactly this kind of dialect-sentiment confound in toxicity datasets), meaning the fix needs to focus on data quality and re-annotation rather than assuming a purely model/algorithm-level fix (like adjusting a threshold) would meaningfully resolve the underlying issue, though a threshold adjustment can serve as a useful, fast, partial mitigation while the more durable data-level fix is built.",
+    "recommendation": "Immediately implement a near-term mitigation: for content flagged by the classifier that also matches known AAVE-dialect linguistic patterns, route it to human review rather than auto-removing/auto-flagging without review, reducing the immediate harm of false-positive removals while the durable fix is built. In parallel, commission a re-annotation effort using either dialect-aware annotators (with relevant lived experience and/or specific training on AAVE linguistic patterns) or clearer, bias-aware labeling guidelines explicitly addressing this known confound, and use the re-annotated/supplemented data to retrain the classifier. Validate the retrained model specifically against the same content-controlled audit methodology used to identify the original problem, confirming the disparity is meaningfully reduced before removing the near-term human-review mitigation.",
+    "risks": [
+      "The near-term human-review mitigation requires a reliable way to detect AAVE-dialect linguistic patterns in flagged content in the first place — building or sourcing this detection capability is itself a real task, and a crude or biased detection mechanism at this stage could introduce its own problems (e.g., inconsistently applying the extra review step) that need careful design.",
+      "Re-annotation with dialect-aware annotators or revised guidelines is a significant undertaking (time, cost, and the challenge of writing genuinely bias-aware labeling instructions) — this should be scoped and resourced as a real project, not treated as a quick fix, and the team should set realistic expectations for how long the durable fix will take to design, execute, and validate.",
+      "Even after retraining on improved data, some residual disparity may remain, and other, less-examined dialects or language varieties on the platform could have similar undiagnosed bias issues — this specific fix addresses the confirmed AAVE disparity, but the underlying finding (crowd-sourced toxicity labels can encode dialect bias) should prompt a broader audit across other language varieties represented on the platform, not just a one-off fix for this single identified case."
+    ],
+    "cross": [
+      {
+        "q": "Building a reliable AAVE-detection capability for the near-term mitigation sounds like it requires exactly the kind of dialect-aware linguistic understanding that seems to be the source of the original bias problem — isn't there a risk of building a flawed detector that itself has bias or accuracy problems?",
+        "a": "That's a legitimate concern, and I'd address it by keeping the near-term mitigation deliberately conservative and low-precision-tolerant: rather than trying to build a highly accurate AAVE classifier (a hard problem in its own right, and one where getting it wrong has its own risks), I'd bias the detection toward over-inclusion — routing MORE borderline content to human review rather than less, since the cost of an unnecessary human review is far lower than the cost of a wrongly auto-removed non-toxic post; I'd also have this detection mechanism itself reviewed by linguists or dialect experts, and treat it explicitly as a temporary, imperfect stopgap whose main job is reducing harm during the retraining period, not as a permanent or highly precise system in its own right — the real fix is the retrained classifier, and I'd set a clear timeline to retire the interim detector once that's validated."
+      },
+      {
+        "q": "How would you communicate this finding and fix plan to the platform's users and to the public, given that AI bias issues like this can generate significant reputational and trust concerns if handled poorly?",
+        "a": "I'd recommend transparency about both the finding and the remediation plan rather than a quiet, unannounced fix — publishing a clear explanation of what was found (using the content-controlled audit methodology as credible evidence, not just an assertion), what's being done about it (the near-term mitigation and the longer-term retraining plan with a realistic timeline), and ideally involving external experts or affected community representatives in reviewing the re-annotation guidelines, since an internally-designed 'fix' without external validation risks not fully addressing the community's legitimate concerns or missing blind spots that outside perspective would catch; being proactive and transparent about a fairness issue found through the company's own auditing process is generally viewed far more favorably than being seen to have covered up or slow-walked a known bias problem, especially in a domain (content moderation) where trust is central to the product."
+      }
+    ],
+    "synthesis": "This expert-adjacent case tests whether a candidate recognizes AI fairness/bias issues as diagnosable, data-rooted problems with specific, well-documented mechanisms (rather than vague, unfixable 'AI bias') and can design both a fast, harm-reducing mitigation and a durable, root-cause fix — while also recognizing that responsible AI issues carry real communication and trust stakes beyond just the technical fix itself, requiring transparency and external validation, not just a quiet internal patch."
+  },
+  {
+    "diff": "hard",
+    "industry": "Enterprise SaaS — GenAI Feature Cost Optimization",
+    "title": "A Company's GenAI-Powered Document Summarization Feature Has Seen LLM API Costs Grow 8x in Two Quarters — Diagnose the Drivers and Recommend a Cost-Optimization Plan",
+    "prompt": "A SaaS company launched a GenAI-powered document summarization feature 6 months ago. Usage has grown, but LLM API costs have grown 8x over the same period — much faster than user growth alone would suggest — and the CFO wants a diagnosis and a cost-optimization plan before the feature's unit economics get further out of line. What would you investigate, and what would you recommend?",
+    "clarify": [
+      {
+        "q": "How much has actual usage (number of documents summarized, or number of active users of this feature) grown over the same period, for comparison against the 8x cost growth?",
+        "a": "Usage (documents summarized) has grown approximately 3x over the same period — real growth, but nowhere near the 8x cost increase, meaning cost-per-document has itself increased meaningfully, not just total cost tracking total usage."
+      },
+      {
+        "q": "Has the underlying LLM model or API pricing changed during this period — a model upgrade, a provider price change, or a switch to a different (possibly more expensive) model?",
+        "a": "Yes — partway through this period, the team upgraded from a smaller, cheaper model to a larger, more capable model, motivated by user feedback that summary quality needed improvement."
+      },
+      {
+        "q": "Has anything changed about how documents are processed before being sent to the LLM — e.g., are longer documents now being sent in full rather than being pre-processed or chunked, or has any caching/deduplication logic changed?",
+        "a": "Also worth checking — this hasn't been specifically investigated yet, but there's no known caching or deduplication layer currently in place; every summarization request results in a fresh LLM API call regardless of whether the same or a very similar document was processed before."
+      }
+    ],
+    "mece": "Given cost has grown roughly 2.7x faster than usage (8x cost vs. 3x usage), I'll decompose the cost growth into its component drivers: (1) the model upgrade's direct per-call cost impact — since larger/more capable models typically cost meaningfully more per token, this is a strong candidate for explaining a large share of the disproportionate cost growth, (2) input-size/token-volume growth — if documents being processed have gotten longer on average, or if less efficient document pre-processing means more tokens are being sent per request than necessary, this compounds cost independent of the per-call pricing change, (3) lack of caching/deduplication — repeated or near-duplicate summarization requests (e.g., a user re-summarizing the same document, or very similar documents across a team) each triggering a fresh, full-cost API call is a common, often-overlooked source of unnecessary spend that a caching layer would eliminate.\n\nL1 — Model-upgrade cost impact: quantify the per-token or per-call price difference between the old and new model, and calculate how much of the total cost growth is explained purely by this pricing change applied to the same usage volume, isolating this from usage-driven or efficiency-driven cost growth.\nL1 — Token-volume/input-size growth: check whether average document length or token count per summarization request has grown over the period (e.g., users increasingly using the feature on longer documents), and whether the current document pre-processing pipeline is sending more tokens than strictly necessary (e.g., no truncation/chunking strategy for very long documents, sending redundant metadata).\nL1 — Caching/deduplication gap: without any caching layer, identical or near-identical repeat requests (a known pattern in enterprise SaaS usage, where the same document might be summarized multiple times by different users or the same user re-triggering the action) represent pure, avoidable waste — quantify what share of requests are exact or near-duplicates of previous requests within a reasonable time window.",
+    "hypothesis": "I expect the model upgrade to explain a substantial share of the disproportionate cost growth (since larger-model per-token pricing is often several multiples higher than smaller-model pricing), but I don't expect it to fully explain an 8x-cost-vs-3x-usage gap on its own — I'd expect input-size growth and/or a lack of caching/deduplication to be meaningful compounding factors worth quantifying and addressing as part of a comprehensive cost-optimization plan, rather than assuming the model upgrade alone explains everything.",
+    "data": "Usage growth: ~3x (documents summarized) over 6 months. Cost growth: ~8x over the same period. Model change: upgraded from a smaller/cheaper model to a larger/more capable model partway through the period, driven by quality feedback. Caching/deduplication: none currently implemented — every request results in a fresh API call regardless of repeat/near-duplicate content. Illustrative model pricing ratio (to be confirmed with actual provider pricing): assume the larger model costs roughly 3x more per token than the smaller model previously used — a plausible, commonly-seen ratio between a mid-tier and a top-tier model from the same provider family.",
+    "calc": "DECOMPOSING THE 8x COST GROWTH (illustrative, using assumed 3x usage growth and 3x per-token price increase from the model upgrade):\nIf usage grew 3x AND the model upgrade alone tripled per-token cost, a naive combination would predict cost growth of roughly 3 × 3 = 9x — actually very close to (and even slightly above) the observed 8x, suggesting these two factors alone could plausibly explain nearly all of the observed cost growth, with token-volume growth and lack of caching potentially explaining a smaller residual or even being already partially reflected in the usage-growth figure (if 'usage' is measured in documents, growth in AVERAGE document length/token count per document would be a separate, additional driver not yet captured in this 3x-usage-growth figure).\n\nThis means the investigation's most valuable next step is confirming the REAL per-token price ratio between old and new models (not the illustrative 3x assumed here) and REAL average-token-count-per-request trend over the period (separate from raw document-count growth), since these two factors, precisely quantified, likely explain the large majority of the disproportionate cost growth — with caching/deduplication opportunity as an additional, separate lever worth quantifying regardless of how much it explains the PAST cost growth, since it represents pure future savings potential either way.",
+    "insight": "The 8x cost growth against 3x usage growth isn't necessarily evidence of runaway inefficiency or waste — it's very plausibly substantially explained by a deliberate, quality-motivated model upgrade (a real trade-off the team knowingly made) combined with organic usage growth, meaning the 'fix' isn't necessarily 'something is broken,' it could be 'the team made a cost-quality trade-off that needs to be revisited and optimized, not reversed outright' — while the caching/deduplication gap represents a separate, likely-significant opportunity for pure savings with no quality trade-off at all, since it eliminates genuinely wasteful redundant API calls rather than trading off against the quality improvement the model upgrade delivered.",
+    "recommendation": "First, precisely quantify the two largest likely drivers with real data: (a) the actual per-token cost difference between the old and new model applied to actual usage volume, and (b) the actual growth in average document length/token-count per request (separate from raw document-count growth) — this decomposition will show how much of the 8x is essentially the 'cost of the deliberate quality upgrade' versus other factors. Second, and regardless of that decomposition's outcome, implement a caching/deduplication layer to eliminate wasted spend on exact or near-duplicate repeat requests — this is close to a pure win with minimal quality trade-off. Third, evaluate whether a hybrid model-routing strategy (using the smaller, cheaper model for straightforward/shorter documents where quality differences are less noticeable, reserving the larger model for longer or more complex documents where the quality upgrade genuinely matters) could recover much of the model upgrade's cost increase while preserving most of its quality benefit for the use cases where it matters most.",
+    "risks": [
+      "The illustrative 3x model-price-ratio and its resulting near-complete explanation of the 8x cost growth is for demonstrating the analytical approach — the real investigation must use actual provider pricing and actual token-volume trend data before concluding how much of the cost growth is 'expected' versus genuinely optimizable, since getting this wrong in either direction (assuming it's all explained when it isn't, or assuming there's a large optimization opportunity when there isn't) would lead to a poorly-targeted response.",
+      "A hybrid model-routing strategy (cheaper model for simpler documents, pricier model for complex ones) requires a reliable way to classify document complexity/length upfront, which adds engineering complexity and its own potential for misclassification — this should be tested carefully to confirm it doesn't meaningfully degrade the quality improvements users specifically asked for that motivated the original model upgrade.",
+      "A caching/deduplication layer needs careful design around what counts as a 'duplicate' or 'near-duplicate' document for summarization purposes (exact text match is straightforward, but near-duplicate detection for slightly-edited documents is more complex) — an overly aggressive deduplication approach risks serving a stale or slightly-mismatched cached summary for a document that has meaningfully changed, which would itself be a quality/trust problem worth avoiding."
+    ],
+    "cross": [
+      {
+        "q": "The CFO is going to want a clear, defensible number for how much of the 8x cost increase was a 'good, deliberate trade-off' versus 'avoidable waste' — how would you present that distinction credibly?",
+        "a": "I'd present the decomposition with explicit, labeled categories backed by real data rather than a vague qualitative narrative: 'X% of the cost growth is directly attributable to the model upgrade's per-token price increase applied to the pre-upgrade usage baseline — a deliberate, quality-motivated decision with a specific, named benefit (the user-feedback-driven quality improvement)'; 'Y% is attributable to genuine usage growth (more documents processed) — expected, healthy cost growth tracking feature adoption'; 'Z% is attributable to growth in average document length/token-count per request — worth a separate conversation about whether the pricing or plan structure for this feature should account for this'; and 'W% (however small or large it turns out to be) is attributable to the absence of caching/deduplication — pure avoidable waste with a clear, quantified fix in progress.' Presenting it this way gives the CFO a clear, credible, and actionable breakdown rather than a single opaque '8x' number to react to."
+      },
+      {
+        "q": "If the hybrid model-routing strategy is implemented and later analysis shows it did NOT meaningfully preserve the quality improvement for the documents that still get routed to the cheaper model, what would you recommend?",
+        "a": "I'd treat that as evidence the complexity-classification logic used for routing needs refinement rather than abandoning the hybrid approach outright — the core idea (matching model capability to document complexity) is sound in principle, so I'd first investigate whether the classification threshold or criteria are miscalibrated (e.g., routing some documents to the cheaper model that actually needed the larger model's capability) before concluding the strategy itself doesn't work; if after genuine recalibration attempts the quality trade-off still proves unacceptable for a meaningful share of routed documents, I'd recommend narrowing the hybrid approach's scope (using it only for a more conservatively-defined 'clearly simple' document category where the quality gap is demonstrated to be negligible) rather than either fully reverting to the expensive model for everything or accepting a real quality regression users would notice."
+      }
+    ],
+    "synthesis": "This case tests whether a candidate can resist treating a scary-looking cost metric (8x growth) as inherently a sign of waste or mismanagement, and instead rigorously decompose it into its actual component drivers — some of which may represent legitimate, deliberate trade-offs (a quality-motivated model upgrade) rather than problems to be reversed — while still identifying and separately quantifying genuine optimization opportunities (caching, hybrid model routing) that don't require sacrificing the value the team was trying to create; the discipline of decomposition before judgment is the core skill being tested."
+  },
+  {
+    "diff": "hard",
+    "industry": "Healthcare Technology — LLM-Based Diagnosis-Support Tool Governance",
+    "title": "Should a Healthcare Company Deploy an LLM-Based Clinical Diagnosis-Support Tool With Full Automation or Strict Mandatory Human Physician Oversight?",
+    "prompt": "A healthcare technology company has built an LLM-based tool that analyzes patient symptoms, history, and test results to suggest possible diagnoses and recommended next steps for physicians. Early testing shows the tool's suggestions match expert physician judgment in the large majority of test cases. Leadership is deciding on the deployment model: should the tool's suggestions be automatically incorporated into the patient record and workflow, or should every suggestion require explicit physician review and sign-off before being acted upon? How would you approach this decision?",
+    "clarify": [
+      {
+        "q": "What does 'matches expert physician judgment in the large majority of test cases' mean specifically — what's the actual accuracy rate, and critically, what does the error pattern look like on the cases where it doesn't match?",
+        "a": "Overall match rate is around 91% against a panel of expert physicians on a curated test set. On the ~9% mismatch cases, most are relatively minor (a reasonable alternative diagnosis suggested alongside or instead of the panel's top choice), but a small subset — roughly 1% of all cases — involved the tool missing or underweighting a rare but serious condition that the physician panel correctly flagged."
+      },
+      {
+        "q": "Is this tool intended to operate across all clinical contexts uniformly, or are there specific use cases/settings under consideration — e.g., a specialist consultation setting versus a high-volume urgent-care triage setting?",
+        "a": "The current plan is fairly broad — deployment across multiple settings including primary care, urgent care, and specialist consultations, without yet having settled on setting-specific deployment rules."
+      },
+      {
+        "q": "What are the regulatory requirements in this jurisdiction for AI-based clinical decision-support tools — is there an existing regulatory framework (like FDA clearance categories) that constrains the autonomy-level decision regardless of the internal risk analysis?",
+        "a": "Yes — this is a real, binding constraint: clinical decision-support software of this kind is subject to regulatory oversight (in the US, FDA guidance distinguishes between tools that merely provide informational support for licensed clinicians who retain full independent judgment, versus tools that could be classified as autonomous medical devices requiring a much more stringent clearance pathway) — the specific regulatory classification depends significantly on how much autonomy the deployment model grants the tool."
+      }
+    ],
+    "mece": "Given the confirmed 1% rare-but-serious-condition miss rate and the binding regulatory constraint, I'll frame this as a risk-stratified governance decision under real regulatory constraint, structured across: (1) the asymmetry of error costs — a missed rare-but-serious diagnosis (a false negative on something dangerous) is a categorically more costly error than a minor alternative-diagnosis disagreement, meaning the 91% aggregate accuracy figure obscures the more decision-relevant question of how the tool performs specifically on high-stakes error types, (2) regulatory constraint — the deployment-model decision isn't purely an internal risk-optimization exercise, since the regulatory classification and required clearance pathway are directly determined by how much autonomy the tool is granted, making full automation potentially legally infeasible regardless of the internal risk analysis's conclusion, (3) setting-specific risk profile — a uniform deployment policy across primary care, urgent care, and specialist consultation may not be appropriate given these settings likely have different baseline risk tolerances, time pressures, and patient-acuity profiles.\n\nL1 — Error-cost asymmetry: the 1% rare-but-serious-miss rate is the most decision-relevant number in this case, since a false negative on a serious condition can have severe, irreversible consequences for a patient, while most of the other 8% of 'mismatches' (reasonable alternative diagnoses) carry much lower stakes — full automation would mean these serious misses occur with zero human check specifically positioned to catch them, an asymmetric risk that the aggregate 91% figure alone doesn't communicate.\nL1 — Regulatory constraint: verify specifically which FDA (or relevant jurisdiction's) clinical decision-support classification pathway applies to each candidate deployment model — informational/human-in-the-loop tools generally face a lighter regulatory pathway than tools that function more autonomously, meaning full automation likely requires a substantially more rigorous (and slower, more expensive) regulatory clearance process, independent of what the internal risk analysis alone would conclude.\nL1 — Setting-specific risk: primary care (often more time available per case, ongoing relationship with patient, ability to schedule follow-up), urgent care (higher time pressure, less patient history context, potentially higher-acuity presentations), and specialist consultation (deep domain expertise already present, tool serving a more supportive/confirmatory role) plausibly warrant different oversight requirements rather than one uniform policy.",
+    "hypothesis": "Given the confirmed rare-but-serious 1% miss rate and the binding regulatory reality that full automation likely triggers a substantially more stringent clearance pathway, I expect mandatory human physician review and sign-off (not full automation) to be both the safer and the more regulatorily feasible near-term deployment model — but I'd expect the RIGHT framing isn't 'human review slows things down and reduces the tool's value,' but rather that human-in-the-loop is what allows the tool's genuine 91% accuracy benefit to be captured safely, with the physician specifically positioned to catch the serious-but-rare miss category that full automation would let through undetected.",
+    "data": "Overall diagnostic match rate: ~91% against expert physician panel. Serious-condition miss rate: ~1% of all cases (a small absolute percentage, but representing missed high-stakes diagnoses specifically). Regulatory context: informational/human-in-the-loop clinical decision-support tools generally face a lighter regulatory pathway; more autonomous tools face substantially more stringent requirements. Deployment settings under consideration: primary care, urgent care, specialist consultation — not yet differentiated by policy.",
+    "calc": "FRAMING THE 1% MISS RATE IN ABSOLUTE PATIENT-IMPACT TERMS:\nIf this tool is deployed at meaningful scale — illustratively, processing 500,000 patient encounters per year across a healthcare system — a 1% rare-but-serious miss rate under FULL AUTOMATION (no human check specifically positioned to catch it) would correspond to approximately 5,000 patient encounters per year where a serious condition is missed or underweighted with no safety net, a substantial and serious absolute number even though it's a small percentage.\nUnder a MANDATORY HUMAN REVIEW model, that same 1% of cases still occur (the tool still generates the same underlying suggestion), but a physician reviewing every case has the opportunity to catch cases where the tool's suggestion doesn't match their own clinical judgment or where something about the case doesn't sit right — while human review isn't a perfect catch-all either (physicians can also miss things, especially if they become over-reliant on or anchored by the tool's suggestion, a well-documented risk called automation bias), it provides a meaningfully positioned additional check specifically at the point where the tool's own error rate is concentrated on the highest-stakes cases.\nThis reframes the decision from 'does human review meaningfully reduce risk relative to full automation' (clearly yes, in absolute patient-impact terms) to 'how do we design human review to actually be effective, given the real risk of automation bias undermining its protective value if physicians simply rubber-stamp the tool's suggestions.'",
+    "insight": "The 91% aggregate accuracy figure, if used alone to justify full automation, would badly obscure the far more decision-relevant 1% rare-but-serious miss rate — which, at any meaningful deployment scale, represents a real and substantial number of missed serious diagnoses with no safety net under full automation; combined with the binding regulatory reality favoring human-in-the-loop deployment models, mandatory physician review isn't just the more cautious choice, it's very likely the only currently regulatorily and ethically viable path for this specific tool's demonstrated risk profile, regardless of how the internal risk-benefit analysis alone might have been argued.",
+    "recommendation": "Deploy the tool as a mandatory human-in-the-loop decision-support system, requiring explicit physician review and sign-off before any diagnostic suggestion is incorporated into the patient record or acted upon — for all deployment settings initially, given the confirmed serious-miss-rate risk applies broadly and setting-specific risk differentiation hasn't yet been rigorously studied. In parallel, specifically design the review workflow to actively counter automation bias (e.g., requiring the physician to document their own independent assessment before viewing the tool's suggestion, rather than simply presenting the tool's suggestion for a rubber-stamp approval), since a human-review requirement that decays into passive rubber-stamping would undermine much of its intended safety benefit. Pursue regulatory clearance specifically for this human-in-the-loop deployment model as the near-term path, and treat any future move toward greater autonomy in any specific, lower-risk setting (e.g., a narrowly-scoped use case with demonstrated near-zero serious-miss rate) as a separate, much more rigorously evidenced future decision requiring its own dedicated clinical validation and regulatory pathway.",
+    "risks": [
+      "Automation bias — physicians becoming over-reliant on or anchored by the tool's suggestions even when nominally required to provide independent review — is a well-documented risk that could undermine much of the safety benefit human-in-the-loop is meant to provide if the review workflow isn't specifically designed to counter it; this should be actively monitored (e.g., periodically auditing whether physician sign-offs ever diverge from the tool's suggestion, and investigating if divergence rates seem implausibly low, which would suggest rubber-stamping rather than genuine independent review).",
+      "Requiring mandatory human review for every case adds real time/workflow burden on physicians, particularly in time-pressured settings like urgent care — this is a genuine trade-off against efficiency/throughput benefits the tool could otherwise provide, and the company should be honest with stakeholders that this recommendation prioritizes patient safety over maximizing the tool's throughput benefit, at least in this initial deployment phase.",
+      "This recommendation treats all three deployment settings (primary care, urgent care, specialist) uniformly due to lack of setting-specific risk data — this is a deliberately conservative default given the current evidence gap, not a permanent judgment that setting-specific differentiation could never be justified; a dedicated, rigorous study of whether the serious-miss-rate risk profile genuinely differs by setting could support a more nuanced, setting-specific policy in the future, but shouldn't be assumed without that dedicated evidence."
+    ],
+    "cross": [
+      {
+        "q": "Leadership might argue that requiring universal human review essentially caps the tool's value at 'a slightly faster way for physicians to think through a case' rather than delivering the bigger efficiency and consistency benefits full automation could provide — how would you respond to that concern given the business case for the tool?",
+        "a": "I'd acknowledge that trade-off honestly rather than minimizing it — but I'd reframe the tool's value proposition around what human-in-the-loop deployment genuinely CAN deliver: faster, more consistent, more comprehensive differential-diagnosis generation than an unaided physician working alone under time pressure, PLUS a specific, positioned safety net for the physician's own potential blind spots (a two-way check, not just the tool being checked by the human) — this is a real and substantial value proposition even without full automation, and importantly, it's the value proposition that's both patient-safe and regulatorily achievable in the near term; I'd also note that a serious adverse patient-safety event traced back to an autonomously-deployed tool would likely cause far more business damage (regulatory action, legal liability, reputational harm, potential total loss of the ability to deploy the tool anywhere) than the more modest, safer efficiency gains foregone by choosing human-in-the-loop now — the conservative choice here is also very plausibly the better business decision when the full downside risk is properly weighted."
+      },
+      {
+        "q": "How would you eventually build the evidence base needed to responsibly consider extending greater autonomy to some narrower, lower-risk use case in the future, without repeating the mistake of relying on an aggregate accuracy number that obscures a critical rare-but-serious error pattern?",
+        "a": "I'd design any future autonomy-expansion evaluation specifically around the error-type breakdown, not just an aggregate accuracy figure — requiring a large enough validation sample size to reliably estimate the RARE, serious-error rate specifically (which by definition requires far more test cases to measure precisely than a general accuracy rate does, given how infrequently these cases occur), and requiring that rate to be demonstrated as very close to zero, with strong confidence intervals given the sample size, specifically for whatever narrower use case is being considered for expanded autonomy — a use case with a demonstrated, statistically well-supported near-zero serious-miss rate in a lower-acuity, well-defined clinical context (rather than the current broad, undifferentiated deployment scope) would be a far more defensible basis for a future autonomy discussion than extrapolating from the current tool's aggregate 91% figure."
+      }
+    ],
+    "synthesis": "This case tests whether a candidate can look past an impressive-sounding aggregate accuracy number to find the specific, asymmetric, high-stakes error pattern that should actually drive a high-consequence governance decision, while properly weighting a binding external regulatory constraint alongside the internal risk analysis — and recognizing that a human-in-the-loop requirement is only genuinely protective if the review workflow is specifically designed to counter automation bias, not just nominally present as a rubber-stamp step."
+  },
+  {
+    "diff": "expert",
+    "industry": "Fintech — Autonomous AI Agent Incident Response and Guardrail Architecture",
+    "title": "An Autonomous AI Agent That Processes Customer Refunds Made a Costly Error, Approving $340K in Refunds It Shouldn't Have — Design the Post-Incident Fix and Guardrail Architecture",
+    "prompt": "A fintech company deployed an AI agent with autonomous authority to review and approve customer refund requests up to a certain value threshold, without human review, to speed up customer service. Over a 3-day period, the agent approved a cluster of fraudulent refund requests totaling $340K, exploiting a pattern the agent hadn't been designed to detect — a coordinated group of accounts submitting refund requests with fabricated but plausible-looking supporting documentation. Leadership wants both an immediate incident response and a redesigned guardrail architecture to prevent this class of failure going forward. How would you approach both?",
+    "clarify": [
+      {
+        "q": "What was the agent's actual decision-making process — was it evaluating each refund request purely in isolation, or did it have any visibility into patterns across multiple requests (e.g., timing clusters, similar account characteristics, similar documentation patterns)?",
+        "a": "Purely in isolation — the agent was designed to evaluate each refund request independently against its own merits (documentation provided, purchase history for that specific account, refund policy rules), with no cross-request pattern analysis or awareness of other concurrent requests."
+      },
+      {
+        "q": "What was the per-request approval threshold, and roughly how many individual requests made up the $340K total — was this a small number of large requests, or many smaller requests that added up?",
+        "a": "The per-request autonomous-approval threshold was $2,000. The $340K total came from approximately 210 individual requests, averaging around $1,600 each — so many small-to-moderate requests, each individually within the autonomous-approval threshold and not obviously alarming on its own."
+      },
+      {
+        "q": "Since the incident, has any analysis been done on what made this specific fraud pattern successful — what specifically about the fabricated documentation or account behavior made it convincing enough to pass the agent's per-request review?",
+        "a": "Preliminary analysis suggests the fabricated documentation was well-crafted to closely mimic legitimate documentation formats, and the accounts involved had been established with some genuine purchase history over several months before the fraudulent refund requests began — suggesting a deliberate, patient setup rather than a spontaneous or crude attempt."
+      }
+    ],
+    "mece": "I'll structure this as two related but distinct work streams — immediate incident response and durable guardrail redesign — since conflating them risks either delaying urgent containment or rushing a redesign without proper analysis: (1) IMMEDIATE INCIDENT RESPONSE — containment (has the exploited pattern stopped, is there ongoing exposure right now), financial/legal response (fraud recovery efforts, any regulatory/reporting obligations for fintech fraud incidents of this scale), and root-cause confirmation (verifying the specific mechanism before designing a fix, not just accepting an assumed explanation), (2) GUARDRAIL REDESIGN — addressing the SPECIFIC failure mode demonstrated (isolated per-request evaluation missing cross-request coordinated-pattern fraud) with both detection-layer additions (cross-request pattern analysis) and authority-architecture changes (rethinking what 'autonomous approval up to a threshold' should actually mean, given this incident shows per-request thresholds alone don't cap aggregate risk from coordinated attacks), (3) BROADER SYSTEMIC REVIEW — since this specific fraud pattern was found via exploitation (not proactive discovery), a broader adversarial red-teaming exercise is warranted to proactively search for other exploitable gaps in the agent's design before they're similarly discovered via a real incident.\n\nL1 — Immediate containment: confirm whether the specific exploited pattern (this account cluster, this documentation-fabrication technique) is still active or has been stopped, and whether there's reason to believe OTHER currently-undetected instances of the same or a similar pattern might be ongoing — requiring an immediate retrospective scan of recent approved refunds for similar characteristics, not just addressing the specifically identified 210 cases.\nL1 — Financial/legal response: pursue fraud recovery (chargebacks, working with payment processors/law enforcement as appropriate for fintech fraud of this scale) and determine any regulatory reporting obligations, which are a real, binding, and time-sensitive requirement in financial services distinct from the technical fix.\nL1 — Guardrail redesign — detection layer: add cross-request pattern analysis (timing clusters, similarity in account setup patterns, similarity in documentation characteristics across multiple requests) as a NEW capability the agent (or a separate monitoring layer) didn't previously have, directly addressing the demonstrated gap (isolated per-request evaluation blind to coordinated patterns).\nL1 — Guardrail redesign — authority architecture: reconsider what 'autonomous up to $2,000 per request' actually caps — since 210 individually-small requests aggregated to $340K, a pure per-request threshold doesn't bound aggregate risk from a coordinated, patient attack; consider adding aggregate/velocity-based limits (e.g., total autonomous-approval volume per time window triggering human review or a pause) as an additional, complementary guardrail dimension.\nL1 — Broader systemic review: commission an adversarial red-teaming exercise (having a dedicated team or external experts actively try to find other ways to exploit the agent's decision logic) rather than only fixing the specific pattern that was already exploited, since a sophisticated, patient attacker (as this incident's setup pattern suggests) is likely to probe for other gaps if this one is closed without a broader review.",
+    "hypothesis": "I expect the core root cause to be an architectural blind spot rather than a simple bug — the agent was designed and evaluated for correctness on a per-request basis, which is a reasonable and common design pattern, but this incident demonstrates that per-request correctness doesn't guarantee protection against coordinated, patient, multi-account attacks that stay within per-request limits while aggregating to significant scale; I'd expect the durable fix to require both a genuinely new detection capability (cross-request pattern analysis) and a rethinking of the authority/threshold architecture itself (adding aggregate and velocity-based limits, not just per-request limits), plus a broader red-teaming effort given the demonstrated sophistication and patience of this specific attack.",
+    "data": "Incident scale: $340K across ~210 requests, average $1,600/request, all individually under the $2,000 autonomous-approval threshold. Attack pattern: accounts established with genuine purchase history over several months before fraudulent activity began (patient, deliberate setup), fabricated documentation closely mimicking legitimate formats. Agent design: purely isolated per-request evaluation, no cross-request pattern awareness, no aggregate or velocity-based limits beyond the per-request threshold.",
+    "calc": "QUANTIFYING THE ARCHITECTURAL GAP:\nUnder the current design, the theoretical maximum autonomous-approval exposure per unit time is effectively UNBOUNDED in aggregate — since the only control is a per-request cap ($2,000), an attacker willing to submit enough individually-small requests faces no systemic ceiling on total aggregate exposure, only a ceiling on how large any single request can be. This is the core quantifiable architectural gap: a per-request-only control structure caps single-transaction risk but does nothing to cap aggregate/coordinated risk, which is exactly the vector this incident exploited.\n\nDESIGNING A COMPLEMENTARY AGGREGATE GUARDRAIL:\nA velocity/aggregate limit (e.g., 'no more than $X in total autonomous approvals within a rolling Y-hour window without triggering human review or a temporary pause') directly bounds the maximum possible exposure from this attack vector, converting an unbounded aggregate risk into a bounded, known maximum — the specific threshold values ($X, Y) should be calibrated against normal legitimate refund volume patterns (set high enough to not meaningfully disrupt normal operations, but low enough to cap worst-case exposure to an acceptable level) using historical legitimate-refund-volume data as the calibration baseline.",
+    "insight": "The fundamental lesson from this incident is that per-request correctness and aggregate/systemic safety are DIFFERENT properties that require different, complementary guardrails — an agent can be behaving exactly as designed and evaluated (correctly assessing each individual request against its own merits) while still being systemically exploitable through a pattern (coordinated, multi-request, patient attacks) that per-request evaluation is structurally blind to; the fix isn't 'the agent made mistakes on individual requests' (it may not have, if each request's documentation was genuinely convincing in isolation), it's 'the authority architecture needs an aggregate dimension, and the detection layer needs cross-request pattern awareness, neither of which existed before.'",
+    "recommendation": "IMMEDIATE: pause or significantly tighten the autonomous-approval threshold while conducting a retrospective scan of recent approved refunds for similar coordinated-pattern characteristics (not just the already-identified 210 cases), pursue fraud recovery and confirm/complete any regulatory reporting obligations, and confirm the specific exploited pattern is fully contained. NEAR-TERM REDESIGN: implement a cross-request pattern-analysis detection layer (flagging clusters of requests with correlated timing, account-setup characteristics, or documentation similarity for human review, even if each request individually looks legitimate) and implement an aggregate/velocity-based limit on total autonomous-approval volume within defined time windows, calibrated against historical legitimate-volume patterns, as a complementary guardrail dimension alongside the existing per-request threshold. BROADER: commission an adversarial red-teaming exercise specifically designed to probe for other exploitable gaps in the agent's decision logic and authority architecture, given the demonstrated sophistication of this attack, rather than considering the incident closed once this specific pattern is addressed.",
+    "risks": [
+      "A cross-request pattern-analysis detection layer, if poorly calibrated, could generate significant false positives — flagging genuine, unrelated customers whose requests happen to share superficial timing or characteristic similarities — which would undermine the autonomous system's speed benefit for legitimate customers; this needs careful calibration and testing against historical legitimate-request data before full deployment, not just a rushed post-incident implementation.",
+      "An aggregate/velocity-based limit could itself be gamed by a sufficiently patient attacker who spreads requests out even further in time specifically to stay under the aggregate threshold within any given window — this guardrail raises the bar and bounds worst-case exposure, but doesn't make coordinated fraud impossible, and should be understood as risk-reduction, not risk-elimination, paired with the pattern-detection layer as a complementary (not redundant) defense.",
+      "The recommended immediate tightening of the autonomous-approval threshold has a real customer-experience and operational cost (slower refund processing for legitimate customers, more requests routed to human review) — this is an appropriate, deliberate trade-off immediately following a confirmed $340K fraud incident, but leadership should have a clear plan and criteria for when and how the threshold gets calibrated back toward its original speed-oriented design once the new guardrails are validated, rather than leaving the tightened state as an indefinite, undiscussed default."
+    ],
+    "cross": [
+      {
+        "q": "Given that this attacker demonstrated real sophistication (patient account setup over months, well-crafted fabricated documentation), how confident can you be that the specific fixes you're proposing (cross-request pattern detection, aggregate limits) would actually have caught or prevented THIS particular incident, rather than just addressing it in hindsight?",
+        "a": "I'd be honest that hindsight-informed fixes always carry some risk of being narrowly tailored to the specific incident rather than the general vulnerability class — which is exactly why the red-teaming recommendation matters as much as the specific fixes; that said, the cross-request pattern-detection layer is specifically designed to catch the STRUCTURAL signature of this attack type (multiple requests, correlated in some way, each individually unremarkable) rather than the specific documentation-fabrication technique used this time, so it should generalize to other coordinated-attack variants using different specific tactics; the aggregate/velocity limit is even more structurally general, since it bounds ANY attack pattern that relies on volume of small requests regardless of the specific fraud technique — I'd present both fixes as addressing the general vulnerability CLASS (coordinated multi-request attacks exploiting per-request-only evaluation) rather than claiming certainty they'd have caught this exact incident's specific tactical details, and I'd rely on the red-teaming exercise to stress-test that generalization claim before declaring the guardrail redesign complete."
+      },
+      {
+        "q": "Leadership is under pressure to quickly restore the autonomous-approval feature to its original speed and threshold to avoid ongoing customer-experience degradation from the emergency tightening — how would you decide when it's actually safe to do so?",
+        "a": "I'd set explicit, evidence-based criteria rather than a fixed calendar timeline: the aggregate/velocity guardrail and cross-request pattern-detection layer need to be built, calibrated against historical data, and validated in a monitored 'shadow mode' (running alongside the tightened manual process, flagging what it WOULD have caught, without yet making autonomous decisions) for a meaningful period to confirm both that it catches simulated/historical fraud patterns effectively and that its false-positive rate on legitimate traffic is acceptable; only after that validation period, with real evidence the new guardrails are working as intended, would I recommend restoring greater autonomy — and even then, I'd propose restoring it gradually (e.g., raising the threshold and aggregate limits incrementally while monitoring closely) rather than snapping back to the original full-speed configuration all at once, treating the restoration itself as a carefully monitored rollout rather than a single reversal decision."
+      }
+    ],
+    "synthesis": "This expert-level case tests whether a candidate can distinguish between per-item correctness and aggregate/systemic safety as genuinely different properties requiring different guardrail architectures — recognizing that an AI agent behaving 'correctly' on each individual decision can still be catastrophically exploitable through a coordinated pattern the per-item evaluation was never designed to see — and can design a response that addresses both the immediate incident and the general vulnerability class (via red-teaming), while being honest about the limits of hindsight-driven fixes and proposing evidence-based, gradual restoration criteria rather than an arbitrary timeline-driven reversal of emergency safeguards."
+  }
+];
+} catch (err) { console.error('Stage 24 data error:', err); }
+</script>
+<script>
+try {
+  var diffLabel = {easy:"Easier", med:"Medium", hard:"Hard", expert:"Expert"};
+
+  function renderCases(list){
+    var wrap = document.getElementById('caselist');
+    wrap.innerHTML = '';
+    list.forEach(function(c, i){
+      var det = document.createElement('details');
+      det.className = 'case';
+      det.id = 'case-' + (i+1);
+
+      var clarifyHtml = c.clarify.map(function(qa){
+        return '<div class="qa-pair"><div class="q">Q: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
+      }).join('');
+
+      var risksHtml = '<ul>' + c.risks.map(function(r){ return '<li>' + esc(r) + '</li>'; }).join('') + '</ul>';
+
+      var crossHtml = c.cross.map(function(qa){
+        return '<div class="qa-pair"><div class="q">Interviewer: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
+      }).join('');
+
+      det.innerHTML =
+        '<summary><span class="cnum">Case ' + (i+1) + '</span>' +
+        '<span class="cdiff ' + c.diff + '">' + diffLabel[c.diff] + '</span>' +
+        '<span class="cind">' + esc(c.industry) + '</span>' +
+        '<span class="ctitle">' + esc(c.title) + '</span></summary>' +
+        '<div class="case-body">' +
+          '<div class="case-prompt">"' + esc(c.prompt) + '"</div>' +
+          '<div class="case-sec"><h5>Clarifying Questions &amp; Answers</h5>' + clarifyHtml + '</div>' +
+          '<div class="case-sec"><h5>MECE Structure</h5><div class="calc-block">' + esc(c.mece) + '</div></div>' +
+          '<div class="case-sec"><h5>Hypothesis</h5><p>' + esc(c.hypothesis) + '</p></div>' +
+          '<div class="case-sec"><h5>Data &amp; Exhibits</h5><div class="calc-block">' + esc(c.data) + '</div></div>' +
+          '<div class="case-sec"><h5>Calculation</h5><div class="calc-block">' + esc(c.calc) + '</div></div>' +
+          '<div class="case-sec"><h5>Insight</h5><p>' + esc(c.insight) + '</p></div>' +
+          '<div class="case-sec"><h5>Recommendation</h5><p>' + esc(c.recommendation) + '</p></div>' +
+          '<div class="case-sec"><h5>Risks &amp; Caveats</h5>' + risksHtml + '</div>' +
+          '<div class="case-sec"><h5>Interviewer Cross-Questions</h5>' + crossHtml + '</div>' +
+          '<div class="synth-box"><h5>Synthesis</h5><p>' + esc(c.synthesis) + '</p></div>' +
+        '</div>';
+      wrap.appendChild(det);
+    });
+  }
+
+  renderCases(cases);
+
+  document.getElementById('casefilter').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if(!btn) return;
+    document.querySelectorAll('#casefilter button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var diff = btn.getAttribute('data-diff');
+    var filtered = diff === 'all' ? cases : cases.filter(function(c){ return c.diff === diff; });
+    renderCases(filtered);
+  });
+
+  var masteryItems = cases.map(function(c, i){ return 'Case ' + (i+1) + ' — ' + c.title + ': I can walk through the full structure, calculation, and synthesis cold.'; });
+  var STORE = 'masterbook-s24-mastery';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var mBox = document.getElementById('masteryBox');
+  mBox.innerHTML = masteryItems.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+esc(t)+'</span></div>';
+  }).join('');
+  mBox.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 500){ backtop.classList.add('show'); } else { backtop.classList.remove('show'); }
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 24 loaded — cases:', cases.length);
+} catch (err) { console.error('Stage 24 render error:', err); }
+</script>

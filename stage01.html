@@ -1,0 +1,958 @@
+<meta name="robots" content="noindex, nofollow">
+
+
+
+
+
+<title>CV Intelligence</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333;
+    --ink-soft:#4E566B;
+    --ink-faint:#7C8399;
+    --paper:#F5F4EF;
+    --paper-raised:#FFFFFF;
+    --paper-sunken:#ECEAE2;
+    --line:#DEDACD;
+    --line-strong:#C7C2B0;
+    --accent:#A2701F;
+    --accent-ink:#6E4B12;
+    --accent-soft:#F0E1C2;
+    --data:#1E6E68;
+    --data-soft:#DCEEEA;
+    --lvlA:#B03A3A;
+    --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420;
+    --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C;
+    --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F;
+    --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0;
+      --ink-soft:#B9B6AC;
+      --ink-faint:#8A8779;
+      --paper:#181A1E;
+      --paper-raised:#212328;
+      --paper-sunken:#141518;
+      --line:#34353A;
+      --line-strong:#454650;
+      --accent:#D6A24F;
+      --accent-ink:#F0C784;
+      --accent-soft:#3A2E17;
+      --data:#5FC1B6;
+      --data-soft:#173330;
+      --lvlA:#E28080;
+      --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63;
+      --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC;
+      --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9;
+      --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0;
+    --ink-soft:#B9B6AC;
+    --ink-faint:#8A8779;
+    --paper:#181A1E;
+    --paper-raised:#212328;
+    --paper-sunken:#141518;
+    --line:#34353A;
+    --line-strong:#454650;
+    --accent:#D6A24F;
+    --accent-ink:#F0C784;
+    --accent-soft:#3A2E17;
+    --data:#5FC1B6;
+    --data-soft:#173330;
+    --lvlA:#E28080;
+    --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63;
+    --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC;
+    --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9;
+    --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, -apple-system, sans-serif;
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces", Georgia, serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code, .mono, .num{ font-family:"IBM Plex Mono", ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+
+  /* ---- shell layout ---- */
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{
+    position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto;
+    width:272px; flex:0 0 272px; padding:28px 20px 40px;
+    border-right:1px solid var(--line);
+    background:var(--paper-sunken);
+  }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:22px; }
+  .stage-pill{
+    display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase;
+    background:var(--accent-soft); color:var(--accent-ink); padding:4px 10px; border-radius:100px; margin-bottom:22px; font-weight:600;
+  }
+  nav.side ul{ list-style:none; margin:0 0 26px; padding:0; }
+  nav.side li a{
+    display:block; padding:7px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.88rem;
+    border-left:2px solid transparent;
+  }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:18px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+  nav.side .roadmap b{ color:var(--ink-soft); }
+  nav.side ul.sub{ margin:2px 0 10px; }
+  nav.side ul.sub li a{ font-size:.8rem; padding:5px 10px 5px 20px; color:var(--ink-faint); }
+  nav.side ul.sub li a:hover{ color:var(--ink); }
+
+  .backtop{
+    position:fixed; right:22px; bottom:22px; z-index:40;
+    width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong);
+    background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem;
+    opacity:0; pointer-events:none; transition:opacity .15s ease;
+  }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+
+  :target{ animation:flash-target 1.6s ease; }
+  @keyframes flash-target{
+    0%{ box-shadow:0 0 0 3px var(--accent); }
+    100%{ box-shadow:0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12); }
+  }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:960px; }
+  @media (max-width:880px){
+    nav.side{ display:none; }
+    main{ padding:32px 20px 100px; }
+  }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.5rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.08rem; color:var(--ink-soft); max-width:62ch; margin-bottom:22px; }
+  .statusbar{
+    display:flex; flex-wrap:wrap; gap:10px; margin-top:6px;
+  }
+  .statuschip{
+    display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line);
+    border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow);
+  }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:66px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:20px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.6rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:10px; font-size:.96rem; }
+
+  p{ max-width:70ch; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  /* ---- consolidated CV ---- */
+  .cv{ padding:8px 0; }
+  .cv-block{ padding:26px 30px; border-bottom:1px solid var(--line); }
+  .cv-block:last-child{ border-bottom:none; }
+  .cv-block h3{ font-size:1.05rem; margin-bottom:4px; }
+  .cv-role-meta{ font-size:.84rem; color:var(--ink-faint); margin-bottom:12px; }
+  .cv-role-meta .co{ color:var(--data); font-weight:600; }
+  .cv ul{ margin:0; padding-left:20px; }
+  .cv li{ margin-bottom:10px; font-size:.95rem; }
+  .variant-flag{
+    display:inline-flex; align-items:center; gap:4px; font-size:.68rem; font-weight:600; letter-spacing:.02em;
+    background:var(--lvlD-soft); color:var(--lvlD); border-radius:5px; padding:1px 7px; margin-left:6px; text-decoration:none;
+    vertical-align:middle; white-space:nowrap;
+  }
+  .cv-groups{ display:grid; grid-template-columns:1fr 1fr; gap:18px 28px; }
+  @media (max-width:640px){ .cv-groups{ grid-template-columns:1fr; } }
+  .cv-group h4{ font-size:.78rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:8px; font-family:"IBM Plex Sans"; font-weight:600; }
+  .cv-group p{ font-size:.88rem; color:var(--ink-soft); margin:0; }
+  .only-tag{ font-size:.68rem; background:var(--lvlB-soft); color:var(--lvlB); padding:1px 6px; border-radius:5px; font-weight:600; margin-left:4px; }
+
+  /* ---- knowledge map ---- */
+  .kmap{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
+  .kmap-card{ padding:18px 20px; }
+  .kmap-card h4{ font-size:.82rem; text-transform:uppercase; letter-spacing:.04em; color:var(--ink); margin-bottom:2px; font-weight:700; }
+  .kmap-card .kmap-count{ font-size:.72rem; color:var(--ink-faint); margin-bottom:12px; display:block; }
+  .chips{ display:flex; flex-wrap:wrap; gap:6px; }
+  .chip{ font-size:.78rem; padding:4px 10px; border-radius:100px; background:var(--paper-sunken); border:1px solid var(--line); color:var(--ink-soft); }
+  .chip.chip-data{ background:var(--data-soft); color:var(--data); border-color:transparent; }
+  .chip.chip-accent{ background:var(--accent-soft); color:var(--accent-ink); border-color:transparent; }
+  .metric-strip{ display:flex; flex-wrap:wrap; gap:10px; margin-top:6px; }
+  .metric{
+    padding:12px 16px; background:var(--paper-raised); border:1px solid var(--line); border-radius:10px; min-width:120px; box-shadow:var(--shadow);
+  }
+  .metric .v{ font-family:"IBM Plex Mono"; font-weight:600; font-size:1.15rem; color:var(--accent-ink); }
+  .metric .l{ font-size:.72rem; color:var(--ink-faint); margin-top:2px; }
+
+  /* ---- level badges ---- */
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.72rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  /* ---- filter bar ---- */
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; align-items:center; }
+  .filterbar button{
+    font-family:"IBM Plex Sans"; font-size:.82rem; font-weight:600; padding:7px 14px; border-radius:100px;
+    border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer;
+  }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+  .filterbar .hint{ font-size:.78rem; color:var(--ink-faint); margin-left:auto; }
+
+  /* ---- matrix table ---- */
+  .tablewrap{ overflow-x:auto; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); background:var(--paper-raised); }
+  table.matrix{ width:100%; border-collapse:collapse; min-width:760px; }
+  table.matrix thead th{
+    text-align:left; font-size:.7rem; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint);
+    padding:12px 16px; border-bottom:1px solid var(--line); background:var(--paper-sunken); position:sticky; top:0;
+  }
+  table.matrix tbody tr{ border-bottom:1px solid var(--line); cursor:pointer; }
+  table.matrix tbody tr:last-child{ border-bottom:none; }
+  table.matrix tbody tr:hover{ background:var(--paper-sunken); }
+  table.matrix td{ padding:13px 16px; font-size:.87rem; vertical-align:top; }
+  table.matrix td.claim{ max-width:280px; color:var(--ink); font-weight:500; }
+  table.matrix td.topic{ color:var(--ink-soft); }
+  .yn{ font-size:.78rem; font-weight:600; }
+  .yn.y{ color:var(--data); }
+  .yn.n{ color:var(--ink-faint); }
+  .conf-dot{
+    width:15px; height:15px; border-radius:50%; border:1.5px solid var(--line-strong); display:inline-block; cursor:pointer;
+    background:transparent;
+  }
+  .conf-dot[data-c="1"]{ background:var(--lvlA); border-color:var(--lvlA); }
+  .conf-dot[data-c="2"]{ background:var(--lvlB); border-color:var(--lvlB); }
+  .conf-dot[data-c="3"]{ background:var(--data); border-color:var(--data); }
+  .conf-label{ font-size:.68rem; color:var(--ink-faint); margin-left:6px; }
+  tr.detail-row{ display:none; }
+  tr.detail-row.open{ display:table-row; }
+  tr.detail-row td{ background:var(--paper-sunken); padding:0; }
+  .detail-inner{ padding:18px 24px 22px; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px 24px; }
+  .detail-inner .f{ font-size:.82rem; }
+  .detail-inner .f b{ display:block; font-size:.68rem; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); margin-bottom:3px; font-weight:600; }
+
+  /* ---- risk cards ---- */
+  .risk-list{ display:flex; flex-direction:column; gap:14px; }
+  .risk-card{ padding:20px 24px; border-left:4px solid var(--lvlA); }
+  .risk-card.ok{ border-left-color:var(--data); }
+  .risk-card.gap{ border-left-color:var(--lvlD); }
+  .risk-card .tag{ font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--lvlA); }
+  .risk-card.ok .tag{ color:var(--data); }
+  .risk-card.gap .tag{ color:var(--lvlD); }
+  .risk-card h4{ font-family:"IBM Plex Sans"; font-size:.98rem; font-weight:700; margin:6px 0 8px; }
+  .risk-card .versions{ font-size:.8rem; color:var(--ink-faint); margin-bottom:8px; }
+  .risk-card .versions span{ font-family:"IBM Plex Mono"; background:var(--paper-sunken); padding:1px 6px; border-radius:4px; margin-right:4px; display:inline-block; margin-bottom:3px; }
+  .risk-card p{ font-size:.9rem; color:var(--ink-soft); margin:0; }
+  .risk-card .fix{ margin-top:10px; font-size:.87rem; padding-top:10px; border-top:1px dashed var(--line); }
+  .risk-card .fix b{ color:var(--ink); }
+
+  /* ---- priority list ---- */
+  .prio{ display:flex; flex-direction:column; gap:10px; }
+  .prio-row{ display:flex; align-items:center; gap:14px; padding:14px 20px; }
+  .prio-row .rank{ font-family:"IBM Plex Mono"; font-size:.8rem; color:var(--ink-faint); width:22px; flex:0 0 22px; }
+  .prio-row .name{ font-weight:600; flex:1 1 auto; min-width:160px; }
+  .prio-row .stage-ref{ font-size:.76rem; color:var(--data); background:var(--data-soft); padding:3px 9px; border-radius:6px; white-space:nowrap; }
+
+  footer.next{ padding:30px 32px; }
+  footer.next h3{ font-size:1.15rem; margin-bottom:10px; }
+  footer.next p{ color:var(--ink-soft); font-size:.92rem; }
+  footer.next .step-list{ margin-top:16px; display:flex; flex-direction:column; gap:8px; }
+  footer.next .step{ display:flex; gap:10px; align-items:baseline; font-size:.88rem; }
+  footer.next .step .s-num{ font-family:"IBM Plex Mono"; color:var(--accent-ink); font-weight:600; width:20px; flex:0 0 20px; }
+  footer.next .step.done .s-num{ color:var(--data); }
+  footer.next .step.done{ color:var(--ink-faint); text-decoration:line-through; }
+
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  /* ---- TOC accordion ---- */
+  details.toc-part{ border-bottom:1px solid var(--line); }
+  details.toc-part:last-child{ border-bottom:none; }
+  details.toc-part summary{
+    padding:15px 22px; cursor:pointer; font-family:"Fraunces"; font-weight:600; font-size:1rem;
+    list-style:none; display:flex; align-items:center; justify-content:space-between; gap:12px;
+  }
+  details.toc-part summary::-webkit-details-marker{ display:none; }
+  details.toc-part summary::before{ content:"▸"; color:var(--accent); margin-right:10px; font-size:.8rem; }
+  details.toc-part[open] summary::before{ content:"▾"; }
+  details.toc-part .toc-stage{
+    font-family:"IBM Plex Mono"; font-size:.7rem; font-weight:500; color:var(--data); background:var(--data-soft);
+    padding:2px 8px; border-radius:5px; white-space:nowrap;
+  }
+  details.toc-part ol{ margin:0 0 16px; padding:0 22px 0 62px; color:var(--ink-soft); font-size:.88rem; }
+  details.toc-part ol li{ margin-bottom:5px; }
+  details.toc-part ol li .toc-stage{ margin-left:8px; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <div class="stage-pill">● Stage 1 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#cv">Consolidated CV</a></li>
+    </ul>
+    <ul class="sub">
+      <li><a href="#cv-axtria">↳ Axtria</a></li>
+      <li><a href="#cv-nanocloud">↳ NanoCloud</a></li>
+      <li><a href="#cv-capgemini">↳ Capgemini</a></li>
+      <li><a href="#cv-hero">↳ Hero Electronics</a></li>
+      <li><a href="#cv-projects">↳ Projects &amp; Cases</a></li>
+    </ul>
+    <ul>
+      <li><a href="#kmap">CV Knowledge Map</a></li>
+      <li><a href="#matrix">Claim → Prep Matrix</a></li>
+      <li><a href="#risk">Risk / Gap Matrix</a></li>
+    </ul>
+    <ul class="sub">
+      <li><a href="#risk-1">↳ Axtria verb drift</a></li>
+      <li><a href="#risk-2">↳ NanoCloud ✓ confirmed</a></li>
+      <li><a href="#risk-3">↳ Certifications</a></li>
+      <li><a href="#risk-4">↳ FDM wording</a></li>
+      <li><a href="#risk-5">↳ XGBoost/LogReg ✓</a></li>
+      <li><a href="#risk-6">↳ Allocation method ✓ confirmed</a></li>
+      <li><a href="#risk-7">↳ Spark/Databricks ✓ confirmed</a></li>
+    </ul>
+    <ul>
+      <li><a href="#priority">Interview Priority</a></li>
+      <li><a href="#toc">Full Table of Contents</a></li>
+      <li><a href="#roadmap">Prioritized Roadmap</a></li>
+      <li><a href="#handson">Hands-On Projects Needed</a></li>
+      <li><a href="#learnbuild">Learn + Build + Defend</a></li>
+      <li><a href="#next">What's next</a></li>
+    </ul>
+    <div class="navgroup-label">Coming stages</div>
+    <ul>
+      <li style="color:var(--ink-faint)">2 · Statistics + Math</li>
+      <li style="color:var(--ink-faint)">3 · SQL</li>
+      <li style="color:var(--ink-faint)">4 · Python + Pandas</li>
+      <li style="color:var(--ink-faint)">5 · PySpark + Databricks</li>
+      <li style="color:var(--ink-faint)">… 28 more</li>
+    </ul>
+    <div class="roadmap">Built stage-by-stage, on your go-ahead each time. <b>Nothing here is fabricated</b> — every claim traces to a real CV line.</div>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part I · Stage 1 of 33</div>
+      <h1>CV Intelligence &amp; Master Index</h1>
+      <p class="lede">Every skill, tool, model, metric, and claim across your five CVs — mapped, classified, cross-checked for contradictions, and ranked by how hard an interviewer is likely to push on it. This is the foundation everything else in the Masterbook builds on.</p>
+      <div class="statusbar">
+        <div class="statuschip">📄 <b>5</b> CV versions analyzed</div>
+        <div class="statuschip">🏷️ <b>60+</b> distinct skills / claims mapped</div>
+        <div class="statuschip">⚠️ <b>7</b> flags — <b>3</b> confirmed, <b>0</b> still open</div>
+        <div class="statuschip">🎯 <b>13</b> Level‑A must-master items</div>
+      </div>
+    </header>
+
+    <section id="cv">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Consolidated CV</h2>
+        <p>One reference version, merging the strongest true wording from all five CVs. Where versions genuinely disagree — not just reworded, but a different claim — it's flagged <span class="variant-flag">⚑ variant</span>; click it to jump to the full explanation in the Risk/Gap Matrix.</p>
+      </div>
+      <div class="card cv">
+        <div class="cv-block">
+          <h3>Pranav Gupta</h3>
+          <p class="cv-role-meta">+91‑7696379775 · pranavwork0113@gmail.com · linkedin.com/in/pranavgupta13</p>
+          <p style="font-size:.92rem;color:var(--ink-soft)">MBA-trained analytics &amp; strategy professional with 3.5+ years of cross-industry experience — Axtria (Decision Intelligence), NanoCloud (Client Solutions), Capgemini (CRM &amp; Product Delivery) — turning data into decision-ready business strategy for stakeholders across technology, retail, and telecom, with hands-on quantitative depth (SQL, Python, PySpark, regression modeling) and a consistent record of stakeholder-facing delivery.</p>
+        </div>
+
+        <div class="cv-block">
+          <h3>Education</h3>
+          <p style="font-size:.9rem;margin:0 0 4px"><b>Management Development Institute (MDI)</b>, Gurgaon — MBA, Information Management &amp; Marketing · Jun 2023 – Mar 2025</p>
+          <p style="font-size:.9rem;margin:0"><b>SRM Institute of Science and Technology</b>, Chennai — B.Tech, Information Technology · Jul 2016 – May 2020</p>
+          <p style="font-size:.85rem;margin-top:10px;color:var(--ink-faint)">Certifications: IBM Certified Product Manager · KPMG Lean Six Sigma Green Belt <span class="only-tag">PM CV only</span></p>
+        </div>
+
+        <div class="cv-block">
+          <h3>Core Competencies</h3>
+          <div class="cv-groups" style="margin-top:12px">
+            <div class="cv-group">
+              <h4>Strategy &amp; Consulting</h4>
+              <p>Business &amp; Commercial Strategy, Business Transformation, Structured Problem Solving, Competitive &amp; Market Analysis, Revenue &amp; Resource Optimization, Cost-Benefit Analysis</p>
+            </div>
+            <div class="cv-group">
+              <h4>Analytics &amp; Quantitative Tools</h4>
+              <p>SQL, Python, PySpark, Databricks, Regression Modeling (XGBoost, Logistic Regression), Forecasting, Statistical Testing (Hypothesis Testing, A/B Testing, AUC/ROC), Power BI, Advanced Excel, PowerPoint, KPI Reporting, Data Visualization</p>
+            </div>
+            <div class="cv-group">
+              <h4>Stakeholder &amp; Program Management</h4>
+              <p>Client &amp; Executive Stakeholder Management, Cross-Functional Collaboration, Product Lifecycle Management, Requirement Documentation (PRDs), Agile Delivery (JIRA), User Research, Program Governance</p>
+            </div>
+            <div class="cv-group">
+              <h4>Product Management &amp; Strategy <span class="only-tag">PM CV emphasis</span></h4>
+              <p>User Story Mapping &amp; Prioritization, 0‑to‑1 Product Development, GTM Strategy, MVP Scoping, Salesforce (Lightning, Workflow Automation)</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="cv-block">
+          <h3>Professional Experience</h3>
+          <div id="cv-axtria" style="margin-top:14px;scroll-margin-top:24px">
+            <h3 style="font-size:1rem">Associate — Decision Intelligence</h3>
+            <p class="cv-role-meta"><span class="co">Axtria Ingenious Insights</span> · Gurgaon · Jul 2025 – Present (14 mo)</p>
+            <ul>
+              <li>Owned data analysis for a revenue-optimization initiative, modeling rep efficiency and cost-per-call to allocate <span class="mono">~60 reps</span>, realizing <span class="mono">$10M</span> in revenue. <a class="variant-flag" href="#risk-1">⚑ variant</a></li>
+              <li>Designed a self-service decision-support tool enabling the client to generate allocation forecasts independently, removing the need for repeat analytical engagements.</li>
+              <li>Co-developed a predictive, regression-based forecasting model (XGBoost, Logistic Regression), driving cross-functional adoption across business, sales, and finance teams to replace manual reporting and inform quarterly market-share strategy.</li>
+              <li>Presented findings to client and senior stakeholders in recurring bi-weekly reviews, shaping input on portfolio and launch decisions.</li>
+            </ul>
+          </div>
+          <div id="cv-nanocloud" style="margin-top:22px;scroll-margin-top:24px">
+            <h3 style="font-size:1rem">Associate — Client Solutions</h3>
+            <p class="cv-role-meta"><span class="co">NanoCloud Solutions Pvt Ltd</span> · Chandigarh · May 2022 – Apr 2023 (12 mo)</p>
+            <ul>
+              <li>Delivered network optimization recommendations for <span class="mono">~15</span> clients across large and mid-sized enterprises, engaging directly with client teams to define requirements and solutions. <a class="variant-flag" href="#risk-2">⚑ variant</a></li>
+              <li>Advised clients on network configuration changes that improved performance by <span class="mono">28%</span>, reducing downtime and strengthening service reliability in high-demand markets.</li>
+              <li>Applied optimization modeling across <span class="mono">50+</span> network heatmaps, converting raw client data into actionable coverage recommendations.</li>
+              <li>Reduced client turnaround time from <span class="mono">10 to 8 days</span> and increased client satisfaction by <span class="mono">15%</span>, with recommendations approved directly by site managers.</li>
+            </ul>
+          </div>
+          <div id="cv-capgemini" style="margin-top:22px;scroll-margin-top:24px">
+            <h3 style="font-size:1rem">Senior Analyst — CRM &amp; Product Delivery</h3>
+            <p class="cv-role-meta"><span class="co">Capgemini</span> · Gurgaon · Sept 2020 – Feb 2022 (18 mo)</p>
+            <ul>
+              <li>Redesigned lead management automation for retail and telecom clients, driving a client-reported <span class="mono">15%</span> increase in lead-to-conversion performance.</li>
+              <li>Owned requirements alignment across client and internal stakeholders, translating business needs into <span class="mono">500+</span> prioritized user stories that shaped Salesforce platform delivery.</li>
+              <li>Coordinated cross-team quality governance ahead of releases, reducing defects by <span class="mono">30%</span> and protecting client trust in platform reliability.</li>
+              <li>Authored PRDs that served as the reference data dictionary for product, technology, and stakeholder teams.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cv-block" id="cv-hero" style="scroll-margin-top:24px">
+          <h3>Summer Internship</h3>
+          <div style="margin-top:14px">
+            <h3 style="font-size:1rem">Product Strategy Intern</h3>
+            <p class="cv-role-meta"><span class="co">Hero Electronics</span> · Gurgaon · Apr 2024 – May 2024</p>
+            <ul>
+              <li>Owned end-to-end design and limited rollout of a chatbot product during a two-month internship, partnering with the technical team on build and validation; full-scale implementation post-internship achieved a confirmed <span class="mono">20%</span> cost reduction (~₹5L/month).</li>
+              <li>Conducted <span class="mono">100+</span> one-on-one user interviews over a two-month engagement to surface recurring issues and inform service-resolution / feature-prioritization decisions.</li>
+              <li>Designed structured interaction flows, prioritized from interview findings, covering <span class="mono">80%</span> of customer queries to streamline service journeys.</li>
+              <li>Structured customer feedback into a thematic issue framework, enabling prioritization of the highest-impact investments.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="cv-block" id="cv-projects" style="scroll-margin-top:24px">
+          <h3>Projects &amp; Case Competitions</h3>
+          <ul style="margin-top:14px">
+            <li><b>Virtual Companion (CareTail)</b> · Oct 2024 – Mar 2025 — Led a 4-member team in product planning and GTM strategy for CareTail, an AI-enabled elderly-care product.</li>
+            <li><b>MakeMyTrip Case Competition</b> · Jul 2024 – Aug 2024 — Advanced to semi-finals (top 10 universities), proposing GenAI-driven travel-bundling recommendations from market research.</li>
+            <li><b>FDM Digital (Live Project)</b> · Nov 2023 – Dec 2023 — Designed operational workflows for real-time item tracking, approved by seniors and adopted by all internal sales employees. <a class="variant-flag" href="#risk-4">⚑ variant</a></li>
+            <li><b>MILE — MDI Incubation Lab for Entrepreneurship</b> · Jun 2023 – Mar 2025 — Coordinated pitching and startup events, connecting founders with mentors and guiding early-stage market research.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="kmap">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>CV Knowledge Map</h2>
+        <p>Everything named or implied across the five CVs, grouped by category. Nothing here is dropped for being "just a skills-section keyword" — every chip below gets its own coverage somewhere in Stages 2–33.</p>
+      </div>
+
+      <div class="kmap">
+        <div class="card kmap-card">
+          <h4>Programming &amp; Data</h4><span class="kmap-count">Core across every version</span>
+          <div class="chips">
+            <span class="chip chip-data">SQL</span><span class="chip chip-data">Python</span><span class="chip chip-data">PySpark</span><span class="chip chip-data">Databricks</span>
+          </div>
+        </div>
+        <div class="card kmap-card">
+          <h4>Modeling &amp; Statistics</h4><span class="kmap-count">Core across every version</span>
+          <div class="chips">
+            <span class="chip chip-data">XGBoost</span><span class="chip chip-data">Logistic Regression</span><span class="chip chip-data">Regression Modeling</span><span class="chip chip-data">Forecasting</span><span class="chip chip-data">Hypothesis Testing</span><span class="chip chip-data">A/B Testing</span><span class="chip chip-data">AUC / ROC</span>
+          </div>
+        </div>
+        <div class="card kmap-card">
+          <h4>BI, Reporting &amp; Viz</h4><span class="kmap-count">Core across every version</span>
+          <div class="chips">
+            <span class="chip">Power BI</span><span class="chip">Advanced Excel</span><span class="chip">Data Visualization</span><span class="chip">KPI Reporting</span><span class="chip">PowerPoint</span>
+          </div>
+        </div>
+        <div class="card kmap-card">
+          <h4>CRM Platform</h4><span class="kmap-count">Core, tied to Capgemini</span>
+          <div class="chips">
+            <span class="chip">Salesforce Lightning</span><span class="chip">Workflow Automation</span><span class="chip">Lead Management Automation</span>
+          </div>
+        </div>
+        <div class="card kmap-card">
+          <h4>Strategy &amp; Consulting</h4><span class="kmap-count">Core, strongest on Consulting / Corp Strategy CVs</span>
+          <div class="chips">
+            <span class="chip chip-accent">Business &amp; Commercial Strategy</span><span class="chip chip-accent">Structured Problem Solving</span><span class="chip chip-accent">Competitive &amp; Market Analysis</span><span class="chip chip-accent">Revenue &amp; Resource Optimization</span><span class="chip chip-accent">Cost-Benefit Analysis</span><span class="chip chip-accent">Business Transformation</span>
+          </div>
+        </div>
+        <div class="card kmap-card">
+          <h4>Product Management</h4><span class="kmap-count">Explicit on PM CV; implicit elsewhere</span>
+          <div class="chips">
+            <span class="chip">PRDs</span><span class="chip">User Story Mapping</span><span class="chip">0‑to‑1 Development</span><span class="chip">GTM Strategy</span><span class="chip">MVP Scoping</span><span class="chip">User Research</span>
+          </div>
+        </div>
+        <div class="card kmap-card">
+          <h4>Stakeholder &amp; Program</h4><span class="kmap-count">Core across every version</span>
+          <div class="chips">
+            <span class="chip">Executive Stakeholder Mgmt</span><span class="chip">Cross-Functional Collaboration</span><span class="chip">Program Governance</span><span class="chip">Agile / JIRA</span><span class="chip">Product Lifecycle Mgmt</span>
+          </div>
+        </div>
+        <div class="card kmap-card">
+          <h4>Certifications</h4><span class="kmap-count">PM CV only — flagged in Risk Matrix</span>
+          <div class="chips">
+            <span class="chip">IBM Certified Product Manager</span><span class="chip">KPMG Lean Six Sigma Green Belt</span>
+          </div>
+        </div>
+        <div class="card kmap-card">
+          <h4>Domains / Industries</h4><span class="kmap-count">Referenced across summaries + client work</span>
+          <div class="chips">
+            <span class="chip">Technology</span><span class="chip">Retail</span><span class="chip">Telecom</span><span class="chip">Pharma-adjacent (Axtria)</span><span class="chip">FinTech (target)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:22px 24px;margin-top:16px">
+        <h4 style="font-family:'IBM Plex Sans';font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;color:var(--ink);margin-bottom:14px;font-weight:700">Every headline metric on the CV</h4>
+        <div class="metric-strip">
+          <div class="metric"><div class="v">$10M</div><div class="l">Revenue realized (Axtria)</div></div>
+          <div class="metric"><div class="v">~60</div><div class="l">Reps allocated</div></div>
+          <div class="metric"><div class="v">28%</div><div class="l">Network perf. improvement</div></div>
+          <div class="metric"><div class="v">50+</div><div class="l">Network heatmaps</div></div>
+          <div class="metric"><div class="v">10→8d</div><div class="l">Turnaround reduced</div></div>
+          <div class="metric"><div class="v">+15%</div><div class="l">Client satisfaction</div></div>
+          <div class="metric"><div class="v">+15%</div><div class="l">Lead-to-conversion</div></div>
+          <div class="metric"><div class="v">500+</div><div class="l">User stories</div></div>
+          <div class="metric"><div class="v">-30%</div><div class="l">Defects</div></div>
+          <div class="metric"><div class="v">20%</div><div class="l">Cost reduction (~₹5L/mo)</div></div>
+          <div class="metric"><div class="v">100+</div><div class="l">User interviews</div></div>
+          <div class="metric"><div class="v">80%</div><div class="l">Query coverage</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="matrix">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>CV Claim → Preparation Matrix</h2>
+        <p>Every major CV pointer, classified by mastery level and interview risk. Click any row to expand the full 14-field matrix. Click the dot in the last column to set your own confidence — it's saved in this browser only, so it'll be here next time you open this page.</p>
+      </div>
+
+      <div class="filterbar">
+        <button class="active" data-filter="all">All (25)</button>
+        <button data-filter="A">Level A — Must Master</button>
+        <button data-filter="B">Level B — Strong Working</button>
+        <button data-filter="C">Level C — Awareness</button>
+        <button data-filter="D">Level D — CV-Defense</button>
+        <span class="hint">click a row to expand</span>
+      </div>
+
+      <div class="tablewrap">
+        <table class="matrix" id="matrixTable">
+          <thead>
+            <tr>
+              <th style="width:26%">CV claim</th>
+              <th style="width:20%">Topic</th>
+              <th>Level</th>
+              <th>Interview odds</th>
+              <th>Portfolio project?</th>
+              <th>Your confidence</th>
+            </tr>
+          </thead>
+          <tbody id="matrixBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="risk">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>Risk / Gap Matrix</h2>
+        <p>Step 3 of your master instructions: contradictions across CV versions, and places where the CV claims more depth than any bullet actually documents. None of these mean the underlying achievement is false — they mean the wording needs to be consistent, and the depth needs to be built before an interview, not discovered in one.</p>
+      </div>
+      <div class="risk-list">
+        <div class="risk-card" id="risk-1" style="scroll-margin-top:24px">
+          <div class="tag">⚑ Wording inconsistency</div>
+          <h4>Axtria — ownership verb on the $10M / ~60-rep bullet shifts by version</h4>
+          <div class="versions"><span>Consulting: "Led"</span><span>Corp Strategy: "Directed"</span><span>FinTech: "Built"</span><span>Master / PM: "Owned"</span></div>
+          <p>Same underlying fact, four different ownership strengths. Not fabrication — but if you've sent a "Directed" version to one employer and then describe it in the interview using "Owned" or "Led" language, a sharp interviewer may probe the gap between the verb and the actual scope of your role on the team.</p>
+          <div class="fix"><b>Fix:</b> settle on one honest verb for your own head, independent of which CV version the employer saw, and be ready to define your literal scope (what you modeled vs. what the team decided) in one breath.</div>
+        </div>
+        <div class="risk-card ok" id="risk-2" style="scroll-margin-top:24px">
+          <div class="tag">✓ Confirmed by Pranav — "Owned"</div>
+          <h4>NanoCloud — "owned requirements &amp; solution design" is the accurate claim</h4>
+          <div class="versions"><span>Consulting / Corp Strategy / FinTech / Master: "Delivered network optimization recommendations"</span><span>Product Management: "Owned requirements definition and solution design" ✓ confirmed accurate</span></div>
+          <p>Confirmed: the Product Management CV's framing is the true one. That means the other four versions are actually <i>underselling</i> this role — "delivered recommendations" undersells the fact that you owned requirements gathering and solution design directly with the client, not just the output.</p>
+          <div class="fix"><b>Fix:</b> when discussing NanoCloud in any interview, regardless of which CV version got you there, lead with the "owned requirements &amp; solution design" framing — it's both stronger and the one you've confirmed as true.</div>
+        </div>
+        <div class="risk-card" id="risk-3" style="scroll-margin-top:24px">
+          <div class="tag">⚑ Selective inclusion</div>
+          <h4>Certifications appear on one CV only</h4>
+          <div class="versions"><span>Product Management CV: IBM Certified Product Manager, KPMG Lean Six Sigma Green Belt</span><span>All other 4 CVs: not mentioned</span></div>
+          <p>If these are real and current, dropping them from four versions isn't wrong tactically (space, relevance), but it means you need to be ready to mention them naturally in a non-PM interview if asked "any certifications?" without it looking like you're improvising.</p>
+          <div class="fix"><b>Fix:</b> keep a short mental note of both, dates earned, and one sentence on what each involved — ready regardless of which CV version got you the interview.</div>
+        </div>
+        <div class="risk-card" id="risk-4" style="scroll-margin-top:24px">
+          <div class="tag">⚑ Wording inconsistency</div>
+          <h4>FDM Digital — "operational workflows" vs. "workflow product"</h4>
+          <div class="versions"><span>4 CVs: "Designed operational workflows for real-time item tracking"</span><span>Product Management: "Designed and delivered a workflow product"</span></div>
+          <p>Minor, but "product" implies a shipped, owned artifact rather than a process design — worth having one consistent story for what was actually delivered (a tool? a documented process? both?).</p>
+          <div class="fix"><b>Fix:</b> low priority — just make sure your spoken description matches whichever framing, and can survive "was this a tool, or a process change?"</div>
+        </div>
+        <div class="risk-card ok" id="risk-5" style="scroll-margin-top:24px">
+          <div class="tag">✓ Consistent — good sign</div>
+          <h4>XGBoost / Logistic Regression is framed as "co-developed" on all 5 versions</h4>
+          <div class="versions"><span>Every version uses "co-developed a predictive / regression-based forecasting model"</span></div>
+          <p>This is the one modeling claim that's honestly worded everywhere — it doesn't overclaim solo ownership. That makes it a clean example of Level D "CV-defense" framing: you understand the methodology end-to-end and can speak to your specific contribution, without needing to pretend you built the model alone.</p>
+          <div class="fix"><b>Fix:</b> none needed on wording — just needs the real technical depth behind it, which Stages 7 &amp; 9 build.</div>
+        </div>
+        <div class="risk-card ok" id="risk-6" style="scroll-margin-top:24px">
+          <div class="tag">✓ Confirmed by Pranav — hybrid method</div>
+          <h4>Allocation mechanism confirmed: linear programming + heuristics, both used</h4>
+          <p>Confirmed: the ~60-rep allocation was driven by a combination of linear programming (formal optimization against constraints — territory, capacity, cost-per-call ceilings) and heuristic rules (practical adjustments/tie-breaking on top of the LP output, e.g. business-judgment overrides that a pure solver wouldn't capture). This is actually a strong, realistic answer — most real-world allocation systems are exactly this hybrid, not a textbook-pure LP.</p>
+          <div class="fix"><b>Fix:</b> Stage 10 (Forecasting + Optimization) will build the full LP formulation (objective function, decision variables, constraints) plus the heuristic layer on top, and Stage 27 (Axtria deep dive) turns this into the "walk me through how the allocation was computed" answer at 30-sec / 2-min / 5-min depth.</div>
+        </div>
+        <div class="risk-card ok" id="risk-7" style="scroll-margin-top:24px">
+          <div class="tag">✓ Confirmed by Pranav — hands-on usage</div>
+          <h4>PySpark / Databricks — confirmed real hands-on usage at Axtria</h4>
+          <p>Confirmed: this was genuine hands-on use, not a listed-but-untouched tool. Good — that means Stage 5 can be built as real defensible experience rather than "concepts only" framing. <span class="mono">[NEEDS USER CONFIRMATION]</span> still open for the specifics Stage 5 will need: what pipelines or transformations did you personally write, was it batch or streaming, and roughly what data volumes were you working with? That level of detail is what turns "yes I used it" into an answer that survives a technical follow-up.</p>
+          <div class="fix"><b>Fix:</b> no wording change needed on the CV. Stage 5 will capture the specifics above when we get there.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="priority">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Interview Priority Matrix</h2>
+        <p>Level‑A items, ranked by how likely they are to get probed, each pointing to the stage that will build its full defense.</p>
+      </div>
+      <div class="card prio">
+        <div class="prio-row"><span class="rank">01</span><span class="lvl lvl-A">A</span><span class="name">XGBoost &amp; Logistic Regression (co-developed forecasting model)</span><span class="stage-ref">Stages 7 · 9 · 27</span></div>
+        <div class="prio-row"><span class="rank">02</span><span class="lvl lvl-A">A</span><span class="name">$10M revenue / ~60-rep allocation — the optimization method itself</span><span class="stage-ref">Stages 10 · 27</span></div>
+        <div class="prio-row"><span class="rank">03</span><span class="lvl lvl-A">A</span><span class="name">SQL, Python, PySpark, Databricks — core technical stack</span><span class="stage-ref">Stages 3 · 4 · 5</span></div>
+        <div class="prio-row"><span class="rank">04</span><span class="lvl lvl-A">A</span><span class="name">Hypothesis Testing, A/B Testing, AUC/ROC</span><span class="stage-ref">Stage 11</span></div>
+        <div class="prio-row"><span class="rank">05</span><span class="lvl lvl-A">A</span><span class="name">Chatbot product design &amp; rollout (Hero Electronics)</span><span class="stage-ref">Stages 13 · 30</span></div>
+        <div class="prio-row"><span class="rank">06</span><span class="lvl lvl-A">A</span><span class="name">500+ user stories, PRDs, requirements ownership</span><span class="stage-ref">Stages 14 · 29</span></div>
+        <div class="prio-row"><span class="rank">07</span><span class="lvl lvl-A">A</span><span class="name">Self-service decision-support tool design</span><span class="stage-ref">Stages 10 · 27</span></div>
+      </div>
+    </section>
+
+    <section id="toc">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Full Masterbook Table of Contents</h2>
+        <p>Step 5: all 14 Parts and 93 chapters from your master instructions, each cross-referenced to the Stage that builds it. Nothing has been dropped or shortened — this is the complete map before any content beyond Stage 1 gets written. Click a Part to expand its chapters.</p>
+      </div>
+      <div class="card" style="padding:8px 4px">
+        <details class="toc-part" open>
+          <summary>Part I — CV Intelligence <span class="toc-stage">Stage 1</span></summary>
+          <ol><li>Consolidated CV</li><li>CV Claim Map</li><li>Skill Matrix</li><li>Risk / Gap Matrix</li><li>Interview Priority Matrix</li></ol>
+        </details>
+        <details class="toc-part" open>
+          <summary>Part II — Foundations <span class="toc-stage">Stage 2 · 23</span></summary>
+          <ol start="6"><li><a href="stage02.html">Mathematics ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage02.html">Statistics ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li>Business Analytics <span class="toc-stage">St. 23</span></li></ol>
+        </details>
+        <details class="toc-part" open>
+          <summary>Part III — Data <span class="toc-stage">Stages 3 · 4 · 5</span></summary>
+          <ol start="9"><li><a href="stage03.html">SQL ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage04.html">Python ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage04.html">Pandas ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage05.html">PySpark ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage05.html">Databricks ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage05.html">Data Engineering Fundamentals ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li></ol>
+        </details>
+        <details class="toc-part">
+          <summary>Part IV — Machine Learning <span class="toc-stage">Stages 6 · 7 · 8 · 9</span></summary>
+          <ol start="15"><li><a href="stage06.html">ML Foundations ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage07.html">Regression ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage07.html">Logistic Regression ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage08.html">KNN ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage08.html">Naive Bayes ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage08.html">SVM ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage08.html">Discriminant Analysis (LDA/QDA) ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage08.html">Neural Network Basics ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage09.html">Trees ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage09.html">Random Forest ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage09.html">Gradient Boosting ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage09.html">XGBoost ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage06.html">Clustering ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage06.html">PCA ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage06.html">Feature Engineering ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage06.html">Model Evaluation ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage06.html">Explainability (SHAP) ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li></ol>
+        </details>
+        <details class="toc-part">
+          <summary>Part V — Forecasting &amp; Optimization <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></summary>
+          <ol start="27"><li><a href="stage10.html">Forecasting ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage10.html">Optimization ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage10.html">Resource Allocation ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage10.html">Revenue Optimization ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li></ol>
+        </details>
+        <details class="toc-part">
+          <summary>Part VI — Experimentation <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></summary>
+          <ol start="31"><li><a href="stage11.html">A/B Testing ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage11.html">Hypothesis Testing ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage11.html">Causal Thinking ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li></ol>
+        </details>
+        <details class="toc-part">
+          <summary>Part VII — BI <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></summary>
+          <ol start="34"><li><a href="stage12.html">Power BI ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage12.html">Excel ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage12.html">Data Visualization ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li></ol>
+        </details>
+        <details class="toc-part">
+          <summary>Part VIII — AI <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></summary>
+          <ol start="37"><li><a href="stage13.html">AI Foundations ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage13.html">ML vs AI vs GenAI ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage13.html">LLMs ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage13.html">Prompt Engineering ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage13.html">Embeddings ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage13.html">RAG ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage13.html">Agents ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage13.html">AI Evaluation ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage13.html">AI Product Development ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li></ol>
+        </details>
+        <details class="toc-part">
+          <summary>Part IX — Product <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></summary>
+          <ol start="46"><li><a href="stage14.html">Product Management ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage14.html">User Research ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage14.html">PRDs ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage14.html">Prioritization ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage14.html">Product Metrics ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage14.html">GTM ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li></ol>
+        </details>
+        <details class="toc-part">
+          <summary>Part X — Consulting <span class="toc-stage">Stages 15–26</span></summary>
+          <ol start="52"><li><a href="stage15.html">Structured Problem Solving, MECE &amp; Frameworks ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage16.html">Profitability Cases (20) ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage17.html">Market Entry Cases (15) ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage18.html">Growth Cases (15) ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage19.html">Pricing Cases (10) ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage20.html">Market Sizing Cases (10) ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage21.html">Operations Cases (10) ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage22.html">Product Cases (10) ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage23.html">Analytics Cases (10) ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage24.html">AI/GenAI Cases (10) ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage25.html">FinTech Cases (10) ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage26.html">Pharma Cases (10) ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li></ol>
+        </details>
+        <details class="toc-part">
+          <summary>Part XI — My Work Experience <span class="toc-stage">Stages 27–30</span></summary>
+          <ol start="64"><li><a href="stage27.html">Axtria ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage28.html">NanoCloud ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage29.html">Capgemini ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage30.html">Hero Electronics ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage30.html">Projects ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage30.html">Case Competitions ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li></ol>
+        </details>
+        <details class="toc-part">
+          <summary>Part XII — Portfolio <span class="toc-stage">Stage 31</span></summary>
+          <ol start="70"><li><a href="stage31.html">SQL Projects ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage31.html">Python Projects ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage31.html">ML Projects ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage31.html">GenAI Projects ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage31.html">Analytics Projects ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage31.html">Dashboards ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage31.html">GitHub Portfolio ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li></ol>
+        </details>
+        <details class="toc-part">
+          <summary>Part XIII — Interview Bank <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></summary>
+          <ol start="77"><li><a href="stage32.html">Technical Questions ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage32.html">Business Questions ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage32.html">Case Questions ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage32.html">Work Experience Questions ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage32.html">HR / Behavioral Questions ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage32.html">Tricky Questions ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage32.html">Mock Interviews ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li></ol>
+        </details>
+        <details class="toc-part">
+          <summary>Part XIV — Study System <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></summary>
+          <ol start="84"><li><a href="stage33.html">5-Day Plan ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage33.html">10-Day Plan ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage33.html">15-Day Plan ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage33.html">Revision System ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage33.html">Mastery Tests ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li></ol>
+        </details>
+        <details class="toc-part">
+          <summary>Appendices <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></summary>
+          <ol start="89"><li><a href="stage33.html">Cheat Sheets ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage33.html">Formula Sheets ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage33.html">SQL Patterns ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage33.html">Python Patterns ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage33.html">ML Comparison Tables ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage33.html">GenAI Architecture Patterns ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage33.html">Consulting Framework Library ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage33.html">Interview Answer Templates ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage33.html">Glossary ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li><li><a href="stage33.html">References ↗</a> <span class="toc-stage" style="background:var(--accent-soft);color:var(--accent-ink)">✓ live</span></li></ol>
+        </details>
+      </div>
+    </section>
+
+    <section id="roadmap">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>Prioritized Roadmap</h2>
+        <p>Step 6: why the 33 stages run in this order — foundation before application, technical depth before the work-experience defense that leans on it, and interview simulation only once everything else exists to draw from.</p>
+      </div>
+      <div class="kmap">
+        <div class="card kmap-card">
+          <h4>Phase 1 — Foundation</h4><span class="kmap-count">Stages 1–6</span>
+          <p style="font-size:.88rem;color:var(--ink-soft);margin:0">CV intelligence, math/stats, SQL, Python, Spark, ML fundamentals. Everything downstream — the model chapters, the case work, the work-experience defense — assumes this is solid first.</p>
+        </div>
+        <div class="card kmap-card">
+          <h4>Phase 2 — Core Quant Depth</h4><span class="kmap-count">Stages 7–12</span>
+          <p style="font-size:.88rem;color:var(--ink-soft);margin:0">Regression through XGBoost, forecasting/optimization, experimentation, BI tools — the technical spine your Axtria and NanoCloud claims sit on.</p>
+        </div>
+        <div class="card kmap-card">
+          <h4>Phase 3 — Applied &amp; Modern</h4><span class="kmap-count">Stages 13–26</span>
+          <p style="font-size:.88rem;color:var(--ink-soft);margin:0">GenAI/LLMs, Product Management, then the full Consulting track — structured problem solving/MECE/frameworks followed by a complete, full-quota case bank (Profitability, Market Entry, Growth, Pricing, Market Sizing, Operations, Product, Analytics, AI/GenAI, FinTech, Pharma) — the layers that map onto Hero Electronics, the PM-track CV, and case-style interviews.</p>
+        </div>
+        <div class="card kmap-card">
+          <h4>Phase 4 — Personal Defense</h4><span class="kmap-count">Stages 27–31</span>
+          <p style="font-size:.88rem;color:var(--ink-soft);margin:0">Axtria, NanoCloud, Capgemini, Hero + Projects, then the Portfolio itself — built only once the technical foundation underneath each claim actually exists.</p>
+        </div>
+        <div class="card kmap-card">
+          <h4>Phase 5 — Interview Readiness</h4><span class="kmap-count">Stages 32–33</span>
+          <p style="font-size:.88rem;color:var(--ink-soft);margin:0">The full question bank, mock interviews, then final integration — the 5/10/15-day study plans, gap audit, and cheat sheets, which only make sense once everything else is in place to summarize.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="handson">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Hands-On Project Requirements</h2>
+        <p>Step 7: every CV topic that needs a real, built-by-you portfolio project — not because the underlying work-experience claim is doubted, but because a self-built project is the one thing that can be defended at unlimited depth with zero risk of contradiction.</p>
+      </div>
+      <div class="card" style="padding:10px 20px">
+        <ul style="font-size:.92rem;line-height:2;color:var(--ink-soft)">
+          <li><b style="color:var(--ink)">Revenue-optimization / resource-allocation model</b> (LP or heuristic, replicating the ~60-rep problem shape) — Stage 10 &amp; 31</li>
+          <li><b style="color:var(--ink)">XGBoost + Logistic Regression comparison project</b> on a forecasting-shaped dataset — Stage 9 &amp; 31</li>
+          <li><b style="color:var(--ink)">Self-service decision-support dashboard</b> (Power BI or a lightweight app) — Stage 12 &amp; 31</li>
+          <li><b style="color:var(--ink)">Salesforce/CRM workflow automation walkthrough</b> — Stage 29 &amp; 31</li>
+          <li><b style="color:var(--ink)">PRD + user story set</b> for a sample 0-to-1 product — Stage 14 &amp; 31</li>
+          <li><b style="color:var(--ink)">Chatbot / conversational flow prototype</b> (rule-based, then a GenAI/LLM version for contrast) — Stage 13, 30 &amp; 31</li>
+          <li><b style="color:var(--ink)">A/B test design + analysis</b> on a public dataset — Stage 11 &amp; 31</li>
+          <li><b style="color:var(--ink)">SQL + Python analytics project</b> covering cohort/funnel/retention — Stage 3, 4 &amp; 31</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="learnbuild">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>Where Depth Still Needs Building — LEARN + BUILD + DEFEND</h2>
+        <p>Steps 8–9: topics where the CV claim is honest but the depth behind it isn't fully there yet. These get the LEARN → BUILD → DEFEND treatment rather than being framed as finished experience — nothing here gets presented as something you've already mastered.</p>
+      </div>
+      <div class="card" style="padding:10px 20px">
+        <ul style="font-size:.92rem;line-height:2;color:var(--ink-soft)">
+          <li><b style="color:var(--ink)">Allocation methodology</b> behind the $10M / ~60-rep claim — mechanism confirmed as LP + heuristics (see <a href="#risk-6">Risk Matrix</a>), but the formal LP structure (objective function, constraints, decision variables) and the heuristic layer both still need to be built out technically in Stage 10 before they're interview-ready. LEARN + BUILD + DEFEND.</li>
+          <li><b style="color:var(--ink)">Chatbot ownership scoping</b> — "owned end-to-end" during a 2-month internship needs a precise, honest account of what you personally built vs. what the technical team handled.</li>
+          <li><b style="color:var(--ink)">Network optimization technical specifics</b> (the 28% improvement, the 50+ heatmaps) — real client outcomes, but the underlying method needs to be explainable at a technical level, not just the result.</li>
+          <li><b style="color:var(--ink)">PySpark/Databricks pipeline specifics</b> — hands-on usage confirmed; still needs the concrete pipeline/volume detail from Stage 5 before it's fully interview-ready. See <a href="#risk-7">Risk Matrix</a>.</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer class="next card" id="next">
+      <h3>What's next</h3>
+      <p>Steps 1–9 of your master instructions are now complete on this page. Step 10 just means "start Module 1" — which is Stage 2.</p>
+      <div class="step-list">
+        <div class="step done"><span class="s-num">✓</span> Steps 1–4 — CV analysis, Knowledge Map, contradiction check, Claim Matrix</div>
+        <div class="step done"><span class="s-num">✓</span> Steps 5–6 — full Masterbook Table of Contents + prioritized roadmap</div>
+        <div class="step done"><span class="s-num">✓</span> Steps 7–9 — hands-on-project list + honest-ownership flags per topic</div>
+        <div class="step"><span class="s-num">→</span> Stage 2 begins — Statistics + Mathematics</div>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<button class="backtop" id="backtop" title="Back to top" aria-label="Back to top">↑</button>
+
+<script>
+(function(){
+  var btn = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 500){ btn.classList.add('show'); } else { btn.classList.remove('show'); }
+  });
+  btn.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+})();
+</script>
+
+<script>
+(function(){
+  var claims = [
+    {t:"Owned data analysis for revenue-optimization initiative", topic:"Revenue optimization / resource allocation", lvl:"A", odds:"Very High", proj:true,
+      knowledge:"LP/IP optimization, allocation modeling, ROI attribution", depth:"Deep — method + numbers must both hold up", tech:"How was ~60 derived? What's the objective function?", biz:"How was $10M attributed / validated?", story:true, risk:"High — no method specified in CV", conf:0},
+    {t:"Modeled rep efficiency & cost-per-call", topic:"Feature engineering for efficiency metrics", lvl:"A", odds:"High", proj:true,
+      knowledge:"Metric design, cost modeling, feature engineering", depth:"Deep", tech:"What inputs defined 'efficiency'?", biz:"Why these two metrics over others?", story:true, risk:"Medium", conf:0},
+    {t:"Designed self-service decision-support tool", topic:"Decision-support tooling / dashboarding", lvl:"B", odds:"Medium-High", proj:true,
+      knowledge:"Requirements gathering, tool/UX design, Power BI or similar", depth:"Working", tech:"What was the tech stack behind it?", biz:"What decisions did it actually change?", story:true, risk:"Medium", conf:0},
+    {t:"Co-developed forecasting model (XGBoost, Logistic Regression)", topic:"XGBoost & Logistic Regression", lvl:"A", odds:"Very High", proj:true,
+      knowledge:"Full ML modeling lifecycle, both algorithms in depth", depth:"Deep — full 30-point treatment", tech:"Why these two models? Feature set? Evaluation metric?", biz:"How did adoption actually happen cross-functionally?", story:true, risk:"High — co-developed framing must stay honest", conf:0},
+    {t:"Bi-weekly stakeholder reviews shaping launch decisions", topic:"Executive communication / storytelling with data", lvl:"B", odds:"Medium", proj:false,
+      knowledge:"Executive communication, structuring a review", depth:"Working", tech:"n/a", biz:"Give an example of a decision that changed from your input", story:true, risk:"Low", conf:0},
+    {t:"Network optimization recommendations for ~15 clients", topic:"Optimization consulting / client delivery", lvl:"B", odds:"Medium", proj:false,
+      knowledge:"Client engagement process, optimization framing", depth:"Working", tech:"What data fed the recommendations?", biz:"How did clients evaluate ROI of the change?", story:true, risk:"Low", conf:0},
+    {t:"28% performance improvement via config changes", topic:"Network/telecom optimization concepts", lvl:"C", odds:"Low-Medium", proj:false,
+      knowledge:"Basic telecom/network concepts (coverage, latency, downtime)", depth:"Awareness+", tech:"What was actually changed technically?", biz:"How was 28% measured / baselined?", story:true, risk:"Medium — technical specifics likely thin", conf:0},
+    {t:"Optimization modeling across 50+ heatmaps", topic:"Spatial / coverage optimization", lvl:"C", odds:"Low-Medium", proj:false,
+      knowledge:"Heatmap interpretation, coverage modeling basics", depth:"Awareness", tech:"What tool generated the heatmaps?", biz:"n/a", story:true, risk:"Medium", conf:0},
+    {t:"Turnaround 10→8 days, +15% satisfaction", topic:"Process improvement / client ops", lvl:"B", odds:"Medium", proj:false,
+      knowledge:"Process improvement framing", depth:"Working", tech:"n/a", biz:"What specifically changed to cut 2 days?", story:true, risk:"Low", conf:0},
+    {t:"Lead management automation, +15% lead-to-conversion", topic:"CRM / Salesforce workflow automation", lvl:"B", odds:"Medium-High", proj:true,
+      knowledge:"Salesforce objects, workflow automation, CRM funnel logic", depth:"Working-Deep", tech:"What exactly did the automation do?", biz:"How was 15% measured/attributed?", story:true, risk:"Medium", conf:0},
+    {t:"500+ user stories, PRDs, requirements ownership", topic:"Product requirements & Agile delivery", lvl:"A", odds:"Very High (PM roles)", proj:true,
+      knowledge:"PRD structure, story writing, prioritization frameworks", depth:"Deep for PM interviews", tech:"Show a sample story / acceptance criteria", biz:"How were 500+ stories prioritized?", story:true, risk:"Low-Medium", conf:0},
+    {t:"Cross-team quality governance, -30% defects", topic:"Release / QA governance", lvl:"B", odds:"Medium", proj:false,
+      knowledge:"Release process, defect triage basics", depth:"Working", tech:"What governance mechanism cut defects?", biz:"n/a", story:true, risk:"Low", conf:0},
+    {t:"PRDs as reference data dictionary", topic:"Documentation practice", lvl:"C", odds:"Low", proj:false,
+      knowledge:"Documentation standards", depth:"Awareness", tech:"n/a", biz:"n/a", story:false, risk:"Low", conf:0},
+    {t:"Chatbot product — design & rollout, 20% cost reduction", topic:"GenAI/chatbot product design", lvl:"A", odds:"Very High", proj:true,
+      knowledge:"Conversation design, chatbot architecture, GenAI vs rule-based bots", depth:"Deep", tech:"Rule-based or LLM-based? What handled the 80% coverage?", biz:"How was the 20% cost figure derived?", story:true, risk:"High — 'owned end-to-end' during a 2-month internship needs careful scoping", conf:0},
+    {t:"100+ one-on-one user interviews", topic:"User research methodology", lvl:"B", odds:"Medium", proj:false,
+      knowledge:"Interview design, synthesis methods", depth:"Working", tech:"n/a", biz:"What changed as a direct result?", story:true, risk:"Low", conf:0},
+    {t:"Structured interaction flows covering 80% of queries", topic:"Conversation design / information architecture", lvl:"B", odds:"Medium", proj:true,
+      knowledge:"Flow design, coverage measurement", depth:"Working", tech:"How was 80% coverage measured?", biz:"n/a", story:true, risk:"Medium", conf:0},
+    {t:"Thematic issue framework from feedback", topic:"Qualitative synthesis", lvl:"C", odds:"Low", proj:false,
+      knowledge:"Thematic analysis basics", depth:"Awareness", tech:"n/a", biz:"n/a", story:false, risk:"Low", conf:0},
+    {t:"CareTail — 4-member team, GTM strategy", topic:"Product strategy / GTM / team leadership", lvl:"B", odds:"Medium", proj:true,
+      knowledge:"GTM frameworks, elderly-care market context", depth:"Working", tech:"n/a", biz:"What was the actual GTM plan?", story:true, risk:"Low", conf:0},
+    {t:"MakeMyTrip case comp — GenAI travel-bundling, semifinal", topic:"Case competition / GenAI ideation", lvl:"C", odds:"Low-Medium", proj:false,
+      knowledge:"Travel industry basics, GenAI recommendation concepts", depth:"Awareness", tech:"How would the recommender actually work?", biz:"n/a", story:true, risk:"Low", conf:0},
+    {t:"FDM Digital — real-time item tracking workflow", topic:"Operations workflow design", lvl:"C", odds:"Low", proj:false,
+      knowledge:"Workflow/process design basics", depth:"Awareness", tech:"n/a", biz:"n/a", story:true, risk:"Low", conf:0},
+    {t:"MILE — startup event coordination", topic:"Entrepreneurship exposure", lvl:"C", odds:"Low", proj:false,
+      knowledge:"None required — factual recall only", depth:"Awareness", tech:"n/a", biz:"n/a", story:false, risk:"Low", conf:0},
+    {t:"SQL, Python, PySpark, Databricks (tool list)", topic:"Core technical stack", lvl:"A", odds:"Very High", proj:true,
+      knowledge:"Full technical fluency in all four", depth:"Deep", tech:"Live coding risk in technical rounds", biz:"How does each connect to a business outcome?", story:false, risk:"High if depth isn't real", conf:0},
+    {t:"Hypothesis Testing, A/B Testing, AUC/ROC (tool list)", topic:"Statistical testing & evaluation", lvl:"A", odds:"High", proj:true,
+      knowledge:"Full statistical testing fluency", depth:"Deep", tech:"Walk through a full test design", biz:"How would you explain AUC to a non-technical stakeholder?", story:false, risk:"Medium-High", conf:0},
+    {t:"Salesforce Lightning, Workflow Automation (tool list)", topic:"CRM platform depth", lvl:"B", odds:"Medium (Capgemini-focused rounds)", proj:false,
+      knowledge:"Salesforce objects, automation tools, CPQ basics", depth:"Working", tech:"What automation did you personally configure?", biz:"n/a", story:true, risk:"Medium", conf:0},
+    {t:"IBM Certified PM / KPMG Lean Six Sigma Green Belt", topic:"Certifications", lvl:"D", odds:"Low-Medium", proj:false,
+      knowledge:"What each certification actually covers", depth:"Awareness+", tech:"n/a", biz:"n/a", story:false, risk:"Low, but only on 1 of 5 CVs — see Risk Matrix", conf:0}
+  ];
+
+  var body = document.getElementById('matrixBody');
+  var rows = '';
+  claims.forEach(function(c, i){
+    rows += '<tr class="claim-row" data-lvl="'+c.lvl+'" data-i="'+i+'">'
+      + '<td class="claim">'+c.t+'</td>'
+      + '<td class="topic">'+c.topic+'</td>'
+      + '<td><span class="lvl lvl-'+c.lvl+'">'+c.lvl+'</span></td>'
+      + '<td>'+c.odds+'</td>'
+      + '<td><span class="yn '+(c.proj?'y':'n')+'">'+(c.proj?'Yes':'—')+'</span></td>'
+      + '<td><span class="conf-dot" data-id="'+i+'" data-c="0" title="Click to set confidence"></span></td>'
+      + '</tr>'
+      + '<tr class="detail-row" data-i="'+i+'"><td colspan="6"><div class="detail-inner">'
+        + '<div class="f"><b>Knowledge required</b>'+c.knowledge+'</div>'
+        + '<div class="f"><b>Depth required</b>'+c.depth+'</div>'
+        + '<div class="f"><b>Technical follow-up</b>'+c.tech+'</div>'
+        + '<div class="f"><b>Business follow-up</b>'+c.biz+'</div>'
+        + '<div class="f"><b>Work-exp story required</b>'+(c.story?'Yes':'No')+'</div>'
+        + '<div class="f"><b>Risk if challenged</b>'+c.risk+'</div>'
+        + '</div></td></tr>';
+  });
+  body.innerHTML = rows;
+
+  // row expand/collapse
+  body.querySelectorAll('.claim-row').forEach(function(r){
+    r.addEventListener('click', function(e){
+      if(e.target.classList.contains('conf-dot')) return;
+      var i = r.getAttribute('data-i');
+      var d = body.querySelector('.detail-row[data-i="'+i+'"]');
+      d.classList.toggle('open');
+    });
+  });
+
+  // confidence dots, persisted per-viewer
+  var STORE_KEY = 'cv_matrix_confidence_v1';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); }catch(e){ saved = {}; }
+  body.querySelectorAll('.conf-dot').forEach(function(dot){
+    var id = dot.getAttribute('data-id');
+    if(saved[id] !== undefined){ dot.setAttribute('data-c', saved[id]); }
+    dot.addEventListener('click', function(e){
+      e.stopPropagation();
+      var c = parseInt(dot.getAttribute('data-c')||'0', 10);
+      c = (c + 1) % 4;
+      dot.setAttribute('data-c', c);
+      saved[id] = c;
+      try{ localStorage.setItem(STORE_KEY, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+
+  // filter bar
+  var buttons = document.querySelectorAll('.filterbar button');
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      buttons.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var f = btn.getAttribute('data-filter');
+      body.querySelectorAll('.claim-row').forEach(function(r){
+        var show = (f === 'all' || r.getAttribute('data-lvl') === f);
+        r.style.display = show ? '' : 'none';
+        var i = r.getAttribute('data-i');
+        var d = body.querySelector('.detail-row[data-i="'+i+'"]');
+        if(!show) d.classList.remove('open');
+        d.style.display = show ? '' : 'none';
+      });
+    });
+  });
+})();
+</script>
+
+
+

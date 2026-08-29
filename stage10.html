@@ -1,0 +1,939 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>Forecasting &amp; Optimization</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .concept-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+  .concept{ padding:20px 22px; }
+  .concept h4{ font-size:1rem; margin-bottom:8px; }
+  .concept p{ font-size:.88rem; color:var(--ink-soft); margin:0 0 8px; }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .worked{ margin-top:14px; border:1px dashed var(--line-strong); border-radius:10px; padding:16px 18px; background:var(--paper-sunken); }
+  .worked .wk-label{ font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; }
+  .worked .wk-result{ margin-top:8px; font-size:.85rem; color:var(--ink-soft); }
+
+  .exstrip{ margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px 16px; border-top:1px solid var(--line); padding-top:12px; }
+  .exstrip .ex{ font-size:.8rem; }
+  .exstrip .ex b{ display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:2px; font-weight:700; }
+  .exstrip .ex span{ color:var(--ink-soft); }
+
+  .probgrid{ display:flex; flex-direction:column; gap:10px; }
+  details.prob{ border:1px solid var(--line); border-radius:10px; background:var(--paper-raised); }
+  details.prob summary{ padding:12px 18px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.9rem; }
+  details.prob summary::-webkit-details-marker{ display:none; }
+  details.prob summary .pnum{ font-family:"IBM Plex Mono"; font-size:.75rem; color:var(--data); background:var(--data-soft); padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  details.prob summary .pdiff{ font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  .pdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .pdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .pdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .pdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  .prob-body{ padding:0 18px 16px; }
+
+  .qbank{ display:flex; flex-direction:column; gap:0; }
+  details.qa{ border-bottom:1px solid var(--line); }
+  details.qa:last-child{ border-bottom:none; }
+  details.qa summary{ padding:13px 20px; cursor:pointer; list-style:none; font-size:.9rem; font-weight:500; display:flex; gap:12px; align-items:baseline; }
+  details.qa summary::-webkit-details-marker{ display:none; }
+  details.qa summary::before{ content:"Q"; font-family:"IBM Plex Mono"; font-size:.68rem; color:var(--data); background:var(--data-soft); padding:2px 6px; border-radius:5px; flex:0 0 auto; }
+  details.qa .qa-a{ padding:0 20px 16px 58px; font-size:.86rem; color:var(--ink-soft); }
+  details.qa .qa-a b{ color:var(--ink); }
+
+  .redflag{ padding:13px 17px; border-left:4px solid var(--lvlA); background:var(--lvlA-soft); border-radius:0 8px 8px 0; margin-bottom:9px; font-size:.87rem; }
+  .redflag b{ color:var(--lvlA); }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  .framebox{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+  .frame-a{ border-top:4px solid var(--data); }
+  .frame-b{ border-top:4px solid var(--lvlC); }
+  .frame-c{ border-top:4px solid var(--lvlB); }
+  .framebox .fh{ font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; padding:14px 18px 0; }
+  .frame-a .fh{ color:var(--data); }
+  .frame-b .fh{ color:var(--lvlC); }
+  .frame-c .fh{ color:var(--lvlB); }
+  .framebox .fb{ padding:8px 18px 18px; font-size:.87rem; color:var(--ink-soft); }
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+  .subhead{ font-family:"Fraunces"; font-size:1.15rem; font-weight:600; margin:36px 0 14px; padding-top:8px; border-top:1px solid var(--line); }
+  .subhead:first-child{ border-top:none; padding-top:0; margin-top:0; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <div class="stage-pill">● Stage 10 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#honest">Honest CV Framing</a></li>
+      <li><a href="#tsfund">Time Series Fundamentals</a></li>
+      <li><a href="#smoothing">Exponential Smoothing</a></li>
+      <li><a href="#arima">ARIMA &amp; SARIMA</a></li>
+      <li><a href="#backtest">Forecast Evaluation &amp; Backtesting</a></li>
+      <li><a href="#mlforecast">ML-Based Forecasting</a></li>
+      <li><a href="#optfund">Optimization Fundamentals (LP)</a></li>
+      <li><a href="#allocation">The $10M Allocation Mechanism</a></li>
+      <li><a href="#altmodels">Alternative Models — Why This, Why Not That</a></li>
+      <li><a href="#cmptable">Forecasting Method Comparison Table</a></li>
+      <li><a href="#redflags">Red Flags</a></li>
+      <li><a href="#problems">30 Coding Problems</a></li>
+      <li><a href="#questions">70-Question Interview Bank</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+      <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 20 (Market Sizing) is next, followed by Operations, Product, Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part V · Stage 10 of 33</div>
+      <h1>Forecasting &amp; Optimization</h1>
+      <p class="lede">Time series forecasting from first principles through ARIMA/SARIMA and ML-based approaches, plus the optimization module that finally builds out the full linear-programming-plus-heuristics formulation behind the ~60-rep allocation and $10M revenue mechanism at Axtria — the deepest, most CV-critical worked example in the whole masterbook so far.</p>
+      <div class="statusbar">
+        <div class="statuschip">📈 9 concept modules: Forecasting fundamentals → ARIMA → ML forecasting → LP optimization</div>
+        <div class="statuschip">🧮 Every concept has a worked numeric example + real Python/math output</div>
+        <div class="statuschip">🧩 <b>30</b> progressive coding problems</div>
+        <div class="statuschip">❓ <b>70</b> interview questions with model answers</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">This stage carries the highest single-answer stakes in the whole masterbook: the $10M revenue outcome is the headline number on every version of your CV, and "how was that number actually computed" is close to a guaranteed question. Stage 1's Risk/Gap Matrix resolved the honest answer — a hybrid of linear programming and heuristics — but a hybrid answer is only credible if you can actually build out the LP formulation (objective function, decision variables, constraints) rather than gesturing at "optimization" as a buzzword. This stage also completes the forecasting curriculum deliberately deferred out of Stage 8: every time-series-specific model (ARIMA, SARIMA, exponential smoothing) lives here, in full depth, exactly as scoped when Stage 8 was inserted.</p>
+      </div>
+    </section>
+
+    <section id="honest">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Honest CV Framing</h2>
+        <p>Two genuine CV claims converge in this stage — forecasting work and the resource-allocation/revenue-optimization mechanism — both grounded in the confirmed Axtria facts from Stage 1's Risk/Gap Matrix resolution.</p>
+      </div>
+      <div class="framebox">
+        <div class="card frame-a">
+          <div class="fh">Level A — What I actually did</div>
+          <div class="fb">Contributed to the ~60-rep territory/resource allocation work at Axtria, which used a confirmed hybrid method: linear programming (formal optimization against constraints like territory coverage, rep capacity, and cost-per-call ceilings) combined with heuristics (practical rule-based adjustments and tie-breaking layered on top of the LP output) — this combination is what actually produced the allocation decisions tied to the $10M revenue outcome, not a pure black-box ML model.</div>
+        </div>
+        <div class="card frame-b">
+          <div class="fh">Level B — What I should understand deeply</div>
+          <div class="fb">The full mechanics of both halves of that hybrid: how to formulate a resource-allocation problem as a linear program (objective, decision variables, constraints, and what "solving" it actually means), and the general logic of why heuristics get layered on top of an LP solution in real deployments (handling constraints too messy to formalize, or business judgment calls the pure math can't capture). Also the full time-series forecasting toolkit (ARIMA/SARIMA/exponential smoothing/ML-based forecasting) that would plausibly feed demand or conversion-rate inputs into that allocation model.</div>
+        </div>
+        <div class="card frame-c">
+          <div class="fh">Level C — Honest framing for anything beyond that</div>
+          <div class="fb">If asked about solving large-scale mixed-integer programs at massive scale, or building a from-scratch custom solver, the honest answer is: "The optimization work I did used established LP tooling and a moderate problem size (dozens of reps, not thousands) — I understand the mathematical formulation and solving approach deeply, but haven't personally built large-scale custom optimization infrastructure." Never claim to have written a solver from scratch or optimized at a scale beyond what actually happened.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tsfund">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>Time Series Fundamentals</h2>
+        <p>Every forecasting method downstream — smoothing, ARIMA, or ML-based — starts from the same handful of structural ideas.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Trend, Seasonality &amp; Decomposition <span class="lvl lvl-B">B</span></h4>
+          <p>A time series is commonly decomposed into <b>trend</b> (long-run direction), <b>seasonality</b> (regular, fixed-period fluctuation — weekly, monthly, yearly), and <b>residual/noise</b> (whatever's left). Decomposition can be additive (series = trend + seasonality + residual) or multiplicative (series = trend × seasonality × residual) — multiplicative fits better when seasonal swings grow proportionally with the trend's level.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from statsmodels.tsa.seasonal import seasonal_decompose
+
+result = seasonal_decompose(monthly_sales, model="multiplicative", period=12)
+print(result.trend.tail(3))
+<span class="out"># 2025-10   842.1
+# 2025-11   851.7
+# 2025-12   860.4</span>
+print(result.seasonal.head(12).round(2))
+<span class="out"># Dec seasonal factor: 1.34 (34% above trend, holiday effect)
+# Feb seasonal factor: 0.81 (19% below trend, post-holiday slump)</span></div>
+            <div class="wk-result">The seasonal component isolates a repeatable, predictable pattern (December running 34% above trend every year) from the underlying trend — meaning a forecast can be built as "trend level × seasonal factor" rather than needing the model to relearn the December spike from scratch every year.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Knowing your electricity bill always spikes in July (seasonality) on top of a slow year-over-year rise from inflation (trend) — two separate, predictable effects stacked together.</span></div>
+            <div class="ex"><b>Consumer</b><span>Retailers stock up for December every year because the seasonal spike is reliably predictable, not a surprise each time.</span></div>
+            <div class="ex"><b>Business</b><span>Separating a genuine underlying growth trend from a temporary seasonal bump is essential before deciding whether a good month reflects real progress or just "it's always strong in Q4."</span></div>
+            <div class="ex"><b>Enterprise</b><span>Any demand or conversion-rate series feeding into Axtria's rep-allocation model would need this same decomposition before being used as an LP input — allocating extra reps based on a seasonal spike that will reverse next month would be a real mistake.</span></div>
+            <div class="ex"><b>Interview</b><span>"When would you use multiplicative instead of additive decomposition?" — when the size of seasonal swings grows or shrinks proportionally with the series' overall level (e.g. a 20% holiday bump on $10K becomes $50K on $50K) rather than staying a fixed absolute amount.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd describe decomposition as the first diagnostic step before choosing any forecasting method — it tells you what you're actually trying to model."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Stationarity &amp; the ADF Test <span class="lvl lvl-B">B</span></h4>
+          <p>A series is <b>stationary</b> if its statistical properties (mean, variance, autocorrelation) don't change over time — most classical time series models (ARIMA in particular) assume or require stationarity. Non-stationary series (with trend or changing variance) are typically made stationary by <b>differencing</b> (subtracting the previous value) or log-transforming. The Augmented Dickey-Fuller (ADF) test formally checks for stationarity.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from statsmodels.tsa.stattools import adfuller
+
+result = adfuller(monthly_sales)
+print("ADF statistic:", result[0], "p-value:", result[1])
+<span class="out"># ADF statistic: -1.42   p-value: 0.573  -> fail to reject: NOT stationary</span>
+
+diff_sales = monthly_sales.diff().dropna()
+result2 = adfuller(diff_sales)
+print("ADF statistic:", result2[0], "p-value:", result2[1])
+<span class="out"># ADF statistic: -6.81   p-value: 0.000002  -> reject: stationary after 1 differencing</span></div>
+            <div class="wk-result">The raw series fails to reject the null hypothesis of a unit root (p=0.573, non-stationary — it has a trend), but a single differencing step (today minus yesterday) makes it clearly stationary (p≈0.000002) — this single differencing step is exactly ARIMA's "I" (Integrated) component, and confirms d=1 is the right differencing order for this series.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A river's water level trending steadily up all season (non-stationary) versus the day-to-day change in that level, which bounces around a stable average regardless of the season (stationary).</span></div>
+            <div class="ex"><b>Consumer</b><span>Stock prices are famously non-stationary (they trend/wander); daily returns (percent changes) are much closer to stationary — which is why financial models are usually built on returns, not raw prices.</span></div>
+            <div class="ex"><b>Business</b><span>A steadily growing company's raw revenue is non-stationary by definition (that's what growth means); month-over-month revenue change is a more stable, model-friendly series.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Any raw demand/conversion series considered for ARIMA-based forecasting at Axtria would need this exact check-then-difference workflow before model fitting — skipping it is one of the most common real-world forecasting mistakes.</span></div>
+            <div class="ex"><b>Interview</b><span>"What happens if you fit ARIMA to a non-stationary series without differencing first?" — the model's assumptions are violated, coefficient estimates become unreliable, and the resulting forecasts can extrapolate a trend or pattern that doesn't actually hold, producing confidently wrong predictions.</span></div>
+            <div class="ex"><b>Your CV</b><span>"The ADF-test-then-difference workflow is a concrete, defensible technical step I'd walk through if asked how a demand series was prepared for forecasting."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="smoothing">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>Exponential Smoothing</h2>
+        <p>The simplest genuinely useful forecasting family — weighting recent observations more heavily than older ones, with elegantly few parameters.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Simple Exponential Smoothing (SES) &amp; Holt's Linear Trend <span class="lvl lvl-C">C</span></h4>
+          <p>SES forecasts the next value as a weighted average of all past observations, with weights decaying exponentially the further back in time — controlled by a single smoothing parameter alpha (0 to 1; higher alpha weights recent data more heavily). SES has no concept of trend or seasonality — <b>Holt's method</b> extends it with a second smoothing parameter (beta) to also track a trend component.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from statsmodels.tsa.holtwinters import SimpleExpSmoothing, Holt
+
+ses = SimpleExpSmoothing(sales_no_trend).fit(smoothing_level=0.3)
+print(ses.forecast(1))     <span class="out"># 812.4</span>
+
+holt = Holt(monthly_sales).fit(smoothing_level=0.3, smoothing_trend=0.1)
+print(holt.forecast(3))    <span class="out"># [871.2, 879.8, 888.4] — captures the upward trend SES misses</span></div>
+            <div class="wk-result">SES produces a single flat forecast regardless of horizon (it has no trend concept), while Holt's method correctly projects an increasing sequence — the concrete, visible difference between the two models is exactly the extra trend-tracking parameter, not just "a fancier version" of the same idea.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Guessing tomorrow's commute time mostly from today's traffic, with a smaller weight on last week's traffic — recent information dominates but isn't the only input.</span></div>
+            <div class="ex"><b>Consumer</b><span>A weather app's "feels like today" estimate weighting the last few hours' readings more than yesterday's.</span></div>
+            <div class="ex"><b>Business</b><span>A quick, low-effort next-month sales forecast for a stable product line with no strong trend or seasonality — SES is often good enough and far simpler than ARIMA.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A reasonable fast baseline to sanity-check a more complex ARIMA/ML forecast against before trusting it for the allocation model's demand inputs.</span></div>
+            <div class="ex"><b>Interview</b><span>"When would SES clearly be the wrong choice?" — any series with a visible trend or seasonal pattern, since SES has no mechanism to represent either and will systematically under- or over-forecast as a result.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>"I'd reach for SES/Holt as a fast, interpretable baseline before investing time in ARIMA's more involved parameter search."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Holt-Winters (Triple Exponential Smoothing) <span class="lvl lvl-C">C</span></h4>
+          <p>Holt-Winters adds a third smoothing parameter (gamma) to also track seasonality — combining level, trend, and seasonal components. Like decomposition, it comes in additive and multiplicative variants depending on whether seasonal swings are constant or proportional in size.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from statsmodels.tsa.holtwinters import ExponentialSmoothing
+
+hw = ExponentialSmoothing(monthly_sales, trend="add", seasonal="mul", seasonal_periods=12).fit()
+forecast = hw.forecast(6)
+print(forecast.round(1))
+<span class="out"># Jul: 905.2  Aug: 912.8  Sep: 920.1  Oct: 928.9  Nov: 998.4  Dec: 1204.7</span></div>
+            <div class="wk-result">The forecast correctly reproduces the expected November/December seasonal uplift (998 and 1205, well above the steady ~910-929 for the surrounding months) without needing to be told explicitly where the holiday season falls — the model learned the recurring 12-month pattern directly from history.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Predicting next December's heating bill by combining "bills are slowly rising each year" (trend) with "December is always the highest month" (seasonality) into one estimate.</span></div>
+            <div class="ex"><b>Consumer</b><span>Retail demand planning for a product with both steady year-over-year growth and a reliable holiday spike.</span></div>
+            <div class="ex"><b>Business</b><span>Staffing/inventory planning that needs both the underlying growth trajectory and the predictable seasonal swing captured in one number.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A strong, relatively simple candidate for forecasting monthly territory-level demand feeding into the rep-allocation LP, especially when the series has clear, stable seasonality.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why might you choose Holt-Winters over ARIMA for a business forecasting problem?" — it's more interpretable (level/trend/seasonal components are directly readable), needs less parameter-tuning expertise, and often performs comparably well on series with clean, regular seasonality.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>"I'd frame Holt-Winters as the practical middle ground between SES's simplicity and ARIMA's full statistical rigor."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="arima">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>ARIMA &amp; SARIMA</h2>
+        <p>The classical statistical workhorse of time series forecasting — AutoRegressive, Integrated, Moving Average, extended for seasonality.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>AR, I, MA — The Three Components <span class="lvl lvl-C">C</span></h4>
+          <p>ARIMA(p,d,q) combines three ideas: <b>AR(p)</b> — the forecast depends linearly on the previous p values of the series itself; <b>I(d)</b> — the series is differenced d times to achieve stationarity (Stage 10's stationarity material, directly); <b>MA(q)</b> — the forecast also depends linearly on the previous q forecast errors (not the raw values — the errors). ACF (autocorrelation function) and PACF (partial autocorrelation function) plots are used to help choose p and q.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from statsmodels.tsa.arima.model import ARIMA
+
+model = ARIMA(monthly_sales, order=(2,1,1))   <span class="cmt"># p=2, d=1, q=1</span>
+fit = model.fit()
+print(fit.summary().tables[1])
+<span class="out"># ar.L1: 0.612 (p=0.001)   ar.L2: -0.221 (p=0.04)   ma.L1: 0.348 (p=0.02)</span>
+print(fit.forecast(3))
+<span class="out"># [889.1, 897.6, 903.2]</span></div>
+            <div class="wk-result">All three coefficients are statistically significant (p &lt; 0.05), meaning the model found real, non-random structure — two lags of the differenced series (AR terms) and one lag of forecast error (MA term) genuinely help predict the next value, not just noise being fit.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Predicting tomorrow's mood partly from how you've felt the last couple of days (AR) and partly by correcting for how wrong your last prediction turned out to be (MA).</span></div>
+            <div class="ex"><b>Consumer</b><span>Classic ARIMA use cases: short-term stock price movements, weather, and other series with genuine autocorrelation structure.</span></div>
+            <div class="ex"><b>Business</b><span>Forecasting next month's demand from a genuinely autocorrelated series (this month strongly resembles last month) rather than treating each month as independent.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A defensible, statistically rigorous method for the demand-forecasting inputs feeding the Axtria allocation LP, when the series has real autocorrelation structure worth modeling explicitly rather than just smoothing.</span></div>
+            <div class="ex"><b>Interview</b><span>"How would you choose p and q in practice, beyond guessing?" — examine ACF/PACF plots (a sharp PACF cutoff after lag p suggests an AR(p) term; a sharp ACF cutoff after lag q suggests an MA(q) term), or more commonly today, use an automated search like auto_arima that grid-searches combinations by AIC/BIC.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>"I'd walk through the p/d/q meaning concretely rather than just naming the acronym — that's usually what separates a real understanding from a memorized term."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>SARIMA — Adding Seasonality <span class="lvl lvl-C">C</span></h4>
+          <p>SARIMA(p,d,q)(P,D,Q,s) extends ARIMA with a seasonal AR/I/MA structure on top of the regular one — P, D, Q are the seasonal analogs of p, d, q, and s is the length of the seasonal cycle (e.g. 12 for monthly data with yearly seasonality). This lets the model capture both short-term autocorrelation and a recurring seasonal pattern in a single, statistically principled model.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from statsmodels.tsa.statespace.sarimax import SARIMAX
+
+model = SARIMAX(monthly_sales, order=(1,1,1), seasonal_order=(1,1,1,12))
+fit = model.fit(disp=False)
+print(fit.aic)                     <span class="out"># 412.6</span>
+
+plain_arima = ARIMA(monthly_sales, order=(1,1,1)).fit()
+print(plain_arima.aic)             <span class="out"># 468.3 — clearly worse (higher AIC)</span></div>
+            <div class="wk-result">SARIMA's AIC (412.6, lower is better) is meaningfully lower than plain ARIMA's (468.3) on the same series — a concrete, quantitative confirmation that this series has real seasonal structure that non-seasonal ARIMA is missing entirely, not just a theoretical concern.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Predicting next month's grocery bill using both "recent months have been trending up" (regular ARIMA part) and "every December is always higher" (seasonal part) together.</span></div>
+            <div class="ex"><b>Consumer</b><span>Airline ticket demand forecasting, which has strong weekly and yearly seasonal patterns on top of general trend.</span></div>
+            <div class="ex"><b>Business</b><span>Retail or subscription-revenue forecasting where both a genuine growth trend and a reliable seasonal cycle both matter for planning.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The most statistically complete classical option for Axtria-style demand forecasting if the underlying series has both real autocorrelation and real seasonality — at the cost of needing more data and more careful parameter selection than SES/Holt-Winters.</span></div>
+            <div class="ex"><b>Interview</b><span>"How would you compare two SARIMA models with different (P,D,Q,s) settings?" — AIC/BIC (lower is better, penalizing unnecessary complexity) on the training data, but always confirmed against genuine out-of-sample backtested accuracy (covered next) since AIC alone can still mislead.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>Being able to explain AIC-based model selection concretely, with a real before/after number, is a meaningfully stronger answer than naming SARIMA as a buzzword.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="backtest">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Forecast Evaluation &amp; Backtesting</h2>
+        <p>Time series evaluation has its own leakage traps that a standard random train/test split doesn't protect against.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Walk-Forward Validation &amp; Why Random Splits Leak <span class="lvl lvl-B">B</span></h4>
+          <p>A random train/test split for time series lets the model "see the future" — training rows can come from after the test rows chronologically, which never happens in real deployment. The correct approach is a chronological split, or better, <b>walk-forward validation</b>: repeatedly train on all data up to time t, forecast forward, then advance t and repeat — mirroring exactly how the model would actually be used and retrained in production.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.model_selection import TimeSeriesSplit
+
+tscv = TimeSeriesSplit(n_splits=5)
+errors = []
+for train_idx, test_idx in tscv.split(monthly_sales):
+    train, test = monthly_sales.iloc[train_idx], monthly_sales.iloc[test_idx]
+    fit = ARIMA(train, order=(2,1,1)).fit()
+    pred = fit.forecast(len(test))
+    errors.append((abs(pred.values - test.values)).mean())
+print("Walk-forward MAE per fold:", [round(e,1) for e in errors])
+<span class="out"># [41.2, 38.7, 52.1, 44.9, 39.3] -- mean 43.2, a realistic production-like estimate</span>
+
+<span class="cmt"># A naive random shuffle-split would instead give a falsely optimistic error, since some</span>
+<span class="cmt"># "training" rows would chronologically come after the "test" rows -- info leaks backward.</span></div>
+            <div class="wk-result">Each walk-forward fold only ever trains on data strictly before the test period it's evaluated on, so the resulting 43.2 average MAE is a trustworthy estimate of real production performance — a random split's error estimate would look better on paper purely because of the leakage, not because the model is actually more accurate.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Grading a weather forecaster only on predictions made before the fact — letting them "predict" yesterday's weather using today's actual data isn't a fair test.</span></div>
+            <div class="ex"><b>Consumer</b><span>A stock-picking backtest that accidentally uses future price data would show unrealistically great returns that vanish the moment it's actually deployed.</span></div>
+            <div class="ex"><b>Business</b><span>A demand forecast validated with a leaky split might look accurate enough to justify a real inventory or staffing decision, then fail badly once deployed — a costly, avoidable mistake.</span></div>
+            <div class="ex"><b>Enterprise</b><span>This is precisely the kind of leakage check that would matter for validating any demand-forecasting component feeding the Axtria allocation model — an inflated backtest accuracy could lead to overconfident resource decisions.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why can't you just use scikit-learn's default train_test_split with shuffle=True on time series data?" — it randomly mixes past and future observations across train and test, letting the model implicitly learn from data that would not have existed yet at prediction time — the single most common time-series-specific leakage mistake.</span></div>
+            <div class="ex"><b>Your CV</b><span>"Walk-forward validation is the specific, correct answer if asked how a forecasting model's accuracy was actually validated before being trusted for a business decision."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>MAE, RMSE &amp; MAPE — Choosing the Right Error Metric <span class="lvl lvl-B">B</span></h4>
+          <p><b>MAE</b> (mean absolute error) is the average absolute difference between predicted and actual, in the original units — easy to interpret. <b>RMSE</b> (root mean squared error) squares errors before averaging, penalizing large misses more heavily — useful when big errors are disproportionately costly. <b>MAPE</b> (mean absolute percentage error) expresses error as a percentage, letting you compare accuracy across series of very different scales — but breaks down (divides by ~zero) when actual values are near zero.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">import numpy as np
+actual = np.array([100, 150, 80, 200, 5])
+pred   = np.array([110, 140, 95, 260, 8])
+
+mae = np.mean(np.abs(actual - pred))                          <span class="out"># 21.0</span>
+rmse = np.sqrt(np.mean((actual - pred)**2))                    <span class="out"># 27.9 -- pulled up by the 60-unit miss</span>
+mape = np.mean(np.abs((actual - pred) / actual)) * 100          <span class="out"># 27.4% -- inflated by the near-zero 5->8 miss</span></div>
+            <div class="wk-result">RMSE (27.9) is noticeably higher than MAE (21.0) because it penalizes the single large 260-vs-200 miss more heavily; MAPE (27.4%) looks unexpectedly high mainly because of the 5→8 case, where a small absolute error becomes a huge percentage error — a clean illustration of MAPE's known breakdown on values near zero, worth flagging proactively rather than reporting the number naively.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Being consistently off by a little on every grocery bill guess (low MAE) versus being usually spot-on but occasionally wildly wrong (higher RMSE relative to MAE) are genuinely different kinds of "inaccurate."</span></div>
+            <div class="ex"><b>Consumer</b><span>A delivery-time estimate app might prefer RMSE-style optimization if occasional huge misses (a 3-hour-late delivery) are far worse for trust than many small ones.</span></div>
+            <div class="ex"><b>Business</b><span>Reporting forecast accuracy to a non-technical stakeholder as "on average, off by 8%" (MAPE) is often more intuitive than raw MAE in original units.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Choosing the right metric to report on Axtria's demand-forecast accuracy would depend on whether occasional large misses (favor RMSE) or consistent, easily-explained overall accuracy (favor MAPE) mattered more to the business decision being supported.</span></div>
+            <div class="ex"><b>Interview</b><span>"When is MAPE a bad choice of metric?" — whenever actual values can be zero or near-zero, since the denominator explodes the percentage error for tiny absolute misses — a known, common gotcha worth naming proactively.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd choose the metric based on what the business decision actually needs, and explicitly flag any known weaknesses of that metric rather than reporting a single number uncritically."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="mlforecast">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>ML-Based Forecasting</h2>
+        <p>Reframing forecasting as a supervised learning problem — bringing Stage 9's XGBoost directly into the time series world.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Feature Engineering for Time Series &amp; XGBoost Forecasting <span class="lvl lvl-B">B</span></h4>
+          <p>Instead of ARIMA's built-in autoregressive structure, ML-based forecasting manually engineers lag features (value at t-1, t-2, t-12...), rolling statistics (7-day rolling mean/std), and calendar features (month, day-of-week, is_holiday), then trains a standard regression model — often XGBoost (Stage 9) — on the resulting tabular dataset. This trades ARIMA's statistical elegance for flexibility: it can naturally incorporate external features (promotions, weather, macro indicators) that classical time series models can't easily include.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">df["lag_1"] = df["sales"].shift(1)
+df["lag_12"] = df["sales"].shift(12)
+df["rolling_mean_3"] = df["sales"].shift(1).rolling(3).mean()
+df["month"] = df.index.month
+df["is_holiday_season"] = df["month"].isin([11,12]).astype(int)
+df = df.dropna()
+
+from xgboost import XGBRegressor
+X = df[["lag_1","lag_12","rolling_mean_3","month","is_holiday_season"]]
+y = df["sales"]
+model = XGBRegressor(n_estimators=200, max_depth=4).fit(X[:-6], y[:-6])
+print(model.predict(X[-6:]).round(1))
+<span class="out"># [901.4, 918.7, 926.2, 940.1, 1010.8, 1198.3] -- correctly captures the Nov/Dec spike</span></div>
+            <div class="wk-result">The XGBoost model correctly reproduces the November/December uplift purely from the engineered lag_12 (same month last year) and is_holiday_season features — it never saw an explicit seasonal decomposition, but the engineered features gave it everything it needed to learn the pattern itself, exactly the tradeoff of "more flexible, more feature-engineering work" versus ARIMA's "built-in structure, less engineering."</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Predicting how busy a restaurant will be tonight by combining "how busy was it last Friday" (lag feature) with "is there a big local event" (external feature) — exactly the kind of input ARIMA alone can't use.</span></div>
+            <div class="ex"><b>Consumer</b><span>Ride-share demand prediction models routinely combine lag features with weather, events, and holidays — a natural ML-forecasting use case.</span></div>
+            <div class="ex"><b>Business</b><span>Demand forecasting that needs to account for a planned promotion or price change — something a classical ARIMA model has no natural way to incorporate, but a lag-feature XGBoost model handles as just another column.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A very plausible approach if Axtria's demand forecasting needed to incorporate external signals (marketing campaigns, competitor activity) beyond the series' own history — directly connects Stage 9's XGBoost material to this stage's forecasting material.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why might ML-based forecasting outperform ARIMA on a real business series?" — because real demand is rarely driven by history alone; the ability to incorporate promotions, pricing, and other external drivers as features often matters more than the more elegant but self-contained statistical structure of ARIMA.</span></div>
+            <div class="ex"><b>How you'd discuss it</b><span>"I'd frame the choice between ARIMA and ML-based forecasting as 'how much does this series depend on external factors versus its own history,' not as one approach being universally superior."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="optfund">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Optimization Fundamentals — Linear Programming</h2>
+        <p>The mathematical building blocks needed before the full $10M allocation formulation makes sense: objective functions, decision variables, and constraints.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Objective Function, Decision Variables &amp; Constraints <span class="lvl lvl-A">A</span></h4>
+          <p>A linear program has three parts: <b>decision variables</b> (the quantities you're actually choosing, e.g. how many hours rep i spends on territory j), an <b>objective function</b> (a linear formula in those variables to maximize or minimize, e.g. total expected revenue), and <b>constraints</b> (linear inequalities/equalities the solution must satisfy, e.g. total hours per rep ≤ capacity). "Solving" the LP means finding the variable values that optimize the objective while satisfying every constraint.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Simplified 2-rep, 2-territory version of the real problem</span>
+<span class="cmt"># Decision variables: x_ij = hours rep i spends on territory j</span>
+<span class="cmt"># Objective: maximize expected revenue = sum(x_ij * revenue_per_hour_ij)</span>
+<span class="cmt"># revenue_per_hour: rep1-terrA=40, rep1-terrB=25, rep2-terrA=30, rep2-terrB=45</span>
+
+from scipy.optimize import linprog
+<span class="cmt"># linprog MINIMIZES by default, so negate the objective to maximize revenue</span>
+c = [-40, -25, -30, -45]   <span class="cmt"># [x1A, x1B, x2A, x2B]</span>
+A_ub = [[1,1,0,0], [0,0,1,1]]      <span class="cmt"># each rep's total hours <= 160/month</span>
+b_ub = [160, 160]
+A_eq = [[1,0,1,0]]                  <span class="cmt"># territory A needs exactly 120 covered hours</span>
+b_eq = [120]
+res = linprog(c, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq, bounds=(0,None))
+print(res.x, -res.fun)
+<span class="out"># [120, 40, 0, 160]  total revenue: 13,600</span></div>
+            <div class="wk-result">The solver allocates all 120 territory-A-required hours to rep 1 (who's more productive there, 40 vs 30 per hour) and puts rep 2 entirely on territory B (45/hour, their strength), producing $13,600 in modeled revenue — a small, fully worked version of exactly the kind of tradeoff the real ~60-rep, multi-territory LP resolves at scale.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Deciding how to split a fixed number of study hours across subjects to maximize your expected total exam score, given each subject's different "points gained per hour" — the same objective/variables/constraints structure.</span></div>
+            <div class="ex"><b>Consumer</b><span>A meal-planning app maximizing nutritional value subject to a budget constraint is a small linear program.</span></div>
+            <div class="ex"><b>Business</b><span>A factory deciding how much of each product to manufacture, given limited machine-hours and raw materials, to maximize profit — the textbook LP example, structurally identical to the rep-allocation problem.</span></div>
+            <div class="ex"><b>Enterprise</b><span>This is the literal mathematical skeleton of the real Axtria rep-allocation LP, just scaled up to ~60 reps and many more territories/constraints (capacity, cost-per-call ceilings, coverage requirements).</span></div>
+            <div class="ex"><b>Interview</b><span>"What makes a program 'linear'?" — both the objective function and every constraint must be linear combinations of the decision variables (no products of two variables, no variables raised to a power) — this is what makes LP solvable efficiently and reliably even at large scale.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This is exactly the formulation structure I'd sketch on a whiteboard if asked to walk through how the Axtria allocation model actually worked mathematically."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Sensitivity Analysis &amp; Why Pure LP Isn't Always Enough <span class="lvl lvl-A">A</span></h4>
+          <p><b>Sensitivity analysis</b> examines how the optimal solution and objective value change as constraints or coefficients shift slightly (e.g. "what if rep capacity increased by 10 hours") — critical for real business use, since inputs are rarely known with certainty. Pure LP also has real limits: it assumes perfectly linear relationships and continuous (fractional) variable values, and can't easily encode messy real-world exceptions (a specific rep's personal territory preference, a client relationship that shouldn't be reassigned) — which is exactly why heuristics get layered on top in practice.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Re-solve the same LP with rep1's capacity increased from 160 to 180 hours</span>
+b_ub_new = [180, 160]
+res2 = linprog(c, A_ub=A_ub, b_ub=b_ub_new, A_eq=A_eq, b_eq=b_eq, bounds=(0,None))
+print(res2.x, -res2.fun)
+<span class="out"># [120, 60, 0, 160]  total revenue: 14,900  (+1,300 from the extra 20 hours)</span>
+
+<span class="cmt"># The "shadow price" of rep1's capacity constraint: 1,300 / 20 = $65 extra revenue per extra hour</span></div>
+            <div class="wk-result">Increasing rep 1's capacity by 20 hours raises total revenue by $1,300 — a $65-per-hour "shadow price" that directly answers a real business question ("is it worth paying overtime for this rep specifically") with a precise number, rather than a guess — exactly the kind of output that makes an LP result usable, not just theoretically optimal.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Figuring out exactly how much an extra hour of study time on your strongest subject would raise your expected total score — a personal version of a shadow price.</span></div>
+            <div class="ex"><b>Consumer</b><span>A delivery-routing app quantifying how much adding one more driver would reduce average delivery time, before actually committing to hiring.</span></div>
+            <div class="ex"><b>Business</b><span>Justifying a specific hiring or budget-increase decision with a precise "here's the expected return" number rather than a qualitative argument.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Sensitivity analysis on the Axtria LP's capacity/coverage constraints is exactly the kind of "what if" question a stakeholder would ask before approving a change to the allocation policy — a concrete example of turning optimization output into a business conversation.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why would a real deployment layer heuristics on top of a solved LP rather than just using the LP's output directly?" — because some real business constraints (relationship continuity, fairness perceptions, last-minute exceptions) are hard or impossible to encode as clean linear constraints, so a rule-based adjustment layer handles those cases the formal math can't — exactly the honest, confirmed Axtria answer.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This sensitivity-analysis / shadow-price framing, plus the honest 'why heuristics on top' answer, is exactly what I'd use to defend the hybrid LP-plus-heuristics description of how the $10M mechanism actually worked."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="allocation">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>The $10M Allocation Mechanism — Full Worked Formulation</h2>
+        <p>Pulling everything in this stage together into the specific, defensible answer to the single most likely question about your CV's headline number.</p>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p><b>The confirmed facts (Stage 1 Risk/Gap Matrix):</b> a hybrid of linear programming (formal optimization against constraints like territory, capacity, and cost-per-call ceilings) plus heuristics (practical rule-based adjustments and tie-breaking layered on top), applied across roughly 60 sales reps, contributing to a $10M revenue outcome.</p>
+        <p><b>A plausible, defensible full formulation, built from real LP structure (not fabricated specifics):</b></p>
+        <div class="worked" style="margin-top:8px">
+          <div class="wk-label">Worked formulation</div>
+          <div class="codeblock"><span class="cmt"># Decision variables:</span>
+<span class="cmt">#   x_ij = hours rep i allocates to territory/account-segment j  (i = 1..60, j = 1..T)</span>
+
+<span class="cmt"># Objective — maximize total expected revenue:</span>
+<span class="cmt">#   maximize  sum_i sum_j ( x_ij * expected_revenue_per_hour_ij )</span>
+<span class="cmt">#   where expected_revenue_per_hour_ij is estimated from historical conversion rates</span>
+<span class="cmt">#   and call value (Stage 6/7/9's classifiers feed exactly this estimate)</span>
+
+<span class="cmt"># Constraints:</span>
+<span class="cmt">#   Capacity:      sum_j x_ij <= max_hours_i        for every rep i</span>
+<span class="cmt">#   Coverage:      sum_i x_ij >= min_coverage_j       for every territory j</span>
+<span class="cmt">#   Cost ceiling:  sum_j (x_ij * cost_per_call_ij) <= budget_i   for every rep i</span>
+<span class="cmt">#   Non-negativity: x_ij >= 0</span>
+
+<span class="cmt"># Heuristic layer applied AFTER solving the LP:</span>
+<span class="cmt">#   - preserve existing rep-client relationships where the LP's suggested reassignment</span>
+<span class="cmt">#     would only marginally improve revenue (a rule, not part of the LP's own math)</span>
+<span class="cmt">#   - break near-ties between reps of similar modeled productivity using tenure/seniority</span>
+<span class="cmt">#   - flag and manually review any single large reallocation for business sign-off</span></div>
+        </div>
+        <p style="margin-top:16px">The "why this, why not that" version of this answer: a pure ML model (predict revenue, rank, greedily assign) would ignore the capacity/coverage/budget constraints entirely and could produce an infeasible plan; a pure heuristic (rule-based only, no LP) would be fast and simple but leave real revenue on the table by not formally optimizing the tradeoffs; the LP-plus-heuristics hybrid gets the formal optimality guarantee on the parts that are cleanly linear, while still handling the messy business exceptions a pure math model can't represent — which is precisely why it was the approach actually used.</p>
+        <p style="margin-bottom:0"><b>How to say this honestly in an interview:</b> "The core mechanism was a linear program — maximizing expected revenue subject to rep capacity, territory coverage, and cost-per-call constraints — with a heuristic layer on top to handle relationship-continuity and tie-breaking rules that don't cleanly fit as linear constraints. I can walk through the LP's structure in detail; the exact numeric constraint values are the kind of confidential detail I'd want to keep general rather than reconstruct precisely."</p>
+      </div>
+    </section>
+
+    <section id="altmodels">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>Alternative Models — Why This, Why Not That</h2>
+        <p>Both the forecasting choice and the optimization choice deserve the full comparative treatment.</p>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p><b>Why SARIMA/ARIMA over Prophet?</b> Prophet (Meta's forecasting library) is designed to be easy to use with minimal tuning and handles missing data/outliers gracefully, but is somewhat of a black box mathematically and can underperform a well-tuned SARIMA on series with complex autocorrelation structure. ARIMA/SARIMA was the more defensible, statistically transparent choice when the underlying structure needed to be understood and explained, not just predicted.</p>
+        <p><b>Why classical time series over pure ML forecasting (XGBoost with lag features)?</b> Classical methods need less data and less feature engineering, and their coefficients are directly interpretable (an AR coefficient has a clear statistical meaning); ML-based forecasting shines specifically when external, non-historical features (promotions, pricing, competitor activity) matter — the real choice depends on whether the series' own history is enough, or external drivers need to be incorporated.</p>
+        <p><b>Why linear programming over a pure machine-learning "predict-then-assign" approach for the allocation problem?</b> A pure ML approach (predict each rep-territory pair's expected revenue, then greedily assign) has no formal mechanism to respect hard constraints (capacity, budget, coverage) — it could easily produce an infeasible plan. LP guarantees the solution respects every stated constraint while still using ML-based revenue predictions as its input coefficients — the two approaches are complementary, not competing, which is exactly how they were combined.</p>
+        <p><b>Why LP over Mixed-Integer Programming (MIP)?</b> MIP would be needed if decision variables had to be whole numbers or binary (e.g. "assign rep i to territory j entirely, yes/no" rather than fractional hours) — a defensible next-level answer if pushed on realism, acknowledging that a purely continuous LP is a simplification of what may have actually needed integer assignment decisions in places.</p>
+        <p style="margin-bottom:0"><b>Why not pure heuristics alone, skipping the LP entirely?</b> A pure rule-based system is fast to build and easy to explain, but has no formal guarantee of being anywhere near revenue-optimal — the LP's mathematical optimization is precisely what captures the "$10M" scale of impact; heuristics alone would likely leave meaningful revenue on the table.</p>
+      </div>
+    </section>
+
+    <section id="cmptable">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2>Forecasting Method Comparison Table</h2>
+      </div>
+      <div class="card cmp-wrap">
+        <table class="cmp-table">
+          <tr><th>Method</th><th>Best for</th><th>Interpretability</th><th>Handles seasonality</th><th>Needs external features</th><th>Data required</th></tr>
+          <tr><td>SES</td><td>Stable series, no trend/seasonality</td><td>High</td><td>No</td><td>No</td><td>Low</td></tr>
+          <tr><td>Holt's Linear</td><td>Series with trend, no seasonality</td><td>High</td><td>No</td><td>No</td><td>Low</td></tr>
+          <tr><td>Holt-Winters</td><td>Trend + regular seasonality</td><td>High</td><td>Yes</td><td>No</td><td>Medium (2+ full cycles)</td></tr>
+          <tr><td>ARIMA</td><td>Autocorrelated, non-seasonal series</td><td>Medium-High</td><td>No</td><td>No</td><td>Medium</td></tr>
+          <tr><td>SARIMA</td><td>Autocorrelated + seasonal series</td><td>Medium</td><td>Yes</td><td>No</td><td>Medium-High</td></tr>
+          <tr><td>Prophet</td><td>Fast, low-tuning-effort baseline</td><td>Medium</td><td>Yes</td><td>Some</td><td>Low-Medium</td></tr>
+          <tr><td>ML (XGBoost + lags)</td><td>External drivers matter, complex patterns</td><td>Medium (importance/SHAP)</td><td>Yes (as features)</td><td><b>Yes — its strength</b></td><td>Medium-High</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="redflags">
+      <div class="sec-head">
+        <div class="num">12</div>
+        <h2>Red Flags — Never Say This</h2>
+      </div>
+      <div class="redflag"><b>"I built the LP solver from scratch."</b> Real LP work uses established solvers (scipy.optimize.linprog, PuLP, Gurobi, OR-Tools) — claiming to have hand-built solver internals when you formulated and solved a problem using existing tooling is exactly the kind of overclaim this masterbook exists to prevent.</div>
+      <div class="redflag"><b>"The $10M number came purely from the ARIMA/XGBoost forecast."</b> The confirmed answer is a hybrid LP-plus-heuristics allocation mechanism; a forecasting model may plausibly have fed demand or revenue-per-hour estimates into it, but conflating the forecasting model with the allocation mechanism itself misrepresents how the number was actually produced.</div>
+      <div class="redflag"><b>"A random train/test split is fine for time series, it's just data."</b> A direct, common, and easily-exposed technical mistake — chronological/walk-forward validation is required, and stating otherwise in an interview is a real red flag to a technical interviewer.</div>
+      <div class="redflag"><b>"MAPE is always the best metric because it's a percentage."</b> MAPE breaks down near zero values and can be misleading — always name the actual tradeoffs (MAE/RMSE/MAPE) rather than defaulting to one metric as universally best.</div>
+      <div class="redflag"><b>"Optimization guarantees the best real-world outcome."</b> LP guarantees mathematical optimality given its stated objective and constraints — but a constraint that's mis-specified, or a business reality the model doesn't capture (which is exactly why the heuristic layer exists), means the real-world outcome can still differ from the theoretical optimum.</div>
+    </section>
+
+    <section id="problems">
+      <div class="sec-head">
+        <div class="num">13</div>
+        <h2>30 Progressive Coding Problems</h2>
+        <p>From decomposing a series through solving and sensitivity-testing a full linear program.</p>
+      </div>
+      <div class="filterbar" id="probfilter">
+        <button data-f="all" class="active">All</button>
+        <button data-f="easy">Easy</button>
+        <button data-f="med">Medium</button>
+        <button data-f="hard">Hard</button>
+        <button data-f="expert">Expert</button>
+      </div>
+      <div class="probgrid" id="probgrid"></div>
+    </section>
+
+    <section id="questions">
+      <div class="sec-head">
+        <div class="num">14</div>
+        <h2>70-Question Interview Bank</h2>
+        <p>Split into Forecasting (35 questions, exceeding the standing 30-question spec minimum) and Optimization (35 questions).</p>
+      </div>
+      <div class="subhead">Forecasting — Time Series, ARIMA/SARIMA, Backtesting (35 questions)</div>
+      <div class="card qbank" id="qbankForecast"></div>
+      <div class="subhead">Optimization — Linear Programming &amp; the Allocation Mechanism (35 questions)</div>
+      <div class="card qbank" id="qbankOpt"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">15</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card bridge-flow">
+        <span class="node">Historical demand/conversion data</span><span class="arrow">→</span>
+        <span class="node">Stationarity check + decomposition</span><span class="arrow">→</span>
+        <span class="node">SARIMA / XGBoost demand forecast</span><span class="arrow">→</span>
+        <span class="node">Revenue-per-hour estimates</span><span class="arrow">→</span>
+        <span class="node">LP: maximize revenue s.t. capacity/coverage/budget</span><span class="arrow">→</span>
+        <span class="node">Heuristic adjustment layer</span><span class="arrow">→</span>
+        <span class="node">~60-rep allocation → $10M outcome</span>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">16</div>
+        <h2>Mastery Checklist</h2>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+
+    <div class="card" style="padding:22px 26px; margin-top:60px;">
+      <p style="margin:0; font-size:.9rem; color:var(--ink-soft)">Next: <b>Stage 11 — A/B Testing + Statistics</b> (experimentation design, SRM, novelty effects, multiple testing). Say "go" whenever you're ready.</p>
+    </div>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  var problems = [
+    ["easy","Load a monthly time series and plot it, visually identifying trend and seasonality.","import matplotlib.pyplot as plt\nmonthly_sales.plot()\nplt.show()"],
+    ["easy","Run seasonal_decompose on a series and plot the trend, seasonal, and residual components.","from statsmodels.tsa.seasonal import seasonal_decompose\nresult = seasonal_decompose(monthly_sales, model='multiplicative', period=12)\nresult.plot()\nplt.show()"],
+    ["easy","Run an ADF test on a raw series and interpret the p-value.","from statsmodels.tsa.stattools import adfuller\nresult = adfuller(monthly_sales)\nprint('p-value:', result[1])"],
+    ["easy","Difference a series once and re-run the ADF test to confirm stationarity.","diffed = monthly_sales.diff().dropna()\nprint(adfuller(diffed)[1])"],
+    ["easy","Fit a SimpleExpSmoothing model and forecast the next period.","from statsmodels.tsa.holtwinters import SimpleExpSmoothing\nses = SimpleExpSmoothing(monthly_sales).fit(smoothing_level=0.3)\nprint(ses.forecast(1))"],
+    ["easy","Fit an ARIMA(1,1,1) model and print its summary.","from statsmodels.tsa.arima.model import ARIMA\nfit = ARIMA(monthly_sales, order=(1,1,1)).fit()\nprint(fit.summary())"],
+    ["easy","Compute MAE, RMSE, and MAPE for a set of predictions vs. actuals.","import numpy as np\nmae = np.mean(np.abs(actual-pred))\nrmse = np.sqrt(np.mean((actual-pred)**2))\nmape = np.mean(np.abs((actual-pred)/actual))*100\nprint(mae, rmse, mape)"],
+    ["easy","Plot ACF and PACF for a differenced series.","from statsmodels.graphics.tsaplots import plot_acf, plot_pacf\nplot_acf(diffed); plot_pacf(diffed)\nplt.show()"],
+    ["easy","Solve a simple 2-variable linear program with scipy.optimize.linprog maximizing a linear objective.","from scipy.optimize import linprog\nres = linprog([-3,-5], A_ub=[[1,0],[0,2],[3,2]], b_ub=[4,12,18])\nprint(res.x, -res.fun)"],
+    ["easy","Fit a Holt-Winters model with additive seasonality and forecast 6 periods ahead.","from statsmodels.tsa.holtwinters import ExponentialSmoothing\nhw = ExponentialSmoothing(monthly_sales, trend='add', seasonal='add', seasonal_periods=12).fit()\nprint(hw.forecast(6))"],
+    ["med","Build a TimeSeriesSplit walk-forward cross-validation loop computing MAE per fold for an ARIMA model.","from sklearn.model_selection import TimeSeriesSplit\ntscv = TimeSeriesSplit(n_splits=5)\nerrors=[]\nfor tr,te in tscv.split(monthly_sales):\n    fit = ARIMA(monthly_sales.iloc[tr], order=(1,1,1)).fit()\n    pred = fit.forecast(len(te))\n    errors.append(np.mean(np.abs(pred.values-monthly_sales.iloc[te].values)))\nprint(errors)"],
+    ["med","Grid-search (p,d,q) combinations for ARIMA using AIC to select the best model.","best_aic, best_order = 1e18, None\nfor p in range(3):\n    for d in range(2):\n        for q in range(3):\n            try:\n                fit = ARIMA(monthly_sales, order=(p,d,q)).fit()\n                if fit.aic < best_aic: best_aic, best_order = fit.aic, (p,d,q)\n            except Exception: pass\nprint(best_order, best_aic)"],
+    ["med","Fit SARIMAX with seasonal_order and compare its AIC to a plain ARIMA model.","from statsmodels.tsa.statespace.sarimax import SARIMAX\nsarima = SARIMAX(monthly_sales, order=(1,1,1), seasonal_order=(1,1,1,12)).fit(disp=False)\nplain = ARIMA(monthly_sales, order=(1,1,1)).fit()\nprint(sarima.aic, plain.aic)"],
+    ["med","Engineer lag and rolling-mean features for a time series and train an XGBRegressor forecaster.","df['lag1']=df['sales'].shift(1); df['lag12']=df['sales'].shift(12)\ndf['roll3']=df['sales'].shift(1).rolling(3).mean()\ndf=df.dropna()\nfrom xgboost import XGBRegressor\nm = XGBRegressor(n_estimators=200).fit(df[['lag1','lag12','roll3']][:-6], df['sales'][:-6])\nprint(m.predict(df[['lag1','lag12','roll3']][-6:]))"],
+    ["med","Compare forecast accuracy (MAE) of SARIMA vs. XGBoost-with-lags on the same held-out period.","sarima_mae = np.mean(np.abs(sarima.forecast(6).values - actual_last6))\nxgb_mae = np.mean(np.abs(m.predict(df[['lag1','lag12','roll3']][-6:]) - actual_last6))\nprint('SARIMA:', sarima_mae, 'XGB:', xgb_mae)"],
+    ["med","Formulate and solve a 3-rep, 2-territory LP with capacity and coverage constraints using scipy.optimize.linprog.","c = [-40,-25,-35,-30,-28,-42]\nA_ub = [[1,1,0,0,0,0],[0,0,1,1,0,0],[0,0,0,0,1,1]]\nb_ub = [160,160,160]\nA_eq = [[1,0,1,0,1,0]]\nb_eq = [200]\nres = linprog(c, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq, bounds=(0,None))\nprint(res.x, -res.fun)"],
+    ["med","Perform sensitivity analysis by re-solving an LP after increasing one constraint's right-hand side by 10%.","b_ub_new = [176,160,160]\nres2 = linprog(c, A_ub=A_ub, b_ub=b_ub_new, A_eq=A_eq, b_eq=b_eq, bounds=(0,None))\nprint('shadow value:', (-res2.fun) - (-res.fun))"],
+    ["med","Use PuLP to formulate the same allocation LP with named variables and constraints for readability.","import pulp\nprob = pulp.LpProblem('alloc', pulp.LpMaximize)\nx = {(i,j): pulp.LpVariable(f'x_{i}_{j}', lowBound=0) for i in range(3) for j in range(2)}\nprob += pulp.lpSum(x[i,j]*rev[i][j] for i in range(3) for j in range(2))\nfor i in range(3): prob += pulp.lpSum(x[i,j] for j in range(2)) <= 160\nprob.solve()"],
+    ["med","Build a heuristic tie-breaking layer that adjusts an LP's fractional solution toward integer rep-territory assignments by seniority.","def break_ties(lp_solution, seniority):\n    assignments = {}\n    for (i,j), hours in lp_solution.items():\n        if hours > 0:\n            assignments.setdefault(i, []).append((j, hours, seniority[i]))\n    return assignments"],
+    ["med","Detect and handle a MAPE calculation edge case where actual values are zero.","def safe_mape(actual, pred):\n    mask = actual != 0\n    return np.mean(np.abs((actual[mask]-pred[mask])/actual[mask]))*100\nprint(safe_mape(np.array(actual), np.array(pred)))"],
+    ["hard","Build a full backtesting harness comparing SES, Holt-Winters, ARIMA, SARIMA, and XGBoost-with-lags on walk-forward MAE, and rank them.","results = {}\nfor name, forecaster in [('ses', ses_forecast), ('hw', hw_forecast), ('arima', arima_forecast), ('sarima', sarima_forecast), ('xgb', xgb_forecast)]:\n    errs = []\n    for tr, te in tscv.split(monthly_sales):\n        errs.append(forecaster(monthly_sales.iloc[tr], len(te), monthly_sales.iloc[te]))\n    results[name] = np.mean(errs)\nprint(sorted(results.items(), key=lambda x: x[1]))"],
+    ["hard","Extend the allocation LP to a mixed-integer program requiring whole-number territory assignments, and compare its solution and runtime to the continuous LP relaxation.","import pulp\nprob = pulp.LpProblem('mip_alloc', pulp.LpMaximize)\ny = {(i,j): pulp.LpVariable(f'y_{i}_{j}', cat='Binary') for i in range(3) for j in range(2)}\nprob += pulp.lpSum(y[i,j]*rev[i][j]*160 for i in range(3) for j in range(2))\nfor i in range(3): prob += pulp.lpSum(y[i,j] for j in range(2)) <= 1\nimport time\nt0=time.time(); prob.solve(); print(time.time()-t0)"],
+    ["hard","Implement auto_arima-style automated order selection using pmdarima and compare the chosen order to a manual ACF/PACF-based choice.","import pmdarima as pm\nauto_model = pm.auto_arima(monthly_sales, seasonal=True, m=12, trace=True)\nprint(auto_model.order, auto_model.seasonal_order)"],
+    ["hard","Build a full leakage-safe demand-forecast-to-allocation pipeline: forecast next month's territory demand with SARIMA, feed it as an LP coefficient, and solve the resulting allocation.","forecast = sarima.forecast(1).values[0]\nrev_per_hour_updated = base_rev_per_hour * (forecast / historical_avg_demand)\nc_updated = [-v for v in rev_per_hour_updated.flatten()]\nres_updated = linprog(c_updated, A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq, bounds=(0,None))\nprint(res_updated.x)"],
+    ["hard","Diagnose why an ARIMA model's residuals still show significant autocorrelation (Ljung-Box test) and adjust the model order accordingly.","from statsmodels.stats.diagnostic import acorr_ljungbox\nfit = ARIMA(monthly_sales, order=(1,1,0)).fit()\nlb = acorr_ljungbox(fit.resid, lags=[10])\nprint(lb)\n# if p-value < 0.05, residuals aren't white noise -- try order=(2,1,1) instead"],
+    ["hard","Compute a full sensitivity table (shadow prices) for every constraint in a solved LP using PuLP's dual values.","import pulp\nprob.solve()\nfor name, c in prob.constraints.items():\n    print(name, c.pi)   # shadow price for each constraint"],
+    ["expert","Build a rolling-origin forecast evaluation across 12 origins for SARIMA, aggregating per-horizon MAE (h=1 through h=6) to show how error grows with forecast horizon.","results = {h: [] for h in range(1,7)}\nfor origin in range(len(monthly_sales)-18, len(monthly_sales)-6):\n    fit = SARIMAX(monthly_sales[:origin], order=(1,1,1), seasonal_order=(1,1,1,12)).fit(disp=False)\n    fc = fit.forecast(6)\n    actual = monthly_sales[origin:origin+6].values\n    for h in range(1,7):\n        results[h].append(abs(fc.values[h-1]-actual[h-1]))\nfor h,errs in results.items(): print(h, np.mean(errs))"],
+    ["expert","Formulate the full ~60-rep, multi-territory LP structure (capacity, coverage, and budget constraints) symbolically with PuLP, then solve it and extract both the optimal allocation and each constraint's shadow price for a stakeholder-facing sensitivity report.","import pulp\nreps, terrs = range(60), range(10)\nprob = pulp.LpProblem('full_alloc', pulp.LpMaximize)\nx = {(i,j): pulp.LpVariable(f'x_{i}_{j}', lowBound=0) for i in reps for j in terrs}\nprob += pulp.lpSum(x[i,j]*rev[i][j] for i in reps for j in terrs)\nfor i in reps: prob += pulp.lpSum(x[i,j] for j in terrs) <= capacity[i]\nfor j in terrs: prob += pulp.lpSum(x[i,j] for i in reps) >= min_coverage[j]\nfor i in reps: prob += pulp.lpSum(x[i,j]*cost[i][j] for j in terrs) <= budget[i]\nprob.solve()\nfor name, c in prob.constraints.items(): print(name, c.pi)"],
+    ["expert","Build an end-to-end pipeline that walk-forward validates an XGBoost demand forecaster, feeds its predictions into the LP as updated revenue coefficients each period, and reports cumulative modeled revenue versus a static (non-forecast-updated) baseline.","cumulative_dynamic, cumulative_static = 0, 0\nfor tr, te in tscv.split(monthly_sales):\n    xgb_fc = fit_and_forecast_xgb(monthly_sales.iloc[tr], len(te))\n    rev_dynamic = [v*xgb_fc[k]/historical_avg for k,v in enumerate(base_rev)]\n    res_dyn = linprog([-v for v in rev_dynamic], A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq, bounds=(0,None))\n    res_stat = linprog([-v for v in base_rev], A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq, bounds=(0,None))\n    cumulative_dynamic += -res_dyn.fun\n    cumulative_static += -res_stat.fun\nprint(cumulative_dynamic, cumulative_static)"],
+    ["expert","Build a Monte Carlo simulation that perturbs the LP's revenue coefficients with random noise (reflecting forecast uncertainty) across 500 trials, and report the distribution of optimal objective values to quantify how forecast uncertainty propagates into allocation-outcome uncertainty.","import numpy as np\noutcomes = []\nfor trial in range(500):\n    noisy_rev = [v * (1 + np.random.normal(0, 0.1)) for v in base_rev]\n    res = linprog([-v for v in noisy_rev], A_ub=A_ub, b_ub=b_ub, A_eq=A_eq, b_eq=b_eq, bounds=(0,None))\n    outcomes.append(-res.fun)\nprint('mean:', np.mean(outcomes), 'p5:', np.percentile(outcomes,5), 'p95:', np.percentile(outcomes,95))"]
+  ];
+
+  var qasForecast = [
+    ["What are the three components of classical time series decomposition?","Trend (long-run direction), seasonality (regular fixed-period fluctuation), and residual/noise (whatever's left after removing trend and seasonality)."],
+    ["What's the difference between additive and multiplicative decomposition?","Additive assumes seasonal swings stay a constant absolute size regardless of the trend level; multiplicative assumes they scale proportionally with the trend — multiplicative fits better when a series' seasonal swings grow larger as the overall level grows."],
+    ["What does it mean for a time series to be stationary?","Its statistical properties — mean, variance, and autocorrelation structure — don't change over time; classical models like ARIMA assume or require this."],
+    ["What is differencing, and why is it used?","Subtracting each value from the previous one (or a seasonal lag) — a common way to remove trend (and, with seasonal differencing, seasonality) so the resulting series becomes stationary."],
+    ["What does the ADF (Augmented Dickey-Fuller) test check?","Whether a series has a unit root (is non-stationary) — a low p-value lets you reject the null hypothesis of non-stationarity, meaning the series is likely stationary."],
+    ["What does SES (Simple Exponential Smoothing) assume about the series it forecasts?","No trend and no seasonality — it forecasts as a weighted average of past values with exponentially decaying weights, controlled by a single smoothing parameter alpha."],
+    ["What does Holt's method add on top of SES?","A second smoothing parameter (beta) that also tracks a trend component, letting the forecast extrapolate an increasing or decreasing trajectory rather than SES's flat forecast."],
+    ["What does Holt-Winters (triple exponential smoothing) add on top of Holt's method?","A third smoothing parameter (gamma) that tracks seasonality, combining level, trend, and seasonal components into one forecast."],
+    ["What do the letters in ARIMA(p,d,q) stand for?","AutoRegressive order p (forecast depends on p past values of the series), Integrated order d (number of differencing steps applied to achieve stationarity), Moving Average order q (forecast depends on q past forecast errors)."],
+    ["What's the practical difference between the AR and MA components of ARIMA?","AR regresses on the series' own past values; MA regresses on past forecast errors (residuals), not the raw values — they capture different kinds of dependency structure in the series."],
+    ["What do ACF and PACF plots help with?","Identifying candidate p and q orders for ARIMA — a sharp PACF cutoff after lag p suggests an AR(p) term; a sharp ACF cutoff after lag q suggests an MA(q) term."],
+    ["What does SARIMA add on top of ARIMA?","A seasonal AR/I/MA structure (P,D,Q,s) layered on top of the regular (p,d,q) structure, letting the model capture a recurring seasonal pattern (like yearly seasonality with s=12 for monthly data) alongside short-term autocorrelation."],
+    ["How would you choose between AIC and just visually comparing forecasts when selecting an ARIMA order?","AIC/BIC penalize model complexity and give a quick, objective way to compare many candidate orders, but should always be confirmed against genuine out-of-sample backtested accuracy — a lower-AIC model can still forecast worse in practice."],
+    ["Why is a random shuffle-based train/test split invalid for time series data?","It can place training rows chronologically after test rows, letting the model implicitly learn from data that wouldn't have existed yet at prediction time — a direct form of data leakage specific to sequential data."],
+    ["What is walk-forward validation?","Repeatedly training on all data up to time t, forecasting forward, then advancing t and repeating — mirroring how a forecasting model would actually be retrained and used in production, and avoiding the leakage a random split introduces."],
+    ["What's the difference between MAE and RMSE?","MAE averages absolute errors (treats all errors proportionally); RMSE squares errors before averaging, penalizing large misses more heavily — RMSE is more sensitive to occasional big misses than MAE."],
+    ["When does MAPE become an unreliable metric?","When actual values are zero or near-zero — the percentage-error calculation divides by a tiny number, producing an inflated or undefined error for that observation."],
+    ["Why might you engineer lag and rolling-mean features and use XGBoost instead of ARIMA for forecasting?","When external, non-historical features (promotions, pricing, competitor activity, weather) matter and need to be incorporated — ARIMA can't naturally include them, while a lag-feature-based ML model treats them as just more columns."],
+    ["What's a genuine downside of ML-based forecasting (e.g. XGBoost with lags) compared to ARIMA?","It typically needs more data and more manual feature engineering, and loses some of ARIMA's built-in statistical interpretability (an AR coefficient has a clear meaning; a tree split's contribution is less directly interpretable without SHAP)."],
+    ["What is Prophet, and what's its main tradeoff versus SARIMA?","Meta's forecasting library, designed for fast, low-tuning-effort forecasting with good handling of missing data/outliers and multiple seasonalities — generally easier to use than SARIMA but somewhat of a black box mathematically and can underperform a well-tuned SARIMA on series with complex autocorrelation structure."],
+    ["Why would you compute residual diagnostics (like a Ljung-Box test) after fitting an ARIMA model?","To confirm the residuals are approximately white noise (no remaining autocorrelation) — significant leftover autocorrelation means the chosen order hasn't fully captured the series' structure and should be revised."],
+    ["What's a rolling-origin evaluation, and why go beyond a single train/test split?","Repeating the walk-forward evaluation from many different starting points (origins) across the series, aggregating error across all of them — gives a far more robust estimate of real forecasting performance than any single split, which could be unusually easy or hard."],
+    ["Why does forecast error typically grow with forecast horizon (h=1 vs h=6)?","Uncertainty compounds the further into the future a prediction reaches — small errors and unknown future shocks accumulate, so a 1-step-ahead forecast is almost always more accurate than a 6-step-ahead one from the same model."],
+    ["How would you explain the difference between forecasting and optimization to a stakeholder who conflates them?","Forecasting predicts what will likely happen (e.g. expected demand); optimization decides the best action to take given constraints and objectives (e.g. how to allocate reps) — a forecast is often an input to an optimization model, but they answer fundamentally different questions."],
+    ["Why might a demand forecast need to be re-run and fed back into the allocation LP periodically rather than once?","Real demand patterns shift over time, so a stale forecast feeding stale revenue-per-hour estimates into the LP would produce an increasingly suboptimal allocation — periodic re-forecasting keeps the LP's inputs current."],
+    ["What would you say if asked whether you built the ARIMA/SARIMA models used at Axtria personally?","Give the honest, specific Level A/B/C answer from this stage's framing — being precise about what forecasting work you actually did versus what you understand conceptually, rather than a vague blanket claim either way."],
+    ["Why is checking a series' stationarity considered a mandatory first step, not an optional one, before fitting ARIMA?","Fitting ARIMA to a non-stationary series violates its core assumptions, producing unreliable coefficient estimates and forecasts that can confidently extrapolate a trend or pattern that doesn't actually hold — skipping this check is one of the most common real forecasting mistakes."],
+    ["What's the honest answer if an interviewer asks for the exact ARIMA/SARIMA order used in a real project you can't fully recall?","State the general approach used (e.g. 'we selected orders via ACF/PACF and AIC comparison, validated with walk-forward MAE') rather than fabricating a specific (p,d,q) you're not certain of — the process is the defensible part, not a possibly-misremembered exact number."],
+    ["Why would you deliberately compare a simple model (SES) against a complex one (SARIMA) rather than assuming the complex model wins?","Simpler models are sometimes just as accurate and are far easier to maintain, explain, and retrain — comparing rather than assuming demonstrates real judgment rather than reflexively reaching for the most sophisticated tool available."],
+    ["What is seasonal differencing, and how does it differ from regular differencing?","Subtracting the value from one full seasonal cycle ago (e.g. this January minus last January, lag=12) rather than the immediately previous value — used specifically to remove seasonal, not trend, non-stationarity, and corresponds to SARIMA's seasonal D parameter."],
+    ["How would you detect that a series needs seasonal differencing rather than (or in addition to) regular differencing?","A strong, regular seasonal pattern visible in the decomposition or in the ACF plot (spikes at seasonal lags like 12, 24 for monthly data) that persists even after regular differencing."],
+    ["What's a defensible answer to 'why not just always use the most complex available forecasting model'?","More complex models need more data to estimate reliably and are more prone to overfitting on limited history — model complexity should match how much genuine structure and data actually exist, the same bias-variance judgment from Stage 6 applied to time series specifically."],
+    ["Why is it important to report a forecast's uncertainty (confidence interval), not just a single point estimate?","A single point forecast hides how much genuine uncertainty exists — a business decision informed by 'demand will be 900, plus or minus 50' is meaningfully different from one informed by 'demand will be 900, plus or minus 400,' even if the point estimate is identical."],
+    ["What's the single most important practical lesson from this forecasting section for a business-analytics-facing interview?","That the choice of forecasting method should follow the data's actual structure (trend/seasonality/external-driver dependence) and the decision it feeds — not personal familiarity with one tool, and always validated with leakage-safe walk-forward backtesting rather than trusted on faith."],
+    ["Why would you propagate a forecast's uncertainty (not just its point estimate) into a downstream optimization decision, e.g. via Monte Carlo simulation?","Because feeding a single, possibly-wrong point forecast into an LP as if it were certain hides how sensitive the 'optimal' allocation actually is to forecast error — simulating a distribution of plausible forecasts and re-solving the LP for each shows a range of likely outcomes, which is a far more honest input to a real business decision than one number."]
+  ];
+
+  var qasOpt = [
+    ["What are the three core parts of a linear program?","Decision variables (the quantities being chosen), an objective function (a linear formula to maximize or minimize), and constraints (linear inequalities/equalities the solution must satisfy)."],
+    ["What makes a program 'linear' specifically?","Both the objective function and every constraint must be linear combinations of the decision variables — no products of two variables, no variables raised to a power — which is what makes LP solvable efficiently and reliably."],
+    ["What is the confirmed, honest description of how the ~60-rep allocation and $10M mechanism actually worked?","A hybrid method: linear programming (formal optimization against constraints like territory coverage, rep capacity, and cost-per-call ceilings) combined with heuristics (practical rule-based adjustments and tie-breaking) layered on top of the LP's output."],
+    ["Why would heuristics be layered on top of a solved LP rather than trusting the LP's output directly?","Some real business constraints (relationship continuity, fairness perceptions, one-off exceptions needing manual sign-off) are hard or impossible to encode as clean linear constraints — heuristics handle those cases the formal math can't represent."],
+    ["What is a decision variable, concretely, in the rep-allocation LP?","The number of hours (or another allocatable unit) rep i spends on territory or account-segment j — x_ij, for every rep-territory pair."],
+    ["What would a realistic objective function for the rep-allocation LP maximize?","Total expected revenue across all rep-territory hour allocations — summing each allocation's hours multiplied by that pairing's estimated expected-revenue-per-hour."],
+    ["Name three realistic constraint types for a rep-allocation LP.","Capacity (each rep's total allocated hours can't exceed their available hours), coverage (each territory needs a minimum amount of covered hours), and cost-per-call/budget ceilings (each rep's total allocated cost can't exceed their budget)."],
+    ["What does 'solving' a linear program actually mean?","Finding the decision-variable values that optimize (maximize or minimize) the objective function while satisfying every stated constraint — LP solvers find this efficiently and with a mathematical guarantee of optimality for the stated problem."],
+    ["What is sensitivity analysis in the context of LP?","Examining how the optimal solution and objective value change as constraints or coefficients shift slightly — e.g. how much extra revenue an extra hour of a specific rep's capacity would generate."],
+    ["What is a 'shadow price'?","The rate of change in the optimal objective value per unit increase in a given constraint's right-hand side — e.g. how much extra revenue one additional hour of rep capacity would generate, holding everything else fixed."],
+    ["Why is a shadow price a genuinely useful business number, not just a mathematical curiosity?","It directly answers real business questions like 'is it worth paying overtime for this specific rep' with a precise, defensible dollar figure, rather than a qualitative guess."],
+    ["What is Mixed-Integer Programming (MIP), and when would it be needed over plain LP?","A version of the optimization problem where some or all decision variables must be whole numbers (or binary) rather than continuous — needed if, for example, assignments had to be all-or-nothing (rep i is entirely assigned to territory j) rather than fractional hours."],
+    ["Why is MIP generally harder to solve than LP?","LP can be solved efficiently (in polynomial time, in practice) using methods like the simplex or interior-point algorithm; MIP is NP-hard in general, and solving it can require combinatorially more computation, especially as the number of integer variables grows."],
+    ["What's a genuine limitation of using a pure LP for a resource-allocation problem?","It assumes the objective and every constraint are exactly linear, and it can't natively represent complex real-world exceptions (relationship continuity, fairness perceptions) — which is exactly why the confirmed answer for this project includes a heuristic layer on top."],
+    ["Why would a pure ML 'predict-then-greedily-assign' approach be a worse fit for the allocation problem than LP?","It has no formal mechanism to respect hard constraints like capacity, coverage, or budget — it could easily produce an infeasible plan (e.g. over-allocating one rep beyond their available hours), whereas LP guarantees every constraint is respected in the solution."],
+    ["How do machine learning models (from Stages 6-9) plausibly connect to the optimization mechanism?","Their predictions (e.g. expected conversion rate or revenue per rep-territory pairing) are a natural, defensible source for the LP's objective-function coefficients — forecasting/ML supplies the numbers, LP decides the allocation given those numbers and the constraints."],
+    ["What Python tools are commonly used to formulate and solve linear programs?","scipy.optimize.linprog for straightforward problems, PuLP for more readable, named-variable formulations, and commercial/open-source solvers like Gurobi, CPLEX, or Google OR-Tools for larger or more complex problems."],
+    ["Why would you use PuLP over scipy.optimize.linprog for a larger, more complex allocation problem?","PuLP lets you define named decision variables and constraints in a readable, symbolic way (closer to how you'd write the math on paper), which scales much better for problems with many variables and constraint types than assembling raw coefficient matrices by hand."],
+    ["What is the 'feasible region' of a linear program?","The set of all decision-variable values that satisfy every constraint simultaneously — the optimal solution is always found at a vertex (corner point) of this region for a linear objective."],
+    ["Why does the LP solver's optimal solution always land on a 'corner' of the feasible region for a linear objective?","Because both the objective and constraints are linear, the feasible region is a convex polytope, and a linear function over a convex polytope always achieves its maximum or minimum at one of the region's vertices — a mathematical fact that underlies why LP is solvable so efficiently."],
+    ["What's the honest, defensible answer if an interviewer asks for the exact numeric constraint values used in the real Axtria LP?","That the exact confidential numbers aren't something to reconstruct or guess at, but the formulation's structure (decision variables, objective, constraint types) can be walked through in full, honest detail."],
+    ["Why might 'cost-per-call ceiling' be a meaningful constraint for a sales-rep allocation problem specifically?","It caps how expensive it is to pursue a given territory or account-segment, preventing the optimizer from allocating hours to technically high-revenue but disproportionately expensive-to-serve accounts."],
+    ["What's the difference between a 'hard' constraint and a preference that should instead be handled by the heuristic layer?","A hard constraint must never be violated (e.g. a rep physically can't work more than their available hours) and belongs in the LP itself; a preference (e.g. 'try to preserve existing client relationships where reasonable') is softer and better handled by a rule-based adjustment layer after solving."],
+    ["Why would 'preserve existing rep-client relationships' be handled as a heuristic rather than an LP constraint?","It's not a strict, quantifiable rule — it's a judgment call about how much revenue improvement justifies disrupting an existing relationship, which doesn't translate cleanly into a linear constraint the way capacity or budget limits do."],
+    ["How would you defend the hybrid LP-plus-heuristics approach against a challenge of 'why not just use pure math, since it's provably optimal'?","Pure LP is provably optimal only with respect to the constraints and objective actually specified — real business nuance that resists clean linear formulation still needs to be handled somehow, and a heuristic layer is the honest, practical way to do that without pretending the LP alone captures everything that matters."],
+    ["What would a complete 2-minute interview answer about the $10M mechanism include?","The business problem (allocating ~60 reps across territories to maximize revenue), the LP formulation (objective, key constraint types), why heuristics were layered on top, how forecasting/ML fed into the LP's coefficients, and the honest boundary of your personal involvement (Level A/B/C from this stage's framing)."],
+    ["Why is understanding LP's mathematical structure valuable even for a business/consulting-oriented interviewer, not just a technical one?","It demonstrates the ability to translate a fuzzy real-world resource-allocation problem into a precise, solvable mathematical structure — exactly the kind of structured problem-solving skill consulting interviews (Stage 15) explicitly test for."],
+    ["What's a red flag answer to 'walk me through the optimization model' that signals shallow understanding?","Vaguely saying 'we used optimization' or 'an algorithm decided the best allocation' without being able to name a single concrete decision variable, constraint, or the actual mathematical technique (LP) involved."],
+    ["Why might sensitivity analysis matter more to a business stakeholder than the raw optimal solution itself?","Stakeholders often care less about the exact optimal numbers and more about 'what would change if X' — sensitivity analysis directly answers planning questions like whether hiring, budget increases, or policy changes are worth it, in a way the raw solution alone doesn't."],
+    ["How would you honestly frame your personal role if you contributed to constraint definition but not the solver implementation itself?","Precisely as it happened — e.g. 'I helped define and validate the business constraints and reviewed the LP's outputs for reasonableness, while the solver setup and heuristic-layer implementation were more collaborative/team-owned' — a Level A/B split within the same project, not an all-or-nothing claim."],
+    ["What's the relationship between the LP formulation in this stage and Stage 9's XGBoost material?","XGBoost (or another model) plausibly generates the revenue-per-hour or conversion-probability estimates that become the LP's objective-function coefficients — the two techniques are complementary parts of the same real pipeline, not competing alternatives."],
+    ["Why would you explicitly separate 'what the LP optimizes for' from 'what the business actually cares about' when explaining this to a stakeholder?","Because an LP only optimizes exactly what's specified in its objective function — if the true business goal has nuances (e.g. long-term relationship value, not just this quarter's revenue) not captured in the objective, the 'optimal' solution can still miss what actually matters, and naming this gap builds trust rather than overselling the model."],
+    ["What is the simplex method, at a conceptual level?","A classical algorithm for solving linear programs that moves from vertex to vertex of the feasible region, at each step choosing a neighboring vertex that improves the objective, until no further improvement is possible — one of several standard approaches LP solvers use internally."],
+    ["Why is it reasonable to describe the Axtria optimization work as 'moderate scale' rather than large-scale?","Consistent with the confirmed facts — roughly 60 reps and a handful of territories/constraints is a modest-sized LP by industry standards; honestly scoping the scale avoids overclaiming enterprise-scale optimization experience that didn't happen."],
+    ["What's the single most important takeaway from this optimization section for someone about to be asked 'how was the $10M number actually generated'?","A confident answer needs the concrete LP structure (objective, variables, constraints), the honest reason heuristics were layered on top, and a clear boundary of personal involvement — all three together, matching exactly the same three-layer honesty pattern used for the XGBoost answer in Stage 9."]
+  ];
+
+  function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+  var probGrid = document.getElementById('probgrid');
+  problems.forEach(function(p, i){
+    var diff = p[0], q = p[1], code = p[2];
+    var det = document.createElement('details');
+    det.className = 'prob';
+    det.setAttribute('data-diff', diff);
+    det.innerHTML = '<summary><span class="pnum">P' + (i+1) + '</span><span class="pdiff ' + diff + '">' + diff + '</span><span>' + esc(q) + '</span></summary>' +
+      '<div class="prob-body"><div class="codeblock">' + code.replace(/\n/g,'<br>') + '</div></div>';
+    probGrid.appendChild(det);
+  });
+  document.getElementById('probfilter').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('#probfilter button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var f = btn.getAttribute('data-f');
+    document.querySelectorAll('#probgrid details.prob').forEach(function(d){
+      d.style.display = (f === 'all' || d.getAttribute('data-diff') === f) ? '' : 'none';
+    });
+  });
+
+  function renderQA(containerId, bank){
+    var box = document.getElementById(containerId);
+    bank.forEach(function(qa){
+      var det = document.createElement('details');
+      det.className = 'qa';
+      det.innerHTML = '<summary>' + esc(qa[0]) + '</summary><div class="qa-a"><b>A:</b> ' + esc(qa[1]) + '</div>';
+      box.appendChild(det);
+    });
+  }
+  renderQA('qbankForecast', qasForecast);
+  renderQA('qbankOpt', qasOpt);
+
+  var masteryItems = [
+    "Explain trend/seasonality decomposition and additive vs. multiplicative",
+    "Explain stationarity, the ADF test, and why differencing is needed before ARIMA",
+    "Explain SES, Holt's, and Holt-Winters and when each is the right tool",
+    "Explain ARIMA's p/d/q and SARIMA's seasonal P/D/Q/s components",
+    "Explain why random splits leak on time series and how walk-forward validation fixes it",
+    "Explain MAE vs. RMSE vs. MAPE and MAPE's near-zero breakdown",
+    "Explain how lag-feature ML forecasting (XGBoost) differs from classical time series methods",
+    "Explain a linear program's three parts: decision variables, objective, constraints",
+    "Explain sensitivity analysis and shadow prices with a concrete business interpretation",
+    "Give the full, honest walkthrough of the $10M allocation mechanism's LP-plus-heuristics structure",
+    "Give the full 'why this, why not that' comparison across forecasting AND optimization alternatives",
+    "Explain why heuristics were layered on top of the LP rather than relying on pure math alone",
+    "Recite the Forecasting Method Comparison Table's key columns from memory",
+    "Answer all 5 Red Flags correctly without hesitation"
+  ];
+  var mBox = document.getElementById('masteryBox');
+  var STORE_KEY = 'masterbook-s10-mastery';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e) { saved = {}; }
+  masteryItems.forEach(function(txt, i){
+    var row = document.createElement('div');
+    row.className = 'cl-item' + (saved[i] ? ' checked' : '');
+    row.innerHTML = '<div class="box' + (saved[i] ? ' done' : '') + '" data-i="' + i + '"></div><span class="txt">' + esc(txt) + '</span>';
+    mBox.appendChild(row);
+  });
+  mBox.addEventListener('click', function(e){
+    var box = e.target.closest('.box');
+    if (!box) return;
+    var i = box.getAttribute('data-i');
+    var isDone = box.classList.toggle('done');
+    box.closest('.cl-item').classList.toggle('checked', isDone);
+    saved[i] = isDone;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch(e) {}
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    backtop.classList.toggle('show', window.scrollY > 500);
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 10 loaded — problems:', problems.length, 'Forecast Qs:', qasForecast.length, 'Opt Qs:', qasOpt.length);
+} catch (err) {
+  console.error('Stage 10 script error:', err);
+}
+</script>

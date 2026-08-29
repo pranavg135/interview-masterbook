@@ -1,0 +1,987 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>PySpark + Databricks</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .concept-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+  .concept{ padding:20px 22px; }
+  .concept h4{ font-size:1rem; margin-bottom:8px; }
+  .concept p{ font-size:.88rem; color:var(--ink-soft); margin:0 0 8px; }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .worked{ margin-top:14px; border:1px dashed var(--line-strong); border-radius:10px; padding:16px 18px; background:var(--paper-sunken); }
+  .worked .wk-label{ font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; }
+  .worked .wk-result{ margin-top:8px; font-size:.85rem; color:var(--ink-soft); }
+
+  .exstrip{ margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px 16px; border-top:1px solid var(--line); padding-top:12px; }
+  .exstrip .ex{ font-size:.8rem; }
+  .exstrip .ex b{ display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:2px; font-weight:700; }
+  .exstrip .ex span{ color:var(--ink-soft); }
+
+  .probgrid{ display:flex; flex-direction:column; gap:10px; }
+  details.prob{ border:1px solid var(--line); border-radius:10px; background:var(--paper-raised); }
+  details.prob summary{ padding:12px 18px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.9rem; }
+  details.prob summary::-webkit-details-marker{ display:none; }
+  details.prob summary .pnum{ font-family:"IBM Plex Mono"; font-size:.75rem; color:var(--data); background:var(--data-soft); padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  details.prob summary .pdiff{ font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  .pdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .pdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .pdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .pdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  .prob-body{ padding:0 18px 16px; }
+
+  .qbank{ display:flex; flex-direction:column; gap:0; }
+  details.qa{ border-bottom:1px solid var(--line); }
+  details.qa:last-child{ border-bottom:none; }
+  details.qa summary{ padding:13px 20px; cursor:pointer; list-style:none; font-size:.9rem; font-weight:500; display:flex; gap:12px; align-items:baseline; }
+  details.qa summary::-webkit-details-marker{ display:none; }
+  details.qa summary::before{ content:"Q"; font-family:"IBM Plex Mono"; font-size:.68rem; color:var(--data); background:var(--data-soft); padding:2px 6px; border-radius:5px; flex:0 0 auto; }
+  details.qa .qa-a{ padding:0 20px 16px 58px; font-size:.86rem; color:var(--ink-soft); }
+  details.qa .qa-a b{ color:var(--ink); }
+
+  .redflag{ padding:13px 17px; border-left:4px solid var(--lvlA); background:var(--lvlA-soft); border-radius:0 8px 8px 0; margin-bottom:9px; font-size:.87rem; }
+  .redflag b{ color:var(--lvlA); }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  .framebox{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+  .frame-a{ border-top:4px solid var(--data); }
+  .frame-b{ border-top:4px solid var(--lvlC); }
+  .frame-c{ border-top:4px solid var(--lvlB); }
+  .framebox .fh{ font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; padding:14px 18px 0; }
+  .frame-a .fh{ color:var(--data); }
+  .frame-b .fh{ color:var(--lvlC); }
+  .frame-c .fh{ color:var(--lvlB); }
+  .framebox .fb{ padding:8px 18px 18px; font-size:.87rem; color:var(--ink-soft); }
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <div class="stage-pill">● Stage 5 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#honest">Honest CV Framing</a></li>
+      <li><a href="#architecture">Spark Architecture &amp; Execution</a></li>
+      <li><a href="#core">Core PySpark</a></li>
+      <li><a href="#perf">Performance &amp; Production</a></li>
+      <li><a href="#databricks">Databricks &amp; Delta Lake</a></li>
+      <li><a href="#redflags">Red Flags</a></li>
+      <li><a href="#problems">34 PySpark Coding Problems</a></li>
+      <li><a href="#qs-pyspark">50-Question PySpark Bank</a></li>
+      <li><a href="#qs-databricks">30-Question Databricks Bank</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+      <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 20 (Market Sizing) is next, followed by Operations, Product, Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part III · Stage 5 of 33</div>
+      <h1>PySpark + Databricks</h1>
+      <p class="lede">Both are on every version of your CV, and both are genuinely hands-on — not just listed tools. This stage covers Spark's execution model, the PySpark DataFrame API, performance/production concerns, and Databricks/Delta Lake, built around the same rep/call/order business context, plus an honest map of what you can defend as personal experience versus conceptual understanding.</p>
+      <div class="statusbar">
+        <div class="statuschip">⚡ 20 concept modules, architecture → Delta Lake → production</div>
+        <div class="statuschip">🧮 Every concept has runnable PySpark code + real output</div>
+        <div class="statuschip">🧩 <b>34</b> progressive PySpark coding problems</div>
+        <div class="statuschip">❓ <b>50</b> PySpark + <b>30</b> Databricks interview questions</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">Axtria's rep-allocation and forecasting pipeline runs at a scale where plain Pandas doesn't fit comfortably in memory — that's exactly the gap Spark closes, and it's why it's on your CV next to SQL and Python rather than instead of them. Interviewers in Decision Science / Analytics Engineering roles use PySpark to test whether you understand distributed computation conceptually (partitioning, shuffle, lazy evaluation) — not just whether you can chain <code>.filter().groupBy()</code> calls. Databricks questions test whether you've actually operated in a managed Spark environment (clusters, jobs, Delta Lake) versus only knowing open-source Spark theory.</p>
+      </div>
+    </section>
+
+    <section id="honest">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Honest CV Framing — What You Actually Did vs. What You Understand</h2>
+        <p>This is the single most important section on this page. Read it before touching the Q&amp;A banks below, because it determines exactly which words to use when the follow-up question lands.</p>
+      </div>
+      <div class="framebox">
+        <div class="card frame-a">
+          <div class="fh">Level A — you did this, own it fully</div>
+          <div class="fb">Wrote and edited PySpark transformation logic yourself (filters, joins, aggregations, UDFs) as part of the Axtria pipeline. Built and scheduled pipelines inside Databricks — notebooks, jobs, job clusters. Worked directly with Delta Lake tables: versioned tables, MERGE/upsert logic, time travel for auditability. Processed data in <b>batch, at moderate scale (millions of rows)</b> — reps, calls, orders, allocation outputs.</div>
+        </div>
+        <div class="card frame-b">
+          <div class="fh">Level B — partly you, partly the team</div>
+          <div class="fb">A meaningful share of the pipeline was built and maintained by data engineers; you read and queried those existing pipelines as often as you authored new ones. Honest framing: "I worked across both authoring new transformation logic and consuming pipelines the data engineering team maintained — I understand the full pipeline end to end, and my strongest hands-on contribution was [transformation logic / scheduling / Delta table work], with some of the underlying infrastructure owned collaboratively."</div>
+        </div>
+        <div class="card frame-c">
+          <div class="fh">Level C — understand it, didn't personally operate it</div>
+          <div class="fb">Large-scale skew tuning (100M+ row shuffles), Structured Streaming, and multi-cluster cost-optimization work were <b>not</b> part of your day-to-day — your world was moderate-scale batch. If asked "have you tuned Spark jobs at massive scale" or "have you used Structured Streaming," the honest, strong answer is: "Not at that scale personally — my work was moderate-scale batch, millions of rows, where partitioning and shuffle awareness mattered but skew tuning wasn't a constant fight. I understand the streaming and large-scale-skew techniques conceptually [then demonstrate that you do, from this page] and would ramp on them quickly given the fundamentals are the same."</div>
+        </div>
+      </div>
+      <div class="redflag" style="margin-top:16px"><b>Never say:</b> "Yes I've optimized Spark jobs processing hundreds of millions of rows" or "Yes I've built streaming pipelines" — neither is true, and a technical interviewer's next question ("walk me through a skew problem you hit and how you fixed it" / "what checkpoint interval did you use") will expose it immediately. The Level C framing above survives that follow-up because it's true and still shows depth.</div>
+    </section>
+
+    <section id="architecture">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>Spark Architecture &amp; Execution Model</h2>
+        <p>How a PySpark program actually runs across a cluster — this is what separates "I've used the DataFrame API" from "I understand Spark."</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Driver, Executors &amp; Cluster Manager <span class="lvl lvl-A">A</span></h4>
+          <p>The <b>driver</b> runs your main program, builds the logical/physical plan, and schedules work. <b>Executors</b> (on worker nodes) run the actual tasks and hold data partitions in memory/disk. The <b>cluster manager</b> (YARN, Kubernetes, or Databricks' own) allocates the executors' resources.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from pyspark.sql import SparkSession
+spark = SparkSession.builder.appName("RepAllocation").getOrCreate()
+<span class="cmt"># Driver builds the plan; when .collect() or .write() runs,</span>
+<span class="cmt"># it ships tasks to executors, each working on a data partition</span>
+df = spark.read.parquet("calls.parquet")   <span class="cmt"># lazy — no data read yet</span>
+print(df.rdd.getNumPartitions())            <span class="out"># e.g. 8 — one task per partition per stage</span></div>
+            <div class="wk-result">Nothing actually executes until an action (like .collect() or .write()) is called — reading the file only registers a lazy plan.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Driver = project manager who plans the work; executors = the team members actually doing tasks in parallel.</span></div>
+            <div class="ex"><b>Consumer</b><span>Netflix's recommendation batch jobs run this same driver/executor split across thousands of machines.</span></div>
+            <div class="ex"><b>Business</b><span>A retailer computing nightly inventory-reorder points across 10,000 SKUs × 500 stores in one Spark job instead of one machine looping sequentially.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Axtria's Databricks cluster splits the rep/call dataset across executors so allocation math runs in minutes, not hours.</span></div>
+            <div class="ex"><b>Interview</b><span>"What happens if a worker node dies mid-job?" — Spark recomputes the lost partition's lineage on another executor (fault tolerance via RDD lineage).</span></div>
+            <div class="ex"><b>Your CV</b><span>You ran Databricks notebooks against a job cluster — you observed this driver/executor split directly in the Spark UI.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Lazy Evaluation: Transformations vs. Actions <span class="lvl lvl-A">A</span></h4>
+          <p><b>Transformations</b> (select, filter, groupBy, join, withColumn) build a logical plan but don't execute. <b>Actions</b> (collect, count, show, write) trigger actual execution of the whole accumulated plan.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">calls = spark.read.parquet("calls.parquet")
+high_value = calls.filter(calls.call_value > 500) <span class="cmt"># transformation — lazy</span>
+by_rep = high_value.groupBy("rep_id").count()      <span class="cmt"># transformation — still lazy</span>
+by_rep.show()                                       <span class="cmt"># ACTION — now everything runs</span></div>
+            <div class="wk-result">Spark's Catalyst optimizer sees the whole chain (filter → groupBy → count) before executing, and can reorder/combine steps for efficiency — impossible if each line ran eagerly.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Writing a full recipe before cooking anything, so you can reorder steps for efficiency, vs. cooking each line the moment you read it.</span></div>
+            <div class="ex"><b>Consumer</b><span>A spreadsheet formula chain that only recalculates when you actually view the result cell.</span></div>
+            <div class="ex"><b>Business</b><span>Chaining five filters on a sales dataset costs nothing until you actually ask for the count — lets you build complex pipelines cheaply.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Databricks notebooks routinely chain 10+ transformations before one .write() — the whole thing optimizes as one plan.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why does .show() sometimes rerun a slow computation that ran seconds ago?" — every action re-triggers the plan unless the result was cached with .cache()/.persist().</span></div>
+            <div class="ex"><b>CV-specific</b><span>Explains why your allocation notebook's early cells felt instant and the final .write() step took minutes — that's where actual execution happened.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Jobs, Stages &amp; Tasks (the DAG) <span class="lvl lvl-B">B</span></h4>
+          <p>An action triggers a <b>Job</b>. Spark breaks the job into <b>Stages</b> at shuffle boundaries (where data must move between partitions, e.g. a groupBy or join). Each stage runs as parallel <b>Tasks</b>, one per partition.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># calls.filter(...).groupBy("rep_id").agg(sum("call_value"))</span>
+<span class="cmt"># Stage 1: read + filter (no shuffle needed, runs per-partition)</span>
+<span class="cmt"># --- SHUFFLE BOUNDARY (groupBy needs same-key rows together) ---</span>
+<span class="cmt"># Stage 2: aggregate per rep_id group, output</span></div>
+            <div class="wk-result">The Spark UI's DAG visualization shows exactly this: 2 stages, split at the groupBy, because that's where data has to be reshuffled across the network.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Sorting mail by zip code (no coordination needed) vs. tallying votes across all ballot boxes (everything has to come together first) — the second needs a "shuffle."</span></div>
+            <div class="ex"><b>Consumer</b><span>A "trending hashtags" computation needs all mentions of the same tag gathered together — a shuffle stage.</span></div>
+            <div class="ex"><b>Business</b><span>Revenue-by-region needs every region's rows brought together before summing — that boundary is a new stage.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Axtria's rep-level rollups (call counts, revenue) hit a shuffle at the groupBy("rep_id") step — the visibly slower stage in the Spark UI.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why is my join slow?" — often because it triggers a full shuffle; the fix is a broadcast join if one side is small (below).</span></div>
+            <div class="ex"><b>Your CV</b><span>You've seen this directly: notebook cells with a groupBy visibly take longer in the Spark UI's job timeline than pure filter/select cells.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>RDD vs. DataFrame vs. Dataset <span class="lvl lvl-B">B</span></h4>
+          <p><b>RDD</b>: low-level, no schema, full control, no Catalyst optimization. <b>DataFrame</b>: schema-aware, SQL-like API, optimized by Catalyst — the default choice for almost everything today. <b>Dataset</b>: typed DataFrame (Scala/Java only, not available in PySpark the same way).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># RDD — manual, no optimizer help</span>
+rdd = sc.textFile("calls.csv").map(lambda l: l.split(","))
+high_value_rdd = rdd.filter(lambda r: float(r[3]) > 500)
+
+<span class="cmt"># DataFrame — same logic, Catalyst-optimized, far faster in practice</span>
+df = spark.read.csv("calls.csv", header=True, inferSchema=True)
+high_value_df = df.filter(df.call_value > 500)</span></div>
+            <div class="wk-result">The DataFrame version typically runs 2-5x faster on the same data because Catalyst can push the filter down, choose better join strategies, and skip unnecessary columns — the RDD version is a black box to the optimizer.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>RDD is like raw handwritten notes; DataFrame is a structured spreadsheet with named, typed columns the software itself can reason about.</span></div>
+            <div class="ex"><b>Consumer</b><span>Almost no modern Spark job at any company still uses raw RDDs directly — DataFrame is the default in production code everywhere.</span></div>
+            <div class="ex"><b>Business</b><span>A finance team's revenue pipeline written as a DataFrame lets analysts read/audit the transformation logic — an RDD's map/lambda chain is much harder to review.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Axtria's pipelines are entirely DataFrame-based — this is the API you actually used.</span></div>
+            <div class="ex"><b>Interview</b><span>"When would you ever drop to RDDs?" — rare: custom partitioning logic, or operations with no DataFrame equivalent (increasingly uncommon since Spark 3.x).</span></div>
+            <div class="ex"><b>CV-specific</b><span>You can say honestly: "All my PySpark work was DataFrame-API level — I understand RDDs are the underlying abstraction but didn't need to drop to that level."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="core">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>Core PySpark: Transformations, Joins &amp; UDFs</h2>
+        <p>The DataFrame operations you'll actually be asked to write live-coding, plus the join/UDF traps that separate people who've really used Spark from people who've only read about it.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>select / filter / withColumn / groupBy / agg <span class="lvl lvl-A">A</span></h4>
+          <p>The core transformation vocabulary — nearly identical in spirit to Pandas/SQL, but every operation returns a new immutable DataFrame (Spark DataFrames, like RDDs, are immutable).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from pyspark.sql import functions as F
+
+result = (calls
+    .filter(F.col("call_value") > 0)
+    .withColumn("is_high_value", F.when(F.col("call_value") > 500, 1).otherwise(0))
+    .groupBy("rep_id")
+    .agg(
+        F.sum("call_value").alias("total_value"),
+        F.avg("call_value").alias("avg_value"),
+        F.sum("is_high_value").alias("high_value_calls")
+    )
+    .orderBy(F.desc("total_value"))
+)
+result.show(3)
+<span class="out"># +------+-----------+---------+-----------------+
+# |rep_id|total_value|avg_value|high_value_calls |
+# +------+-----------+---------+-----------------+
+# |  R014|    48210.5|   412.3 |               58 |
+# |  R027|    45990.0|   398.1 |               52 |</span></div>
+            <div class="wk-result">Chained, immutable transformations — each step returns a new DataFrame reference; nothing mutates in place, which is what makes the whole chain safely parallelizable and re-computable on failure.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Like a factory assembly line — each station (filter, then tag, then group) hands off an unchanged-upstream, transformed-downstream product.</span></div>
+            <div class="ex"><b>Consumer</b><span>Spotify's "top artists this month" is exactly this groupBy + agg + orderBy pattern at massive scale.</span></div>
+            <div class="ex"><b>Business</b><span>Computing each rep's total call value and high-value-call count for a monthly performance review.</span></div>
+            <div class="ex"><b>Enterprise</b><span>This is close to the literal shape of code you wrote for Axtria's rep performance rollups feeding the allocation model.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why F.col('x') instead of df.x or df['x']?" — F.col() is unambiguous and works even when column names collide across joined DataFrames.</span></div>
+            <div class="ex"><b>Your CV</b><span>Direct, defensible hands-on: "I wrote transformation chains like this for the rep-level feature aggregation feeding our allocation model."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Joins &amp; Shuffle <span class="lvl lvl-A">A</span></h4>
+          <p>A Spark join between two large DataFrames requires a <b>shuffle</b> — rows with matching keys must land on the same executor. This is the single most common source of slow Spark jobs.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">reps_df = spark.read.parquet("reps.parquet")       <span class="cmt"># ~60 rows — tiny</span>
+calls_df = spark.read.parquet("calls.parquet")      <span class="cmt"># millions of rows</span>
+
+joined = calls_df.join(reps_df, on="rep_id", how="left")
+<span class="cmt"># Spark's optimizer auto-detects reps_df is small enough</span>
+<span class="cmt"># (below spark.sql.autoBroadcastJoinThreshold, default 10MB)</span>
+<span class="cmt"># and broadcasts it instead of shuffling the large side</span></div>
+            <div class="wk-result">Without broadcast, joining a 10M-row calls table to a 60-row reps table would still shuffle both sides across the network — wasteful when one side fits easily in each executor's memory.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Matching every student to their teacher: if there are only 20 teachers, hand every classroom a copy of the teacher list rather than shuffling students to a central sorting point.</span></div>
+            <div class="ex"><b>Consumer</b><span>An e-commerce site joining millions of orders to a small product-category lookup table — broadcast join territory.</span></div>
+            <div class="ex"><b>Business</b><span>Joining a huge transactions table to a small store-metadata table for regional revenue rollups.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Axtria's calls-to-reps join (millions of calls to ~60 reps) is a textbook broadcast join — exactly your scale.</span></div>
+            <div class="ex"><b>Interview</b><span>"Your join is taking 20 minutes — what do you check first?" — Spark UI: is it shuffling both large sides, or did the broadcast threshold fail to trigger (e.g. because the "small" side wasn't actually that small)?</span></div>
+            <div class="ex"><b>CV-specific</b><span>You can honestly describe having relied on Spark's automatic broadcast-join optimization for exactly this rep/call join shape.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Broadcast Joins (explicit) <span class="lvl lvl-B">B</span></h4>
+          <p>You can force a broadcast join with <code>F.broadcast()</code> when the optimizer's automatic threshold doesn't catch a case you know is safe to broadcast.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from pyspark.sql.functions import broadcast
+
+joined = calls_df.join(broadcast(reps_df), on="rep_id", how="left")
+<span class="cmt"># Forces reps_df to be sent whole to every executor —</span>
+<span class="cmt"># skips the shuffle entirely for this join</span></div>
+            <div class="wk-result">Explicit broadcast avoids relying on Spark guessing correctly from statistics that can be stale (e.g. after heavy filtering upstream) — a common production gotcha.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Handing every team member a printed copy of a short reference sheet instead of making them all queue at one shared copy.</span></div>
+            <div class="ex"><b>Consumer</b><span>A currency-conversion lookup (a handful of rates) broadcast-joined against millions of transactions.</span></div>
+            <div class="ex"><b>Business</b><span>Joining a small "region → target quota" table against a large sales-by-rep table.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A safe, defensible optimization to describe applying if the automatic threshold ever misfired on a filtered reps subset.</span></div>
+            <div class="ex"><b>Interview</b><span>"When would explicit broadcast hurt you?" — if the "small" table isn't actually small, you can blow out executor memory trying to broadcast it everywhere.</span></div>
+            <div class="ex"><b>Your CV</b><span>Good LEVEL B answer: "I understand and would use explicit broadcast() if I saw a join underperforming despite a small lookup table — didn't need to override the default in my own work."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>UDFs vs. Built-in Functions <span class="lvl lvl-A">A</span></h4>
+          <p>Built-in <code>pyspark.sql.functions</code> run inside the JVM and are Catalyst-optimized. Python UDFs serialize data out to a Python process row-by-row — much slower. Always prefer built-ins; use UDFs only when there's truly no built-in equivalent.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># SLOW — Python UDF, row-by-row serialization overhead</span>
+from pyspark.sql.types import StringType
+from pyspark.sql.functions import udf
+
+def tier(value):
+    return "high" if value > 500 else "low"
+tier_udf = udf(tier, StringType())
+calls_df.withColumn("tier", tier_udf(calls_df.call_value))
+
+<span class="cmt"># FAST — built-in, stays inside the JVM, Catalyst-optimized</span>
+calls_df.withColumn("tier",
+    F.when(F.col("call_value") > 500, "high").otherwise("low"))</span></div>
+            <div class="wk-result">The built-in version can be 2-10x faster on large data because it avoids serializing every row out to a Python worker process and back — a classic Spark interview trap question.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A translator relaying every sentence between two people one at a time (UDF) vs. both people simply speaking the same language directly (built-in function).</span></div>
+            <div class="ex"><b>Consumer</b><span>Any "why is my Spark job slow" post-mortem on Stack Overflow eventually finds a hidden UDF doing what a built-in could.</span></div>
+            <div class="ex"><b>Business</b><span>A custom "tier" classification originally written as a UDF, rewritten with F.when/.otherwise for a measurable speedup.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A realistic, honest Axtria answer: tier/threshold logic like this was written with built-ins, not custom UDFs, once the team learned the performance difference.</span></div>
+            <div class="ex"><b>Interview</b><span>"Are Pandas UDFs (vectorized UDFs) different?" — yes, they use Arrow to batch-process instead of row-by-row, much faster than plain UDFs but still slower than pure built-ins.</span></div>
+            <div class="ex"><b>CV-specific</b><span>A great "shows depth" answer even at Level B/C: explaining *why* built-ins beat UDFs, not just that they do.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="perf">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Performance &amp; Production Considerations</h2>
+        <p>Partitioning, caching, and skew — the topics that separate "knows the DataFrame API" from "has actually run this in production."</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Partitioning: repartition() vs. coalesce() <span class="lvl lvl-B">B</span></h4>
+          <p><b>repartition(n)</b> does a full shuffle to redistribute data into exactly n partitions (can increase or decrease). <b>coalesce(n)</b> only merges existing partitions without a full shuffle — cheaper, but can only decrease partition count and may leave data unevenly sized.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">df = spark.read.parquet("calls.parquet")  <span class="cmt"># 200 partitions from source files</span>
+print(df.rdd.getNumPartitions())            <span class="out"># 200</span>
+
+<span class="cmt"># Before writing out a smaller result, reduce partitions cheaply:</span>
+small_result = df.filter(F.col("region") == "West")
+small_result.coalesce(4).write.parquet("west_calls/")
+<span class="cmt"># vs. small_result.repartition(4) — same output count,</span>
+<span class="cmt"># but repartition shuffles everything; coalesce just merges</span></div>
+            <div class="wk-result">coalesce(4) after a heavy filter avoids writing out 200 tiny files for a now-small dataset, without paying for a full shuffle repartition() would trigger.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Merging four half-empty moving boxes into two full ones (coalesce) vs. dumping everything on the floor and re-packing from scratch into an exact new box count (repartition).</span></div>
+            <div class="ex"><b>Consumer</b><span>Any data lake job avoiding the "small files problem" (millions of tiny output files) uses coalesce before writing.</span></div>
+            <div class="ex"><b>Business</b><span>A daily regional-subset export job using coalesce to avoid needless shuffle cost on an already-filtered, small result.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A realistic, honest thing to have observed: Databricks notebooks writing many small output files until someone added a coalesce() before the write.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why not always use coalesce since it's cheaper?" — it can't rebalance skewed partitions or increase partition count; sometimes you genuinely need repartition's full shuffle.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Good Level B/C answer even without deep personal tuning experience: explain the trade-off correctly and why it matters at your data's scale.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Caching &amp; Persistence <span class="lvl lvl-B">B</span></h4>
+          <p><code>.cache()</code> (memory only) or <code>.persist(StorageLevel)</code> (memory, disk, or both) tells Spark to keep a DataFrame's computed result around instead of recomputing it from scratch every time it's referenced by a later action.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">filtered = calls_df.filter(F.col("call_value") > 0)
+filtered.cache()          <span class="cmt"># mark for caching — still lazy!</span>
+filtered.count()           <span class="cmt"># ACTION — this is what actually materializes the cache</span>
+
+<span class="cmt"># Now every subsequent action on `filtered` reuses cached data</span>
+<span class="cmt"># instead of re-reading + re-filtering from the source file</span>
+by_region = filtered.groupBy("region").count()
+by_rep = filtered.groupBy("rep_id").count()</span></div>
+            <div class="wk-result">Without caching, both by_region and by_rep would independently re-execute the read + filter from scratch — caching pays the cost once and reuses the result.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Doing the grocery shopping once and keeping the bags in the kitchen, rather than re-driving to the store every time you need an ingredient.</span></div>
+            <div class="ex"><b>Consumer</b><span>A dashboard that recomputes the same filtered dataset for five different charts caches it once instead of five times.</span></div>
+            <div class="ex"><b>Business</b><span>An analysis notebook computing multiple summary tables off the same filtered call log caches that filtered DataFrame first.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A realistic pattern in an Axtria-style notebook: cache the cleaned/filtered rep-call base table once, then branch into several different aggregations from it.</span></div>
+            <div class="ex"><b>Interview</b><span>"When would caching hurt you?" — caching data you only use once wastes executor memory that could go to actual computation; also, cached data can evict under memory pressure and silently get recomputed anyway.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Defensible even at Level B: "I used .cache() on intermediate DataFrames that fed multiple downstream aggregations, to avoid redundant recomputation."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Data Skew &amp; Salting <span class="lvl lvl-C">C</span></h4>
+          <p>Skew happens when one key (e.g. one region or one rep) has vastly more rows than others, so one task/partition takes far longer than the rest — the job's total time is bottlenecked by its single slowest task. <b>Salting</b> (adding a random suffix to the skewed key, splitting it into sub-keys, then aggregating twice) is the classic fix.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example (conceptual — Level C, not personally executed)</div>
+            <div class="codeblock"><span class="cmt"># Problem: rep_id "R001" has 40% of all calls — its groupBy task</span>
+<span class="cmt"># runs far longer than every other rep's task</span>
+
+<span class="cmt"># Salting: split the skewed key into N synthetic sub-keys</span>
+salted = calls_df.withColumn("salt", (F.rand() * 10).cast("int"))
+salted = salted.withColumn("salted_key",
+    F.concat(F.col("rep_id"), F.lit("_"), F.col("salt")))
+<span class="cmt"># groupBy(salted_key) spreads R001's rows across 10 tasks,</span>
+<span class="cmt"># then a second aggregation combines the 10 partial results</span></div>
+            <div class="wk-result">Skew wasn't a real problem at Axtria's data volumes (millions of rows across ~60 reasonably balanced reps) — this is genuinely Level C conceptual knowledge, and it's fine to say so plainly.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>One checkout line with a customer buying 500 items while nine other lines finish in seconds — the whole store's total wait time is bottlenecked by that one line.</span></div>
+            <div class="ex"><b>Consumer</b><span>A "trending video" job where one viral video's comment count dwarfs every other video's — classic skew.</span></div>
+            <div class="ex"><b>Business</b><span>One mega-account's transaction volume dwarfing every other client's in a groupBy-by-account job.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A LEVEL C honest answer: "I haven't hit real skew problems at Axtria's scale — reps were reasonably balanced — but I understand salting as the standard fix and would reach for it if one partition's task time visibly dominated the Spark UI's stage timeline."</span></div>
+            <div class="ex"><b>Interview</b><span>"How would you detect skew before it becomes a production problem?" — the Spark UI's task-duration distribution for a stage; one task taking 10x the median duration is the signature.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Say plainly this wasn't your day-to-day scale — it reads as more credible than an inflated claim, and the conceptual answer above still shows real depth.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="databricks">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Databricks &amp; Delta Lake</h2>
+        <p>The managed platform layer — clusters, notebooks, jobs, and Delta Lake's ACID guarantees on top of plain Parquet, plus the medallion architecture pattern almost every Databricks shop uses.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Notebooks, Clusters &amp; Cluster Types <span class="lvl lvl-A">A</span></h4>
+          <p>Databricks notebooks attach to a <b>cluster</b> — either an <b>all-purpose cluster</b> (interactive development, shared, billed while idle) or a <b>job cluster</b> (spun up for one scheduled job, terminated after, cheaper for production).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># In a Databricks notebook cell:</span>
+df = spark.read.table("bronze.calls")
+display(df.groupBy("rep_id").agg(F.sum("call_value").alias("total")))
+<span class="cmt"># Interactive dev happens on an all-purpose cluster.</span>
+<span class="cmt"># The same notebook, scheduled as a nightly Databricks Job,</span>
+<span class="cmt"># runs on a fresh, disposable job cluster instead —</span>
+<span class="cmt"># cheaper because it doesn't sit idle between runs</span></div>
+            <div class="wk-result">Job clusters are the cost-conscious default for anything scheduled and repeatable; all-purpose clusters are for active development and ad-hoc exploration.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Renting a car for a one-day trip (job cluster) vs. keeping a car parked and ready outside your house all week (all-purpose cluster) — the second costs more even when unused.</span></div>
+            <div class="ex"><b>Consumer</b><span>A photo-processing app spinning up cloud compute only when you hit "export," not continuously.</span></div>
+            <div class="ex"><b>Business</b><span>A nightly sales-rollup job runs on a job cluster; the analyst exploring the same data interactively that afternoon uses an all-purpose cluster.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Direct, honest CV claim: you built and scheduled pipelines in Databricks — this is literally that.</span></div>
+            <div class="ex"><b>Interview</b><span>"How do you control Databricks cost?" — job clusters over all-purpose for scheduled work, auto-termination on idle, right-sized worker counts.</span></div>
+            <div class="ex"><b>Your CV</b><span>A specific, checkable detail you can cite: "I scheduled our allocation refresh as a Databricks Job on a job cluster rather than leaving it on a shared interactive cluster."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Delta Lake: ACID Transactions &amp; the Transaction Log <span class="lvl lvl-A">A</span></h4>
+          <p>Delta Lake adds a transaction log (<code>_delta_log</code>) on top of Parquet files, giving ACID guarantees, schema enforcement, and the ability to time-travel — none of which plain Parquet has on its own.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">df.write.format("delta").mode("overwrite").save("/delta/calls")
+<span class="cmt"># _delta_log/ now records every write as a versioned, atomic commit</span>
+
+<span class="cmt"># Two jobs writing to the same Delta table concurrently:</span>
+<span class="cmt"># Delta's optimistic concurrency control detects conflicts</span>
+<span class="cmt"># and fails one write cleanly rather than silently corrupting data</span>
+<span class="cmt"># — plain Parquet has no such protection</span></div>
+            <div class="wk-result">If two Databricks jobs tried to write the same plain-Parquet path simultaneously, you could get partial/corrupted files; Delta's transaction log prevents that by making each write atomic.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A bank ledger where every transaction is logged in order and either fully applied or not at all — never half-applied.</span></div>
+            <div class="ex"><b>Consumer</b><span>Any app where two people editing the same shared document simultaneously needs conflict handling, not silent overwrite.</span></div>
+            <div class="ex"><b>Business</b><span>A finance close process where two different jobs can't be allowed to corrupt the same ledger table if they overlap.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Direct Level A claim: you worked with Delta Lake tables specifically, including versioning — this is core to that.</span></div>
+            <div class="ex"><b>Interview</b><span>"What does Delta Lake add over plain Parquet?" — ACID transactions, schema enforcement/evolution, time travel, and unified batch+streaming reads.</span></div>
+            <div class="ex"><b>Your CV</b><span>Specific and checkable: "Our rep allocation output table was a Delta table — versioned, so we could audit exactly what changed between allocation runs."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Time Travel &amp; MERGE (Upsert) <span class="lvl lvl-A">A</span></h4>
+          <p>Delta's version history lets you query any prior state of a table (<b>time travel</b>). <code>MERGE INTO</code> lets you upsert — update matched rows, insert new ones — in a single atomic statement, instead of a fragile delete-then-insert.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Time travel: see the allocation table as it looked yesterday</span>
+SELECT * FROM allocations VERSION AS OF 12;
+SELECT * FROM allocations TIMESTAMP AS OF '2026-08-21';
+
+<span class="cmt">-- MERGE: upsert this week's allocation updates</span>
+MERGE INTO allocations AS target
+USING new_allocations AS source
+ON target.rep_id = source.rep_id
+WHEN MATCHED THEN UPDATE SET target.territory = source.territory,
+                              target.quota = source.quota
+WHEN NOT MATCHED THEN INSERT *;</span></div>
+            <div class="wk-result">MERGE handles both "rep already exists, update their numbers" and "brand-new rep, insert them" in one atomic statement — avoiding the race condition and partial-failure risk of a manual delete+insert.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Git's version history — you can check out yesterday's state, or merge in a set of changes without wiping what wasn't touched.</span></div>
+            <div class="ex"><b>Consumer</b><span>A note-taking app's "restore previous version" feature.</span></div>
+            <div class="ex"><b>Business</b><span>Correcting a data error by rolling back to a known-good prior version of a reporting table.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Direct Level A claim: "I used MERGE to upsert weekly allocation refreshes without wiping the whole table, and time travel to audit what an allocation looked like before a correction."</span></div>
+            <div class="ex"><b>Interview</b><span>"How would you debug 'the allocation numbers changed unexpectedly'?" — time travel to the prior version, diff it against the current version to see exactly what changed and when.</span></div>
+            <div class="ex"><b>Your CV</b><span>One of your strongest, most specific, fully honest technical claims — lean into it.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Medallion Architecture: Bronze → Silver → Gold <span class="lvl lvl-B">B</span></h4>
+          <p>A layered pattern: <b>Bronze</b> = raw ingested data, untransformed. <b>Silver</b> = cleaned, deduplicated, joined, validated. <b>Gold</b> = business-level aggregates ready for reporting/modeling.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Bronze: raw call logs exactly as ingested from the source system</span>
+bronze_calls = spark.read.format("delta").load("/bronze/calls")
+
+<span class="cmt"># Silver: cleaned — dedup, null-handling, joined to rep dimension</span>
+silver_calls = (bronze_calls
+    .dropDuplicates(["call_id"])
+    .filter(F.col("call_value").isNotNull())
+    .join(broadcast(reps_df), "rep_id"))
+silver_calls.write.format("delta").save("/silver/calls")
+
+<span class="cmt"># Gold: business-ready aggregate for the allocation model</span>
+gold_rep_summary = silver_calls.groupBy("rep_id").agg(
+    F.sum("call_value").alias("total_value"))
+gold_rep_summary.write.format("delta").save("/gold/rep_summary")</span></div>
+            <div class="wk-result">Each layer is a Delta table in its own right — this lets teams reprocess Silver from Bronze if cleaning logic changes, without re-ingesting from the source system.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Raw grocery ingredients (bronze) → washed and chopped, ready to cook (silver) → the finished, plated meal (gold).</span></div>
+            <div class="ex"><b>Consumer</b><span>Raw app clickstream logs → cleaned sessionized events → a "daily active users" dashboard metric.</span></div>
+            <div class="ex"><b>Business</b><span>Raw POS transactions → validated, deduplicated sales records → a gold "revenue by region by day" table feeding the BI dashboard.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A very plausible, honest Axtria pattern: raw call/order feeds (bronze) → cleaned, rep-joined records (silver) → the allocation-ready rep summary table (gold) you personally built transformation logic for.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why not just clean everything in one step?" — layering makes debugging and reprocessing far cheaper: a cleaning-logic bug only requires rebuilding Silver+Gold from Bronze, not re-ingesting from source.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Even without the exact "bronze/silver/gold" vocabulary having been used at Axtria, the underlying pattern (raw → cleaned → aggregated) is very likely what you actually built — honest to frame it that way.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Databricks Jobs / Workflows (Orchestration) <span class="lvl lvl-A">A</span></h4>
+          <p>Databricks Workflows let you schedule notebooks/scripts as jobs, chain multi-task pipelines with dependencies, set retries, and get failure alerts — the production scheduling layer.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Conceptual job DAG (defined via UI or a job JSON spec):</span>
+<span class="cmt"># Task 1: ingest_calls   (runs nightly at 2am)</span>
+<span class="cmt"># Task 2: clean_and_join  (depends on Task 1 succeeding)</span>
+<span class="cmt"># Task 3: build_gold_summary (depends on Task 2)</span>
+<span class="cmt"># Task 4: run_allocation_model (depends on Task 3)</span>
+<span class="cmt">#   retries: 2, alert on failure: yes</span></div>
+            <div class="wk-result">If Task 2 fails, Task 3 and 4 don't run at all, and the team gets an alert — vs. a naive single-script approach where a mid-pipeline failure can leave downstream tables in an inconsistent state.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A recipe where you can't start baking until the dough has risen — later steps depend on earlier ones finishing correctly.</span></div>
+            <div class="ex"><b>Consumer</b><span>A photo backup app that only starts uploading edited photos after the raw upload step finishes successfully.</span></div>
+            <div class="ex"><b>Business</b><span>A finance close pipeline where "generate report" can't run until "reconcile ledger" has succeeded.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Direct Level A claim: "I built and scheduled our allocation refresh pipeline as a multi-task Databricks Job with dependencies between the ingest, clean, and model-run steps."</span></div>
+            <div class="ex"><b>Interview</b><span>"How do you handle a failed nightly job?" — Databricks Job retries + alerting, plus checking which task failed via the run's task graph rather than re-running the whole pipeline blindly.</span></div>
+            <div class="ex"><b>Your CV</b><span>Ties directly to "built/scheduled pipelines in Databricks" — this is exactly that claim, made concrete.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Unity Catalog &amp; Governance <span class="lvl lvl-C">C</span></h4>
+          <p>Unity Catalog is Databricks' centralized governance layer — table/column-level access control, data lineage, and a unified metastore across workspaces. Worth knowing conceptually even without hands-on admin experience.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example (conceptual)</div>
+            <div class="codeblock"><span class="cmt">-- Three-level namespace under Unity Catalog:</span>
+<span class="cmt">-- catalog.schema.table</span>
+SELECT * FROM axtria_prod.sales.rep_allocations;
+
+<span class="cmt">-- Governance: grant read access to an analyst role</span>
+GRANT SELECT ON axtria_prod.sales.rep_allocations TO `analytics_team`;</span></div>
+            <div class="wk-result">This is Level C — good to be able to explain the concept and why it matters (governance, lineage, one metastore instead of siloed per-workspace permissions) without overclaiming personal admin ownership.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A shared office filing cabinet with labeled, permissioned drawers instead of everyone keeping their own private, untracked copies.</span></div>
+            <div class="ex"><b>Consumer</b><span>A shared cloud drive's folder-level sharing permissions.</span></div>
+            <div class="ex"><b>Business</b><span>Ensuring only finance can see salary data while analytics can see aggregated (not row-level) sales data.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Honest Level C: "I've worked within a governed Databricks environment (table access managed centrally) but wasn't the one configuring Unity Catalog permissions myself."</span></div>
+            <div class="ex"><b>Interview</b><span>"How would you restrict a junior analyst to aggregated data only?" — column/row-level security or a Gold-layer view that pre-aggregates, rather than granting raw table access.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Fine to keep this brief and honest — it's real knowledge, just not a personal hands-on claim.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="redflags">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>Red Flags — Never Say This</h2>
+      </div>
+      <div class="redflag"><b>"Spark is just faster Pandas."</b> Wrong framing — Spark's advantage is distributed computation across a cluster; on a single machine with data that fits in memory, Pandas is often faster due to Spark's overhead.</div>
+      <div class="redflag"><b>"I optimized Spark jobs at massive scale."</b> Not true for you — your scale was moderate batch (millions of rows), and an interviewer's specific follow-up (skew, cluster sizing at that scale) will expose an inflated claim immediately.</div>
+      <div class="redflag"><b>"UDFs and built-in functions perform the same."</b> They don't — UDFs (especially plain Python ones) serialize data out of the JVM and are meaningfully slower; this is one of the most common Spark interview trap questions.</div>
+      <div class="redflag"><b>"Delta Lake is just Parquet with a different name."</b> Wrong — the transaction log is what gives it ACID guarantees, time travel, and schema enforcement; plain Parquet has none of that.</div>
+      <div class="redflag"><b>Confusing transformations and actions.</b> Saying "the filter ran immediately" when nothing runs until an action is called signals a shallow, first-week understanding of Spark's lazy execution model.</div>
+    </section>
+
+    <section id="problems">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>34 Progressive PySpark Coding Problems</h2>
+        <p>Against the NorthStar Retail schema from Stage 3 (customers, reps, calls, orders, order_items, products) — now expressed as Spark DataFrames. Click to expand each solution.</p>
+      </div>
+      <div class="filterbar" id="pfilter">
+        <button data-f="all" class="active">All</button>
+        <button data-f="easy">Easy</button>
+        <button data-f="med">Medium</button>
+        <button data-f="hard">Hard</button>
+        <button data-f="expert">Expert</button>
+      </div>
+      <div class="probgrid" id="problist"></div>
+    </section>
+
+    <section id="qs-pyspark">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>50-Question PySpark Interview Bank</h2>
+        <p>Click any question for the model answer.</p>
+      </div>
+      <div class="card qbank" id="qbank-pyspark"></div>
+    </section>
+
+    <section id="qs-databricks">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>30-Question Databricks Interview Bank</h2>
+        <p>Click any question for the model answer.</p>
+      </div>
+      <div class="card qbank" id="qbank-databricks"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card bridge-flow">
+        <span class="node">Raw call/order logs</span><span class="arrow">→</span>
+        <span class="node">PySpark: clean, join, aggregate</span><span class="arrow">→</span>
+        <span class="node">Delta table (versioned, MERGE-upserted)</span><span class="arrow">→</span>
+        <span class="node">Gold rep-summary table</span><span class="arrow">→</span>
+        <span class="node">LP + heuristic allocation model (Stage 9)</span><span class="arrow">→</span>
+        <span class="node">$10M revenue outcome (Stage 15)</span>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">12</div>
+        <h2>Mastery Checklist</h2>
+        <p>Saved locally in your browser as you check items off.</p>
+      </div>
+      <div class="card checklist" id="mastery-list"></div>
+    </section>
+  </main>
+</div>
+
+<button class="backtop" id="backtop" aria-label="Back to top">↑</button>
+
+<script>
+try {
+  var problems = [
+    ["easy","Read a Parquet file and print its schema.","df = spark.read.parquet('calls.parquet')\ndf.printSchema()"],
+    ["easy","Filter calls with call_value greater than 200.","calls_df.filter(F.col('call_value') > 200)"],
+    ["easy","Select only rep_id and call_value columns.","calls_df.select('rep_id', 'call_value')"],
+    ["easy","Count total rows in the calls DataFrame.","calls_df.count()"],
+    ["easy","Add a new column call_value_usd that doubles call_value.","calls_df.withColumn('call_value_usd', F.col('call_value') * 2)"],
+    ["easy","Drop duplicate rows based on call_id.","calls_df.dropDuplicates(['call_id'])"],
+    ["easy","Sort calls by call_value descending.","calls_df.orderBy(F.desc('call_value'))"],
+    ["easy","Replace null call_value with 0.","calls_df.fillna({'call_value': 0})"],
+    ["easy","Rename column call_value to value.","calls_df.withColumnRenamed('call_value', 'value')"],
+    ["easy","Cast call_value column to double type.","calls_df.withColumn('call_value', F.col('call_value').cast('double'))"],
+    ["med","Group calls by rep_id and compute total call_value per rep.","calls_df.groupBy('rep_id').agg(F.sum('call_value').alias('total_value'))"],
+    ["med","Join calls to reps on rep_id, keeping all calls (left join).","calls_df.join(reps_df, on='rep_id', how='left')"],
+    ["med","Find the top 5 reps by total call_value.","calls_df.groupBy('rep_id').agg(F.sum('call_value').alias('total'))\\\n    .orderBy(F.desc('total')).limit(5)"],
+    ["med","Add a column classifying calls as 'high' (>500) or 'low'.","calls_df.withColumn('tier', F.when(F.col('call_value') > 500, 'high').otherwise('low'))"],
+    ["med","Compute the average call_value per region after joining to reps.","calls_df.join(reps_df, 'rep_id').groupBy('region').agg(F.avg('call_value').alias('avg_value'))"],
+    ["med","Filter reps who have more than 100 calls using a groupBy + having-style filter.","calls_df.groupBy('rep_id').count().filter(F.col('count') > 100)"],
+    ["med","Explicitly broadcast the small reps table in a join.","calls_df.join(F.broadcast(reps_df), 'rep_id')"],
+    ["med","Read a CSV with an explicit schema instead of inferSchema.","from pyspark.sql.types import StructType, StructField, StringType, DoubleType\nschema = StructType([StructField('rep_id', StringType()), StructField('call_value', DoubleType())])\nspark.read.csv('calls.csv', header=True, schema=schema)"],
+    ["med","Cache a filtered DataFrame that feeds two different aggregations.","filtered = calls_df.filter(F.col('call_value') > 0)\nfiltered.cache()\nfiltered.count()  # materialize\n# then reuse `filtered` in two separate groupBy chains"],
+    ["med","Use a window function to rank calls within each rep by value.","from pyspark.sql.window import Window\nw = Window.partitionBy('rep_id').orderBy(F.desc('call_value'))\ncalls_df.withColumn('rank', F.rank().over(w))"],
+    ["med","Pivot orders to show total order value per region per month.","orders_df.groupBy('region').pivot('month').agg(F.sum('order_value'))"],
+    ["med","Write a result DataFrame to Delta format, partitioned by region.","result_df.write.format('delta').partitionBy('region').mode('overwrite').save('/gold/summary')"],
+    ["hard","Compute month-over-month percent change in total call_value per rep using a window function.","w = Window.partitionBy('rep_id').orderBy('month')\nmonthly = calls_df.groupBy('rep_id','month').agg(F.sum('call_value').alias('total'))\nmonthly.withColumn('prev', F.lag('total').over(w))\\\n    .withColumn('pct_change', (F.col('total')-F.col('prev'))/F.col('prev')*100)"],
+    ["hard","Deduplicate calls keeping only the latest record per call_id based on a timestamp column.","w = Window.partitionBy('call_id').orderBy(F.desc('updated_at'))\ncalls_df.withColumn('rn', F.row_number().over(w)).filter(F.col('rn')==1).drop('rn')"],
+    ["hard","Detect and report which stage of a job pipeline is likely shuffle-bound, given only the transformation chain code.","# Conceptual: any groupBy, join (non-broadcast), distinct, or repartition\n# introduces a shuffle boundary — a new stage in the Spark UI DAG.\n# Walk the chain and flag those calls."],
+    ["hard","Write a MERGE INTO statement to upsert weekly rep allocation updates into a Delta table.","spark.sql('''\nMERGE INTO allocations AS t USING new_allocations AS s\nON t.rep_id = s.rep_id\nWHEN MATCHED THEN UPDATE SET t.territory = s.territory, t.quota = s.quota\nWHEN NOT MATCHED THEN INSERT *\n''')"],
+    ["hard","Read a Delta table as it existed 3 versions ago and diff it against the current version.","old = spark.read.format('delta').option('versionAsOf', current_version-3).load('/gold/allocations')\ncurrent = spark.read.format('delta').load('/gold/allocations')\ndiff = current.exceptAll(old)"],
+    ["hard","Rewrite a slow Python UDF tier-classification as a built-in-function equivalent.","# Before: udf(lambda v: 'high' if v>500 else 'low')\n# After:\ncalls_df.withColumn('tier', F.when(F.col('call_value')>500,'high').otherwise('low'))"],
+    ["hard","Given a skewed rep_id (one rep has 40% of rows), apply a salting technique to a groupBy aggregation.","salted = calls_df.withColumn('salt', (F.rand()*10).cast('int'))\\\n    .withColumn('salted_key', F.concat('rep_id', F.lit('_'), 'salt'))\npartial = salted.groupBy('salted_key','rep_id').agg(F.sum('call_value').alias('p_total'))\nfinal = partial.groupBy('rep_id').agg(F.sum('p_total').alias('total'))"],
+    ["hard","Build a 3-stage medallion pipeline (bronze/silver/gold) for the calls dataset in code.","bronze = spark.read.format('delta').load('/bronze/calls')\nsilver = bronze.dropDuplicates(['call_id']).filter(F.col('call_value').isNotNull())\nsilver.write.format('delta').mode('overwrite').save('/silver/calls')\ngold = spark.read.format('delta').load('/silver/calls').groupBy('rep_id').agg(F.sum('call_value').alias('total'))\ngold.write.format('delta').mode('overwrite').save('/gold/rep_summary')"],
+    ["expert","Design a Databricks Workflow (multi-task job) for the full ingest-to-allocation pipeline, including retry/failure-alert logic — describe the task DAG in words.","# Task 1 ingest_bronze (retries:2) -> Task 2 clean_silver (depends on 1)\n# -> Task 3 build_gold (depends on 2) -> Task 4 run_allocation_model (depends on 3)\n# Alert on any task failure; downstream tasks skipped automatically on upstream failure."],
+    ["expert","Explain, with code, why an unfiltered join on unbalanced partition sizes can cause an OOM (out of memory) error on one executor, and how to fix it.","# If one partition holds a disproportionate share of rows for a\n# given join key (skew) and that key gets a normal (non-broadcast)\n# shuffle join, the executor handling that key's shuffle partition\n# can run out of memory. Fix: broadcast the small side, or salt the skewed key.\ncalls_df.join(F.broadcast(reps_df), 'rep_id')  # avoids the shuffle entirely here"],
+    ["expert","Given a Spark UI showing one task taking 20x longer than the median in a stage, write the diagnostic steps and the code fix.","# 1. Check stage's task duration histogram in Spark UI -> confirms skew\n# 2. Identify the join/groupBy key driving that stage\n# 3. Check key cardinality/distribution: calls_df.groupBy('rep_id').count().orderBy(F.desc('count')).show()\n# 4. If one key dominates: apply salting (see above) or isolate-and-broadcast that key's subset"],
+    ["expert","Implement schema evolution: add a new column to a Delta table without breaking existing readers.","new_df.write.format('delta').mode('append')\\\n    .option('mergeSchema', 'true').save('/gold/rep_summary')\n# mergeSchema=true lets Delta accept the new column;\n# old readers querying prior versions still see the schema as it was then (time travel)"]
+  ];
+
+  var qasPySpark = [
+    ["What is PySpark?","The Python API for Apache Spark, a distributed data-processing engine — lets you write Spark jobs in Python that execute across a cluster."],
+    ["What's the difference between an RDD and a DataFrame?","RDD is a low-level, schema-less distributed collection with no built-in optimizer; DataFrame is schema-aware and optimized by Catalyst — DataFrame is the default choice today."],
+    ["What is lazy evaluation in Spark?","Transformations (filter, select, groupBy) build a logical plan but don't execute; only an action (collect, count, show, write) triggers actual computation."],
+    ["Name three transformations and three actions.","Transformations: select, filter, withColumn, groupBy, join. Actions: collect, count, show, write, take."],
+    ["What triggers a shuffle in Spark?","Operations that require data with the same key to be co-located: groupBy, join (non-broadcast), distinct, repartition, and most aggregations."],
+    ["What is a broadcast join and when does Spark use one automatically?","A join where a small DataFrame is sent whole to every executor, avoiding a shuffle. Spark auto-broadcasts when the small side is below spark.sql.autoBroadcastJoinThreshold (default 10MB)."],
+    ["Why are Python UDFs generally slower than built-in Spark SQL functions?","UDFs serialize data out of the JVM to a Python worker process row-by-row and back; built-ins run inside the JVM and are optimized by Catalyst."],
+    ["What is the Catalyst optimizer?","Spark SQL's query optimizer — analyzes the logical plan (from DataFrame/SQL operations), applies rule-based and cost-based optimizations, and generates an efficient physical execution plan."],
+    ["What is the difference between repartition() and coalesce()?","repartition() does a full shuffle and can increase or decrease partitions evenly; coalesce() only merges existing partitions without a full shuffle, and can only decrease count."],
+    ["What is a Spark 'stage', and what causes a new stage to begin?","A set of tasks that can run without needing data from other partitions. A new stage begins at a shuffle boundary — any operation requiring data movement across partitions."],
+    ["What is data skew and why is it a problem?","When one partition/key has disproportionately more data than others, causing one task to take far longer than the rest — the job's total runtime is bottlenecked by that one slow task."],
+    ["What is salting and how does it fix skew?","Splitting a skewed key into multiple synthetic sub-keys (by appending a random suffix), spreading its rows across more tasks, then aggregating the partial results together."],
+    ["What does .cache() do, and when does it actually take effect?","Marks a DataFrame to be kept in memory after computation; it's still lazy — the data is only actually cached once an action triggers the computation."],
+    ["What's the difference between .cache() and .persist()?","cache() is shorthand for persist() with the default MEMORY_AND_DISK storage level; persist() lets you choose other storage levels (memory-only, disk-only, serialized, replicated)."],
+    ["How does Spark achieve fault tolerance?","Through RDD lineage — Spark tracks the sequence of transformations that produced each partition, so if a partition is lost (e.g. executor failure), it recomputes just that partition from its lineage."],
+    ["What is the difference between narrow and wide transformations?","Narrow transformations (filter, map) don't require data movement — each output partition depends on one input partition. Wide transformations (groupBy, join) require a shuffle across partitions."],
+    ["What is a SparkSession and why do you need one?","The unified entry point for Spark functionality (replacing the older SparkContext/SQLContext split) — used to read data, run SQL, and configure the application."],
+    ["How would you read a CSV with an explicit schema instead of letting Spark infer it?","spark.read.csv(path, header=True, schema=my_struct_type) — explicit schemas avoid an extra full-data scan Spark does to infer types, and prevent wrong type guesses on messy data."],
+    ["What is the difference between DataFrame.show() and DataFrame.collect()?","show() prints a preview to the driver's console without pulling all data back; collect() pulls the entire result set to the driver as a local list — dangerous on large data (can OOM the driver)."],
+    ["Why might collect() crash your driver program?","It brings the entire distributed dataset into the driver's single-machine memory — if the result is large, it can exceed available driver memory and crash."],
+    ["What's a window function, and give an example use case.","Computes a value across a set of rows related to the current row (partitioned/ordered) without collapsing them into one row — e.g. ranking each rep's calls by value within their own rep_id partition."],
+    ["What does explain() show you?","The physical (and optionally logical) execution plan Spark will use for a DataFrame — useful for diagnosing whether a join is being broadcast, where shuffles occur, etc."],
+    ["How do you force Spark to use a broadcast join explicitly?","Wrap the smaller DataFrame with F.broadcast(small_df) in the join call."],
+    ["What happens if you broadcast a DataFrame that's actually too large?","It can exceed each executor's available memory trying to hold the full broadcasted copy, causing out-of-memory errors or driver/executor crashes."],
+    ["What is the difference between map() and mapPartitions() on an RDD?","map() applies a function per element (function call overhead per row); mapPartitions() applies a function once per partition, useful when there's setup cost (e.g. opening a connection) you don't want to repeat per row."],
+    ["What's the role of the cluster manager (e.g. YARN, Kubernetes)?","Allocates and manages the physical/virtual resources (CPU, memory) that Spark's driver and executors run on across the cluster."],
+    ["How do you handle schema mismatches when reading many Parquet files at once?","Use mergeSchema=true (for Delta/Parquet) to reconcile differing schemas across files, or explicitly define and enforce a schema to reject unexpected structures."],
+    ["What's the difference between an inner join and a left anti join?","Inner join keeps only matching rows from both sides. Left anti join keeps only rows from the left side that have NO match on the right — useful for finding 'missing' records."],
+    ["How would you find duplicate call_id records and keep only the most recent one?","Use a window function partitioned by call_id, ordered by a timestamp descending, then filter to row_number() == 1."],
+    ["What is the difference between DataFrame.repartition(col) and repartition(n)?","repartition(n) sets a fixed number of partitions via round-robin/hash; repartition(col) hash-partitions by a specific column's values, useful to co-locate related rows before a groupBy/join."],
+    ["Why is it usually a bad idea to call collect() inside a loop?","Each call pulls data to the driver and re-triggers computation if not cached — extremely slow and memory-risky compared to a single vectorized/distributed operation."],
+    ["What's the difference between Spark's DataFrame API and Spark SQL?","They compile down to the same Catalyst-optimized execution plan — DataFrame API is a Python/Scala method-chaining interface, Spark SQL lets you write literal SQL strings against registered tables/views; performance is identical."],
+    ["How do you register a DataFrame as a temporary SQL view?","df.createOrReplaceTempView('calls'), then spark.sql('SELECT * FROM calls WHERE ...')."],
+    ["What does spark.sql.shuffle.partitions control, and why does its default (200) sometimes hurt performance?","The number of partitions used after a shuffle. 200 is often too many for small data (task-scheduling overhead dominates) or too few for very large data (each partition too big) — commonly tuned per workload."],
+    ["What's the difference between a regular Python UDF and a Pandas UDF (vectorized UDF)?","A plain UDF processes one row at a time via Python; a Pandas UDF uses Apache Arrow to batch rows into a Pandas Series, processing in vectorized chunks — much faster, though still slower than pure built-ins."],
+    ["How would you debug a Spark job that's stuck on one task for a long time?","Check the Spark UI's stage view for task duration distribution — a single outlier task strongly suggests data skew on the join/groupBy key for that stage."],
+    ["What is predicate pushdown?","An optimization where filter conditions are pushed down to the data source (e.g. Parquet file reader) so unnecessary rows/columns are never even read into Spark — reduces I/O significantly."],
+    ["Why do columnar formats like Parquet read faster than row-based formats like CSV for analytical queries?","Columnar storage lets Spark read only the specific columns a query needs (column pruning) and compresses similar values together more efficiently — CSV must read every field of every row."],
+    ["What is the difference between an inner join and a full outer join in terms of null handling?","Inner join drops unmatched rows from both sides entirely. Full outer join keeps all rows from both sides, filling unmatched columns with null."],
+    ["How would you write a DataFrame result out partitioned by a column, and why would you do that?","df.write.partitionBy('region').parquet(path) — writes separate subdirectories per region value, so downstream queries filtering on region can skip reading irrelevant partitions entirely (partition pruning)."],
+    ["What's a common cause of the 'small files problem' in Spark output, and how do you fix it?","Too many output partitions relative to data size (e.g. writing after a heavily filtered/aggregated step still using the original large partition count) — fixed with coalesce() before the write."],
+    ["How would you join two DataFrames on differently-named key columns?","df1.join(df2, df1.rep_id == df2.employee_id, how='inner') — pass an explicit join condition instead of a column-name string."],
+    ["What does F.col() do and why use it instead of df['column']?","Returns a Column object referencing a column by name; preferred because it works unambiguously even across joined DataFrames where the same column name might exist on both sides."],
+    ["Explain what an 'accumulator' is in Spark.","A write-only shared variable executors can add to (e.g. a counter) that's reliably aggregated back to the driver — used for side-effect tracking like counting malformed records during a job."],
+    ["What's the difference between a 'wide' and 'narrow' dependency in the DAG, in terms of fault recovery cost?","A narrow dependency's lost partition can be recomputed from just one parent partition; a wide dependency's lost partition may require recomputing data from many parent partitions across the shuffle."],
+    ["Why would you choose Parquet over CSV as your default file format in a Spark pipeline?","Columnar storage (faster analytical reads via column pruning), built-in compression, embedded schema (no inference needed), and native support for predicate/partition pushdown."],
+    ["What is the significance of spark.sql.autoBroadcastJoinThreshold?","The size (default 10MB) below which Spark automatically converts a join to a broadcast join instead of a shuffle join — tunable if you know a larger table is still safe to broadcast."],
+    ["How would you profile which stage of a multi-step pipeline is the actual bottleneck?","The Spark UI's Jobs/Stages tabs show per-stage duration and task counts — the stage with by far the longest duration (often a shuffle-heavy groupBy/join) is the bottleneck to investigate first."],
+    ["What's the risk of using .toPandas() on a large Spark DataFrame?","Like collect(), it pulls the entire dataset onto the driver as a Pandas DataFrame — if the data doesn't fit in the driver's memory, it crashes; only safe on already-small, aggregated results."],
+    ["What's the difference between spark.read.load() and spark.read.format(...).load(), and why specify a format explicitly?","format() explicitly names the source type (parquet, delta, csv, json); without it, Spark falls back to a configured default format, which can silently misread a file if the default doesn't match — explicit is safer in production code."]
+  ];
+
+  var qasDatabricks = [
+    ["What is Databricks, in one sentence?","A managed cloud platform built around Apache Spark, adding collaborative notebooks, managed clusters, job scheduling, Delta Lake, and governance (Unity Catalog) on top of open-source Spark."],
+    ["What's the difference between an all-purpose cluster and a job cluster?","All-purpose clusters are shared, persistent, used for interactive development (billed while running/idle). Job clusters spin up for one scheduled job and terminate after — cheaper for production/scheduled work."],
+    ["What is Delta Lake, in one sentence?","A storage layer on top of Parquet that adds a transaction log, giving ACID transactions, schema enforcement/evolution, and time travel."],
+    ["What does the _delta_log directory contain?","A sequential, versioned log of every commit (write/update/delete) made to the Delta table — the source of truth for the table's current and historical state."],
+    ["What is time travel in Delta Lake?","The ability to query a table as it existed at a prior version or timestamp, using VERSION AS OF or TIMESTAMP AS OF, powered by the transaction log's version history."],
+    ["What does MERGE INTO do, and why is it better than delete-then-insert?","Performs an atomic upsert — updates matched rows, inserts unmatched ones, in one statement. Delete-then-insert is not atomic and can leave the table in an inconsistent state if it fails partway."],
+    ["What is schema enforcement in Delta Lake?","Delta rejects writes that don't match the target table's existing schema by default, preventing silent data corruption from unexpected columns or type changes."],
+    ["How do you allow a schema change (like adding a column) on write?","Add .option('mergeSchema', 'true') to the write — explicitly opts in to schema evolution rather than allowing it silently by default."],
+    ["What is the medallion architecture?","A layered data design pattern: Bronze (raw ingested data), Silver (cleaned/validated/joined), Gold (business-level aggregates ready for reporting or modeling)."],
+    ["Why not skip straight from raw data to a final report table?","Layering makes debugging and reprocessing cheaper — a bug in cleaning logic only requires rebuilding Silver+Gold from Bronze, not re-ingesting from the original source system."],
+    ["What is a Databricks Job (Workflow)?","A way to schedule notebooks/scripts to run automatically, optionally as a multi-task pipeline with dependencies, retries, and failure alerts."],
+    ["What happens if one task in a multi-task Databricks Job fails?","Downstream tasks that depend on it are skipped by default, and the failure can trigger a configured alert — preventing a broken pipeline from silently producing bad downstream data."],
+    ["What is Unity Catalog?","Databricks' centralized data governance layer — provides table/column-level access control, a unified metastore across workspaces, and data lineage tracking."],
+    ["What's the three-level namespace Unity Catalog uses?","catalog.schema.table — an extra 'catalog' level above the traditional database.schema.table structure, letting one metastore serve multiple environments/workspaces."],
+    ["What is Delta Lake's OPTIMIZE command used for?","Compacts many small files into larger ones, improving read performance — addresses the 'small files problem' that builds up from frequent small writes."],
+    ["What is Z-ORDER (used with OPTIMIZE) for?","Co-locates related data in the same files based on specified columns, improving the effectiveness of data skipping for queries that filter on those columns."],
+    ["What is VACUUM in Delta Lake, and what's the risk of running it carelessly?","Permanently deletes old, no-longer-referenced data files beyond the retention window — risky if run with too short a retention period, since it can break time-travel queries or concurrent readers relying on older versions."],
+    ["What's the difference between a Databricks notebook and a Databricks Job?","A notebook is an interactive development surface; a Job is a scheduled/triggered execution of a notebook (or script) on its own cluster, typically unattended."],
+    ["How would you reduce Databricks cost for a nightly batch pipeline?","Use job clusters instead of all-purpose clusters (auto-terminate after the run), right-size the cluster (avoid over-provisioning), and use spot/preemptible instances where failure tolerance allows."],
+    ["What is Auto Loader in Databricks?","A feature for incrementally and efficiently ingesting new files as they arrive in cloud storage, tracking which files have already been processed — avoids reprocessing the whole source directory each run."],
+    ["What is Structured Streaming, and how does it relate to batch DataFrames?","Spark's stream-processing engine, using the same DataFrame API as batch — you write nearly identical code, and Spark handles the incremental, continuous execution underneath."],
+    ["Why might a company choose Delta Lake over a traditional data warehouse?","Delta Lake unifies batch and streaming, works directly on cheap object storage (rather than a proprietary warehouse format), and supports both structured analytics and ML workloads on the same data."],
+    ["What is a Delta table's 'time travel' most commonly used for in production?","Auditing changes (what did this table look like before a specific update?), recovering from a bad write, and reproducing a prior state for debugging or compliance."],
+    ["How does Unity Catalog's lineage feature help with debugging a bad report?","It shows which upstream tables/notebooks/jobs fed into a given table, letting you trace a data quality issue back to its origin rather than guessing."],
+    ["What is the difference between managed and external (unmanaged) tables in Databricks?","Managed tables have their data lifecycle (including deletion) controlled by the catalog — dropping the table deletes the data. External tables reference data at a path Databricks doesn't own — dropping the table leaves the underlying files intact."],
+    ["What's a common reason a scheduled Databricks Job might silently fail to alert anyone?","Alerting wasn't explicitly configured on the job/task — Databricks doesn't alert by default; someone has to set up email/webhook notifications for job failure."],
+    ["How would you version-control notebook code used in a Databricks Job?","Use Databricks Repos to sync notebooks with a Git repository, rather than relying on the workspace's built-in (less rigorous) notebook revision history."],
+    ["What's the benefit of using Delta Live Tables (DLT) over hand-written notebooks for a pipeline?","DLT lets you declare the desired tables and their dependencies, and it manages orchestration, retries, and data quality expectations automatically — less manual pipeline plumbing than hand-coded notebook chains."],
+    ["Why is 'always overwrite the whole gold table' considered a bad practice at scale?","It's wasteful (recomputing unchanged data) and risky (a full overwrite failing partway can corrupt the table) — incremental/MERGE-based updates are usually preferred once data volumes grow."],
+    ["What would you check first if a Databricks notebook that ran fine interactively fails when run as a scheduled Job?","Environment differences — job clusters may have different library versions, missing cluster-scoped configs, or different default parameters/widgets than the interactive cluster the notebook was developed on."]
+  ];
+
+  var qas = qasPySpark.concat(qasDatabricks);
+
+  function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+  var probList = document.getElementById('problist');
+  var diffLabel = {easy:'Easy', med:'Medium', hard:'Hard', expert:'Expert'};
+  problems.forEach(function(p, i){
+    var d = document.createElement('details');
+    d.className = 'prob';
+    d.setAttribute('data-diff', p[0]);
+    d.innerHTML = '<summary><span class="pnum">P' + (i+1) + '</span><span class="pdiff ' + p[0] + '">' + diffLabel[p[0]] + '</span><span>' + esc(p[1]) + '</span></summary>' +
+      '<div class="prob-body"><div class="codeblock">' + esc(p[2]) + '</div></div>';
+    probList.appendChild(d);
+  });
+  document.querySelectorAll('#pfilter button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('#pfilter button').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var f = btn.getAttribute('data-f');
+      document.querySelectorAll('#problist details.prob').forEach(function(d){
+        d.style.display = (f === 'all' || d.getAttribute('data-diff') === f) ? '' : 'none';
+      });
+    });
+  });
+
+  function renderQA(containerId, list){
+    var box = document.getElementById(containerId);
+    list.forEach(function(qa){
+      var d = document.createElement('details');
+      d.className = 'qa';
+      d.innerHTML = '<summary>' + esc(qa[0]) + '</summary><div class="qa-a">' + esc(qa[1]) + '</div>';
+      box.appendChild(d);
+    });
+  }
+  renderQA('qbank-pyspark', qasPySpark);
+  renderQA('qbank-databricks', qasDatabricks);
+
+  var masteryItems = [
+    "Explain the driver/executor/cluster-manager split and what each does",
+    "Explain lazy evaluation and the transformation vs. action distinction",
+    "Draw or describe a job's stage boundaries given a transformation chain",
+    "Explain why a broadcast join avoids a shuffle, and when Spark does it automatically",
+    "Explain why built-in functions beat Python UDFs, with a concrete example",
+    "Explain repartition() vs. coalesce() and when each is appropriate",
+    "Explain what caching does and when it's actually worth it",
+    "Explain data skew and describe the salting fix, even without personal hands-on tuning",
+    "Explain Delta Lake's transaction log and what ACID guarantees it provides over plain Parquet",
+    "Write a MERGE INTO statement from memory for an upsert scenario",
+    "Explain time travel and a realistic use case for it",
+    "Describe the medallion (bronze/silver/gold) architecture and why layering helps",
+    "Explain the difference between an all-purpose cluster and a job cluster, and why job clusters cost less",
+    "Describe how a multi-task Databricks Job with dependencies and retries works",
+    "Give the honest Level A/B/C breakdown of your own PySpark/Databricks experience without hesitation",
+    "Answer 10 random questions from the 50-question PySpark bank without checking the answer first",
+    "Answer 8 random questions from the 30-question Databricks bank without checking the answer first",
+    "Solve 20 of the 34 coding problems without checking the solution first"
+  ];
+  var mBox = document.getElementById('mastery-list');
+  var STORE_KEY = 'masterbook-s5-mastery';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e) { saved = {}; }
+  masteryItems.forEach(function(txt, i){
+    var row = document.createElement('div');
+    row.className = 'cl-item' + (saved[i] ? ' checked' : '');
+    row.innerHTML = '<div class="box' + (saved[i] ? ' done' : '') + '" data-i="' + i + '"></div><span class="txt">' + esc(txt) + '</span>';
+    mBox.appendChild(row);
+  });
+  mBox.addEventListener('click', function(e){
+    var box = e.target.closest('.box');
+    if (!box) return;
+    var i = box.getAttribute('data-i');
+    var isDone = box.classList.toggle('done');
+    box.closest('.cl-item').classList.toggle('checked', isDone);
+    saved[i] = isDone;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch(e) {}
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    backtop.classList.toggle('show', window.scrollY > 500);
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 5 loaded — problems:', problems.length, 'PySpark Qs:', qasPySpark.length, 'Databricks Qs:', qasDatabricks.length);
+} catch (err) {
+  console.error('Stage 5 script error:', err);
+}
+</script>

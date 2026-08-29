@@ -1,0 +1,950 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>Product Management</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .concept-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+  .concept{ padding:20px 22px; }
+  .concept h4{ font-size:1rem; margin-bottom:8px; }
+  .concept p{ font-size:.88rem; color:var(--ink-soft); margin:0 0 8px; }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .worked{ margin-top:14px; border:1px dashed var(--line-strong); border-radius:10px; padding:16px 18px; background:var(--paper-sunken); }
+  .worked .wk-label{ font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; }
+  .worked .wk-result{ margin-top:8px; font-size:.85rem; color:var(--ink-soft); }
+
+  .exstrip{ margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px 16px; border-top:1px solid var(--line); padding-top:12px; }
+  .exstrip .ex{ font-size:.8rem; }
+  .exstrip .ex b{ display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:2px; font-weight:700; }
+  .exstrip .ex span{ color:var(--ink-soft); }
+
+  .probgrid{ display:flex; flex-direction:column; gap:10px; }
+  details.prob{ border:1px solid var(--line); border-radius:10px; background:var(--paper-raised); }
+  details.prob summary{ padding:12px 18px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.9rem; }
+  details.prob summary::-webkit-details-marker{ display:none; }
+  details.prob summary .pnum{ font-family:"IBM Plex Mono"; font-size:.75rem; color:var(--data); background:var(--data-soft); padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  details.prob summary .pdiff{ font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  .pdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .pdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .pdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .pdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  .prob-body{ padding:0 18px 16px; }
+
+  .qbank{ display:flex; flex-direction:column; gap:0; }
+  details.qa{ border-bottom:1px solid var(--line); }
+  details.qa:last-child{ border-bottom:none; }
+  details.qa summary{ padding:13px 20px; cursor:pointer; list-style:none; font-size:.9rem; font-weight:500; display:flex; gap:12px; align-items:baseline; }
+  details.qa summary::-webkit-details-marker{ display:none; }
+  details.qa summary::before{ content:"Q"; font-family:"IBM Plex Mono"; font-size:.68rem; color:var(--data); background:var(--data-soft); padding:2px 6px; border-radius:5px; flex:0 0 auto; }
+  details.qa .qa-a{ padding:0 20px 16px 58px; font-size:.86rem; color:var(--ink-soft); }
+  details.qa .qa-a b{ color:var(--ink); }
+
+  .redflag{ padding:13px 17px; border-left:4px solid var(--lvlA); background:var(--lvlA-soft); border-radius:0 8px 8px 0; margin-bottom:9px; font-size:.87rem; }
+  .redflag b{ color:var(--lvlA); }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  .framebox{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+  .frame-a{ border-top:4px solid var(--data); }
+  .frame-b{ border-top:4px solid var(--lvlC); }
+  .frame-c{ border-top:4px solid var(--lvlB); }
+  .framebox .fh{ font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; padding:14px 18px 0; }
+  .frame-a .fh{ color:var(--data); }
+  .frame-b .fh{ color:var(--lvlC); }
+  .frame-c .fh{ color:var(--lvlB); }
+  .framebox .fb{ padding:8px 18px 18px; font-size:.87rem; color:var(--ink-soft); }
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+  .subhead{ font-family:"Fraunces"; font-size:1.15rem; font-weight:600; margin:36px 0 14px; padding-top:8px; border-top:1px solid var(--line); }
+  .subhead:first-child{ border-top:none; padding-top:0; margin-top:0; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <div class="stage-pill">● Stage 14 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#honest">Honest CV Framing</a></li>
+      <li><a href="#foundations">Product Management Foundations &amp; Discovery</a></li>
+      <li><a href="#research">User Research</a></li>
+      <li><a href="#prds">PRDs &amp; Requirements</a></li>
+      <li><a href="#priority">Prioritization Frameworks</a></li>
+      <li><a href="#metrics">Product Metrics</a></li>
+      <li><a href="#gtm">GTM &amp; Agile Delivery</a></li>
+      <li><a href="#altmodels">Alternative Approaches — Why This, Why Not That</a></li>
+      <li><a href="#cmptable">Prioritization Framework Comparison Table</a></li>
+      <li><a href="#redflags">Red Flags</a></li>
+      <li><a href="#problems">30 Progressive Problems</a></li>
+      <li><a href="#questions">80-Question Interview Bank</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next (Part IX)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 20 (Market Sizing) is next, followed by Operations, Product, Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part IX · Stage 14 of 33</div>
+      <h1>Product Management</h1>
+      <p class="lede">This is your strongest Level A territory in the entire masterbook: 500+ user stories and PRDs at Capgemini, owning requirements &amp; solution design at NanoCloud, 100+ user interviews at Hero Electronics, and an IBM Certified Product Manager credential. This stage builds the full practitioner toolkit — discovery, research, PRDs, prioritization, metrics, and GTM — that turns those real achievements into a defensible, technically fluent PM interview performance.</p>
+      <div class="statusbar">
+        <div class="statuschip">🧭 12 concept modules: Discovery → Research → PRDs → Prioritization → Metrics → GTM/Agile</div>
+        <div class="statuschip">🧮 Every concept has a worked numeric example + real computed result</div>
+        <div class="statuschip">🧩 <b>30</b> progressive problems</div>
+        <div class="statuschip">❓ <b>80</b> interview questions with model answers</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">Unlike most of this masterbook, Product Management isn't a stage where you're building depth to defend a thin claim — it's a stage where you already have the real, substantial experience (PRDs, requirements ownership, user research, 0-to-1 delivery) and the job is to give it proper vocabulary and rigor. A PM interviewer isn't testing whether you've heard of RICE scoring; they're testing whether you can reason from first principles about a genuinely ambiguous product problem, prioritize under real constraints, and defend a decision with data. This stage builds exactly that: the frameworks (JTBD, RICE/MoSCoW/Kano, North Star/AARRR, PRDs, GTM) applied with the same worked-example rigor as every technical stage, directly connected to what you've actually built.</p>
+      </div>
+    </section>
+
+    <section id="honest">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Honest CV Framing</h2>
+        <p>Product Management is a genuine, deep Level A area across your CVs — real requirements ownership, real user research, real PRD authorship.</p>
+      </div>
+      <div class="framebox">
+        <div class="card frame-a">
+          <div class="fh">Level A — What I actually did</div>
+          <div class="fb">Authored 500+ user stories and PRDs at Capgemini that served as the reference data dictionary for product, technology, and stakeholder teams; owned requirements definition and solution design directly with the client at NanoCloud (the Product Management CV's accurate framing — the other four CVs undersell this as "delivered recommendations"); conducted 100+ one-on-one user interviews over a two-month engagement at Hero Electronics, structuring feedback into a thematic issue framework to prioritize the highest-impact investments; hold an IBM Certified Product Manager credential.</div>
+        </div>
+        <div class="card frame-b">
+          <div class="fh">Level B — What I should understand deeply</div>
+          <div class="fb">The formal vocabulary and frameworks underneath work I've already done intuitively: naming what I did as Jobs-to-be-Done-style discovery, applying RICE/MoSCoW/Kano rigor to prioritization decisions I made more informally in practice, and structuring metrics thinking (North Star, AARRR, leading vs. lagging indicators) around the outcomes I was already tracking (query coverage, cost reduction, thematic issue prioritization).</div>
+        </div>
+        <div class="card frame-c">
+          <div class="fh">Level C — Honest framing for anything beyond that</div>
+          <div class="fb">If asked about running a full formal GTM launch end-to-end, owning a P&amp;L, or leading a large cross-functional org through a major 0-to-1 launch with board-level stakeholders, the honest answer is: "My product experience is strongest in discovery, requirements, and research — deep, hands-on, and real — while a full GTM launch or P&amp;L ownership at that scale is something I understand the framework for but haven't personally run end-to-end." Never claim GTM/launch ownership at a scale beyond what the CVs actually support.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="foundations">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>Product Management Foundations &amp; Discovery</h2>
+        <p>What a PM actually does, and the discovery discipline that keeps a product team solving real problems instead of guessing.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>The PM Role &amp; the Product Lifecycle <span class="lvl lvl-A">A</span></h4>
+          <p>A Product Manager sits at the intersection of <b>user needs</b>, <b>business viability</b>, and <b>technical feasibility</b> — the classic three-circle Venn diagram. The role spans the full <b>product lifecycle</b>: discovery (is this problem worth solving?), definition (PRDs, requirements, scope), delivery (working with engineering through build), and iteration (measuring, learning, refining post-launch) — a PM doesn't own engineering execution but owns the "what" and "why," collaborating closely with design and engineering who own the "how."</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- A real NanoCloud-style requirements-ownership workflow, mapped to the lifecycle:</span>
+Discovery:   Client reports "unclear where network capacity is under/over-provisioned"
+             -&gt; is this worth solving? (yes -- directly tied to cost + service quality)
+Definition:  Requirements gathered directly with client; solution design scoped
+             (heatmap-based optimization recommendations, defined success criteria)
+Delivery:    Solution design handed to technical team for implementation
+Iteration:   Recommendations validated against real coverage/downtime outcomes,
+             refined based on what worked</span></div>
+            <div class="wk-result">Framing the NanoCloud engagement through this four-stage lifecycle turns "I delivered network optimization recommendations" into a structured, defensible narrative: you personally owned Discovery and Definition (the requirements-gathering and solution-design stages), which is exactly the accurate, confirmed framing from the Product Management CV — precise about which lifecycle stages you owned versus which were handled by the technical team.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Planning a home renovation: understanding what's actually wrong (discovery) before picking finishes (definition) is the same discipline as not jumping straight to a solution before confirming the problem.</span></div>
+            <div class="ex"><b>Consumer</b><span>A shopping app team confirming customers actually struggle with checkout (discovery) before redesigning it (definition/delivery), rather than redesigning on a hunch.</span></div>
+            <div class="ex"><b>Business</b><span>The classic reason product teams waste quarters: skipping discovery and jumping straight to building a solution nobody validated actually solves the real problem.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Exactly the sequence the NanoCloud engagement followed — problem confirmed with the client before any optimization modeling began.</span></div>
+            <div class="ex"><b>Interview</b><span>"What's the difference between a PM and a project manager?" — a project manager is primarily responsible for delivery (on time, on scope, on budget); a PM is responsible for the "what" and "why" — deciding what gets built and defending why, informed by discovery, before delivery even starts.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This lifecycle framing is exactly how I'd walk an interviewer through NanoCloud — I owned discovery and definition directly with the client, which is the accurate, confirmed story."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Jobs-to-be-Done (JTBD) Discovery <span class="lvl lvl-B">B</span></h4>
+          <p><b>Jobs-to-be-Done</b> reframes discovery around the underlying "job" a customer is "hiring" a product to do, rather than the product's feature list or a static user persona — the classic formulation is "when [situation], I want to [motivation], so I can [expected outcome]." This surfaces genuine unmet needs and functional/emotional/social dimensions of a problem that a feature checklist or demographic persona often misses.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Applied to the Hero Electronics chatbot's underlying customer job:</span>
+Weak framing (persona-based): "Our user is a 30-45 year old homeowner
+  who owns a router."
+
+JTBD framing: "When my router unexpectedly stops working during a video call,
+  I want a fast, low-effort way to get either a fix or a clear next step,
+  so I can get back to what I was doing without a frustrating support call."
+
+<span class="cmt">-- This JTBD framing directly explains WHY 80% query coverage was the</span>
+<span class="cmt">-- right initial design target -- most jobs are simple, time-pressured</span>
+<span class="cmt">-- "get me unblocked fast," not complex diagnostic conversations</span></div>
+            <div class="wk-result">The JTBD framing explains a real design decision (why the chatbot targeted fast self-service for the majority of queries, escalating the harder 20%) far more precisely than a demographic persona would have — it's the difference between "who is this for" and "what job are they actually trying to get done," which is the sharper, more design-relevant question.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>The famous "people don't want a quarter-inch drill, they want a quarter-inch hole" — they're hiring the drill for the job of making a hole, not because they love drills.</span></div>
+            <div class="ex"><b>Consumer</b><span>Someone isn't buying a meal-kit subscription because they love chopping vegetables — they're hiring it to solve "get a decent home-cooked meal on the table without the planning effort."</span></div>
+            <div class="ex"><b>Business</b><span>Segmenting customers by the job they're trying to get done (not just demographics) often reveals your real competitor isn't a similar product — it's whatever else could accomplish that job (for the meal kit: takeout, not another meal-kit brand).</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly the lens that explains why the Hero Electronics chatbot's design decisions (self-service-first, fast escalation) were the right call for the actual job customers were hiring it to do.</span></div>
+            <div class="ex"><b>Interview</b><span>"How is JTBD different from a user persona?" — a persona describes WHO the user is (demographics, attributes); JTBD describes WHAT they're trying to accomplish and WHY — two different customers with different personas can share the exact same job.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd reframe the Hero Electronics chatbot's design rationale through JTBD if asked to justify why the 80%-coverage self-service design was the right initial scope."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="research">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>User Research</h2>
+        <p>The discipline behind your real 100+ user interviews — how to run research that actually changes decisions, not just decorates them.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Qualitative Interview Technique &amp; Bias Avoidance <span class="lvl lvl-A">A</span></h4>
+          <p>Good user interviews ask <b>open-ended, past-behavior-focused</b> questions ("walk me through the last time you...") rather than <b>hypothetical or leading</b> ones ("would you use a feature that..."), because people are unreliable predictors of their own future behavior but much more reliable narrators of what they actually did. Common bias traps: leading questions, confirmation bias (only hearing what supports your hypothesis), and small unrepresentative samples generalized too confidently.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- WEAK (hypothetical, leading):</span>
+"Would you use a chatbot that instantly answers your questions?"
+<span class="cmt">-- almost everyone says yes to a hypothetical convenience -- low signal</span>
+
+<span class="cmt">-- STRONG (past-behavior, open-ended):</span>
+"Walk me through the last time you had a problem with your router.
+ What did you do first? What was frustrating about that?"
+<span class="out">-&gt; reveals REAL behavior: "I called support, waited 20 minutes, the
+    rep asked me to restart the router which I'd already tried twice"</span></div>
+            <div class="wk-result">The past-behavior question surfaced a concrete, specific frustration (repeating troubleshooting steps already tried) that directly informed a real design decision — a chatbot that first asks "have you already tried X" before repeating it — something the hypothetical question would never have revealed, since it only measures enthusiasm for a vague concept, not a real pain point.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Asking a friend "what did you actually eat this week" gets a more useful answer than "would you eat healthier if it were easier" — the same past-behavior-over-hypothetical principle.</span></div>
+            <div class="ex"><b>Consumer</b><span>Why good UX researchers watch someone actually use a prototype rather than just asking if they'd like a described feature.</span></div>
+            <div class="ex"><b>Business</b><span>A classic costly mistake: building a feature because survey respondents said "yes, I'd use that" to a hypothetical, then seeing near-zero real adoption.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Exactly the discipline behind the real 100+ interviews at Hero Electronics — structuring questions around actual past support experiences, not hypothetical feature enthusiasm.</span></div>
+            <div class="ex"><b>Interview</b><span>"How many user interviews are 'enough'?" — qualitative research typically shows diminishing new insights after 5-8 interviews per user segment (saturation); 100+ interviews across an engagement usually spans multiple segments/themes, not one exhaustively-sampled group.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This is exactly the interview discipline I applied across the 100+ one-on-one interviews at Hero Electronics — past-behavior framing, not hypothetical feature-enthusiasm questions."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Synthesizing Research into a Thematic Framework <span class="lvl lvl-A">A</span></h4>
+          <p>Raw interview notes are not insight — <b>synthesis</b> (affinity mapping/thematic coding: grouping similar quotes/observations into named themes, then sizing each theme by frequency and severity) turns a pile of qualitative data into a small number of prioritizable, defensible findings a team can actually act on.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- 100+ interview notes distilled into themes (illustrative structure):</span>
+Theme A: "Repeats troubleshooting steps already tried"     -- mentioned by 41%
+Theme B: "Can't reach a human quickly for urgent issues"    -- mentioned by 28%
+Theme C: "Unclear what warranty actually covers"             -- mentioned by 19%
+Theme D: "Setup instructions assume too much technical knowledge" -- 12%
+
+<span class="cmt">-- Prioritized by frequency x severity, not just frequency alone</span>
+<span class="cmt">-- (Theme B is lower frequency but HIGH severity -- urgent issue,</span>
+<span class="cmt">-- unresolved -- so it can rank above a higher-frequency, lower-severity theme)</span></div>
+            <div class="wk-result">Turning 100+ raw interview transcripts into 4 named, sized themes is what makes the research actionable — a stakeholder can look at "41% repeat already-tried steps" and immediately understand both the scale of the problem and a clear design implication (the chatbot should ask what's already been tried), which raw quotes alone never deliver on their own.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Sorting a messy pile of complaints from neighbors into a few real, named issues (noise, parking, trash days) rather than reading each one in isolation.</span></div>
+            <div class="ex"><b>Consumer</b><span>A company's "top 3 customer complaints this quarter" report is exactly this synthesis process applied to support tickets or reviews.</span></div>
+            <div class="ex"><b>Business</b><span>Sizing themes by frequency AND severity (not frequency alone) is what prevents a team from over-indexing on a loud-but-rare complaint while missing a quiet-but-widespread one.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Precisely the process the CV describes: "structured customer feedback into a thematic issue framework, enabling prioritization of the highest-impact investments" at Hero Electronics.</span></div>
+            <div class="ex"><b>Interview</b><span>"How do you avoid your own bias when synthesizing research themes?" — have a second person independently code a sample of the same notes and compare groupings (inter-rater agreement), and explicitly look for evidence that contradicts your working hypothesis, not just evidence that confirms it.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This exact thematic-framework synthesis is the real methodology I used at Hero Electronics to turn 100+ interviews into a prioritized set of design decisions."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="prds">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>PRDs &amp; Requirements</h2>
+        <p>The anatomy of a real PRD and a well-formed user story — the discipline behind 500+ real stories authored at Capgemini.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>PRD Anatomy — What Actually Belongs in One <span class="lvl lvl-A">A</span></h4>
+          <p>A well-formed <b>PRD (Product Requirements Document)</b> typically includes: the problem statement (why this, why now), goals/success metrics, user stories/scope, explicit non-goals (what's deliberately out of scope), open questions/risks, and a rough timeline — serving as the single source of truth that keeps product, design, engineering, and stakeholders aligned, which is exactly the "reference data dictionary" role the CV describes.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- A condensed real-shape PRD skeleton:</span>
+Problem:      "Reps can't quickly see which accounts are at churn risk,
+               leading to reactive rather than proactive outreach."
+Goal/Metric:  "Reduce time-to-first-contact for at-risk accounts by 30%"
+In scope:     Risk score display on account dashboard, weekly digest email
+Non-goals:    Automated outreach (explicitly OUT of scope for this release)
+User stories: "As a rep, I want to see a risk score on my account list so
+               I can prioritize outreach without manually cross-referencing data."
+Open risks:   "Risk score model accuracy not yet validated on live data"</span></div>
+            <div class="wk-result">The explicit "non-goals" line (automated outreach is deliberately out of scope) is what prevents scope creep and stakeholder confusion mid-build — naming what you're NOT doing is as important as naming what you are, and is one of the most commonly missing sections in a weak PRD.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A detailed renovation brief that states both what's included (new kitchen counters) and explicitly excluded (not touching the bathroom) prevents costly mid-project scope confusion.</span></div>
+            <div class="ex"><b>Consumer</b><span>Release notes that clearly state what's new in this version versus what's planned for later are the external-facing cousin of a PRD's scope/non-goals section.</span></div>
+            <div class="ex"><b>Business</b><span>A PRD without a clear success metric is a common, costly failure mode — a team can "ship" something with no way to know afterward whether it actually worked.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Exactly the "reference data dictionary" role the CV describes — 500+ PRDs/stories at Capgemini serving as the source of truth product, tech, and stakeholder teams all referenced.</span></div>
+            <div class="ex"><b>Interview</b><span>"What's the most commonly missing section in a weak PRD?" — explicit non-goals and a measurable success metric; without them, scope creeps and nobody can agree afterward whether the feature succeeded.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This PRD anatomy is literally the structure behind the 500+ stories and PRDs I authored at Capgemini that served as the team's reference data dictionary."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>User Stories &amp; Acceptance Criteria <span class="lvl lvl-A">A</span></h4>
+          <p>A well-formed <b>user story</b> follows "As a [role], I want [capability], so that [benefit]" — capturing WHO, WHAT, and WHY without prescribing the exact HOW (leaving implementation to engineering). <b>Acceptance criteria</b> make a story testable: specific, verifiable conditions (often Given/When/Then format) that define exactly when the story is "done."</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">Story: "As a sales rep, I want to filter my account list by risk score,
+         so that I can prioritize which accounts to contact first."
+
+Acceptance Criteria (Given/When/Then):
+  Given I am viewing my account list,
+  When I apply a risk-score filter of "High",
+  Then only accounts with a risk score above the High threshold are shown.
+
+  Given no accounts match the selected filter,
+  When the filter is applied,
+  Then an empty state message displays: "No high-risk accounts right now."</span></div>
+            <div class="wk-result">The second acceptance criterion (the empty-state case) is exactly the kind of edge case that separates a well-specified story from an ambiguous one — without it, engineering has to guess what happens when zero accounts match, which either causes a bug or an unplanned mid-sprint clarifying conversation; naming it upfront in the story removes that ambiguity entirely.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A well-specified restaurant order ("no onions, extra sauce on the side") leaves no room for the kitchen to guess — acceptance criteria play the same role for engineering.</span></div>
+            <div class="ex"><b>Consumer</b><span>Why a feature sometimes "technically works" but confuses users in an edge case nobody thought to specify (like an empty search result) — a missing acceptance criterion.</span></div>
+            <div class="ex"><b>Business</b><span>Well-written acceptance criteria reduce the single biggest source of engineering rework: building the wrong edge-case behavior because it was never specified.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly the discipline behind writing 500+ real user stories at Capgemini — WHO/WHAT/WHY plus explicit, testable acceptance criteria for each.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why shouldn't a user story specify the exact UI/implementation?" — that's engineering and design's domain; over-specifying the HOW in a story removes their ability to find the best technical/design solution and can lock in a worse implementation than they'd have chosen themselves.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd walk through exactly this story-plus-acceptance-criteria structure if asked to show a sample of the 500+ stories I authored at Capgemini."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="priority">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Prioritization Frameworks</h2>
+        <p>Turning "everything feels important" into a defensible, data-informed ranking.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>RICE Scoring <span class="lvl lvl-B">B</span></h4>
+          <p><b>RICE</b> scores each initiative on Reach (how many users/how often), Impact (how much it moves the needle per user, often a multiplier like 3=massive, 2=high, 1=medium, 0.5=low), Confidence (% certainty in your Reach/Impact estimates), and Cost (person-time/effort) — combined as <b>RICE Score = (Reach × Impact × Confidence) / Effort</b>, giving a comparable number across very different initiatives.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">Initiative A: "Risk-score filter on account list"
+  Reach=800 reps/quarter, Impact=2, Confidence=80%, Effort=4 person-weeks
+  RICE = (800 * 2 * 0.8) / 4 = 1280/4 = 320
+
+Initiative B: "Automated weekly digest email"
+  Reach=800 reps/quarter, Impact=1, Confidence=90%, Effort=1 person-week
+  RICE = (800 * 1 * 0.9) / 1 = 720/1 = 720
+
+Initiative C: "Full account-360 redesign"
+  Reach=800 reps/quarter, Impact=3, Confidence=40%, Effort=12 person-weeks
+  RICE = (800 * 3 * 0.4) / 12 = 960/12 = 80</span></div>
+            <div class="wk-result">Despite having the highest raw Impact score, Initiative C ranks LAST (RICE=80) once its low confidence and high effort are factored in — while the modest-impact, cheap, high-confidence digest email (Initiative B, RICE=720) actually ranks highest. This is exactly RICE's value: it prevents a team from chasing the flashiest-sounding idea over the one that's actually the best use of limited effort right now.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Choosing home-improvement projects by weighing how many rooms benefit, how much it improves daily life, how sure you are it'll work, against how much effort/money it costs — not just picking the most exciting-sounding project.</span></div>
+            <div class="ex"><b>Consumer</b><span>Why a product team ships a small, high-confidence quality-of-life fix before a flashy, uncertain, expensive redesign — RICE-style reasoning even when not formally scored.</span></div>
+            <div class="ex"><b>Business</b><span>Giving stakeholders a transparent, numeric prioritization rationale (rather than "gut feel") is often what earns a PM real prioritization authority with leadership.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Exactly the kind of structured tradeoff reasoning that should sit behind decisions like the Hero Electronics thematic-issue prioritization — sizing themes by more than just how loud the complaint was.</span></div>
+            <div class="ex"><b>Interview</b><span>"What's RICE's biggest weakness?" — the inputs (especially Impact and Confidence) are still subjective estimates, not hard data — RICE makes the reasoning explicit and comparable, but doesn't eliminate judgment calls, so estimates should be revisited as real data comes in.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd use RICE to formalize exactly the kind of prioritization reasoning I applied informally when structuring the Hero Electronics feedback themes into a prioritized investment list."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>MoSCoW &amp; the Kano Model <span class="lvl lvl-B">B</span></h4>
+          <p><b>MoSCoW</b> (Must have / Should have / Could have / Won't have this time) is a fast, simple scope-negotiation tool for a single release. The <b>Kano Model</b> classifies features by the relationship between investment and satisfaction: <b>Basic/Threshold</b> (expected — absence causes dissatisfaction, presence doesn't excite), <b>Performance</b> (more is linearly better), and <b>Delighters/Excitement</b> (unexpected — absence isn't missed, presence creates disproportionate satisfaction).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — Kano classification</div>
+            <div class="codeblock">Feature: "Chatbot correctly answers a basic warranty question"
+  -&gt; BASIC/THRESHOLD. Users don't praise it for working; they're
+     frustrated and lose trust immediately if it DOESN'T work.
+
+Feature: "Chatbot response speed"
+  -&gt; PERFORMANCE. Faster is proportionally better, slower is
+     proportionally worse -- satisfaction scales roughly linearly.
+
+Feature: "Chatbot proactively flags 'your warranty expires in 2 weeks'"
+  -&gt; DELIGHTER. Nobody expected this; its absence isn't noticed,
+     but its presence creates disproportionate positive surprise.</span></div>
+            <div class="wk-result">Misclassifying a Basic feature as a Delighter is a common, costly mistake — investing extra polish in "the chatbot answers warranty questions" beyond making it simply reliable wastes effort on a feature that was never going to generate excitement, while under-investing in genuinely delightful, differentiating features that could have. Kano gives explicit language for exactly that investment-allocation decision.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Hot water in a hotel room is a Basic feature (its absence is a serious complaint, its presence isn't praised); a handwritten welcome note is a Delighter (nobody expects it, and it creates outsized goodwill).</span></div>
+            <div class="ex"><b>Consumer</b><span>A working checkout flow is Basic for any e-commerce site; a surprisingly thoughtful post-purchase touch (like a personalized thank-you) is a Delighter.</span></div>
+            <div class="ex"><b>Business</b><span>MoSCoW is the fast, practical tool for "what ships in THIS release, given a fixed deadline" — used constantly in real sprint/release planning, more lightweight than a full Kano analysis.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Precisely the classification lens that should have governed investment in the Hero Electronics chatbot: basic reliability on core queries (Basic/Threshold) was the non-negotiable foundation before any delighter-style proactive features made sense.</span></div>
+            <div class="ex"><b>Interview</b><span>"Do Delighters stay Delighters forever?" — no, they typically decay into expected Basic features over time as the market catches up (a delighter today, like same-day delivery once was, becomes table stakes tomorrow) — a genuinely important, often-tested follow-up point.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd use MoSCoW to explain how the Hero Electronics chatbot's initial scope was negotiated for the internship timeline, and Kano to explain why reliability came before any 'delightful' proactive features."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="metrics">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>Product Metrics</h2>
+        <p>Choosing the right number to optimize for — and knowing the difference between a metric that means something and a vanity number.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>North Star Metric &amp; the AARRR Funnel <span class="lvl lvl-B">B</span></h4>
+          <p>A <b>North Star Metric</b> is the single measure that best captures the core value a product delivers to customers (and, done well, correlates with long-term business success) — not a vanity metric like total signups. <b>AARRR</b> (Acquisition, Activation, Retention, Referral, Revenue — the "pirate metrics" funnel) breaks the customer journey into stages, each with its own conversion rate, so a team can pinpoint exactly where users drop off.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — AARRR funnel math</div>
+            <div class="codeblock">Acquisition:  10,000 visitors to the chatbot landing/entry point
+Activation:   6,000 actually start a conversation      -&gt; 60% of Acquisition
+Retention:    2,400 return to use it again within 30 days -&gt; 40% of Activation
+Referral:     360 recommend it / share it                -&gt; 15% of Retention
+Revenue/Value: 1,920 of the 2,400 retained users had their issue
+               resolved without a live agent               -&gt; 80% resolution
+
+<span class="cmt">-- The steepest drop is Acquisition -&gt; Activation (only 60% even try it)</span>
+<span class="cmt">-- and Activation -&gt; Retention (only 40% come back) -- these two stages,</span>
+<span class="cmt">-- not Referral, are where investment would have the biggest funnel impact</span></div>
+            <div class="wk-result">Breaking the journey into AARRR stages reveals that the biggest opportunity isn't Referral (the smallest absolute number, but not necessarily the weakest conversion rate) — it's the Activation and Retention stages, where the steepest percentage drop-offs occur; without this stage-by-stage view, a team might intuitively (and wrongly) focus effort on the most visible number rather than the actual bottleneck.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A gym doesn't succeed by counting sign-ups (Acquisition) alone — the real measure of success is people who actually keep showing up (Retention), which is the North-Star-style distinction.</span></div>
+            <div class="ex"><b>Consumer</b><span>Spotify's North Star is closer to "time spent listening" than "total downloads" — downloads are a vanity Acquisition number that doesn't guarantee real value delivered.</span></div>
+            <div class="ex"><b>Business</b><span>A team fixated on total chatbot conversations started (Activation-adjacent vanity metric) without tracking Retention or actual resolution rate could look "successful" while genuinely failing customers.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The CV's real "80% query coverage" number is essentially a resolution-rate metric — precisely the kind of value-delivered measure a North Star framework would elevate over a vanity "conversations started" count.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why not just optimize for total revenue as the North Star?" — revenue is a lagging, backward-looking outcome of value already delivered; a good North Star is closer to the moment value is actually created for the user, which then drives revenue, not the reverse.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd frame the chatbot's 80% coverage number through this North Star lens — it's a genuine value-delivered metric, not a vanity Acquisition number, which is exactly why it's a defensible, credible result to cite."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Leading vs. Lagging Metrics &amp; OKRs <span class="lvl lvl-C">C</span></h4>
+          <p>A <b>lagging metric</b> measures an outcome after the fact (revenue, churn rate) — important but too late to act on directly. A <b>leading metric</b> predicts that outcome earlier and is something the team can actually influence day-to-day (e.g., activation rate predicting future retention). <b>OKRs</b> (Objectives and Key Results) pair a qualitative, inspirational Objective with 2-4 measurable Key Results, usually including both a leading and a lagging indicator to balance short-term action with long-term outcome accountability.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">Objective: "Make the support chatbot the fastest way to resolve a routine issue"
+
+Key Result 1 (leading): "Increase first-message resolution rate from
+                          65% to 80%" -- a leading indicator the team can
+                          directly influence week to week
+
+Key Result 2 (lagging):  "Reduce overall support cost per customer by 20%
+                          quarter-over-quarter" -- a lagging outcome that
+                          confirms the leading work actually mattered
+
+<span class="cmt">-- Tracking ONLY the lagging KR (cost) risks discovering a problem too</span>
+<span class="cmt">-- late in the quarter to correct course; the leading KR gives an early signal</span></div>
+            <div class="wk-result">Pairing a leading KR (first-message resolution rate, trackable weekly) with a lagging KR (quarterly cost reduction) means the team gets an early warning if resolution rate stalls at week 4, rather than only discovering the cost target was missed at the end of the quarter — exactly the practical value of distinguishing leading from lagging indicators rather than tracking outcomes alone.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Weight (lagging) versus daily calories and exercise (leading) — you can influence the leading numbers directly today; the lagging number just confirms whether it worked, weeks later.</span></div>
+            <div class="ex"><b>Consumer</b><span>A subscription app tracking weekly active usage (leading) as a predictor of the lagging churn number it won't see clearly for another month or two.</span></div>
+            <div class="ex"><b>Business</b><span>A quarterly OKR review that only reports the lagging Key Result (revenue) without any leading indicator context leaves leadership unable to course-correct mid-quarter.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A well-formed OKR for the Hero-Electronics-style chatbot upgrade proposed in Stage 13 would pair a leading KR (resolution rate) with a lagging KR (cost reduction), exactly as in the worked example.</span></div>
+            <div class="ex"><b>Interview</b><span>"Give an example of a leading indicator for customer churn." — declining product usage frequency, a drop in feature engagement, or reduced support-interaction satisfaction scores typically show up weeks before an actual cancellation (the lagging outcome).</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd propose this leading/lagging KR pairing if asked how I'd formalize measurement for a product I owned requirements for, like the NanoCloud optimization work."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="gtm">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>GTM &amp; Agile Delivery</h2>
+        <p>Getting a product into the world, and the delivery cadence that keeps a team shipping iteratively rather than in one giant leap.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>GTM Strategy &amp; Launch Planning <span class="lvl lvl-B">B</span></h4>
+          <p>A <b>Go-To-Market (GTM) strategy</b> answers who the target customer is, what the positioning/messaging is, which channels reach them, and how success will be measured post-launch — commonly staged as a phased rollout (internal/alpha → limited beta → general availability) rather than a single big-bang release, to de-risk and gather real feedback before full exposure.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">Phase 1 (Alpha, internal):    Chatbot tested by internal support staff only,
+                                comparing bot answers against known-correct ones
+Phase 2 (Beta, 10% traffic):   Live to a small % of real customer queries,
+                                monitored closely for resolution rate/escalations
+Phase 3 (GA, full rollout):    Full traffic, once Beta metrics clear the
+                                pre-defined bar (e.g. resolution rate >= 75%)
+
+<span class="cmt">-- Rollback criteria defined BEFORE launch, not improvised mid-incident:</span>
+<span class="cmt">-- "if resolution rate drops below 60% or escalation complaints spike,</span>
+<span class="cmt">-- revert Beta traffic to 0% within 24 hours"</span></div>
+            <div class="wk-result">Defining the rollback threshold (resolution rate below 60%) BEFORE launch, not during a live incident, is what separates disciplined GTM planning from reactive firefighting — deciding your abort criteria under pressure, in the middle of a bad launch, tends to produce worse, more emotionally-driven decisions than deciding it calmly in advance.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Soft-opening a new restaurant to friends and family before the full public launch — the same phased de-risking logic as an alpha/beta/GA rollout.</span></div>
+            <div class="ex"><b>Consumer</b><span>Why new app features often appear for a small % of users first ("gradual rollout") rather than everyone simultaneously.</span></div>
+            <div class="ex"><b>Business</b><span>A well-run product launch has pre-agreed success AND failure criteria — "what does good look like, and what does bad look like, and what do we do in each case" — decided before, not during, launch week.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The disciplined phased rollout a real GenAI-based upgrade to the Hero Electronics chatbot (per Stage 13) should follow, rather than a single full-traffic switch.</span></div>
+            <div class="ex"><b>Interview</b><span>"What's the risk of a big-bang launch versus a phased rollout?" — a big-bang launch exposes every user to an unvalidated change at once, so any flaw affects the whole user base immediately and simultaneously, with no controlled way to catch and limit the blast radius of a problem before it's widespread.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd describe this phased GTM discipline as the natural extension of the requirements/rollout ownership I demonstrated on the Hero Electronics chatbot's limited rollout."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Agile/Scrum Ceremonies &amp; MVP Scoping <span class="lvl lvl-B">B</span></h4>
+          <p><b>Scrum</b> structures delivery into time-boxed sprints with four core ceremonies: sprint planning (what will we build this sprint), daily standup (quick sync on progress/blockers), sprint review/demo (show what shipped), and retrospective (what should we improve next sprint). <b>MVP (Minimum Viable Product)</b> scoping means shipping the smallest version that lets you validate the core hypothesis with real users — not "the fewest features," but "the smallest thing that actually tests the real risk."</p>
+          <div class="worked">
+            <div class="wk-label">Worked example — a genuine MVP cut</div>
+            <div class="codeblock"><span class="cmt">-- Hypothesis to validate: "customers will accept a chatbot's answer</span>
+<span class="cmt">-- for routine questions instead of insisting on a human"</span>
+
+WRONG MVP (feature-minimal but doesn't test the real risk):
+  A chatbot that only answers ONE narrow question type perfectly
+  -&gt; doesn't validate whether customers accept a bot AT ALL for
+     the range of real questions they actually ask
+
+RIGHT MVP (tests the actual hypothesis):
+  A chatbot covering the TOP 10 most common query types (not all of them),
+  with a clean, honest "let me connect you to a person" escalation path
+  -&gt; directly tests customer acceptance of the bot-first model across
+     a realistic slice of real demand, which is the actual open question</span></div>
+            <div class="wk-result">The "wrong" MVP is smaller in raw feature count but fails to validate the real hypothesis (will customers accept a bot at all); the "right" MVP is larger in scope but is the smallest version that actually tests the genuine open risk — this is the single most common MVP-scoping mistake: confusing "minimal features" with "minimum viable," which are not the same thing.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Testing whether you'll actually stick with a new hobby by trying a beginner class before buying the full expensive gear set — the smallest real test of the real question, not the cheapest possible action.</span></div>
+            <div class="ex"><b>Consumer</b><span>A startup testing demand for a delivery service with a manual, unscalable process (a person driving the order themselves) before building any real logistics software — classic "do things that don't scale" MVP thinking.</span></div>
+            <div class="ex"><b>Business</b><span>Confusing "smallest feature set" with "MVP" is a very common, costly product mistake — it can ship something too narrow to actually learn anything meaningful from.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The two-month Hero Electronics internship timeline itself demanded exactly this MVP discipline — scoping a limited rollout that could genuinely validate the chatbot concept within a real constraint.</span></div>
+            <div class="ex"><b>Interview</b><span>"What's the difference between an MVP and a prototype?" — a prototype validates usability/direction, often without real backend logic, shown to a small group; an MVP is a real, live, functioning (if minimal) product used by real customers to validate an actual business hypothesis.</span></div>
+            <div class="ex"><b>Your CV</b><span>"The Hero Electronics chatbot's 'limited rollout' during a two-month internship is a real, concrete MVP-scoping story I can walk through in exactly these terms."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="altmodels">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>Alternative Approaches — Why This, Why Not That</h2>
+        <p>Product management involves real methodology choices — the comparative reasoning that shows genuine product judgment, not framework-name-dropping.</p>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p><b>Why JTBD over persona-based discovery?</b> JTBD focuses on the underlying motivation/job, which stays stable even as the market and demographics shift; personas can calcify into stereotypes and miss that very different people can be "hiring" a product for the identical job — though personas remain useful for design/communication once the job is understood, so many teams use both together rather than choosing one exclusively.</p>
+        <p><b>Why RICE over pure ICE (Impact, Confidence, Effort, no Reach)?</b> RICE's explicit Reach term prevents over-indexing on a high-impact idea that only touches a tiny fraction of users; ICE is faster and fine for smaller, similarly-scoped decisions where reach is roughly constant across options — RICE earns its extra complexity specifically when comparing initiatives with very different audience sizes.</p>
+        <p><b>Why Agile/Scrum over Waterfall for a 0-to-1 product?</b> Agile's short iteration cycles let a team learn and course-correct as real user feedback comes in, which matters most when the problem/solution fit is still uncertain (0-to-1); Waterfall's upfront full-spec-then-build approach fits better when requirements are genuinely well-understood and stable in advance (e.g., a regulatory-compliance feature with a fixed, unambiguous spec) — Agile isn't universally superior, it's the better fit for genuine uncertainty.</p>
+        <p><b>Why a phased GTM rollout over a big-bang launch?</b> Phased rollout limits the blast radius of an unvalidated change and generates real usage data to correct course before full exposure; a big-bang launch is occasionally justified when a coordinated, simultaneous release matters strategically (e.g., a competitive announcement timed to a specific market event) — but that's a deliberate strategic tradeoff, not a default.</p>
+        <p style="margin-bottom:0"><b>Why not just prioritize by "whatever the loudest stakeholder wants"?</b> It's fast and avoids friction short-term, but produces a roadmap that reflects internal politics rather than actual user/business value — a defensible, numeric framework like RICE gives a PM a neutral, data-informed basis to push back, which is often what separates a PM with real prioritization authority from one who's just executing requests.</p>
+      </div>
+    </section>
+
+    <section id="cmptable">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>Prioritization Framework Comparison Table</h2>
+      </div>
+      <div class="card cmp-wrap">
+        <table class="cmp-table">
+          <tr><th>Framework</th><th>Best for</th><th>Speed</th><th>Data-intensiveness</th><th>Main weakness</th></tr>
+          <tr><td>RICE</td><td>Comparing initiatives with very different reach/scale</td><td>Medium</td><td>Medium (needs rough estimates)</td><td>Inputs are still subjective estimates</td></tr>
+          <tr><td>ICE</td><td>Fast, lightweight comparisons, similar-scope options</td><td>Fast</td><td>Low</td><td>No Reach term — can favor niche-but-flashy ideas</td></tr>
+          <tr><td>MoSCoW</td><td>Single-release scope negotiation under a fixed deadline</td><td>Fast</td><td>Low</td><td>Doesn't rank within a category (all "Musts" look equal)</td></tr>
+          <tr><td>Kano Model</td><td>Understanding satisfaction impact/investment allocation</td><td>Slow (often needs a real survey)</td><td>High</td><td>Delighters decay into Basics over time — needs re-running</td></tr>
+          <tr><td>Value vs. Effort matrix</td><td>Quick visual stakeholder alignment</td><td>Fast</td><td>Low</td><td>Value axis is often as subjective as raw gut-feel ranking</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="redflags">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2>Red Flags — Never Say This</h2>
+      </div>
+      <div class="redflag"><b>"A PRD and a user story are basically the same thing."</b> A PRD is the broader problem/goals/scope document; user stories are the granular, engineering-facing breakdown within it — conflating the two signals unfamiliarity with how real product teams actually structure requirements.</div>
+      <div class="redflag"><b>"MVP means the fewest possible features."</b> An MVP is the smallest thing that validates the REAL hypothesis/risk — not simply feature-minimal; a feature-minimal product that fails to test the actual open question isn't a valid MVP at all.</div>
+      <div class="redflag"><b>"We should just build whatever the loudest stakeholder is asking for."</b> Reveals no real prioritization discipline — a credible PM prioritizes against a framework (RICE, business goals, user evidence), not internal volume or seniority alone.</div>
+      <div class="redflag"><b>"More features always make a product better."</b> A well-known anti-pattern (feature bloat) — added complexity has a real cost (cognitive load, maintenance, dilution of focus) that has to be weighed against the marginal value of each addition, not assumed to be free.</div>
+      <div class="redflag"><b>"Vanity metrics like total signups prove the product is succeeding."</b> Confuses Acquisition with actual value delivered — a credible PM distinguishes vanity metrics from a real North Star tied to genuine customer value and downstream business outcomes.</div>
+    </section>
+
+    <section id="problems">
+      <div class="sec-head">
+        <div class="num">12</div>
+        <h2>30 Progressive Problems</h2>
+        <p>From a basic user story through a full 0-to-1 product case with prioritization and GTM planning.</p>
+      </div>
+      <div class="filterbar" id="probfilter">
+        <button data-f="all" class="active">All</button>
+        <button data-f="easy">Easy</button>
+        <button data-f="med">Medium</button>
+        <button data-f="hard">Hard</button>
+        <button data-f="expert">Expert</button>
+      </div>
+      <div class="probgrid" id="probgrid"></div>
+    </section>
+
+    <section id="questions">
+      <div class="sec-head">
+        <div class="num">13</div>
+        <h2>80-Question Interview Bank</h2>
+        <p>Split into Foundations, Research &amp; Requirements (40 questions) and Prioritization, Metrics &amp; GTM/Agile (40 questions), comfortably exceeding the 75-question spec minimum.</p>
+      </div>
+      <div class="subhead">Foundations, User Research &amp; PRDs (40 questions)</div>
+      <div class="card qbank" id="qbankFoundations"></div>
+      <div class="subhead">Prioritization, Metrics &amp; GTM/Agile (40 questions)</div>
+      <div class="card qbank" id="qbankApplied"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">14</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card bridge-flow">
+        <span class="node">100+ user interviews (Hero Electronics)</span><span class="arrow">→</span>
+        <span class="node">Thematic issue framework &amp; prioritization</span><span class="arrow">→</span>
+        <span class="node">Requirements &amp; solution design ownership (NanoCloud)</span><span class="arrow">→</span>
+        <span class="node">500+ PRDs &amp; user stories (Capgemini)</span><span class="arrow">→</span>
+        <span class="node">Full PM framework fluency, IBM Certified PM</span>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">15</div>
+        <h2>Mastery Checklist</h2>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+
+    <div class="card" style="padding:22px 26px; margin-top:60px;">
+      <p style="margin:0; font-size:.9rem; color:var(--ink-soft)">Next: <b>Stage 15 — Structured Problem Solving, MECE &amp; Consulting Frameworks</b> (Part X now spans Stages 15–26, one full-quota case-category stage at a time). Say "go" whenever you're ready.</p>
+    </div>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  var problems = [
+    ["easy","Write a user story for a feature letting a rep export their account list to CSV.","As a sales rep, I want to export my account list to CSV, so that I can analyze it offline in Excel."],
+    ["easy","Write one acceptance criterion (Given/When/Then) for the CSV export story above.","Given I have an active account list view, When I click 'Export to CSV', Then a file downloads containing all currently-filtered rows and columns."],
+    ["easy","Write a JTBD statement for someone using a budgeting app.","When my spending feels out of control by mid-month, I want a fast way to see where my money actually went, so I can adjust before the month is over."],
+    ["easy","List the four sections a MoSCoW analysis sorts features into.","Must have, Should have, Could have, Won't have (this time)."],
+    ["easy","Classify 'the app doesn't crash' using the Kano model.","Basic/Threshold -- its absence causes serious dissatisfaction, but its presence isn't praised as exciting."],
+    ["easy","Compute a RICE score: Reach=500, Impact=1, Confidence=100%, Effort=2.","RICE = (500*1*1.0)/2 = 250"],
+    ["easy","List the four AARRR funnel stages before Revenue.","Acquisition, Activation, Retention, Referral."],
+    ["easy","Write a PRD problem statement for a feature preventing duplicate customer records.","Problem: Sales reps are unknowingly creating duplicate customer records, leading to fragmented history and wasted outreach effort."],
+    ["easy","Name the four core Scrum ceremonies.","Sprint planning, daily standup, sprint review/demo, retrospective."],
+    ["easy","Identify whether 'weekly active users' is a leading or lagging indicator of churn.","Leading -- a decline in weekly active usage typically predicts future churn (a lagging outcome) before it actually happens."],
+    ["med","Compute and compare RICE scores for two initiatives, then state which should be prioritized: Initiative A (Reach=2000, Impact=1, Confidence=90%, Effort=3) vs Initiative B (Reach=300, Impact=3, Confidence=60%, Effort=2).","A: (2000*1*0.9)/3=600. B: (300*3*0.6)/2=270. Prioritize A -- despite lower per-user impact, its much larger reach and higher confidence give it more than double B's RICE score."],
+    ["med","Write a full PRD skeleton (problem, goal/metric, in-scope, non-goals, one user story) for a 'save search filters' feature.","Problem: users re-apply the same filters every session. Goal: reduce repeat-filter actions by 50%. In scope: save/name/reapply a filter set. Non-goals: sharing saved filters with other users (this release). Story: As a rep, I want to save my filter set, so I don't have to reapply it every time I log in."],
+    ["med","Given an AARRR funnel of 5,000 Acquisition -> 3,000 Activation -> 900 Retention -> 90 Referral, compute each stage's conversion rate and identify the weakest stage.","Acq->Act: 3000/5000=60%. Act->Ret: 900/3000=30%. Ret->Ref: 90/900=10%. Weakest percentage stage: Retention->Referral (10%), though Activation->Retention (30%) also merits attention given its larger absolute drop (2100 users)."],
+    ["med","Distinguish a leading and lagging metric for a feature reducing customer support call volume.","Leading: self-service resolution rate (trackable weekly, directly influenced). Lagging: total support cost per customer (confirmed only after a full billing cycle)."],
+    ["med","Write two Kano classifications with justification for a food delivery app: 'order arrives on time' and 'driver leaves a personalized thank-you note'.","On-time arrival: Basic/Threshold (expected, absence causes real dissatisfaction). Thank-you note: Delighter (unexpected, absence unnoticed, presence creates outsized positive surprise)."],
+    ["med","Design a 3-phase (alpha/beta/GA) rollout plan with a rollback criterion for a new search-ranking algorithm.","Alpha: internal team only, compare rankings against known-good results. Beta: 10% of real traffic, monitor click-through rate. GA: full rollout once Beta CTR is within 5% of the control algorithm. Rollback: if Beta CTR drops more than 15% versus control, revert to 0% within 24 hours."],
+    ["med","Explain, with an example, the difference between a persona and a JTBD statement for the same feature.","Persona: '28-year-old urban professional, tech-savvy.' JTBD: 'When I'm too busy to cook after work, I want a fast, healthy dinner option, so I don't default to unhealthy takeout.' The persona describes WHO; the JTBD describes the actual motivating problem, which can apply across very different personas."],
+    ["med","Write 2 acceptance criteria (including one edge case) for a story: 'As a user, I want to reset my password via email.'","1) Given a valid registered email, When I request a reset, Then a reset link is emailed within 2 minutes. 2) Given an email NOT in the system, When I request a reset, Then a generic 'if this email exists, a link was sent' message displays (no account-existence leak)."],
+    ["med","Given a team debating MoSCoW classification for 6 features under a 2-week deadline with capacity for only 3, explain how you'd resolve disagreement.","Anchor the debate on the release's stated goal/success metric first, then classify each feature by whether it's required to hit that specific goal (Must), meaningfully improves it (Should), or is unrelated/nice-to-have (Could) -- disagreements are usually really disagreements about the goal, not the framework."],
+    ["med","Explain why 'total app downloads' is a poor North Star metric for a subscription fitness app, and propose a better one.","Downloads measure Acquisition, not value delivered or retained -- someone could download and never open the app again. A better North Star: weekly completed workouts per active user, which reflects real, recurring value delivered."],
+    ["hard","Design a full RICE-scored prioritization exercise for 4 competing initiatives given a fixed team capacity of 8 person-weeks this quarter, and justify the final selection.","Score each on Reach/Impact/Confidence/Effort, rank by RICE/Effort efficiency, then greedily select initiatives fitting within the 8-week capacity starting from the highest RICE score, explicitly noting which lower-RICE initiative was deferred and why."],
+    ["hard","Write a complete PRD (problem, goal, in-scope, non-goals, 3 user stories with acceptance criteria, open risks) for a 'proactive warranty-expiration alert' feature, tying it to Stage 13's Delighter classification.","Problem: customers miss warranty windows unknowingly, leading to unexpected repair costs and frustration. Goal: reduce 'unexpected cost' complaints by 25%. In scope: automated alert 30/7 days before expiration. Non-goals: automated renewal purchase flow (future release). Stories: (1) receive email alert (2) see status in account dashboard (3) opt out of alerts, each with Given/When/Then criteria. Risk: alert timing accuracy depends on warranty data completeness. Framed as a Kano Delighter -- unexpected, high goodwill impact relative to modest build cost."],
+    ["hard","Design a full JTBD-driven discovery plan (5 interview questions, synthesis method, and how findings would feed prioritization) for improving a chatbot's escalation experience.","Questions: past-behavior focused ('walk me through the last time you needed a human'). Synthesis: thematic coding of transcripts into named, frequency+severity-sized themes. Feeding into prioritization: each theme scored via RICE using interview-derived Reach/Impact estimates, translated directly into a prioritized backlog."],
+    ["hard","Build a complete North Star + AARRR measurement plan for a new onboarding flow, including at least one leading and one lagging metric.","North Star: % of new users who complete their first successful core action within 48 hours. AARRR: signup(Acq)->flow completion(Act)->day-7 return(Ret)->invite sent(Ref)->paid conversion(Rev). Leading: flow completion rate (daily-trackable). Lagging: day-30 retention (confirms whether onboarding actually mattered)."],
+    ["hard","Diagnose a scenario: a feature scored highest on RICE shipped, but adoption is far below the Reach estimate used. Explain the likely failure point and next step.","The Reach or Confidence input was likely miscalibrated (overestimated audience size or overconfident in an untested assumption) -- next step: re-run the estimate with real usage data now available, update the RICE score, and treat the original estimate as a hypothesis that's now been tested, not a fixed fact."],
+    ["hard","Design a full MVP scope (in 3 sentences) for testing whether users will trust an AI-generated product recommendation, distinguishing it from a feature-minimal but hypothesis-invalidating version.","WRONG (feature-minimal): recommend only 1 pre-selected 'safe' product to a tiny test group -- doesn't test real trust across varied recommendations. RIGHT (true MVP): show AI recommendations across the top 5 product categories to a real slice of traffic, track click-through AND purchase-follow-through (not just clicks) as the true trust signal, with an easy 'why this recommendation' explanation shown."],
+    ["hard","Write a stakeholder-facing justification memo (150 words) defending a RICE-based decision to deprioritize a CEO-requested feature.","<Sample structure>: State the RICE scores for the requested feature versus the top 2 currently-prioritized items, transparently show the inputs (Reach/Impact/Confidence/Effort) used, acknowledge the feature's strategic appeal, and propose either re-scoping it to raise Confidence/lower Effort, or scheduling it for the next quarter once current higher-RICE work ships -- framed as sequencing, not rejection."],
+    ["expert","Design a full 0-to-1 product case: given 'design a service for elderly users to request help with home tech problems,' walk through JTBD discovery, PRD scope, MoSCoW/Kano classification, North Star metric, and a phased GTM plan.","Discovery: JTBD interviews surfacing the real job ('I don't want to feel stupid asking, and I want it fixed today'). PRD: scope=phone-first request intake + same-day technician matching; non-goals=in-app video support (v1). MoSCoW: Must=phone intake+same-day matching, Should=appointment reminders, Could=service history log. Kano: reliability=Basic, same-day speed=Performance, technician calling ahead with a plain-language explanation=Delighter. North Star: % of requests resolved same-day without a repeat call. GTM: alpha with one neighborhood, beta expanding to one city, GA regionally, with a rollback trigger if same-day resolution falls below 70%."],
+    ["expert","Build a complete OKR set (1 objective, 3 key results mixing leading/lagging) for taking the Hero Electronics chatbot from 80% to 90% query coverage, and explain how you'd sequence the underlying initiatives using RICE.","Objective: 'Make the chatbot the default, trusted first stop for routine support.' KR1 (leading): raise first-message resolution rate from 65% to 78%. KR2 (leading): reduce average escalation wait time by 30%. KR3 (lagging): raise overall query coverage from 80% to 90% by quarter-end. Sequencing: RICE-score the underlying initiatives (e.g. 'add top-10 new query intents' vs 'improve escalation handoff') and greedily sequence by RICE/effort within the quarter's capacity, prioritizing initiatives that most directly move the two leading KRs first since they're the earliest real signal the lagging KR will land."],
+    ["expert","Write a full research-to-roadmap traceability chain: 3 synthesized research themes (with %), each mapped to a RICE-scored initiative, each mapped to a MoSCoW category for the next release.","Theme 1 (41%, repeats troubleshooting) -> Initiative: 'ask what's already been tried' logic, RICE=(6000*2*0.85)/3=3400 -> Must. Theme 2 (28%, can't reach a human fast) -> Initiative: 'one-tap human escalation button', RICE=(6000*2*0.9)/2=5400 -> Must. Theme 3 (12%, unclear warranty) -> Initiative: 'plain-language warranty summary card', RICE=(6000*1*0.7)/1=4200 -> Should. Full chain shows each roadmap item is traceable back to a real, sized customer research finding, not an unsubstantiated internal guess."]
+  ];
+
+  var qasFoundations = [
+    ["What are the three circles in the classic PM Venn diagram?","User desirability (needs), business viability, and technical feasibility -- a PM operates at the intersection of all three."],
+    ["What are the four stages of the product lifecycle described in this stage?","Discovery (is this worth solving?), Definition (PRDs/requirements/scope), Delivery (building with engineering), Iteration (measuring and refining post-launch)."],
+    ["What's the difference between a Product Manager and a Project Manager?","A PM owns the 'what' and 'why' (informed by discovery, deciding what gets built and defending it); a project manager is primarily responsible for delivery -- on time, on scope, on budget."],
+    ["What does Jobs-to-be-Done (JTBD) reframe discovery around?","The underlying job/motivation a customer is 'hiring' a product to accomplish, rather than the product's feature list or a static demographic persona."],
+    ["Give the standard JTBD statement format.","'When [situation], I want to [motivation], so I can [expected outcome].'"],
+    ["Why can two customers with very different personas share the same job?","Because JTBD is about the underlying motivation/task, not demographic attributes -- a college student and a retiree could both be 'hiring' a meal kit for the identical job of easy, healthy home cooking."],
+    ["Why do good interview questions focus on past behavior rather than hypotheticals?","People are unreliable predictors of their own future behavior but far more reliable narrators of what they actually did -- hypothetical questions ('would you use X') tend to produce inflated, low-signal enthusiasm."],
+    ["Give an example of a leading (strong) interview question versus a weak, leading one.","Weak: 'Would you use a chatbot that answers instantly?' Strong: 'Walk me through the last time you had a router problem -- what did you do first?'"],
+    ["What is affinity mapping / thematic coding in research synthesis?","Grouping similar interview quotes/observations into named themes, then sizing each theme by frequency and severity, turning raw qualitative notes into prioritizable findings."],
+    ["Why should research themes be sized by severity AND frequency, not frequency alone?","A lower-frequency but high-severity theme (e.g. an urgent, unresolved issue) can matter more than a higher-frequency but low-severity one -- frequency alone can misrank real priority."],
+    ["How would you check for bias in your own research synthesis?","Have a second person independently code a sample of the same notes and compare groupings (inter-rater agreement), and explicitly look for evidence that contradicts your working hypothesis, not just confirming evidence."],
+    ["Roughly how many interviews per user segment typically reach saturation (diminishing new insight)?","About 5-8 interviews per segment; more interviews across multiple segments/themes is different from exhaustively over-sampling one segment."],
+    ["What are the core sections of a well-formed PRD?","Problem statement, goals/success metrics, in-scope user stories, explicit non-goals, open questions/risks, and a rough timeline."],
+    ["Why is an explicit 'non-goals' section important in a PRD?","It prevents scope creep and stakeholder confusion mid-build by naming what's deliberately NOT included, not just what is -- one of the most commonly missing sections in a weak PRD."],
+    ["What's the standard format for a user story?","'As a [role], I want [capability], so that [benefit]' -- capturing who, what, and why without prescribing the exact implementation."],
+    ["Why shouldn't a user story specify the exact UI or technical implementation?","That's engineering and design's domain -- over-specifying the HOW removes their ability to find the best technical/design solution and can lock in a worse implementation than they'd choose themselves."],
+    ["What is the Given/When/Then format used for?","Writing acceptance criteria -- specific, testable conditions defining exactly when a user story is considered done."],
+    ["Why is an 'empty state' or edge case often a critical acceptance criterion to specify?","Without it, engineering has to guess what happens in that case, which either causes a bug or an unplanned mid-sprint clarifying conversation -- naming it upfront removes the ambiguity."],
+    ["What's the difference between a PRD and a user story?","A PRD is the broader document covering problem, goals, and full scope; user stories are the granular, engineering-facing breakdown of specific capabilities within that PRD."],
+    ["Why is 'reference data dictionary' an apt description for a well-run set of PRDs?","Because product, technology, and stakeholder teams all reference the same PRDs as the single source of truth for what's being built and why, rather than relying on scattered, inconsistent understanding."],
+    ["What's the honest way to frame 'owned requirements definition and solution design' if pressed on exactly what that meant day to day?","Gathering requirements directly with the client, defining the scope and success criteria for the solution, and handing a clear solution design to the technical team for implementation -- owning the 'what/why' stages, not the technical build itself."],
+    ["Why is a JTBD lens more design-relevant than a demographic persona in most cases?","It answers 'what job are they trying to get done,' which more directly informs design decisions, than 'who are they' (age/role/etc.), which can miss that different people share the same underlying need."],
+    ["What's a common mistake when writing user stories for a large initiative?","Writing stories too large/vague to be estimated or completed within a single sprint ('epics' disguised as stories) instead of breaking them into properly-sized, independently valuable increments."],
+    ["Give a 30-second answer to 'walk me through your product management experience.'","I've owned requirements and solution design directly with clients (NanoCloud), authored 500+ user stories and PRDs that served as the team's reference documentation (Capgemini), and led 100+ user interviews synthesized into a prioritized, thematic issue framework (Hero Electronics) -- real, hands-on discovery-through-requirements experience, formalized with an IBM Certified Product Manager credential."],
+    ["Why is 'I owned requirements and solution design' a stronger claim than 'I delivered recommendations'?","It specifies you drove the discovery and definition stages directly with the client, not just handed off a final output -- a materially more accurate and more senior framing, confirmed as the correct one for the NanoCloud engagement."],
+    ["What's the risk of skipping discovery and jumping straight to a solution?","The team may build something that doesn't actually solve a validated real problem, wasting build effort and potentially eroding trust with users/stakeholders when the shipped solution misses the mark."],
+    ["What does 'the job, not the product' mean in JTBD terms?","Customers aren't loyal to a specific product category; they're loyal to whatever best accomplishes their underlying job -- your real competitor may be an entirely different kind of solution to the same job."],
+    ["Why might 100+ interviews over a two-month engagement not all belong to one saturated segment?","At that volume, the interviews likely spanned multiple distinct user segments/themes, each individually reaching saturation, rather than needlessly over-sampling a single homogenous group."],
+    ["What's a defensible answer if asked to produce a sample PRD on the spot in an interview?","Walk through the standard skeleton live -- problem statement, a measurable goal, 2-3 in-scope stories with acceptance criteria, and at least one explicit non-goal -- exactly the structure behind the real PRDs authored at Capgemini."],
+    ["How do you know a research theme is genuinely actionable rather than just interesting?","It's specific enough to imply a concrete design or prioritization decision (e.g. 'add an already-tried-this check') rather than a vague, unfalsifiable observation like 'users want a better experience.'"],
+    ["What's the difference between a PRD's 'goal' and its 'success metric'?","The goal is the qualitative intent (why we're doing this); the success metric is the specific, measurable number that will confirm whether the goal was actually achieved."],
+    ["Why is 'walk me through the last time X happened' a better prompt than 'how often does X happen'?","It surfaces a specific, real, detailed story rather than a self-reported, often inaccurate frequency estimate -- concrete narrative detail is usually more reliable and more useful than a vague self-assessment."],
+    ["What's the honest answer if asked whether you've run formal JTBD interviews using that exact terminology?","The underlying discipline (past-behavior-focused, motivation-oriented interviewing) is real and reflected in the 100+ interviews conducted -- the formal JTBD vocabulary is something I've since layered on to describe that work more precisely, not a framework I was formally trained in at the time."],
+    ["Why does a PRD's 'open risks' section matter for stakeholder trust?","It shows the team is being upfront about genuine uncertainty rather than overselling certainty -- surfacing risk explicitly builds more credibility than a document that implies everything is guaranteed to work."],
+    ["What makes a user story 'INVEST' (a common quality heuristic)?","Independent, Negotiable, Valuable, Estimable, Small, Testable -- a well-formed story should satisfy all six to be genuinely useful for sprint planning."],
+    ["How would you handle a stakeholder who insists a feature request skip discovery entirely?","Acknowledge the urgency, then propose a fast, lightweight discovery step (a few targeted interviews or a quick data check) rather than none at all -- framing it as risk reduction for their own request, not a delay for its own sake."],
+    ["What's the real difference between requirements gathering and requirements definition?","Gathering is collecting input from stakeholders/users; definition is synthesizing that input into a clear, prioritized, decided scope -- gathering alone without definition just produces a long, unprioritized wish list."],
+    ["Give an example from your CV of turning ambiguous raw input into a structured deliverable.","Turning 100+ raw user interview transcripts at Hero Electronics into a small number of named, sized themes that directly informed prioritized investment decisions."],
+    ["Why is 'I authored PRDs' a stronger interview claim when paired with 'that served as the reference data dictionary'?","It demonstrates not just that documents were written, but that they were trusted and actually used as the team's source of truth across product, tech, and stakeholders -- evidence of real quality and adoption, not just output volume."],
+    ["What's a practical way to keep a PRD from going stale as a project evolves?","Treat it as a living document with a clear revision log (what changed, when, why) rather than a one-time artifact, and explicitly flag when a change affects previously-agreed scope or acceptance criteria so downstream teams aren't silently working from an outdated version."]
+  ];
+
+  var qasApplied = [
+    ["What does RICE stand for, and what's the formula?","Reach, Impact, Confidence, Effort. RICE Score = (Reach x Impact x Confidence) / Effort."],
+    ["Why does dividing by Effort matter in the RICE formula?","It normalizes for cost -- an idea with modest reach/impact but very low effort can beat a flashier, more effortful idea, ensuring prioritization reflects value PER unit of team capacity, not raw value alone."],
+    ["What's RICE's biggest weakness?","Its inputs -- especially Impact and Confidence -- are still subjective estimates, not hard data; RICE makes the reasoning explicit and comparable but doesn't eliminate judgment calls."],
+    ["When would you use ICE instead of RICE?","For fast, lightweight comparisons among options with roughly similar audience size/reach, where the extra precision of a separate Reach term isn't worth the added estimation effort."],
+    ["What do the four MoSCoW categories mean?","Must have (non-negotiable for this release), Should have (important but not release-blocking), Could have (nice-to-have if capacity allows), Won't have (explicitly out of scope this time)."],
+    ["What's a common failure mode when using MoSCoW?","Labeling too many items 'Must have,' which defeats the framework's purpose of forcing real tradeoffs -- if everything is a Must, nothing has actually been prioritized."],
+    ["What are the three Kano categories, and how does satisfaction scale for each?","Basic/Threshold (absence causes dissatisfaction, presence doesn't excite), Performance (satisfaction scales roughly linearly with investment), Delighter (absence unnoticed, presence creates disproportionate positive surprise)."],
+    ["Why do Delighters eventually become Basic features?","As the market catches up and a delighting feature becomes common/expected, customers start to expect it by default -- its absence then becomes a real complaint rather than a neutral non-event."],
+    ["What is a North Star Metric?","The single measure that best captures the core value a product delivers to customers, chosen to correlate with long-term business success, distinct from a vanity Acquisition-only metric."],
+    ["Why is 'total signups' usually a poor North Star metric?","It measures Acquisition, not whether real, ongoing value was actually delivered -- someone could sign up and never receive any real benefit from the product."],
+    ["What does AARRR stand for?","Acquisition, Activation, Retention, Referral, Revenue -- the 'pirate metrics' funnel breaking the customer journey into measurable stages."],
+    ["Why break a funnel into AARRR stages instead of tracking one overall conversion number?","It pinpoints exactly WHERE in the journey users drop off, so investment can target the actual bottleneck stage rather than guessing based on the single most visible aggregate number."],
+    ["What's the difference between a leading and a lagging metric?","A leading metric predicts an outcome earlier and is directly influenceable day-to-day; a lagging metric measures the outcome after the fact, confirming whether the leading work actually mattered."],
+    ["Give an example of a leading indicator for churn.","Declining product usage frequency or reduced feature engagement typically shows up weeks before an actual account cancellation."],
+    ["What's the structure of an OKR?","A qualitative, inspirational Objective paired with 2-4 measurable Key Results, ideally mixing at least one leading and one lagging indicator."],
+    ["Why is it risky to track only a lagging Key Result?","It risks discovering a problem too late in the period to correct course -- a leading indicator gives an earlier warning signal while there's still time to act."],
+    ["What does a Go-To-Market (GTM) strategy need to answer?","Who the target customer is, what the positioning/messaging is, which channels reach them, and how success will be measured post-launch."],
+    ["Why is a phased rollout (alpha/beta/GA) usually preferred over a big-bang launch?","It limits the blast radius of an unvalidated change and generates real usage data to correct course before full exposure, rather than exposing the entire user base simultaneously to an unproven change."],
+    ["Why should rollback criteria be defined BEFORE a launch, not during an incident?","Deciding abort criteria under live pressure tends to produce worse, more emotionally-driven decisions than deciding calmly and objectively in advance."],
+    ["What are the four core Scrum ceremonies and their purpose?","Sprint planning (decide what to build this sprint), daily standup (sync on progress/blockers), sprint review/demo (show what shipped), retrospective (identify process improvements)."],
+    ["What is an MVP, precisely defined?","The smallest version of a product that lets you validate the core hypothesis/risk with real users -- not simply 'the fewest features,' but the smallest thing that actually tests the real open question."],
+    ["What's the most common MVP-scoping mistake?","Confusing 'minimal features' with 'minimum viable' -- a feature-minimal product can fail to validate the actual hypothesis it was meant to test, making it not a valid MVP despite being small."],
+    ["What's the difference between an MVP and a prototype?","A prototype validates usability/direction, often without real backend logic, typically shown to a small group; an MVP is a real, live, functioning product used by actual customers to validate a genuine business hypothesis."],
+    ["Why is Agile generally preferred over Waterfall for a 0-to-1 product?","Agile's short iteration cycles let a team learn and course-correct as real feedback comes in, which matters most when problem/solution fit is still genuinely uncertain -- Waterfall fits better when requirements are already well-understood and stable."],
+    ["When might Waterfall actually be the better choice?","When requirements are genuinely well-understood, stable, and unlikely to change -- e.g. a regulatory-compliance feature with a fixed, unambiguous specification, where Agile's iterative uncertainty-handling offers little benefit."],
+    ["Why is JTBD sometimes used together with personas rather than as a strict replacement?","JTBD identifies the underlying motivation/job, which stays stable; personas remain useful for design and communication once that job is understood -- the two serve complementary purposes."],
+    ["How would you push back on a stakeholder request using a data-informed framework rather than just saying no?","Present the RICE (or equivalent) scores for the requested feature alongside currently-prioritized work, showing the actual inputs used, and propose a path (rescoping, or a future quarter) rather than an outright rejection -- framed as sequencing, not dismissal."],
+    ["What's a good way to validate a RICE Reach estimate after a feature ships?","Compare actual usage/adoption data against the original Reach estimate, and treat any large gap as new information to recalibrate future estimates, rather than treating the original number as having been definitively correct or wrong in isolation."],
+    ["Give a 30-second answer to 'how do you prioritize a roadmap?'","I anchor prioritization to a framework like RICE -- scoring initiatives on reach, impact, confidence, and effort -- so the reasoning is transparent and defensible, then validate the underlying estimates against real research and usage data rather than relying on gut feel or the loudest internal voice."],
+    ["What's the risk of feature bloat, and how does Kano help avoid it?","Added complexity has real cost (cognitive load, maintenance, diluted focus); Kano helps by explicitly distinguishing which investments are Basic necessities, Performance improvements, or true Delighters, so effort isn't wasted over-polishing an already-adequate Basic feature."],
+    ["Why should GTM success AND failure criteria be defined before launch?","So the team has an objective, pre-agreed basis for deciding whether to scale up, pause, or roll back -- deciding this reactively, in the middle of a launch, tends to produce worse, more biased judgment calls."],
+    ["What's the honest answer if asked whether you've run a full end-to-end GTM launch?","My strongest, most hands-on experience is in discovery, requirements, and research; a full GTM launch at scale (multi-channel positioning, board-level launch coordination) is something I understand the framework for but haven't personally run end-to-end -- I'd be honest about that distinction rather than overclaiming."],
+    ["How would you explain OKRs to someone unfamiliar with the framework, in one sentence?","An OKR pairs an inspirational goal (the Objective) with a small number of specific, measurable results that would prove you actually achieved it (the Key Results)."],
+    ["Why is 'number of features shipped' a poor measure of product management success?","It rewards output volume over actual outcomes/value delivered -- a PM could ship many low-impact features and look 'productive' while a North Star metric like retained value stayed flat or declined."],
+    ["What's a defensible way to talk about the IBM Certified Product Manager credential in an interview?","As formal validation and structured grounding for practices I was already applying in real work (PRDs, prioritization, discovery) -- pairing the credential with concrete real examples rather than citing it alone as evidence of PM skill."],
+    ["How would you structure a first 30-60-90 day plan as a new PM joining a team?","Days 1-30: discovery -- interviews with users and internal stakeholders, review existing PRDs/metrics, identify quick wins. Days 31-60: define a prioritized initial roadmap using RICE, ship a small early win to build trust. Days 61-90: establish an OKR/measurement cadence and a repeatable research/synthesis rhythm for ongoing prioritization."],
+    ["What's the relationship between MVP scoping and RICE prioritization?","MVP scoping determines the smallest valid test of a hypothesis; RICE then helps prioritize WHICH hypothesis/initiative is worth testing first, given limited team capacity -- they operate at different, complementary decision layers."],
+    ["Why might 'time to first resolution' be a better leading metric than 'total chatbot conversations' for a support bot?","Conversation count reflects volume, not success -- time to first resolution more directly reflects whether the bot is actually solving the user's problem quickly, which is the real value being delivered."],
+    ["Give a 2-minute answer connecting this whole stage back to your real CV experience.","Product management is genuinely my strongest, most evidence-backed area: I owned requirements definition and solution design directly with a client at NanoCloud, authored 500+ user stories and PRDs at Capgemini that served as the team's reference documentation, and led 100+ user interviews at Hero Electronics that I synthesized into a thematic, prioritized issue framework -- all formalized with an IBM Certified Product Manager credential. What this stage adds is precise vocabulary and rigor for reasoning I was already applying: JTBD for discovery, RICE/MoSCoW/Kano for prioritization, North Star/AARRR for metrics, and phased GTM/Agile discipline for delivery -- so I can walk an interviewer through any of those real projects using the same structured framing a senior PM would, while being honest that a full end-to-end GTM launch at scale is something I understand conceptually rather than something I've personally run."],
+    ["What's the single most important discipline this stage emphasizes for any product decision?","Ground every prioritization or scoping decision in a transparent, revisitable framework and real evidence (research themes, RICE inputs, funnel data) rather than intuition or internal politics alone -- the same evidence-based rigor applied throughout this whole masterbook."]
+  ];
+} catch (err) { console.error('Stage 14 data error:', err); }
+</script>
+<script>
+try {
+  var probGrid = document.getElementById('probgrid');
+  problems.forEach(function(p, i){
+    var diff = p[0], q = p[1], code = p[2];
+    var det = document.createElement('details');
+    det.className = 'prob';
+    det.setAttribute('data-diff', diff);
+    det.innerHTML = '<summary><span class="pnum">P' + (i+1) + '</span><span class="pdiff ' + diff + '">' + diff + '</span><span>' + esc(q) + '</span></summary>' +
+      '<div class="prob-body"><div class="codeblock">' + code.replace(/\n/g,'<br>') + '</div></div>';
+    probGrid.appendChild(det);
+  });
+  document.getElementById('probfilter').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('#probfilter button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var f = btn.getAttribute('data-f');
+    document.querySelectorAll('#probgrid details.prob').forEach(function(d){
+      d.style.display = (f === 'all' || d.getAttribute('data-diff') === f) ? '' : 'none';
+    });
+  });
+
+  function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+  function renderQA(containerId, bank){
+    var box = document.getElementById(containerId);
+    bank.forEach(function(qa){
+      var det = document.createElement('details');
+      det.className = 'qa';
+      det.innerHTML = '<summary>' + esc(qa[0]) + '</summary><div class="qa-a"><b>A:</b> ' + esc(qa[1]) + '</div>';
+      box.appendChild(det);
+    });
+  }
+  renderQA('qbankFoundations', qasFoundations);
+  renderQA('qbankApplied', qasApplied);
+
+  var masteryItems = [
+    "Explain the PM role/product lifecycle and map a real CV example to each stage",
+    "Write a JTBD statement and explain why it beats a persona for a given feature",
+    "Explain past-behavior vs hypothetical interview questions with an example of each",
+    "Explain thematic synthesis and why severity matters alongside frequency",
+    "Write a full PRD skeleton including a real non-goals section",
+    "Write a user story with Given/When/Then acceptance criteria including an edge case",
+    "Compute and compare RICE scores for two competing initiatives by hand",
+    "Classify 3 features using the Kano model with justification",
+    "Compute AARRR funnel conversion rates and identify the true bottleneck stage",
+    "Explain leading vs lagging metrics and pair one of each in an OKR",
+    "Design a phased GTM rollout with a pre-defined rollback criterion",
+    "Explain MVP scoping and correct a feature-minimal-but-invalid MVP mistake",
+    "Give the honest Level A/B/C answer for GTM/launch-scale experience",
+    "Answer all 5 Red Flags correctly without hesitation"
+  ];
+  var mBox = document.getElementById('masteryBox');
+  var STORE_KEY = 'masterbook-s14-mastery';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e) { saved = {}; }
+  masteryItems.forEach(function(txt, i){
+    var row = document.createElement('div');
+    row.className = 'cl-item' + (saved[i] ? ' checked' : '');
+    row.innerHTML = '<div class="box' + (saved[i] ? ' done' : '') + '" data-i="' + i + '"></div><span class="txt">' + esc(txt) + '</span>';
+    mBox.appendChild(row);
+  });
+  mBox.addEventListener('click', function(e){
+    var box = e.target.closest('.box');
+    if (!box) return;
+    var i = box.getAttribute('data-i');
+    var isDone = box.classList.toggle('done');
+    box.closest('.cl-item').classList.toggle('checked', isDone);
+    saved[i] = isDone;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch(e) {}
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    backtop.classList.toggle('show', window.scrollY > 500);
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 14 loaded — problems:', problems.length, 'Foundations Qs:', qasFoundations.length, 'Applied Qs:', qasApplied.length);
+} catch (err) {
+  console.error('Stage 14 script error:', err);
+}
+</script>

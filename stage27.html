@@ -1,0 +1,585 @@
+<meta name="robots" content="noindex, nofollow">
+<title>Axtria Deep Dive</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+
+  .caselist{ display:flex; flex-direction:column; gap:14px; }
+  details.case{ border:1px solid var(--line); border-radius:12px; background:var(--paper-raised); box-shadow:var(--shadow); overflow:hidden; }
+  details.case summary{ padding:16px 22px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.98rem; font-weight:600; }
+  details.case summary::-webkit-details-marker{ display:none; }
+  details.case summary .cnum{ font-family:"IBM Plex Mono"; font-size:.72rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:3px 9px; border-radius:6px; flex:0 0 auto; }
+  details.case summary .cdiff{ font-size:.66rem; font-weight:700; padding:3px 9px; border-radius:6px; flex:0 0 auto; text-transform:uppercase; letter-spacing:.03em; }
+  .cdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .cdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .cdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .cdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  details.case summary .cind{ font-size:.72rem; font-weight:500; color:var(--ink-faint); flex:0 0 auto; }
+  details.case summary .ctitle{ flex:1; }
+  .case-body{ padding:0 22px 24px; border-top:1px solid var(--line); }
+  .case-prompt{ margin:18px 0; padding:15px 18px; background:var(--paper-sunken); border-left:4px solid var(--ink-faint); border-radius:0 8px 8px 0; font-style:italic; font-size:.93rem; }
+  .case-sec{ margin-top:20px; }
+  .case-sec h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .case-sec h5::before{ content:""; width:14px; height:2px; background:var(--accent); display:inline-block; }
+  .case-sec p, .case-sec li{ font-size:.9rem; color:var(--ink-soft); margin:0 0 6px; }
+  .qa-pair{ margin-bottom:10px; padding:10px 14px; background:var(--paper-sunken); border-radius:8px; }
+  .qa-pair .q{ font-size:.88rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .qa-pair .a{ font-size:.87rem; color:var(--ink-soft); }
+  .case-sec ul{ margin:0; padding-left:20px; }
+  .case-sec .calc-block{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:14px 16px; font-family:"IBM Plex Mono"; font-size:.79rem; overflow-x:auto; line-height:1.65; white-space:pre; margin-top:4px; }
+  .case-sec .result-tag{ display:inline-block; margin-top:8px; font-family:"IBM Plex Mono"; font-size:.8rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:5px 11px; border-radius:6px; }
+  .synth-box{ margin-top:20px; padding:15px 18px; background:var(--accent-soft); border-radius:8px; border-left:4px solid var(--accent); }
+  .synth-box h5{ color:var(--accent-ink); }
+  .synth-box p{ color:var(--ink); font-weight:500; }
+
+  .cv-role-meta{ font-size:.85rem; color:var(--ink-faint); margin:2px 0 10px; }
+  .cv-role-meta .co{ color:var(--ink); font-weight:600; }
+
+  .draftflag{ display:inline-flex; align-items:center; gap:5px; font-size:.68rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; background:var(--lvlB-soft); color:var(--lvlB); text-transform:uppercase; letter-spacing:.03em; }
+
+  .ladder{ display:flex; flex-direction:column; gap:12px; margin-top:6px; }
+  .ladder-tier{ padding:15px 18px; border-radius:10px; background:var(--paper-sunken); border-left:4px solid var(--data); }
+  .ladder-tier .tier-label{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--data); margin-bottom:8px; display:block; }
+  .ladder-tier p{ margin:0; font-size:.91rem; color:var(--ink); }
+
+  .verb-row{ display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+  .verb-chip{ font-size:.8rem; padding:5px 12px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); }
+  .verb-chip .src{ font-size:.68rem; color:var(--ink-faint); margin-left:5px; }
+  .verb-chip.chosen{ background:var(--accent-soft); color:var(--accent-ink); border-color:var(--accent); font-weight:700; }
+
+  .star-card{ border:1px solid var(--line); border-radius:12px; padding:20px 22px; background:var(--paper-raised); box-shadow:var(--shadow); margin-bottom:16px; }
+  .star-card h4{ font-size:1.02rem; margin-bottom:12px; }
+  .star-row{ margin-bottom:9px; font-size:.9rem; color:var(--ink-soft); }
+  .star-row b{ color:var(--accent-ink); font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; margin-right:8px; display:inline-block; min-width:70px; }
+
+  .claimcard{ border:1px solid var(--line); border-radius:14px; background:var(--paper-raised); box-shadow:var(--shadow); padding:26px 28px; margin-bottom:20px; }
+  .claimcard .chead{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:10px; }
+  .claimcard .chead h3{ font-size:1.22rem; flex:1; min-width:200px; }
+  .bulletquote{ margin:14px 0; padding:14px 18px; background:var(--paper-sunken); border-left:4px solid var(--ink-faint); border-radius:0 8px 8px 0; font-style:italic; font-size:.92rem; color:var(--ink-soft); }
+  .scopebox{ margin:14px 0; padding:14px 18px; background:var(--data-soft); border-radius:8px; border-left:4px solid var(--data); }
+  .scopebox h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--data); margin-bottom:6px; }
+  .scopebox p{ margin:0; color:var(--ink); font-size:.9rem; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <a class="backlink" href="stage14.html">← Stage 14 · Product Management</a>
+    <a class="backlink" href="stage15.html">← Stage 15 · Structured Problem Solving &amp; Frameworks</a>
+    <a class="backlink" href="stage16.html">← Stage 16 · Profitability Case Bank</a>
+    <a class="backlink" href="stage17.html">← Stage 17 · Market Entry Case Bank</a>
+    <a class="backlink" href="stage18.html">← Stage 18 · Growth Case Bank</a>
+    <a class="backlink" href="stage19.html">← Stage 19 · Pricing Case Bank</a>
+    <a class="backlink" href="stage20.html">← Stage 20 · Market Sizing Case Bank</a>
+    <a class="backlink" href="stage21.html">← Stage 21 · Operations Case Bank</a>
+    <a class="backlink" href="stage22.html">← Stage 22 · Product Case Bank</a>
+    <a class="backlink" href="stage23.html">← Stage 23 · Analytics Case Bank</a>
+    <a class="backlink" href="stage24.html">← Stage 24 · AI/GenAI Case Bank</a>
+    <a class="backlink" href="stage25.html">← Stage 25 · FinTech Case Bank</a>
+    <a class="backlink" href="stage26.html">← Stage 26 · Pharma Case Bank</a>
+    <div class="stage-pill">● Stage 27 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#overview">Role Overview</a></li>
+      <li><a href="#claim-allocation">$10M Allocation</a></li>
+      <li><a href="#claim-tool">Self-Service Tool</a></li>
+      <li><a href="#claim-model">Forecasting Model</a></li>
+      <li><a href="#claim-stakeholder">Stakeholder Reviews</a></li>
+      <li><a href="#pyspark">PySpark &amp; Databricks</a></li>
+      <li><a href="#star">STAR Story Bank</a></li>
+      <li><a href="#verb">Honest Verb &amp; Scope</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+      <li><a href="#bridge">How This Connects</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next (Part XI)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 29 (Capgemini Deep Dive) is next, continuing the Work Experience Deep Dives.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part XI · Stage 27 of 33</div>
+      <h1>Axtria Deep Dive</h1>
+      <p class="lede">The first Work Experience Deep Dive — your actual 14-month role as Associate, Decision Intelligence at Axtria Ingenious Insights, taken apart bullet by bullet. Every CV claim gets an honest ownership scope, the real technical mechanism behind it, and the interviewer cross-questions that go with it. For the single highest-stakes question — "walk me through how the allocation was computed" — this stage builds a full 30-second / 2-minute / 5-minute answer ladder, exactly as the master instructions specify. Nothing here is a practice case: this is your real work, defended honestly, with every gap still needing your confirmation clearly flagged rather than quietly filled in.</p>
+      <div class="statusbar">
+        <div class="statuschip">💼 <b>4</b> CV bullets, fully deep-dived</div>
+        <div class="statuschip">🎯 <b>3</b> Level-A claims — Very High interview odds</div>
+        <div class="statuschip">🧮 Full LP + heuristic allocation mechanism, recapped from Stage 10</div>
+        <div class="statuschip">🗣️ 30-sec / 2-min / 5-min answer ladder for the $10M question</div>
+      </div>
+    </header>
+
+    <section id="overview">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Role Overview</h2>
+        <p>The factual anchor everything below builds on — pulled directly from your Consolidated CV (Stage 1) with nothing added or reworded.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <h3 style="font-size:1.1rem">Associate — Decision Intelligence</h3>
+        <p class="cv-role-meta"><span class="co">Axtria Ingenious Insights</span> · Gurgaon · Jul 2025 – Present (14 mo)</p>
+        <p style="margin:10px 0 16px;font-size:.93rem;color:var(--ink-soft)">Axtria is a life-sciences-focused commercial analytics and consulting firm — this is the reason "Pharma-adjacent" appears next to your name in the Skill Matrix, and it's a genuinely useful bridge to Stage 26's Pharma Case Bank: that stage is deliberate practice on pharma-industry logic, this stage is the real analytics work, for a firm that serves that same industry, that you can actually defend as experience. Decision Intelligence sits inside Axtria's commercial-analytics function — supporting a client's sales and marketing decisions (here: how to deploy a field force of reps across territories and accounts) with data-driven modeling rather than gut-feel or static rules.</p>
+        <div class="case-sec" style="margin-top:4px">
+          <h5>The Four CV Bullets, Classified</h5>
+          <ul style="margin-top:6px">
+            <li><span class="lvl lvl-A" style="margin-right:8px">A</span> Owned data analysis for a revenue-optimization initiative, modeling rep efficiency and cost-per-call to allocate ~60 reps, realizing $10M in revenue. <a href="#claim-allocation" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-B" style="margin-right:8px">B</span> Designed a self-service decision-support tool enabling the client to generate allocation forecasts independently. <a href="#claim-tool" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-A" style="margin-right:8px">A</span> Co-developed a predictive, regression-based forecasting model (XGBoost, Logistic Regression), driving cross-functional adoption. <a href="#claim-model" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-B" style="margin-right:8px">B</span> Presented findings to client and senior stakeholders in recurring bi-weekly reviews. <a href="#claim-stakeholder" style="font-size:.82rem">↓ deep dive</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-allocation">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Claim 1 — The $10M / ~60-Rep Allocation</h2>
+        <p>Priority Matrix rank #02, Level A, "Very High" interview odds, flagged High risk because the CV states the result without the method. This is the single most important story in the entire Masterbook to have cold.</p>
+      </div>
+
+      <div class="claimcard">
+        <div class="bulletquote">"Owned data analysis for a revenue-optimization initiative, modeling rep efficiency and cost-per-call to allocate ~60 reps, realizing $10M in revenue."</div>
+
+        <div class="scopebox">
+          <h5>Honest Scope</h5>
+          <p>You owned the <b>data analysis and modeling</b> behind the initiative — building the rep-efficiency and cost-per-call features, running the allocation model, and defining the heuristic rules you'd recommend on top of it. The final heuristic overrides on specific accounts and the ultimate sign-off on the $10M validation sat with client and Axtria business stakeholders, not with you alone. That is a strong, honest claim — analytical ownership of a $10M-impact initiative — and it does not require pretending you had unilateral business authority you didn't have.</p>
+        </div>
+
+        <div class="case-sec">
+          <h5>The Mechanism — Linear Programming + Heuristic Overlay</h5>
+          <p>Confirmed hybrid method (Stage 1, Risk Matrix #6): a formal linear program produced the mathematically optimal allocation against real constraints, and a heuristic layer sat on top for judgment calls a solver can't make. This is genuinely how most real-world allocation systems work — not a textbook-pure optimization, and that's a strength to say out loud, not a weakness to hide.</p>
+          <div class="calc-block">maximize    Σ_j  u_j(x_j)              <span class="cmt"># expected revenue uplift, summed over territories j</span>
+
+subject to:
+  Σ_j x_j = 60                          <span class="cmt"># total reps available to allocate</span>
+  floor_j ≤ x_j ≤ cap_j     ∀j          <span class="cmt"># min coverage per priority territory, and a ceiling</span>
+                                          <span class="cmt"># where extra reps stop adding marginal revenue</span>
+  Σ_j (cpc_j × calls_j × x_j) ≤ Budget  <span class="cmt"># cost-per-call × call volume stays inside budget</span>
+  x_j ∈ ℤ≥0
+
+<span class="out">u_j(x_j) is a concave, diminishing-returns revenue-response curve per territory —
+estimated from the XGBoost uplift model (see Claim 3 below), not assumed.</span></div>
+          <p style="margin-top:10px">The <code>floor_j</code>/<code>cap_j</code> pair is what stops the LP from either abandoning a strategically important-but-low-yield territory (floor) or over-saturating a high-yield one past the point of diminishing returns (cap) — both boundaries came from the business, not the solver. The heuristic layer sits after the LP solve: rounding fractional solutions, protecting a rep's existing account relationships from churn even where the raw math would move them, and folding in sales-leadership judgment on flagship accounts that a purely numeric objective wouldn't weight correctly.</p>
+        </div>
+
+        <div class="case-sec">
+          <h5>Rep Efficiency &amp; Cost-Per-Call — The Feature Engineering Behind u_j(x_j)</h5>
+          <p>Two metrics, deliberately chosen as a pair rather than a single number: <b>efficiency</b> (revenue or response generated per call) captures the output side, <b>cost-per-call</b> (travel time, prep time, territory density) captures the input side. Optimizing on efficiency alone would reward reps in easy-to-reach, high-density territories without accounting for what it cost to get there; optimizing on cost alone would reward doing nothing. Together they approximate a per-rep, per-territory ROI, which is what actually needs to be maximized under a fixed headcount.</p>
+        </div>
+
+        <div class="case-sec">
+          <h5>Answer Ladder — "Walk me through how the allocation was computed"</h5>
+          <p>The specific three-depth format the master instructions call for. Practice moving between all three without notes.</p>
+          <div class="ladder">
+            <div class="ladder-tier">
+              <span class="tier-label">30 seconds</span>
+              <p>"I owned the data analysis behind a rep-allocation project that reallocated about 60 reps across a client's territories and realized $10M in revenue. The core method was a linear program that maximized expected revenue subject to headcount, budget, and minimum-coverage constraints, with a heuristic layer on top for the judgment calls a pure solver can't make — like protecting a rep's existing account relationships."</p>
+            </div>
+            <div class="ladder-tier">
+              <span class="tier-label">2 minutes</span>
+              <p>Adds: what was broken before (reps allocated by static tenure-based rules, not by expected marginal return); my specific contribution (built the rep-efficiency and cost-per-call features that became the LP's revenue-uplift coefficients, ran the optimization, and proposed the heuristic rules); who made the final call on business exceptions (I flagged them with a recommendation, client and Axtria stakeholders signed off — that's the honest ownership line); and how $10M was measured (pre/post revenue compared across reallocated vs. non-reallocated territory cohorts, the same natural-experiment logic used throughout Stage 21 and Stage 23, isolating the reallocation effect from seasonal and macro noise as best the data allowed).</p>
+            </div>
+            <div class="ladder-tier">
+              <span class="tier-label">5 minutes</span>
+              <p>Full walkthrough in order: (1) the business problem — a static, tenure-based allocation was leaving revenue on the table because it ignored territory-level response differences; (2) the data — historical call logs, account potential, prior prescribing/purchasing behavior, territory demographics; (3) the modeling layer — an XGBoost model estimated the revenue-uplift curve u_j(x_j) per territory (see Claim 3), and a Logistic Regression model separately flagged which accounts were high-response-likelihood, feeding into how floor_j and cap_j were set; (4) the LP itself — decision variables x_j, the objective function, the three constraint families (headcount, coverage bounds, budget), solved to get a mathematically optimal starting allocation; (5) the heuristic overlay — rounding, relationship-protection rules, and flagship-account overrides, each one a deliberate, documented deviation from the raw LP output rather than an ad hoc change; (6) validation — the $10M figure checked against actual post-reallocation revenue by territory cohort; (7) what it became next — the same pipeline was productized into the self-service tool (Claim 2) so the client could re-run this without re-engaging Axtria every time assumptions changed.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions — Technical</h5>
+          <div class="qa-pair"><div class="q">Q: How was ~60 derived — why not more or fewer reps?</div><div class="a">A: It came from two directions meeting in the middle — the client's budget ceiling divided by fully-loaded cost per rep set an upper bound, and the revenue-uplift curve from the XGBoost model showed marginal returns flattening close to that same number, so ~60 was close to both the affordable ceiling and the point of diminishing analytical return. <span class="draftflag">Draft — confirm exact tie-break logic with Pranav</span></div></div>
+          <div class="qa-pair"><div class="q">Q: Why a linear program instead of letting the ML model drive allocation directly?</div><div class="a">A: The LP guarantees feasibility against hard constraints — you cannot allocate a fractional rep, exceed budget, or leave a priority territory below its floor — in a way a standalone ML model has no mechanism to enforce. The ML model's job is to supply the revenue-uplift estimates that become the LP's objective coefficients; the two are complementary, not competing, and conflating them is a common wrong answer to this question.</div></div>
+          <div class="qa-pair"><div class="q">Q: What would you change if you rebuilt this today?</div><div class="a">A: Formalize more of the heuristic layer into explicit, documented constraints rather than case-by-case overrides — partly for repeatability, and partly because that's exactly what made the self-service tool possible: the more of the judgment layer that's rule-based rather than tribal knowledge, the more of it a client analyst can safely operate without Axtria in the loop.</div></div>
+        </div>
+
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions — Business</h5>
+          <div class="qa-pair"><div class="q">Q: How was the $10M figure attributed and validated?</div><div class="a">A: Pre/post revenue comparison across reallocated vs. non-reallocated territory cohorts, controlling as best the data allowed for seasonality and macro trend — the same cohort-comparison logic used to validate causal claims throughout the Analytics Case Bank (Stage 23). Worth being precise in an interview that this is the client-reported, business-validated figure from the CV, not a number recomputed independently — an honest interviewer answer distinguishes "I built the model that produced this" from "I personally re-audited the final $10M," and only the first claim needs to be made.</div></div>
+          <div class="qa-pair"><div class="q">Q: Why efficiency and cost-per-call specifically, over other metrics you could have engineered?</div><div class="a">A: They jointly cover the numerator and denominator of ROI per rep — output (efficiency) and input cost (cost-per-call) — which resists optimizing for a single vanity metric like raw call volume that looks good but doesn't actually track revenue impact.</div></div>
+        </div>
+
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>This is the CV's single highest-value story, and it survives deep technical probing because the method is genuinely sound: an LP for the parts that must be guaranteed feasible, ML for the parts that need to be estimated, and an honest, named heuristic layer for the parts that need human judgment — with your own ownership scoped to the analysis and modeling, not to business authority you never claimed. See §08 below for how this resolves the CV's verb-drift risk directly.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-tool">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>Claim 2 — Self-Service Decision-Support Tool</h2>
+        <p>Level B, "Medium-High" interview odds. The productization of Claim 1's pipeline — this is what let the client stop re-engaging Axtria every time an assumption changed.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Designed a self-service decision-support tool enabling the client to generate allocation forecasts independently, removing the need for repeat analytical engagements."</div>
+        <div class="scopebox">
+          <h5>Honest Scope</h5>
+          <p>You designed the tool — meaning the requirements, the inputs a client analyst should be able to adjust, and the logic connecting those inputs back to the underlying allocation model. Exactly which parts of the build (front-end, back-end refresh pipeline, hosting) were yours to configure versus a shared build with a technical teammate is a specific worth pinning down before an interview. <span class="draftflag">Needs confirmation — exact build split</span></p>
+        </div>
+        <div class="case-sec">
+          <h5>What It Likely Was — a Defensible Draft</h5>
+          <p>Given the tool sits on Stage 12's skill set, the most defensible honest framing is a parameterized dashboard (Power BI, most likely, given it's the BI tool named on every CV version) layered over the same scoring pipeline behind Claim 1 — a client analyst adjusts inputs like headcount, budget ceiling, or priority-tier weighting, and the report recomputes the allocation and its projected revenue without anyone re-running the underlying Python/PySpark pipeline by hand. <span class="draftflag">Needs confirmation — actual tech stack</span> This draft is deliberately concrete so it's easy to correct rather than starting from nothing.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: What was the tech stack behind it?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — draft answer: a BI layer (most likely Power BI, given Stage 12) on top of the same feature pipeline that fed the LP in Claim 1, refreshed on a set cadence rather than live.</div></div>
+          <div class="qa-pair"><div class="q">Q: What decisions did it actually change?</div><div class="a">A: It shifted the client from "re-engage Axtria for every scenario" to "run the scenario yourself" — meaning the actual decision it enabled is faster iteration on assumptions (budget, headcount, priority tiers) without a multi-week Axtria engagement each time.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>This claim's strength in an interview depends entirely on the concrete build details Pranav still needs to confirm — the structural story (productizing Claim 1's pipeline into something the client could self-operate) is solid and doesn't need to change.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-model">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>Claim 3 — Co-Developed Forecasting Model (XGBoost, Logistic Regression)</h2>
+        <p>Priority Matrix rank #01, Level A, "Very High" interview odds. Flagged High risk specifically because "co-developed" framing has to stay honest under questioning.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Co-developed a predictive, regression-based forecasting model (XGBoost, Logistic Regression), driving cross-functional adoption across business, sales, and finance teams to replace manual reporting and inform quarterly market-share strategy."</div>
+        <div class="scopebox">
+          <h5>Honest Scope</h5>
+          <p>"Co-developed" is confirmed as the accurate word across every CV version — meaning this was a shared build, not solo. The defensible, honest version of this answer names your specific contribution (which parts of feature engineering, evaluation, or one of the two models was primarily yours) rather than either overclaiming full ownership or underselling real technical involvement. <span class="draftflag">Needs confirmation — exact division of labor with teammate(s)</span></p>
+        </div>
+        <div class="case-sec">
+          <h5>Why Two Different Models — A Defensible Framing</h5>
+          <div class="cmp-wrap">
+            <table class="cmp-table">
+              <thead><tr><th>Model</th><th>Likely sub-task</th><th>Why this model</th><th>Evaluation</th></tr></thead>
+              <tbody>
+                <tr><td>Logistic Regression</td><td>Classifying accounts as high vs. low response-likelihood to increased call frequency</td><td>Interpretable coefficients — business stakeholders in a regulated, pharma-adjacent context need to see and trust <i>why</i> an account was flagged, not just the flag itself</td><td>AUC/ROC (Stage 11)</td></tr>
+                <tr><td>XGBoost</td><td>Estimating the continuous revenue-uplift curve per territory (u_j(x_j) feeding the LP in Claim 1)</td><td>Captures nonlinear interactions between account features (specialty, prior behavior, territory demographics) that a linear model would miss</td><td>RMSE/MAE on a holdout set, feature importance via SHAP (Stage 9)</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p style="margin-top:10px">This split is the most defensible honest story because it explains <i>why two different algorithms</i> rather than treating "XGBoost, Logistic Regression" as an interchangeable pair — a classification sub-problem (who's likely to respond) and a regression sub-problem (how much uplift to expect) are genuinely different tasks that call for genuinely different tools. <span class="draftflag">Needs confirmation — actual task split, if different</span></p>
+        </div>
+        <div class="case-sec">
+          <h5>Cross-Functional Adoption — the "Replace Manual Reporting" Claim</h5>
+          <p>The honest story: business and sales teams used the Logistic Regression output's interpretability ("which accounts are worth prioritizing, and why") to build trust in the model before adopting it; finance used the XGBoost revenue-uplift forecasts for quarterly market-share planning, replacing a manual Excel-based estimation process that previously required much more analyst time per cycle.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: What was your specific contribution vs. your co-developer's?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — have one honest, consistent answer ready (e.g., "I owned feature engineering and the Logistic Regression component; my teammate led the XGBoost implementation and we jointly validated both") rather than improvising differently across interviews.</div></div>
+          <div class="qa-pair"><div class="q">Q: How did cross-functional adoption actually happen — walk me through it?</div><div class="a">A: Give one concrete instance — a specific bi-weekly review (see Claim 4) where a stakeholder's objection was addressed with the interpretable Logistic Regression output, which is what turned skepticism into adoption.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>The "co-developed" framing is the one CV claim already confirmed honest across all five versions (Stage 1, Risk Matrix #5) — the work here is adding real depth behind it, not fixing wording. The two-model comparison table above is the single most reusable artifact from this claim.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-stakeholder">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Claim 4 — Bi-Weekly Stakeholder Reviews</h2>
+        <p>Level B, "Medium" interview odds. Executive communication — the softest-skill claim on the Axtria bullets, and the one most likely to get a "give me an example" follow-up.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Presented findings to client and senior stakeholders in recurring bi-weekly reviews, shaping input on portfolio and launch decisions."</div>
+        <div class="scopebox">
+          <h5>Honest Scope</h5>
+          <p>You presented and shaped input — the CV does not claim you made the final portfolio/launch call, and that distinction should stay intact in an interview: the strength of this claim is influence through clear, defensible analysis, not decision authority you didn't hold.</p>
+        </div>
+        <div class="case-sec">
+          <h5>What "Shaping Input" Needs to Become — One Concrete Example</h5>
+          <p>The single biggest risk on this claim is answering "give me an example of a decision that changed from your input" with something generic. The strongest available real material is the Claim 3 cross-functional adoption story: a bi-weekly review where the Logistic Regression's interpretable output addressed a stakeholder's specific skepticism about the model, and that review is where "replace manual reporting" adoption actually started. <span class="draftflag">Needs confirmation — pin down the specific review and objection</span></p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: Give me an example of a decision that changed because of your input.</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — draft: "In one review, [stakeholder] was skeptical of the revenue-uplift model until I walked through the Logistic Regression's interpretable feature weights on a specific account — after that, [decision] moved forward using the model's recommendation instead of the prior manual estimate." Replace bracketed detail with the real instance.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>This claim is honest as worded and low-risk on wording — the only real work is having one specific, concrete story ready rather than a generic "I presented regularly" answer.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="pyspark">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>PySpark &amp; Databricks at Axtria</h2>
+        <p>Confirmed real hands-on usage (Stage 1, Risk Matrix #7) — not a listed-but-untouched tool. This section exists to fold that confirmed fact into the Axtria narrative and flag exactly what's still needed to make it fully interview-ready.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <p style="margin:0 0 12px">The most defensible honest position: PySpark/Databricks was the batch data-engineering layer underneath everything in this stage — pulling and joining historical call logs, account potential data, and territory demographics at a scale that made a plain-pandas workflow impractical, then handing off cleaned features to the efficiency/cost-per-call engineering (Claim 1) and the XGBoost/Logistic Regression modeling (Claim 3).</p>
+        <p style="margin:0"><span class="draftflag">Needs confirmation</span> — three specifics from Stage 1's own open question, still unresolved: what pipelines or transformations were personally written (vs. inherited/shared), whether processing was batch or streaming (batch is far more likely for this use case), and roughly what data volumes were involved. Until these are confirmed, keep the honest framing at "hands-on, real usage, exact pipeline specifics being finalized" rather than inventing precise numbers — see Stage 5 for the full PySpark/Databricks technical foundation this claim rests on.</p>
+      </div>
+    </section>
+
+    <section id="star">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>STAR Story Bank</h2>
+        <p>Structured behavioral stories drawn from the Axtria role, each ready to answer a "tell me about a time..." prompt. Structure is complete; several specifics are flagged for confirmation rather than invented as fact.</p>
+      </div>
+
+      <div class="star-card">
+        <h4>Proposing the Hybrid LP + Heuristic Approach</h4>
+        <div class="star-row"><b>Situation</b>A rule-based, tenure-driven rep allocation was underperforming, leaving analyzable revenue on the table.</div>
+        <div class="star-row"><b>Task</b>Find and justify a better allocation method within a fixed headcount and budget.</div>
+        <div class="star-row"><b>Action</b>Modeled rep efficiency and cost-per-call, built the revenue-uplift estimates, and proposed a linear program with an explicit heuristic overlay rather than either a pure rule-based system or an unconstrained ML-only approach.</div>
+        <div class="star-row"><b>Result</b>~60 reps reallocated, $10M in realized revenue, later productized into the self-service tool.</div>
+      </div>
+
+      <div class="star-card">
+        <h4>Handling Stakeholder Skepticism of a Model Recommendation</h4>
+        <div class="star-row"><b>Situation</b>A senior stakeholder in a bi-weekly review was skeptical of trusting a model over established manual judgment.</div>
+        <div class="star-row"><b>Task</b>Build trust in the recommendation without overstating the model's certainty.</div>
+        <div class="star-row"><b>Action</b>Walked through the Logistic Regression's interpretable feature weights on a concrete account, showing the reasoning rather than just the output. <span class="draftflag">Needs confirmation — real instance</span></div>
+        <div class="star-row"><b>Result</b>Shifted the review from skepticism to adoption, feeding the "replace manual reporting" outcome on Claim 3.</div>
+      </div>
+
+      <div class="star-card">
+        <h4>A Metric That Needed Revising</h4>
+        <div class="star-row"><b>Situation</b>An early formulation of "efficiency" risked rewarding reps in easy, high-density territories regardless of actual cost to serve.</div>
+        <div class="star-row"><b>Task</b>Catch and correct a metric-design flaw before it distorted the allocation.</div>
+        <div class="star-row"><b>Action</b>Paired efficiency with cost-per-call so the objective captured ROI rather than raw output alone. <span class="draftflag">Needs confirmation — was this an actual mid-project correction, or the metric design from the start?</span></div>
+        <div class="star-row"><b>Result</b>A more defensible, harder-to-game allocation objective feeding directly into the LP.</div>
+      </div>
+
+      <div class="star-card">
+        <h4>Cross-Functional Collaboration on the Forecasting Model</h4>
+        <div class="star-row"><b>Situation</b>Business, sales, and finance teams each needed something different from one shared forecasting model.</div>
+        <div class="star-row"><b>Task</b>Co-develop a model that could serve interpretability needs (business/sales) and forecast accuracy needs (finance) at once.</div>
+        <div class="star-row"><b>Action</b>Split the problem into a classification sub-task (Logistic Regression, interpretable) and a regression sub-task (XGBoost, accurate), rather than forcing one model to do both jobs.</div>
+        <div class="star-row"><b>Result</b>Adoption across all three teams, replacing a manual Excel-based quarterly process.</div>
+      </div>
+    </section>
+
+    <section id="verb">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Honest Verb &amp; Scope Resolution</h2>
+        <p>Directly resolves Stage 1's Risk Matrix #1 — the ownership verb on the $10M/~60-rep bullet shifts by CV version. This is the single sentence to have completely settled before any Axtria interview.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <p style="margin:0 0 8px;font-size:.85rem;color:var(--ink-faint);font-family:'IBM Plex Mono';text-transform:uppercase;letter-spacing:.04em">Verb used, by CV version</p>
+        <div class="verb-row">
+          <span class="verb-chip">"Led"<span class="src">Consulting CV</span></span>
+          <span class="verb-chip">"Directed"<span class="src">Corp Strategy CV</span></span>
+          <span class="verb-chip">"Built"<span class="src">FinTech CV</span></span>
+          <span class="verb-chip chosen">"Owned"<span class="src">Master / PM CV — chosen</span></span>
+        </div>
+        <p style="margin:14px 0 0;font-size:.92rem">"Owned" is the verb to use consistently, in your own head, regardless of which CV version got you the interview — it's the most literally accurate of the four: you owned the data analysis and modeling, not the final business decision. The one-breath scope statement to have ready for any version of this question: <i>"I owned the data analysis and modeling behind the initiative — built the features, ran the optimization, and proposed the heuristic rules — while the final heuristic overrides and the $10M validation sign-off sat with client and business stakeholders."</i> That sentence survives a sharp interviewer's follow-up on scope, because it draws the line honestly instead of hoping the question doesn't come up.</p>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>Mastery Checklist</h2>
+        <p>Check off once you can deliver each item cold, without re-reading this page.</p>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>How This Connects to the Rest of the Masterbook</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <div class="bridge-flow">
+          <span class="node">Stage 10 · LP</span><span class="arrow">→</span>
+          <span class="node">Stage 9 · XGBoost/SHAP</span><span class="arrow">→</span>
+          <span class="node">Stage 7 · Logistic Regression</span><span class="arrow">→</span>
+          <span class="node">Stage 11 · AUC/ROC</span><span class="arrow">→</span>
+          <span class="node">Stage 12 · Power BI</span><span class="arrow">→</span>
+          <span class="node">Stage 23 · Attribution rigor</span><span class="arrow">→</span>
+          <span class="node">Stage 5 · PySpark</span>
+        </div>
+        <p style="margin:14px 0 0">Unlike the case banks (Stages 16–26), nothing here is a practice scenario — every technical concept named above is the real foundation this Axtria narrative is built on, and every gap flagged with <span class="draftflag" style="vertical-align:middle">Needs confirmation</span> is a genuine open item, not a rhetorical device. Stage 28 (NanoCloud Deep Dive) applies this exact same treatment — honest scope, real mechanism, cross-questions, STAR bank — to the next role on the CV.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  var masteryItems = [
+    'The $10M/~60-rep allocation — I can deliver the 30-sec, 2-min, and 5-min versions cold, in order.',
+    'I can write out the LP objective function and all three constraint families from memory.',
+    'I can explain why a heuristic layer sits on top of the LP, with a real example of what it overrides.',
+    'I can state my honest scope on the allocation claim in one breath, using "owned" consistently.',
+    'I can explain why two different models (Logistic Regression, XGBoost) were used for two different sub-tasks.',
+    'I have one concrete example ready for "give me an example of a decision that changed from your input."',
+    'I can explain the self-service tool’s purpose (remove repeat engagements) even where exact tech-stack specifics are still pending confirmation.',
+    'I know exactly which PySpark/Databricks specifics still need confirming before a technical round.',
+    'I have all four STAR stories ready, including which details still need Pranav’s confirmation.',
+    'I can connect this stage back to Stages 5, 7, 9, 10, 11, 12, and 23 without hesitating.'
+  ];
+  var STORE = 'masterbook-s27-mastery';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var mBox = document.getElementById('masteryBox');
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  mBox.innerHTML = masteryItems.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+esc(t)+'</span></div>';
+  }).join('');
+  mBox.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 500){ backtop.classList.add('show'); } else { backtop.classList.remove('show'); }
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 27 loaded — mastery items:', masteryItems.length);
+} catch (err) { console.error('Stage 27 render error:', err); }
+</script>

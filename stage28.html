@@ -1,0 +1,544 @@
+<meta name="robots" content="noindex, nofollow">
+<title>NanoCloud Deep Dive</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+
+  .case-sec{ margin-top:20px; }
+  .case-sec h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .case-sec h5::before{ content:""; width:14px; height:2px; background:var(--accent); display:inline-block; }
+  .case-sec p, .case-sec li{ font-size:.9rem; color:var(--ink-soft); margin:0 0 6px; }
+  .qa-pair{ margin-bottom:10px; padding:10px 14px; background:var(--paper-sunken); border-radius:8px; }
+  .qa-pair .q{ font-size:.88rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .qa-pair .a{ font-size:.87rem; color:var(--ink-soft); }
+  .case-sec ul{ margin:0; padding-left:20px; }
+  .synth-box{ margin-top:20px; padding:15px 18px; background:var(--accent-soft); border-radius:8px; border-left:4px solid var(--accent); }
+  .synth-box h5{ color:var(--accent-ink); }
+  .synth-box p{ color:var(--ink); font-weight:500; }
+
+  .cv-role-meta{ font-size:.85rem; color:var(--ink-faint); margin:2px 0 10px; }
+  .cv-role-meta .co{ color:var(--ink); font-weight:600; }
+
+  .draftflag{ display:inline-flex; align-items:center; gap:5px; font-size:.68rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; background:var(--lvlB-soft); color:var(--lvlB); text-transform:uppercase; letter-spacing:.03em; }
+  .okflag{ display:inline-flex; align-items:center; gap:5px; font-size:.68rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; background:var(--data-soft); color:var(--data); text-transform:uppercase; letter-spacing:.03em; }
+
+  .ladder{ display:flex; flex-direction:column; gap:12px; margin-top:6px; }
+  .ladder-tier{ padding:15px 18px; border-radius:10px; background:var(--paper-sunken); border-left:4px solid var(--data); }
+  .ladder-tier .tier-label{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--data); margin-bottom:8px; display:block; }
+  .ladder-tier p{ margin:0; font-size:.91rem; color:var(--ink); }
+
+  .verb-row{ display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+  .verb-chip{ font-size:.8rem; padding:5px 12px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); }
+  .verb-chip .src{ font-size:.68rem; color:var(--ink-faint); margin-left:5px; }
+  .verb-chip.chosen{ background:var(--accent-soft); color:var(--accent-ink); border-color:var(--accent); font-weight:700; }
+
+  .star-card{ border:1px solid var(--line); border-radius:12px; padding:20px 22px; background:var(--paper-raised); box-shadow:var(--shadow); margin-bottom:16px; }
+  .star-card h4{ font-size:1.02rem; margin-bottom:12px; }
+  .star-row{ margin-bottom:9px; font-size:.9rem; color:var(--ink-soft); }
+  .star-row b{ color:var(--accent-ink); font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; margin-right:8px; display:inline-block; min-width:70px; }
+
+  .claimcard{ border:1px solid var(--line); border-radius:14px; background:var(--paper-raised); box-shadow:var(--shadow); padding:26px 28px; margin-bottom:20px; }
+  .claimcard .chead{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:10px; }
+  .claimcard .chead h3{ font-size:1.22rem; flex:1; min-width:200px; }
+  .bulletquote{ margin:14px 0; padding:14px 18px; background:var(--paper-sunken); border-left:4px solid var(--ink-faint); border-radius:0 8px 8px 0; font-style:italic; font-size:.92rem; color:var(--ink-soft); }
+  .scopebox{ margin:14px 0; padding:14px 18px; background:var(--data-soft); border-radius:8px; border-left:4px solid var(--data); }
+  .scopebox h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--data); margin-bottom:6px; }
+  .scopebox p{ margin:0; color:var(--ink); font-size:.9rem; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <a class="backlink" href="stage14.html">← Stage 14 · Product Management</a>
+    <a class="backlink" href="stage15.html">← Stage 15 · Structured Problem Solving &amp; Frameworks</a>
+    <a class="backlink" href="stage16.html">← Stage 16 · Profitability Case Bank</a>
+    <a class="backlink" href="stage17.html">← Stage 17 · Market Entry Case Bank</a>
+    <a class="backlink" href="stage18.html">← Stage 18 · Growth Case Bank</a>
+    <a class="backlink" href="stage19.html">← Stage 19 · Pricing Case Bank</a>
+    <a class="backlink" href="stage20.html">← Stage 20 · Market Sizing Case Bank</a>
+    <a class="backlink" href="stage21.html">← Stage 21 · Operations Case Bank</a>
+    <a class="backlink" href="stage22.html">← Stage 22 · Product Case Bank</a>
+    <a class="backlink" href="stage23.html">← Stage 23 · Analytics Case Bank</a>
+    <a class="backlink" href="stage24.html">← Stage 24 · AI/GenAI Case Bank</a>
+    <a class="backlink" href="stage25.html">← Stage 25 · FinTech Case Bank</a>
+    <a class="backlink" href="stage26.html">← Stage 26 · Pharma Case Bank</a>
+    <a class="backlink" href="stage27.html">← Stage 27 · Axtria Deep Dive</a>
+    <div class="stage-pill">● Stage 28 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#overview">Role Overview</a></li>
+      <li><a href="#claim-clients">~15-Client Ownership</a></li>
+      <li><a href="#claim-perf">28% Performance Gain</a></li>
+      <li><a href="#claim-heatmaps">50+ Heatmaps</a></li>
+      <li><a href="#claim-turnaround">Turnaround &amp; Satisfaction</a></li>
+      <li><a href="#telecom-concepts">Telecom/Network Concepts</a></li>
+      <li><a href="#star">STAR Story Bank</a></li>
+      <li><a href="#verb">Confirmed Scope Upgrade</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+      <li><a href="#bridge">How This Connects</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next (Part XI)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 30 (Hero Electronics Deep Dive, plus Projects &amp; Case Competitions) is next, closing out the Work Experience Deep Dives.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part XI · Stage 28 of 33</div>
+      <h1>NanoCloud Deep Dive</h1>
+      <p class="lede">The second Work Experience Deep Dive — your 12-month role as Associate, Client Solutions at NanoCloud Solutions, taken apart bullet by bullet. This role reads differently from Axtria's: it's a client-facing, requirements-and-solution-design story rather than a from-scratch technical build, and two of its four bullets (the 28% performance figure, the 50+ heatmaps) are honestly Level C — real client outcomes you can speak to conceptually, not technical work you personally executed at depth. That distinction is the whole point of this stage: nothing here gets inflated to sound more technical than it was, and nothing here gets undersold either — Stage 1's Risk Matrix already confirmed that four of your five CV versions are actually <i>underselling</i> this role's true ownership scope.</p>
+      <div class="statusbar">
+        <div class="statuschip">💼 <b>4</b> CV bullets, fully deep-dived</div>
+        <div class="statuschip">⚖️ <b>2</b> Level-B, <b>2</b> Level-C claims — no Level-A here</div>
+        <div class="statuschip">✓ Scope already confirmed and upgraded, not in dispute</div>
+        <div class="statuschip">🗣️ 30-sec / 2-min / 5-min answer ladder for the flagship claim</div>
+      </div>
+    </header>
+
+    <section id="overview">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Role Overview</h2>
+        <p>The factual anchor everything below builds on — pulled directly from your Consolidated CV (Stage 1) with nothing added or reworded.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <h3 style="font-size:1.1rem">Associate — Client Solutions</h3>
+        <p class="cv-role-meta"><span class="co">NanoCloud Solutions Pvt Ltd</span> · Chandigarh · May 2022 – Apr 2023 (12 mo)</p>
+        <p style="margin:10px 0 16px;font-size:.93rem;color:var(--ink-soft)">NanoCloud's client base sits in telecom/network infrastructure — enterprises needing network-coverage and configuration optimization across their sites. Unlike Axtria's from-scratch modeling work, this role centers on client-facing requirements gathering and solution design layered on top of an existing optimization methodology at NanoCloud, which is exactly why the honest-scope framing below matters more here than the technical-mechanism framing: the strongest, most defensible story is "I owned the client-facing definition of the problem and the solution," not "I personally engineered the network-optimization models."</p>
+        <div class="case-sec" style="margin-top:4px">
+          <h5>The Four CV Bullets, Classified</h5>
+          <ul style="margin-top:6px">
+            <li><span class="lvl lvl-B" style="margin-right:8px">B</span> Delivered network optimization recommendations for ~15 clients, engaging directly with client teams to define requirements and solutions — <span class="okflag">confirmed: "owned requirements &amp; solution design"</span> <a href="#claim-clients" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-C" style="margin-right:8px">C</span> Advised clients on network configuration changes that improved performance by 28%, reducing downtime. <a href="#claim-perf" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-C" style="margin-right:8px">C</span> Applied optimization modeling across 50+ network heatmaps, converting raw client data into actionable coverage recommendations. <a href="#claim-heatmaps" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-B" style="margin-right:8px">B</span> Reduced client turnaround time from 10 to 8 days and increased client satisfaction by 15%. <a href="#claim-turnaround" style="font-size:.82rem">↓ deep dive</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-clients">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Claim 1 — Requirements &amp; Solution Design Ownership Across ~15 Clients</h2>
+        <p>Level B, "Medium" interview odds per the Claim Matrix — but the single most important claim on this page, because Stage 1's Risk Matrix #2 already confirmed the accurate, stronger framing: this is a resolved upgrade, not an open risk.</p>
+      </div>
+
+      <div class="claimcard">
+        <div class="bulletquote">CV wording (4 of 5 versions): "Delivered network optimization recommendations for ~15 clients across large and mid-sized enterprises, engaging directly with client teams to define requirements and solutions."<br><br>Confirmed accurate framing (Product Management CV, and the one to use everywhere): "Owned requirements definition and solution design."</div>
+
+        <div class="scopebox">
+          <h5>Honest Scope</h5>
+          <p>You owned the client-facing front end of ~15 engagements — sitting with client network/operations teams, defining what the problem actually was, scoping what data and access were needed, and designing the shape of the recommendation NanoCloud would deliver back. That is genuine ownership of requirements and solution design, confirmed by you as the accurate story. It does not mean you personally built NanoCloud's underlying optimization methodology from scratch (that sits closer to Claims 2 and 3, both Level C) — the honest distinction is "owned defining and shaping the engagement" vs. "owned inventing the optimization technique," and only the first is being claimed here.</p>
+        </div>
+
+        <div class="case-sec">
+          <h5>The Mechanism — a Requirements-to-Recommendation Engagement Model</h5>
+          <p>The most defensible honest description of how ~15 client engagements actually ran, structured as a repeatable process rather than 15 one-off efforts: (1) intake — understanding the client's stated problem (typically dropped calls, slow throughput, or complaints concentrated in specific sites/regions); (2) scoping — translating that into a concrete data ask (site-level performance logs, coverage maps, complaint/ticket data) and a defined engagement boundary (which sites, what timeframe, what "success" would look like); (3) solution design — working with NanoCloud's technical/optimization team to shape what kind of recommendation would actually be actionable for that client's constraints (budget, which changes were operationally feasible, which sites were highest priority); (4) delivery — presenting recommendations back to the client in a form site managers could approve and act on directly. <span class="draftflag">Draft — confirm which of these four stages you personally ran vs. handed off to a technical teammate</span></p>
+        </div>
+
+        <div class="case-sec">
+          <h5>Why This Is the Flagship Claim on This Page</h5>
+          <p>Unlike Axtria's Claim 1 (a from-scratch technical build), this claim's strength is repeatability and client-facing judgment across volume — ~15 distinct engagements is meaningfully different from one big project, and it's evidence of a transferable skill (structuring an ambiguous client ask into a scoped, deliverable engagement) that shows up in almost every analytics/consulting interview, regardless of whether the interviewer cares about telecom specifically.</p>
+        </div>
+
+        <div class="case-sec">
+          <h5>Answer Ladder — "Walk me through what you actually owned at NanoCloud"</h5>
+          <p>The same three-depth format used for Axtria's flagship claim, applied here since this is the claim most likely to get a broad "tell me about your NanoCloud role" opener.</p>
+          <div class="ladder">
+            <div class="ladder-tier">
+              <span class="tier-label">30 seconds</span>
+              <p>"At NanoCloud I owned requirements definition and solution design for network-optimization engagements across about 15 enterprise clients — sitting directly with client teams to scope the problem, then shaping recommendations that improved network performance by an average of 28% and got approved directly by site managers."</p>
+            </div>
+            <div class="ladder-tier">
+              <span class="tier-label">2 minutes</span>
+              <p>Adds: what "requirements definition" concretely meant (translating a client's vague complaint — dropped calls, slow service in specific areas — into a scoped data ask and a defined engagement); the honest split between the client-facing work (mine) and the underlying optimization modeling across 50+ heatmaps (closer to NanoCloud's technical team, with my role scoping what those heatmaps needed to answer); and the operational outcome — cutting turnaround time from 10 to 8 days by tightening how requirements were scoped upfront, which reduced back-and-forth later in the engagement. <span class="draftflag">Draft — confirm exact link between requirements-scoping and the turnaround-time improvement</span></p>
+            </div>
+            <div class="ladder-tier">
+              <span class="tier-label">5 minutes</span>
+              <p>Full walkthrough: (1) the client population — ~15 large and mid-sized enterprise clients, each with a network-coverage or performance complaint; (2) my specific role — direct client engagement to define requirements, distinct from the technical modeling that translated those requirements into recommendations; (3) the deliverable — client-approved recommendations, with site managers signing off directly rather than the recommendation getting stuck in a longer internal approval chain; (4) the measured outcomes across the client base — a 28% average performance improvement, 50+ heatmaps processed, turnaround cut from 10 to 8 days, and a 15% increase in client satisfaction; (5) the honest technical boundary — the heatmap-based optimization modeling itself is Level C for me (I can explain what it does and why, not defend the specific technique at Stage-9/10 depth), while the requirements-and-solution-design ownership is fully Level B, confirmed as the accurate framing by the Product Management CV version.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions — Technical</h5>
+          <div class="qa-pair"><div class="q">Q: What did the optimization technique behind the recommendations actually do?</div><div class="a">A: Conceptually, it converted raw network performance data (signal strength, dropped-call rates, complaint density) mapped across each client's sites into a heatmap, then identified where configuration changes — antenna tilt, power settings, handover parameters — would most improve coverage or reduce downtime. <span class="draftflag">Draft — confirm exact technique/tooling used, and how much of this you personally ran vs. a technical teammate</span></div></div>
+          <div class="qa-pair"><div class="q">Q: If you didn't build the optimization models yourself, what makes this your claim rather than the technical team's?</div><div class="a">A: The claim isn't "I built the optimization engine" — it's "I owned turning an ambiguous client problem into a scoped, deliverable engagement, and shaping the recommendation into something a site manager could actually approve." That's a distinct, real skill from the technical modeling, and it's the one this bullet actually describes.</div></div>
+        </div>
+
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions — Business</h5>
+          <div class="qa-pair"><div class="q">Q: Walk me through one specific client engagement, start to finish.</div><div class="a">A: <span class="draftflag">Needs confirmation — a specific real engagement, client name/industry anonymized if needed</span> — draft shape: a mid-sized enterprise client reporting service complaints concentrated in a few sites; requirements intake surfaced the actual pattern (high-demand periods, not a blanket coverage problem); the resulting recommendation was targeted rather than a blanket network overhaul, which is part of why it was approvable quickly at the site-manager level rather than needing a large capital-expenditure sign-off.</div></div>
+          <div class="qa-pair"><div class="q">Q: How did you handle 15 clients without the engagements blurring together or losing quality?</div><div class="a">A: The repeatable four-stage engagement model above (intake, scoping, solution design, delivery) is exactly what made volume manageable — a defined process rather than reinventing the approach for each client.</div></div>
+        </div>
+
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>This is the one Axtria-equivalent "flagship" claim on this page, but its strength comes from a completely different place — repeatable client-facing ownership across volume, not a from-scratch technical build. It also directly resolves Stage 1's Risk Matrix #2: unlike Axtria's still-open verb-drift question, this one is already confirmed, and the only remaining work is defaulting to the stronger framing consistently. See §08 below.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-perf">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>Claim 2 — 28% Performance Improvement via Configuration Changes</h2>
+        <p>Level C, "Low-Medium" interview odds, flagged Medium risk — "technical specifics likely thin" per Stage 1's own Claim Matrix. This is a real, client-reported outcome; the honest scope is conceptual understanding, not personal technical execution.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Advised clients on network configuration changes that improved performance by 28%, reducing downtime and strengthening service reliability in high-demand markets."</div>
+        <div class="scopebox">
+          <h5>Honest Scope — Level C</h5>
+          <p>This is a real client-reported outcome tied to your engagements, but per the standing rule on this Masterbook, a Level C claim gets a conceptual-understanding answer, not an invented technical narrative. The honest position: you can explain what kinds of configuration changes generally drive a performance improvement like this in telecom/network contexts, and you were the client-facing advisor translating the technical team's recommendation into something the client acted on — but you should not claim to have personally selected or executed the specific technical configuration changes unless that's confirmed.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Telecom/Network Optimization — What "28% Performance Improvement" Plausibly Means</h5>
+          <p>A conceptual primer, not a claim about what specifically happened: common levers behind a network performance improvement of this kind include antenna tilt/orientation adjustments (redirecting coverage toward high-demand areas), transmit power tuning (extending or tightening coverage radius), and handover parameter tuning (reducing dropped calls as users move between coverage areas). "Performance" itself is usually a composite of dropped-call rate, throughput, and latency — a 28% figure most likely refers to one specific metric improving by that amount, or a blended service-quality score, not literally "everything got 28% better." <span class="draftflag">Draft — confirm which specific metric the 28% refers to</span></p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: What was actually changed technically?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — honest answer if pressed without confirmed specifics: "The specific configuration changes were determined by NanoCloud's technical/network engineering process; my role was advising the client on what those changes would mean operationally and helping them prioritize which sites to act on first. I can speak to the general categories of change — antenna and power configuration, handover tuning — but I'd want to confirm the exact technical levers used on a specific engagement before going deeper than that."</div></div>
+          <div class="qa-pair"><div class="q">Q: How was 28% measured — baselined against what?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — most plausible measurement is a before/after comparison of the same performance metric (dropped-call rate, throughput, or a blended score) at the same sites, over comparable time windows, but the exact baselining methodology needs confirming before claiming it confidently in an interview.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>This claim is honest exactly as worded on the CV — the risk is only in over-claiming technical depth beyond Level C in a live interview. The safe, honest posture: confident on what the outcome means and why it matters to the client, explicitly conceptual on the underlying technical execution.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-heatmaps">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>Claim 3 — Optimization Modeling Across 50+ Network Heatmaps</h2>
+        <p>Level C, "Low-Medium" interview odds, flagged Medium risk. The most technical-sounding NanoCloud bullet, and the one where staying honest about scope matters most.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Applied optimization modeling across 50+ network heatmaps, converting raw client data into actionable coverage recommendations."</div>
+        <div class="scopebox">
+          <h5>Honest Scope — Level C</h5>
+          <p>"Applied" is doing real work in this sentence — the honest reading is that you used/interpreted heatmap-based optimization outputs as part of the client-facing engagement process (Claim 1), not that you personally built the optimization modeling technique. Until confirmed otherwise, the defensible framing is: you worked directly with heatmap outputs across 50+ instances to translate them into client-facing coverage recommendations, with the underlying modeling technique itself sitting with NanoCloud's broader methodology/technical team.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Heatmap-Based Coverage Optimization — A Conceptual Primer</h5>
+          <p>A network heatmap is a spatial visualization of a metric (signal strength, call quality, complaint density) across a geographic area or site footprint. "Optimization modeling" applied to a heatmap typically means identifying the gap between current coverage and a target/threshold, then prioritizing which locations would see the largest improvement per unit of investment (a rough analogy to the marginal-return logic in Stage 10's forecasting/optimization content, just applied spatially rather than across territories). Converting that into "actionable coverage recommendations" means translating a technical gap map into a short, prioritized list a client can actually act on — which sites first, roughly what kind of intervention, and why. <span class="draftflag">Draft — confirm what tool/software generated the heatmaps and what "applying optimization modeling" concretely meant in your workflow</span></p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: What tool generated the heatmaps, and what did you personally do with them?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — honest framing until confirmed: "The heatmaps were generated by NanoCloud's network-analysis tooling; my role was interpreting them alongside the client's stated problem and translating the technical gap into a prioritized, actionable recommendation the client could approve."</div></div>
+          <div class="qa-pair"><div class="q">Q: Across 50+ heatmaps, how did you prioritize which recommendations to push first?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — plausible framing: prioritizing by a combination of severity (how far below target the site was) and feasibility/cost (which changes were operationally realistic for that client), mirroring the same severity-times-feasibility prioritization logic used in Stage 22's product-prioritization cases — but this specific answer needs to be confirmed as what actually happened rather than assumed by analogy.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>The safest, most defensible honest answer keeps this claim at "applied and interpreted" rather than "built the optimization technique" — real, valuable client-facing work, without overclaiming a from-scratch technical build this stage's evidence doesn't support.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-turnaround">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Claim 4 — Turnaround Time Reduction &amp; Client Satisfaction</h2>
+        <p>Level B, "Medium" interview odds. A process-improvement claim, directly connected to Claim 1's requirements-ownership story.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Reduced client turnaround time from 10 to 8 days and increased client satisfaction by 15%, with recommendations approved directly by site managers."</div>
+        <div class="scopebox">
+          <h5>Honest Scope</h5>
+          <p>This reads as a direct downstream effect of Claim 1's ownership — tighter, better-scoped requirements definition upfront plausibly reduces the back-and-forth that would otherwise stretch an engagement from 10 to 8 days. That link is logical and worth stating in an interview, but the exact mechanism ("what specifically changed to cut 2 days") is still a specific worth pinning down rather than assuming.</p>
+        </div>
+        <div class="case-sec">
+          <h5>The Likely Mechanism — Tighter Requirements Scoping</h5>
+          <p>The most defensible honest story: standardizing the intake/scoping stage of the engagement model (Claim 1) — a consistent set of questions and data asks upfront — reduces the number of follow-up rounds needed later, which is the most common lever behind a turnaround-time improvement in a client-delivery process. "Recommendations approved directly by site managers" (rather than escalating through a longer internal chain) suggests the recommendations were also scoped to be within a site manager's approval authority — itself a product of good requirements definition. <span class="draftflag">Draft — confirm the specific process change behind the 10→8 day improvement</span></p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: What specifically changed to cut 2 days off turnaround?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — draft: "Tightening the requirements-intake step so fewer clarifying rounds were needed later in the engagement, and scoping recommendations so they fell within a site manager's direct approval authority rather than requiring a longer internal sign-off chain."</div></div>
+          <div class="qa-pair"><div class="q">Q: How was the 15% client satisfaction increase measured?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — most plausible source is a client survey or feedback score NanoCloud tracked per engagement; needs confirming before citing a specific measurement method in an interview.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Low-risk claim as worded — the only work needed is connecting it explicitly to Claim 1's requirements-ownership story in your own head, so it reads as one coherent narrative about process ownership rather than four disconnected bullets.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="telecom-concepts">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Telecom/Network Optimization Concepts — LEARN + BUILD + DEFEND</h2>
+        <p>Per Stage 1's own flag (LEARN+BUILD+DEFEND section): "Network optimization technical specifics — real client outcomes, but the underlying method needs to be explainable at a technical level, not just the result." This section names exactly what still needs building, rather than papering over the gap.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <p style="margin:0 0 12px">Unlike Axtria's PySpark/Databricks gap (confirmed hands-on, just missing pipeline specifics), this is a genuine conceptual gap: the two Level C claims on this page (28% performance, 50+ heatmaps) currently rest on a general, plausible-but-unconfirmed understanding of telecom network optimization rather than depth you've personally built and can defend under a technical follow-up.</p>
+        <p style="margin:0 0 12px"><b style="color:var(--ink)">LEARN:</b> basic telecom/network concepts — coverage vs. capacity vs. latency vs. downtime as distinct metrics, common configuration levers (antenna tilt, transmit power, handover parameters), and how a heatmap-based gap analysis typically drives prioritization.</p>
+        <p style="margin:0 0 12px"><b style="color:var(--ink)">BUILD:</b> no dedicated hands-on portfolio project is currently scoped for this topic in Stage 1's Hands-On Project Requirements list — unlike Axtria's allocation model or forecasting comparison, network optimization wasn't flagged as needing a from-scratch build. That's itself an honest signal: this role's strength is client-facing requirements ownership (Claim 1), not a technical specialty to prove with a portfolio project.</p>
+        <p style="margin:0"><b style="color:var(--ink)">DEFEND:</b> the target is not deep technical mastery of network optimization — it's being able to explain the general concepts fluently (this section) while staying honest that Claim 1's requirements-and-solution-design ownership, not the underlying optimization technique, is the real strength of this role.</p>
+      </div>
+    </section>
+
+    <section id="star">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>STAR Story Bank</h2>
+        <p>Structured behavioral stories drawn from the NanoCloud role. These skew toward client-engagement and requirements-ownership stories rather than technical-build stories, matching the role's actual strength.</p>
+      </div>
+
+      <div class="star-card">
+        <h4>Scoping an Ambiguous Client Problem into a Deliverable Engagement</h4>
+        <div class="star-row"><b>Situation</b>A client came in with a vague complaint (service issues, dropped calls) rather than a defined technical problem.</div>
+        <div class="star-row"><b>Task</b>Translate that into a scoped engagement NanoCloud could actually deliver against.</div>
+        <div class="star-row"><b>Action</b>Ran the requirements-intake process directly with the client's team — narrowing the vague complaint into a specific, data-backed problem statement and a defined engagement boundary. <span class="draftflag">Needs confirmation — real instance</span></div>
+        <div class="star-row"><b>Result</b>A recommendation the client could approve directly at the site-manager level, without a longer escalation chain.</div>
+      </div>
+
+      <div class="star-card">
+        <h4>Reducing Turnaround Time Through Better Upfront Scoping</h4>
+        <div class="star-row"><b>Situation</b>Engagements were taking 10 days end-to-end, with back-and-forth clarifying rounds along the way.</div>
+        <div class="star-row"><b>Task</b>Cut turnaround without sacrificing recommendation quality.</div>
+        <div class="star-row"><b>Action</b>Standardized the intake/scoping questions asked upfront, reducing the number of follow-up rounds needed mid-engagement. <span class="draftflag">Needs confirmation — was this a deliberate process change you introduced, or an outcome of experience over time?</span></div>
+        <div class="star-row"><b>Result</b>Turnaround cut from 10 to 8 days, plus a 15% increase in client satisfaction.</div>
+      </div>
+
+      <div class="star-card">
+        <h4>Translating a Technical Recommendation Into Something a Client Could Act On</h4>
+        <div class="star-row"><b>Situation</b>A heatmap-based technical analysis identified a coverage gap, but the raw output wasn't in a form a client's site manager could approve.</div>
+        <div class="star-row"><b>Task</b>Convert the technical finding into a prioritized, actionable recommendation.</div>
+        <div class="star-row"><b>Action</b>Worked with the client to understand which changes were operationally and budget-feasible, then framed the recommendation around that constraint rather than a purely technical optimum. <span class="draftflag">Needs confirmation — real instance</span></div>
+        <div class="star-row"><b>Result</b>A recommendation approved directly by the site manager, contributing to the broader 28% performance improvement figure across the client base.</div>
+      </div>
+
+      <div class="star-card">
+        <h4>Managing Volume Across ~15 Concurrent-ish Client Relationships</h4>
+        <div class="star-row"><b>Situation</b>Roughly 15 client engagements running across a 12-month period, each needing individual attention.</div>
+        <div class="star-row"><b>Task</b>Deliver consistent quality without any one engagement's requirements-definition process suffering from volume.</div>
+        <div class="star-row"><b>Action</b>Relied on a repeatable engagement structure (intake → scoping → solution design → delivery) rather than improvising fresh for each client.</div>
+        <div class="star-row"><b>Result</b>Consistent outcomes across the client base — the 28%, 50+, and 15% figures are aggregate results across this volume, not a single flagship engagement.</div>
+      </div>
+    </section>
+
+    <section id="verb">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Confirmed Scope Upgrade — Not an Open Risk</h2>
+        <p>Directly resolves Stage 1's Risk Matrix #2. Unlike Axtria's Risk #1 (an unresolved verb-drift question you still need to settle), this one is already confirmed by you — the only work left is defaulting to the stronger, accurate framing consistently.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <p style="margin:0 0 8px;font-size:.85rem;color:var(--ink-faint);font-family:'IBM Plex Mono';text-transform:uppercase;letter-spacing:.04em">Framing used, by CV version</p>
+        <div class="verb-row">
+          <span class="verb-chip">"Delivered network optimization recommendations"<span class="src">Consulting / Corp Strategy / FinTech / Master CVs</span></span>
+          <span class="verb-chip chosen">"Owned requirements definition and solution design"<span class="src">Product Management CV — confirmed accurate, use everywhere</span></span>
+        </div>
+        <p style="margin:14px 0 0;font-size:.92rem">This is the opposite failure mode from Axtria's Risk #1: four of your five CV versions <i>undersell</i> this role by describing you as delivering recommendations that were handed to you, when the confirmed truth is that you owned defining what the client actually needed and designing the shape of the solution. The one-breath scope statement to use in any interview, regardless of which CV version got you there: <i>"I owned requirements definition and solution design across roughly 15 client engagements — not just delivering recommendations someone else scoped, but sitting directly with client teams to define the problem and shape what NanoCloud would deliver back."</i> Leading with this framing is both more accurate and a stronger answer — there's no honesty trade-off here, only an upgrade to make consistently.</p>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>Mastery Checklist</h2>
+        <p>Check off once you can deliver each item cold, without re-reading this page.</p>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>How This Connects to the Rest of the Masterbook</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <div class="bridge-flow">
+          <span class="node">Stage 15 · MECE/structured scoping</span><span class="arrow">→</span>
+          <span class="node">Stage 10 · Optimization logic (spatial analogy)</span><span class="arrow">→</span>
+          <span class="node">Stage 22 · Prioritization frameworks</span><span class="arrow">→</span>
+          <span class="node">Stage 14 · Requirements/PRD discipline</span><span class="arrow">→</span>
+          <span class="node">Stage 27 · Axtria (contrast: technical build vs. client ownership)</span>
+        </div>
+        <p style="margin:14px 0 0">This stage reads best in contrast with Stage 27: Axtria is a from-scratch technical build defended at deep mechanism level; NanoCloud is client-facing requirements-and-solution-design ownership defended honestly at the scope it actually was, with two genuinely Level C technical claims kept conceptual rather than inflated. Together they show a consistent, honest range — not every role needs to be the deepest technical story to be a strong interview answer. Stage 29 (Capgemini Deep Dive) applies this same treatment — honest scope, real mechanism where it exists, cross-questions, STAR bank — to the next role on the CV.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  var masteryItems = [
+    'I can deliver the requirements-ownership 30-sec, 2-min, and 5-min answers cold, in order.',
+    'I can state the honest scope difference between Claim 1 (requirements/solution-design ownership) and Claims 2-3 (Level C, conceptual only) without blurring them.',
+    'I can explain the four-stage engagement model (intake, scoping, solution design, delivery) from memory.',
+    'I can explain the general telecom concepts behind a "28% performance improvement" claim without overclaiming personal technical execution.',
+    'I can explain what a network heatmap is and what "optimization modeling" on it conceptually means.',
+    'I can connect the turnaround-time improvement back to tighter requirements scoping in one sentence.',
+    'I default to the confirmed "owned requirements definition and solution design" framing, not the weaker "delivered recommendations" framing.',
+    'I know exactly which specifics (technical levers, real client examples, measurement methods) still need Pranav’s confirmation before a live interview.',
+    'I have all four STAR stories ready, including which details still need confirmation.',
+    'I can contrast this role against Axtria’s in one sentence when asked to compare my experience.'
+  ];
+  var STORE = 'masterbook-s28-mastery';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var mBox = document.getElementById('masteryBox');
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  mBox.innerHTML = masteryItems.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+esc(t)+'</span></div>';
+  }).join('');
+  mBox.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 500){ backtop.classList.add('show'); } else { backtop.classList.remove('show'); }
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 28 loaded — mastery items:', masteryItems.length);
+} catch (err) { console.error('Stage 28 render error:', err); }
+</script>

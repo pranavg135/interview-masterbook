@@ -1,0 +1,792 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>Pricing Case Bank</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+
+  .caselist{ display:flex; flex-direction:column; gap:14px; }
+  details.case{ border:1px solid var(--line); border-radius:12px; background:var(--paper-raised); box-shadow:var(--shadow); overflow:hidden; }
+  details.case summary{ padding:16px 22px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.98rem; font-weight:600; }
+  details.case summary::-webkit-details-marker{ display:none; }
+  details.case summary .cnum{ font-family:"IBM Plex Mono"; font-size:.72rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:3px 9px; border-radius:6px; flex:0 0 auto; }
+  details.case summary .cdiff{ font-size:.66rem; font-weight:700; padding:3px 9px; border-radius:6px; flex:0 0 auto; text-transform:uppercase; letter-spacing:.03em; }
+  .cdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .cdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .cdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .cdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  details.case summary .cind{ font-size:.72rem; font-weight:500; color:var(--ink-faint); flex:0 0 auto; }
+  details.case summary .ctitle{ flex:1; }
+  .case-body{ padding:0 22px 24px; border-top:1px solid var(--line); }
+  .case-prompt{ margin:18px 0; padding:15px 18px; background:var(--paper-sunken); border-left:4px solid var(--ink-faint); border-radius:0 8px 8px 0; font-style:italic; font-size:.93rem; }
+  .case-sec{ margin-top:20px; }
+  .case-sec h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .case-sec h5::before{ content:""; width:14px; height:2px; background:var(--accent); display:inline-block; }
+  .case-sec p, .case-sec li{ font-size:.9rem; color:var(--ink-soft); margin:0 0 6px; }
+  .qa-pair{ margin-bottom:10px; padding:10px 14px; background:var(--paper-sunken); border-radius:8px; }
+  .qa-pair .q{ font-size:.88rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .qa-pair .a{ font-size:.87rem; color:var(--ink-soft); }
+  .case-sec ul{ margin:0; padding-left:20px; }
+  .case-sec .calc-block{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:14px 16px; font-family:"IBM Plex Mono"; font-size:.79rem; overflow-x:auto; line-height:1.65; white-space:pre; margin-top:4px; }
+  .case-sec .result-tag{ display:inline-block; margin-top:8px; font-family:"IBM Plex Mono"; font-size:.8rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:5px 11px; border-radius:6px; }
+  .synth-box{ margin-top:20px; padding:15px 18px; background:var(--accent-soft); border-radius:8px; border-left:4px solid var(--accent); }
+  .synth-box h5{ color:var(--accent-ink); }
+  .synth-box p{ color:var(--ink); font-weight:500; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <a class="backlink" href="stage14.html">← Stage 14 · Product Management</a>
+    <a class="backlink" href="stage15.html">← Stage 15 · Structured Problem Solving &amp; Frameworks</a>
+    <a class="backlink" href="stage16.html">← Stage 16 · Profitability Case Bank</a>
+    <a class="backlink" href="stage17.html">← Stage 17 · Market Entry Case Bank</a>
+    <a class="backlink" href="stage18.html">← Stage 18 · Growth Case Bank</a>
+    <div class="stage-pill">● Stage 19 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#howtouse">How to Use This Case Bank</a></li>
+      <li><a href="#cases">The 15 Growth Cases</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 21 (Operations) is next, followed by Product, Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part X · Stage 19 of 33</div>
+      <h1>Pricing Case Bank</h1>
+      <p class="lede">10 full pricing cases at full interview depth: subscription and usage-based pricing, tiered packaging, price increases and pass-throughs, dynamic and surge pricing, price discrimination, penetration vs. skimming, bundling, and promotional cannibalization — each solved with a genuine pricing MECE structure, worked math, and a real recommendation, walked through exactly as a real case interview runs, including interviewer pushback and model answers.</p>
+      <div class="statusbar">
+        <div class="statuschip">💲 <b>10</b> full pricing cases, zero compressed</div>
+        <div class="statuschip">🧮 Every case has a genuine worked pricing calculation</div>
+        <div class="statuschip">🗣️ Every case includes interviewer cross-questions with model answers</div>
+        <div class="statuschip">🔀 Spans SaaS, consumer, CPG, mobility, airline, telecom, e-commerce, and enterprise software</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">Pricing cases are the sharpest test of quantitative business judgment in the whole Masterbook: unlike growth or profitability cases, where the lever is usually obvious once the MECE structure is drawn, pricing cases require genuinely modeling a trade-off — price against volume, discount depth against retention value, near-term margin against long-term position — and defending a specific number, not just a direction. The discipline that separates a strong answer from a weak one is building the actual demand/elasticity or segmentation logic and running real numbers through it, rather than asserting "raise the price" or "add a discount" without quantifying the trade-off. This stage applies that discipline to 10 genuinely distinct pricing situations, from a straightforward existing-customer price increase to a full per-seat-to-usage-based enterprise pricing-model redesign, so the underlying quantitative reasoning becomes second nature.</p>
+      </div>
+    </section>
+
+    <section id="howtouse">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>How to Use This Case Bank</h2>
+        <p>Every case follows the exact same 10-part structure, so you can drill any single part in isolation or run the whole case end to end.</p>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <div class="bridge-flow">
+          <span class="node">Prompt</span><span class="arrow">→</span>
+          <span class="node">Clarifying Qs</span><span class="arrow">→</span>
+          <span class="node">MECE Structure</span><span class="arrow">→</span>
+          <span class="node">Hypothesis</span><span class="arrow">→</span>
+          <span class="node">Data</span><span class="arrow">→</span>
+          <span class="node">Calculation</span><span class="arrow">→</span>
+          <span class="node">Insight</span><span class="arrow">→</span>
+          <span class="node">Recommendation</span><span class="arrow">→</span>
+          <span class="node">Risks</span><span class="arrow">→</span>
+          <span class="node">Cross-Qs</span><span class="arrow">→</span>
+          <span class="node">Synthesis</span>
+        </div>
+        <p style="margin:14px 0 0">Recommended drill: read only the <b>prompt</b>, pause the page, and try to generate your own pricing MECE structure (the classic split is price × volume, or value delivered vs. willingness-to-pay vs. competitive anchor) before expanding the rest. Pricing cases especially reward being explicit about the actual trade-off curve — price against volume, discount against retention — and running a real number through it, since interviewers almost always push on the underlying elasticity or segmentation assumption. The 10 cases are tagged by difficulty (easier / medium / hard / expert) and filterable below the case list heading.</p>
+      </div>
+    </section>
+
+    <section id="cases">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>The 10 Pricing Cases</h2>
+        <p>Full quota, full depth — every case fully interactive, none compressed to structure-plus-answer-only.</p>
+      </div>
+      <div class="filterbar" id="casefilter">
+        <button class="active" data-diff="all">All (10)</button>
+        <button data-diff="easy">Easier</button>
+        <button data-diff="med">Medium</button>
+        <button data-diff="hard">Hard</button>
+        <button data-diff="expert">Expert</button>
+      </div>
+      <div class="caselist" id="caselist"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">None of these 10 companies or pricing situations are Pranav's own work experience, and none should ever be presented as such — they're deliberate practice cases. The honest bridge is the METHOD: modeling a price-volume or segmentation trade-off with real numbers, sizing a breakeven or elasticity threshold, and stress-testing the recommendation against interviewer pushback is the same quantitative discipline behind the statistical and forecasting work in Stage 2 and Stage 10, and the profitability-lever thinking in Stage 16's Profitability Case Bank. If an interviewer asks "have you made a pricing decision before," the honest and strong answer is: "Not as a standalone pricing-strategy engagement, but I've built the quantitative habits — modeling a trade-off, sizing a breakeven, and defending a specific number rather than just a direction — through real analytical work, and I've drilled a full bank of pricing cases across a dozen industries to build the pricing-specific structures (elasticity, segmentation, bundling economics) on top of that foundation."</p>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Mastery Checklist</h2>
+        <p>One item per case — check off once you can walk through that case's full structure, calculation, and synthesis cold, without re-reading it.</p>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  var cases = [
+  {
+    "diff": "easy",
+    "industry": "B2B SaaS — Project Management Tool",
+    "title": "B2B SaaS Company: Should They Raise Prices 15% on Existing Customers?",
+    "prompt": "Our client sells a project-management SaaS tool to small and mid-size businesses, priced at $29/user/month, unchanged for four years. Costs have risen and the CEO is considering a 15% price increase across the existing customer base to $33.35/user/month. Should they do it, and how should it be rolled out?",
+    "clarify": [
+      {
+        "q": "Do we have any data on price sensitivity — has the client ever tested a higher price with new customers, or is there competitor pricing benchmark data?",
+        "a": "No formal price test has been run, but competitor tools in the same category are priced between $32 and $45/user/month, so the client has been underpriced relative to the market for some time."
+      },
+      {
+        "q": "What is current customer retention (logo and revenue churn), and do we know if churn is price-sensitive or driven by other factors like product fit?",
+        "a": "Annual logo churn is 12%, and exit surveys show the top two churn reasons are 'switched to a competitor with more features' and 'no longer need the tool' — price is rarely cited, suggesting churn is more product-driven than price-driven today."
+      },
+      {
+        "q": "Is the 15% increase intended for all customers uniformly, including customers on multi-year contracts, or could it be segmented?",
+        "a": "The CEO's initial framing was uniform, but he is open to a segmented approach if we can build the case for it."
+      }
+    ],
+    "mece": "Central question: Should the client raise prices 15% on existing customers, and if so, how?\n\nL1 (MECE, decision framing): (A) Value delivered vs. price paid --\n  is $33.35 still below the value customers receive relative to\n  alternatives and their willingness-to-pay? (B) Revenue impact --\n  does the math work even after accounting for elevated churn from\n  the increase? (C) Implementation design -- uniform vs. segmented,\n  timing, grandfathering, and communication.\n\nL2 under (A): Compare $33.35 against (i) the competitive set\n  ($32-$45), (ii) the client's own stated value drivers in sales\n  conversations, and (iii) simple willingness-to-pay signals like\n  the very low price-related churn today.\n\nL2 under (B): Model the breakeven churn rate -- how much additional\n  churn would erase the revenue gain from the price increase -- and\n  compare that breakeven against realistic churn elasticity given\n  the price-insensitive churn pattern observed.",
+    "hypothesis": "Given the client is priced meaningfully below the competitive range and price is rarely cited as a churn driver, my leading hypothesis is that there is real headroom to raise prices without triggering material additional churn -- meaning the increase is very likely revenue-accretive even before considering any segmentation refinements, and the real risk is less 'will churn spike' and more 'is 15% leaving money on the table or, conversely, too aggressive a single jump.'",
+    "data": "Data:\n  Current: 40,000 paying users x $29/month = $1.16M MRR ($13.92M ARR)\n  Current annual logo churn: 12% (translates to roughly 12% of\n    revenue at risk annually under current pricing, ignoring expansion)\n  Proposed new price: $33.35/user/month (+15.0%)\n  Competitive range: $32-$45/user/month (client currently 15-36%\n    below the low end of the range even at the NEW price, still\n    only just above the low end)\n  Historical elasticity data point: a 15% price increase rolled\n    out by the closest comparable competitor last year saw an\n    estimated 2-3 percentage point uptick in churn, per public\n    reviews and win/loss commentary the client's sales team has\n    gathered informally",
+    "calc": "Breakeven churn analysis -- how much MORE churn could the price\nincrease absorb before it stops being revenue-positive:\n\n  Current annual revenue: 40,000 x $29 x 12 = $13.92M\n  New price annual revenue (0% incremental churn):\n    40,000 x $33.35 x 12 = $16.008M (+15.0%, +$2.088M)\n\n  Breakeven: how many users could churn AWAY (in addition to the\n  base 12%) before new revenue equals old revenue?\n    New revenue per remaining user = $33.35 x 12 = $400.20/year\n    Users needed to hit $13.92M at new price: $13.92M / $400.20\n      = 34,782 users\n    Allowable incremental churn: 40,000 - 34,782 = 5,218 users\n      = 13.0 percentage points of ADDITIONAL churn beyond the\n        existing 12% baseline before the increase becomes revenue-\n        negative\n\n  Compare to the comparable competitor's observed 2-3 point churn\n  uptick from a similar increase: even at 3x that historical signal\n  (i.e., a 6-9 point uptick), the client would still be comfortably\n  inside the 13-point breakeven cushion.",
+    "insight": "The breakeven cushion (13 points of tolerable incremental churn) is roughly 4-6x larger than the realistic churn impact suggested by the comparable competitor's actual experience (2-3 points) -- this is not a marginal call, it's a price increase with a wide margin of safety, which changes the conversation from 'should we do this' to 'how do we do this in a way that protects the relationship with existing customers and doesn't waste the headroom by being too timid.'",
+    "recommendation": "(1) Proceed with the price increase, but segment rather than apply it uniformly on day one: grandfather customers on active multi-year contracts until renewal to preserve trust and avoid contract disputes, and apply the full 15% to month-to-month and annual-renewal customers with 60 days' notice. (2) Pair the increase with a visible value addition (e.g., bundling a previously paid add-on feature into the base price) so the increase reads as 'more value' rather than 'pure price grab,' which should further dampen the churn response beyond the comparable-competitor benchmark. (3) Monitor churn weekly for the first two quarters against the 13-point breakeven cushion as a live tripwire, with a pre-agreed fallback (e.g., a loyalty discount for at-risk accounts) if actual churn approaches even half the cushion.",
+    "risks": [
+      "The comparable-competitor churn data point is informal (gathered from reviews and sales commentary, not a controlled study) and may understate the true elasticity if that competitor's customer base or value proposition differs meaningfully from this client's -- a small controlled price test on a subset of renewals before the full rollout would de-risk this.",
+      "Grandfathering multi-year contract customers delays revenue realization and creates a two-tier pricing structure that sales and support need to manage carefully going forward, including a plan for what happens at their eventual renewal.",
+      "The analysis focuses on churn but not on the possibility that the price increase changes the MIX of new customers acquired going forward (e.g., attracting a more enterprise-oriented buyer who expects more features) — the value-add bundling recommendation should be sized with that shift in mind, not just as a retention tactic."
+    ],
+    "cross": [
+      {
+        "q": "What if the interviewer says: 'What if the CFO pushes back and says the breakeven math assumes churn happens instantly, but really you'd see it drip out over 12 months as contracts come up for renewal — does that change your recommendation?'",
+        "a": "It doesn't change the breakeven THRESHOLD, but it does change the URGENCY and monitoring cadence — if churn drips out over 12 months as multi-year and annual contracts individually renew into the new price, we'd see a gradual, cohort-by-cohort read on actual elasticity rather than one dramatic all-at-once signal, which is actually favorable: it gives us real data to course-correct segment-by-segment (e.g., pause the increase for a segment showing above-cushion churn) before the full base has rolled over, rather than committing blind."
+      },
+      {
+        "q": "What if the interviewer says: 'What if the client's Head of Sales says a 15% increase will make the price psychologically cross an internal budget threshold for a meaningful chunk of small-business customers, even if it's still below competitor pricing?'",
+        "a": "That's a real and distinct risk from general elasticity — a hard budget-threshold effect isn't smoothly modeled by the churn-percentage breakeven, it's a step function concentrated in a specific customer segment (small businesses near that threshold). I'd want to segment the customer base by company size before finalizing the rollout, and consider either a smaller increase or a lower-priced/lighter tier specifically preserved for the small-business segment most exposed to that threshold effect, rather than applying the same 15% to a segment where the underlying willingness-to-pay dynamic is fundamentally different from the mid-market segment the competitive benchmark and churn data were drawn from."
+      }
+    ],
+    "synthesis": "The client is priced 15-36% below its competitive set, and price is rarely a stated churn driver today, which together produce a wide 13-percentage-point breakeven cushion against the price increase — several times larger than the realistic churn impact suggested by a comparable competitor's own recent increase. That cushion justifies proceeding, but the segmented rollout (grandfathering multi-year contracts, bundling in visible value, and monitoring against the breakeven as a live tripwire) captures the upside while protecting against the two real residual risks: an unvalidated elasticity assumption and a possible small-business budget-threshold effect the aggregate churn math wouldn't catch."
+  },
+  {
+    "diff": "easy",
+    "industry": "Consumer App — Freemium Personal Finance",
+    "title": "Freemium Consumer App: Where Should the Free-to-Paid Price Point Be Set?",
+    "prompt": "Our client runs a freemium personal-finance app. The free tier has broad functionality; the paid tier unlocks advanced budgeting and investment-tracking features. They are launching the paid tier for the first time and need to decide the price point. What price should they set, and how should they think about it?",
+    "clarify": [
+      {
+        "q": "Do we have any willingness-to-pay data, like a survey, a waitlist with price options, or comparable products' pricing?",
+        "a": "A waitlist survey of 8,000 free users asked willingness to pay across five price points ($3.99, $5.99, $7.99, $9.99, $12.99/month) and captured intent-to-purchase at each; comparable competitor apps range from $4.99 to $14.99/month depending on feature depth."
+      },
+      {
+        "q": "What is the client's monetization goal — maximize total subscription revenue, maximize paid conversion rate/user count, or something else like maximizing long-term LTV?",
+        "a": "The stated goal is maximizing total subscription revenue over the first 12 months, not conversion rate or user count in isolation."
+      },
+      {
+        "q": "Is there a cost basis we need to clear (e.g., cost to serve each paid user, such as data/API costs for investment tracking), or is this a pure demand-side pricing decision?",
+        "a": "Cost to serve a paid user is roughly $1.20/month, which is a minor factor -- treat this as primarily a demand-side pricing decision, but keep the $1.20 floor in mind as a sanity check."
+      }
+    ],
+    "mece": "Central question: What price maximizes total 12-month subscription\nrevenue?\n\nL1 (MECE, revenue decomposition): Total Revenue = Price x Number of\n  Paying Users, and Number of Paying Users = Total Free User Base x\n  Conversion Rate at that price -- so Total Revenue = Price x\n  Conversion Rate(Price) x Free User Base. Since conversion rate\n  falls as price rises, the revenue-maximizing price is NOT\n  automatically the highest or lowest price point tested -- it's\n  wherever Price x Conversion Rate(Price) peaks.\n\nL2: Use the waitlist survey's intent-to-purchase at each of the\n  five tested price points as a proxy for conversion rate, compute\n  Price x Conversion Rate at each point, and identify the peak,\n  then sanity-check against the comparable competitor range and\n  the $1.20 cost floor.",
+    "hypothesis": "Given demand curves for subscription products are typically downward-sloping but not linear, my leading hypothesis is that the revenue-maximizing price sits somewhere in the MIDDLE of the five tested points rather than at either extreme -- the lowest price ($3.99) likely maximizes conversion rate but leaves revenue-per-user too low, while the highest price ($12.99) likely maximizes revenue-per-user but at a conversion rate too low to compensate, so the analysis should focus on finding where the trade-off is optimized rather than assuming either extreme is automatically wrong.",
+    "data": "Data (waitlist survey, n=8,000 free users, intent-to-purchase %):\n  $3.99/month -> 18.0% intent\n  $5.99/month -> 13.5% intent\n  $7.99/month -> 9.0% intent\n  $9.99/month -> 6.0% intent\n  $12.99/month -> 3.5% intent\n  Cost to serve: $1.20/month per paid user\n  Comparable competitor range: $4.99-$14.99/month\n  Total free user base at launch: 500,000 users",
+    "calc": "Compute projected monthly subscription revenue at each price\npoint (Price x Intent% x Free User Base), then net of serving cost:\n\n  $3.99: 500,000 x 0.180 = 90,000 users x $3.99 = $359,100/mo\n    net of cost: 90,000 x ($3.99-$1.20) = $251,100/mo\n  $5.99: 500,000 x 0.135 = 67,500 users x $5.99 = $404,325/mo\n    net of cost: 67,500 x ($5.99-$1.20) = $323,325/mo\n  $7.99: 500,000 x 0.090 = 45,000 users x $7.99 = $359,550/mo\n    net of cost: 45,000 x ($7.99-$1.20) = $305,550/mo\n  $9.99: 500,000 x 0.060 = 30,000 users x $9.99 = $299,700/mo\n    net of cost: 30,000 x ($9.99-$1.20) = $263,700/mo\n  $12.99: 500,000 x 0.035 = 17,500 users x $12.99 = $227,325/mo\n    net of cost: 17,500 x ($12.99-$1.20) = $206,325/mo\n\n  Peak GROSS revenue: $5.99 ($404,325/mo)\n  Peak NET revenue (after $1.20 cost): also $5.99 ($323,325/mo) --\n  the cost floor doesn't change which price point wins here since\n  it's a flat per-user cost, but it does compress the margin gap\n  between $5.99 and $7.99 slightly (7.9% net revenue gap vs. 11.2%\n  gross revenue gap), worth flagging.",
+    "insight": "$5.99/month maximizes both gross and net monthly revenue among the five tested points, beating even the higher price points despite their higher per-user revenue, because the conversion-rate drop-off outweighs the price increase beyond that point -- and notably $5.99 also sits comfortably within the comparable competitor range ($4.99-$14.99), so it isn't an outlier price that would look mispriced against the market, which adds confidence beyond the survey data alone.",
+    "recommendation": "(1) Launch the paid tier at $5.99/month based on the revenue-maximizing point in the survey data, which is also market-consistent with comparable competitor pricing. (2) Because willingness-to-pay surveys tend to overstate real purchase behavior (stated intent isn't the same as actual conversion), run the actual launch as a live A/B test across a subset of the free base at $5.99 vs. the adjacent points ($4.99/$7.99) to validate the survey-implied peak with real conversion data before committing the full base to one price. (3) Layer in an annual-plan option at a discount (e.g., $59.99/year, ~17% off monthly) to capture users with a lower monthly willingness-to-pay but higher annual commitment, which can lift blended revenue beyond the single-price-point estimate.",
+    "risks": [
+      "Stated willingness-to-pay in a waitlist survey commonly overstates real conversion behavior, since there's no real payment friction at survey time -- the recommended live A/B validation step exists specifically to catch this gap before committing to $5.99 at full scale.",
+      "The analysis optimizes for 12-month subscription revenue as instructed, but doesn't account for long-term LTV effects like retention differences by price point (a $12.99 subscriber who stays 3x longer than a $3.99 subscriber could change the ranking on a lifetime-value basis) -- worth flagging to the CEO as a secondary consideration even though it's outside the stated goal.",
+      "A single flat price point ignores that different user segments (e.g., power users who already use advanced budgeting features heavily on the free tier vs. casual users) likely have very different true willingness-to-pay -- a future iteration could explore tiered pricing rather than a single $5.99 price for all paid features."
+    ],
+    "cross": [
+      {
+        "q": "What if the interviewer says: 'What if I told you the survey data is a year old and the app has added significant new investment-tracking features since then that weren't part of what respondents were pricing?'",
+        "a": "That materially weakens confidence in using the survey data directly, since respondents were pricing a different (less feature-rich) product than what's actually launching -- I'd treat the survey as a rough prior rather than the final answer, and lean more heavily on the recommended live A/B test at launch, likely testing a slightly higher band of price points than the survey implied (e.g., centered closer to $6.99-$7.99) given the added feature value, while still keeping $5.99 in the test as a baseline anchor."
+      },
+      {
+        "q": "What if the interviewer says: 'What if the CEO says he actually cares more about total PAID USER COUNT for a fundraising narrative than about revenue in year one?'",
+        "a": "That changes the objective function entirely -- if the goal is maximizing paid user count rather than revenue, the optimal price shifts toward the lower end of the tested range, likely $3.99, which produces the highest conversion rate (18%) and highest absolute paid user count (90,000/month) even though it's not revenue-optimal. I'd flag directly that this is a real trade-off, not a free lunch: choosing $3.99 for the user-count narrative leaves roughly $65,000/month of net revenue on the table relative to $5.99, and I'd want explicit confirmation from the CEO that the fundraising objective is worth that trade before changing the recommendation."
+      }
+    ],
+    "synthesis": "Modeling Price x Conversion Rate across the five survey-tested price points shows $5.99/month maximizes both gross and net monthly revenue, beating higher price points because the conversion drop-off outweighs their per-user revenue gains, and it lands comfortably inside the comparable competitor range. Because stated willingness-to-pay tends to overstate real conversion, the launch should validate this survey-implied peak with a live A/B test rather than committing the full base on survey data alone, and an annual-plan option should be layered in to capture additional revenue from users with a lower monthly price point but stronger annual commitment."
+  },
+  {
+    "diff": "med",
+    "industry": "B2B Software — Workflow Analytics Platform",
+    "title": "B2B Software Company: Designing a Good-Better-Best (Tiered) Pricing Structure",
+    "prompt": "Our client sells a single-tier B2B workflow-analytics platform priced flatly at $199/month per company, regardless of usage or company size. They believe they're leaving revenue on the table with larger customers and want to move to a three-tier (Good-Better-Best) pricing structure. How should the tiers be designed?",
+    "clarify": [
+      {
+        "q": "What does usage/value look like across the current customer base — is it fairly uniform, or is there a wide spread that a single flat price is failing to capture?",
+        "a": "There's a wide spread: the bottom 60% of customers use under 5 dashboards and 3 integrations, the middle 30% use 5-15 dashboards and 4-8 integrations, and the top 10% use 15+ dashboards, 8+ integrations, and request features like SSO and dedicated support that aren't currently offered at all."
+      },
+      {
+        "q": "Is there any risk of losing the bottom-tier (smallest) customers if we simply raise the floor price as part of introducing tiers?",
+        "a": "Yes, that's the CEO's top concern -- he doesn't want to alienate the large base of small customers who are happy today, even if they're not the most profitable segment."
+      },
+      {
+        "q": "Are there specific unmet feature requests from larger customers we should know about, beyond just usage volume?",
+        "a": "Yes -- SSO/enterprise security, a dedicated customer success manager, and API rate limits above the current cap are the three most-requested features from the top 10% segment, none of which exist today at any price."
+      }
+    ],
+    "mece": "Central question: How should the three tiers be designed to\ncapture more value from larger customers without alienating\nsmaller ones?\n\nL1 (MECE, tiering levers): (A) Usage-based gating -- limits on\n  dashboards/integrations that scale with tier. (B) Feature-based\n  gating -- capabilities like SSO, dedicated support, and higher\n  API limits reserved for higher tiers. (C) Price anchoring and\n  floor protection -- setting the entry tier at or below today's\n  $199 to protect the small-customer base, while the top tier\n  prices in the new, previously-uncaptured enterprise value.\n\nL2: Map the three customer segments (bottom 60%, middle 30%, top\n  10%) directly onto three tiers, using the CURRENT usage split as\n  the basis for Good/Better tier limits, and using the UNMET\n  feature requests (SSO, CSM, higher API limits) as the specific\n  differentiators that justify the Best tier's premium, since\n  those are willingness-to-pay signals already expressed by that\n  segment.",
+    "hypothesis": "Given the bottom 60% of customers are already well-served by current usage levels and the CEO's top concern is not alienating them, my leading hypothesis is that the entry (Good) tier should be priced AT OR BELOW $199 with generous-enough limits to keep that segment's experience essentially unchanged, while the real revenue capture comes from a premium Best tier priced well above $199 and gated specifically by the three features (SSO, CSM, higher API limits) the top 10% have already told the company they want and don't have today -- meaning this isn't primarily a price-increase story, it's a value-unbundling story that monetizes the enterprise segment's unmet needs.",
+    "data": "Data (current customer base of 1,000 companies, all on flat $199/mo):\n  Bottom 60% (600 companies): <5 dashboards, <3 integrations, no\n    unmet feature requests observed\n  Middle 30% (300 companies): 5-15 dashboards, 4-8 integrations\n  Top 10% (100 companies): 15+ dashboards, 8+ integrations, and\n    active requests for SSO, dedicated CSM, higher API limits\n  Current blended MRR: 1,000 x $199 = $199,000/month\n  Estimated cost to build/support SSO + CSM + higher API limits\n    for the top-tier segment: roughly $18,000/month in incremental\n    engineering and CSM headcount cost, amortized",
+    "calc": "Model proposed tier pricing and resulting MRR uplift:\n\n  Good tier: $179/month (below current $199, protects bottom 60%,\n    limits set at 5 dashboards / 3 integrations -- matches their\n    existing usage almost exactly, so this segment sees a modest\n    PRICE DECREASE, addressing the CEO's alienation concern directly)\n  Better tier: $249/month (middle 30%, limits at 15 dashboards / 8\n    integrations, no new features, positioned as 'more room to grow')\n  Best tier: $449/month (top 10%, unlimited dashboards/integrations\n    plus SSO, dedicated CSM, and higher API limits -- the three\n    features this segment has already asked for)\n\n  Projected new MRR (assuming customers self-select into the tier\n  matching their current usage, a conservative starting assumption):\n    600 x $179 = $107,400\n    300 x $249 = $74,700\n    100 x $449 = $44,900\n    Total: $227,000/month vs. current $199,000/month = +14.1% MRR\n\n  Net of the $18,000/month incremental cost to serve the Best tier:\n    $227,000 - $18,000 = $209,000 net vs. $199,000 current =\n    +5.0% net MRR uplift even in this conservative self-selection\n    scenario, before accounting for any additional upsell as\n    Better/Best customers grow into needing more room",
+    "insight": "Even under the conservative assumption that no customer changes behavior and everyone simply lands in the tier matching their CURRENT usage, the restructuring is net revenue-positive (+5.0% after incremental service cost) while simultaneously making 60% of the customer base modestly happier (a price decrease) -- this reframes the tiering project from a defensive 'will we lose customers' conversation to an offensive 'how much MORE upside is there once middle and top-tier customers start growing into their tiers and generating expansion revenue over time,' which the conservative model doesn't even capture yet.",
+    "recommendation": "(1) Launch the three-tier structure as modeled: Good at $179 (usage limits matching the bottom 60%'s current behavior, functioning as a price decrease for that segment), Better at $249 (more room for the middle 30%), and Best at $449 (unlimited usage plus SSO, dedicated CSM, and higher API limits for the top 10%, monetizing previously-unmet enterprise requests). (2) Grandfather existing customers into whichever tier matches their current usage automatically, framing the change as 'here's what you already have, plus new options if you want more' rather than requiring an active choice that could create friction or attrition risk. (3) Track tier-migration rates over the following two quarters as the real upside signal, since customers organically growing from Good to Better or Better to Best is where the expansion revenue the conservative model doesn't capture will show up.",
+    "risks": [
+      "The conservative self-selection assumption may not hold if customers game the system by choosing a lower tier and simply staying under its usage limits rather than upgrading when they'd naturally cross a threshold -- usage limits need to be enforced with clear, friendly upgrade prompts rather than hard cutoffs that create a bad experience at the boundary.",
+      "The $18,000/month cost estimate for SSO, dedicated CSM, and higher API limits is a planning estimate, not an actual build cost -- SSO integration in particular can run over budget and timeline in B2B software, and the Best tier's economics should be revisited once real implementation costs are known, before broad marketing of that tier begins.",
+      "Grandfathering all 1,000 existing customers automatically avoids short-term attrition risk but also means the company won't see real willingness-to-pay signals from existing customers choosing a tier — a live pricing signal will only emerge from NEW customers going forward, so total realized uplift may take longer to materialize than the conservative model based on grandfathered assignment suggests."
+    ],
+    "cross": [
+      {
+        "q": "What if the interviewer says: 'What if a customer in the middle 30% is furious that the Good tier they've been paying $199 for is now capped, and they're being forced into a $249 Better tier just to keep their current usage?'",
+        "a": "That's a real risk with how I've drawn the segment boundaries -- if any customer currently at $199 has usage that falls into the middle 30% profile (5-15 dashboards) rather than the bottom 60% profile, grandfathering them into 'whichever tier matches current usage' would indeed put them in Better at $249, a $50/month increase, not a decrease. I'd want to explicitly grandfather every EXISTING customer's PRICE, not just their tier placement — meaning any current customer whose usage lands in Better or Best keeps paying $199 until their next renewal or until their usage grows further, with the new $249/$449 pricing applying cleanly only to new customers and to existing customers at their next natural renewal conversation, which avoids the abrupt increase entirely."
+      },
+      {
+        "q": "What if the interviewer says: 'What if engineering says the SSO build will actually take 9 months, not the 2-3 months implied by the cost estimate?'",
+        "a": "That's a sequencing problem more than a pricing problem — I wouldn't hold the ENTIRE tiering launch hostage to SSO being ready, since the Good and Better tiers (which capture most of the value for 90% of customers) don't depend on it at all. I'd recommend launching Good and Better on the original timeline, and launching Best as a waitlisted 'coming soon' tier with dedicated CSM and higher API limits available immediately (since those don't require the 9-month SSO build) while SSO ships separately and gets added to Best once ready — this captures most of the revenue upside now rather than delaying the whole restructuring for one feature."
+      }
+    ],
+    "synthesis": "Usage data cleanly separates the 1,000-customer base into three natural segments, and mapping tiers directly onto that split — with the entry tier priced at or below today's flat rate to protect the price-sensitive majority, and the top tier monetizing already-requested enterprise features (SSO, dedicated CSM, higher API limits) — produces a net MRR increase even under the most conservative assumption that no customer's behavior changes. The real upside beyond that conservative estimate comes from tier-migration and expansion revenue over time, which is why grandfathering existing customer PRICING (not just tier placement) at launch is essential to avoid an abrupt increase for any customer whose current usage happens to land above the entry tier's limits."
+  },
+  {
+    "diff": "med",
+    "industry": "CPG — Packaged Snack Foods",
+    "title": "CPG Snack Brand: Should They Pass Through a Commodity Cost Increase via Price?",
+    "prompt": "Our client makes a branded packaged snack food. A key commodity input (palm oil) has risen sharply in cost, compressing gross margin from 38% to 31%. The CFO wants to raise the retail price to restore margin. Should they, and by how much?",
+    "clarify": [
+      {
+        "q": "Is the cost increase expected to be temporary or structural/long-term, and do competitors face the same input cost pressure?",
+        "a": "Industry analysts view the palm oil cost increase as structural for at least 18-24 months due to supply constraints, and yes, competitors using palm oil face the same pressure -- though not all competitors use palm oil as heavily, so the impact isn't uniform across the category."
+      },
+      {
+        "q": "What's the current retail price and how price-sensitive is this category historically (any past price change data)?",
+        "a": "Current retail price is $3.99 for a standard bag. The last price increase (8% two years ago, unrelated to input costs) saw unit volume decline by roughly 3%, suggesting relatively low elasticity in this category historically."
+      },
+      {
+        "q": "Are there non-price levers already being explored, like reformulation or package-size changes (e.g., shrinkflation)?",
+        "a": "Reformulation to a lower-palm-oil recipe is being explored by R&D but is at least 6 months from being ready and carries taste-profile risk; a package-size reduction (keeping price flat but reducing bag weight) has not yet been evaluated and is worth including as an option."
+      }
+    ],
+    "mece": "Central question: How should the client restore margin given\nthe structural palm oil cost increase?\n\nL1 (MECE, margin-restoration levers): (A) Price increase (raise\n  retail price, hold pack size and formulation constant). (B) Pack-\n  size reduction (hold price constant, reduce net weight -- the\n  'shrinkflation' lever). (C) Cost reduction elsewhere in the supply\n  chain or formulation (reformulation, sourcing, packaging cost\n  cuts) not involving the consumer-facing price or pack size at all.\n  These three are not mutually exclusive and can be combined.\n\nL2 under (A) and (B): Since both a straight price increase and a\n  pack-size reduction functionally raise price-per-ounce for the\n  consumer, model both using the historical elasticity data point\n  (8% increase -> 3% volume decline) as the best available proxy,\n  and compare which framing better protects volume given\n  established, if imperfect, consumer price-anchoring on the\n  headline shelf price.",
+    "hypothesis": "Given the input cost increase is structural (18-24 months) rather than transient, and historical elasticity in this category is low (8% price increase -> only 3% volume decline, implying elasticity of roughly -0.375, well below 1 in absolute value, i.e. inelastic), my leading hypothesis is that a price increase sized to restore most of the lost margin is justified and won't destroy volume disproportionately -- but given the structural nature of the cost pressure, a BLENDED approach (a smaller, less visible price increase combined with a modest pack-size adjustment) likely protects volume and shelf-price perception better than a single large price jump that crosses a visible psychological price point.",
+    "data": "Data:\n  Current: $3.99 retail, 38% gross margin (pre-cost-increase)\n  Post-cost-increase margin at $3.99: 31% (7-point compression)\n  Historical elasticity: 8% price increase -> 3% volume decline\n    (implied elasticity approximately -0.375)\n  Current annual volume: 40 million units\n  Current bag weight: 8 oz\n  Target: restore gross margin back toward 36-37% (allowing a small\n    permanent compression as a buffer, rather than demanding a full\n    restoration to 38%, which the CFO agrees is a reasonable target\n    given some cost pressure may persist even after mitigation)",
+    "calc": "Estimate the price increase needed to restore margin to ~36.5%,\nthen apply the historical elasticity to project volume impact:\n\n  Simplified margin-restoration math (holding unit cost fixed,\n  solving for price P such that margin = 36.5%):\n    At $3.99, COGS represents 69% of price ($2.75), since margin\n      is 31%\n    To reach 36.5% margin with the SAME $2.75 COGS:\n      P x (1 - 0.365) = $2.75  ->  P = $2.75 / 0.635 = $4.33\n    Required increase: ($4.33 - $3.99) / $3.99 = 8.5%\n\n  Apply historical elasticity (8% increase -> 3% volume decline,\n  i.e. ~0.375 volume decline per 1% price increase) to an 8.5%\n  increase:\n    Projected volume decline: 8.5% x 0.375 = ~3.2%\n    New volume: 40M x (1 - 0.032) = 38.72M units\n\n  Revenue and margin check at $4.33 with 38.72M units:\n    New revenue: 38.72M x $4.33 = $167.7M vs. current 40M x $3.99\n      = $159.6M -> +5.1% revenue despite the volume decline\n    Gross profit: 38.72M x ($4.33 x 0.365) = $61.2M vs. current\n      40M x $3.99 x 0.31 = $49.5M -> +23.6% gross profit, confirming\n      the price increase more than compensates for the volume loss",
+    "insight": "Because the category's historical elasticity is low (-0.375), an 8.5% price increase sized to restore margin to 36.5% produces only a ~3.2% projected volume decline, and the resulting revenue and gross profit both increase meaningfully (+5.1% revenue, +23.6% gross profit) despite that volume loss -- the math strongly favors a price increase over the alternative of absorbing the margin compression, though the SIZE (8.5%) is worth testing against the psychological price point of $3.99, since crossing to $4.33 changes the visible 'first digit' of the price in a way that could carry more elasticity risk than the historical 8%-increase data point captured.",
+    "recommendation": "(1) Raise price toward $4.29 rather than the fully-calculated $4.33, both to leave a small margin buffer for execution risk and, more importantly, to stay just under the $4.30 mark rather than crossing further toward $4.49-type psychological thresholds — a modest, deliberate rounding-down decision informed by category pricing psychology, not just the raw formula. (2) Combine this with a smaller reformulation-driven cost reduction once R&D's lower-palm-oil recipe is ready in ~6 months, which would allow either a partial future price rollback (a strong PR/loyalty move) or further margin improvement without a further price increase. (3) Avoid a pack-size reduction as a PRIMARY lever given no historical elasticity data exists for that specific mechanism at this client, and consumer research on other CPG categories shows shrinkflation is increasingly recognized and can generate more negative sentiment than an equivalent price increase — reserve it as a secondary lever only if the price increase alone proves insufficient after monitoring.",
+    "risks": [
+      "The elasticity estimate (-0.375) comes from a single historical price change two years ago under different market conditions (no simultaneous category-wide cost pressure) -- if competitors ALSO raise prices due to the same structural palm oil pressure, category-wide elasticity could behave differently (more inelastic, since the client isn't becoming relatively more expensive) or less predictably than the single historical data point suggests, and this should be monitored via competitor pricing tracking, not assumed.",
+      "The margin-restoration math holds COGS fixed at $2.75, but if palm oil costs continue rising further within the 18-24 month structural window, this price increase may only be a first step, and the CFO should be prepared for the possibility of a second review in 6-12 months rather than treating this as a one-time fix.",
+      "Rounding the price down to $4.29 instead of the calculated $4.33 leaves roughly 0.9 percentage points of margin restoration unrealized (36.5% target vs. what $4.29 actually delivers) -- this is a deliberate trade-off for volume protection and should be presented to the CFO as an explicit choice, not buried in the recommendation, since a CFO focused purely on margin restoration might prefer the full $4.33."
+    ],
+    "cross": [
+      {
+        "q": "What if the interviewer says: 'What if the client's #1 competitor announces they are NOT raising prices and are instead absorbing the cost increase, at least for now?'",
+        "a": "That changes the competitive dynamic materially -- if the #1 competitor holds price while this client raises it, the client's RELATIVE price gap widens beyond what the historical (single-company) elasticity data captured, since that data didn't account for a competitor staying flat. I'd want to revisit the volume-decline estimate upward to reflect some switching to the now-relatively-cheaper competitor, and I'd consider a smaller initial increase (perhaps 4-5% rather than 8.5%) paired with closer monitoring of competitor pricing moves, with the option to raise further later if the competitor eventually follows (which a structural, industry-wide cost pressure makes likely, just possibly delayed)."
+      },
+      {
+        "q": "What if the interviewer says: 'What if this brand's core buyer skews toward a lower-income demographic that public reporting suggests is more price-sensitive than the category average?'",
+        "a": "That's an important segmentation flag the aggregate historical elasticity data (-0.375) may not fully capture if it was measured across the broader, more affluent category rather than this brand's specific buyer base. I'd want brand-specific elasticity data if available, and if the demographic concern holds, I'd lean further toward the smaller, rounded-down price point ($4.29 or even slightly lower) and prioritize the reformulation-driven cost-reduction lever more heavily as a parallel track, since a lower-income buyer base may be more likely to switch to private-label alternatives entirely rather than simply buying somewhat less, which is a different and more severe risk than the volume-decline elasticity model captures."
+      }
+    ],
+    "synthesis": "With gross margin compressed from 38% to 31% by a structural palm oil cost increase, restoring margin to a 36.5% target requires roughly an 8.5% price increase, and the category's historically low elasticity (-0.375) implies only a ~3.2% volume decline against that increase — producing a net gain in both revenue and gross profit that clearly favors a price increase over absorbing the margin hit. Rounding the increase down to just under a psychological price threshold, pairing it with an in-progress reformulation effort as a secondary lever, and closely monitoring competitor pricing behavior (which the historical single-company elasticity data can't fully anticipate) round out a recommendation that restores most of the margin while managing the two real residual risks: competitive relative-price exposure and demographic-specific price sensitivity the aggregate data may understate."
+  },
+  {
+    "diff": "med",
+    "industry": "Ride-Hailing / Mobility Platform",
+    "title": "Ride-Hailing App: Should Surge (Dynamic) Pricing Be Used More Aggressively?",
+    "prompt": "Our client runs a ride-hailing platform that currently caps surge pricing at 2x the base fare during high-demand periods, even when demand-supply imbalance would justify higher multipliers under an uncapped model. Riders are frequently unable to get a ride during peak periods due to driver shortages. Should the client remove or raise the surge cap?",
+    "clarify": [
+      {
+        "q": "What is the primary objective here — maximizing platform revenue, maximizing completed rides (matched supply and demand), or something else like rider satisfaction/retention?",
+        "a": "The primary stated objective is maximizing completed rides during peak periods (i.e., actually getting more riders matched with drivers), not pure revenue maximization -- the CEO's concern is specifically the failure-to-match problem, not underpricing per se."
+      },
+      {
+        "q": "Do we have data on how surge multiplier level affects DRIVER supply response (i.e., does a higher multiplier actually pull more drivers onto the road, and how quickly)?",
+        "a": "Yes -- internal data from markets where the cap has been tested at 2.5x and 3x shows driver supply increases materially within 10-15 minutes of a higher multiplier appearing, as drivers see the higher earning opportunity and log on or reposition toward the surge zone."
+      },
+      {
+        "q": "Is there a regulatory or reputational constraint on how high surge can go (e.g., past media backlash, city regulations)?",
+        "a": "No hard regulatory cap in the client's markets, but there has been past media criticism of extreme surge pricing (10x+) at competitors during emergencies, so extremely high multipliers carry real reputational risk even if not legally restricted."
+      }
+    ],
+    "mece": "Central question: Should the 2x surge cap be raised or removed to\nreduce failed-to-match rides during peak demand?\n\nL1 (MECE, the matching mechanism): Completed Rides = min(Rider\n  Demand at price P, Driver Supply at price P) -- surge pricing\n  works on BOTH sides simultaneously: it reduces rider demand\n  somewhat (some riders decline at a higher price) while it\n  increases driver supply (more drivers come online at a higher\n  earning opportunity). The current 2x cap may be constraining\n  supply response more than it's protecting riders, if driver\n  supply is meaningfully elastic to price and rider demand is\n  relatively less so during genuine urgent-need peak periods.\n\nL2: Quantify BOTH sides -- how much additional driver supply does\n  a higher multiplier (2.5x, 3x) pull in within the relevant\n  15-30 minute window, and how much rider demand is actually lost\n  at each multiplier level -- to determine whether completed rides\n  (the stated objective) net increase or decrease as the cap is\n  raised.",
+    "hypothesis": "Given internal data already shows driver supply responds materially within 10-15 minutes to multipliers above the current 2x cap, my leading hypothesis is that the cap is currently a binding constraint suppressing driver supply response specifically at the moments of worst imbalance -- meaning raising (not necessarily removing entirely) the cap likely increases completed rides even if it modestly reduces rider demand at the margin, because the supply-side response is the larger lever during genuine peak-demand failures-to-match.",
+    "data": "Data (from markets where 2.5x and 3x caps were tested):\n  At 2.0x cap (current): 100 driver supply units available in a\n    peak zone (baseline), 140 units of rider demand -> only 100\n    rides completed (supply-constrained), 40 riders unmatched\n  At 2.5x cap (test market): driver supply rises to 125 units\n    within 15 minutes (+25%), rider demand falls to 130 units (-7%\n    from the higher price) -> 125 rides completed (still supply-\n    constrained but improved), 5 riders unmatched\n  At 3.0x cap (test market): driver supply rises to 145 units\n    (+45% from baseline), rider demand falls to 118 units (-16%\n    from the higher price) -> 118 rides completed (now DEMAND-\n    constrained, supply exceeds demand), 0 riders unmatched but\n    27 supply units go unused (idle drivers)",
+    "calc": "Compare completed rides and the supply/demand balance point\nacross the three multiplier levels:\n\n  2.0x: 100 completed (of 140 demanded) -> 71.4% of demand served,\n    100% of the constrained supply used, 0 idle supply\n  2.5x: 125 completed (of 130 demanded) -> 96.2% of demand served,\n    100% of supply used, 0 idle supply -- this is the point where\n    supply and demand are nearly balanced\n  3.0x: 118 completed (of 118 demanded, now demand-constrained) ->\n    100% of (reduced) demand served, but only 118/145 = 81.4% of\n    available supply used, meaning 27 driver-units are now idle\n    and earning less than they could be, at a WORSE completed-ride\n    count than 2.5x (118 vs. 125)\n\n  Peak completed rides occurs at 2.5x (125), not at 2.0x (100) or\n  at the uncapped/3.0x extreme (118) -- the relationship between\n  multiplier and completed rides is NOT monotonic; there's an\n  interior optimum where supply and demand roughly balance.",
+    "insight": "Completed rides are maximized at 2.5x, not at the current 2.0x cap and not at an even higher 3.0x -- raising the cap from 2.0x to 2.5x directly addresses the CEO's stated objective (more completed rides during peak periods) by pulling in enough additional driver supply to nearly close the gap with demand, while going further to 3.0x actually makes things WORSE on the completed-rides metric because rider demand falls faster than the additional driver supply gets used, leaving both fewer completed rides AND idle drivers who could have been earning. This is a genuinely counter-intuitive finding worth leading with: 'higher cap' does not mean 'monotonically better' on the specific objective the CEO cares about.",
+    "recommendation": "(1) Raise the surge cap from 2.0x to 2.5x, which the data indicates is close to the completed-ride-maximizing point for this specific peak-demand pattern, rather than removing the cap entirely or going to 3.0x, both of which perform worse on the stated objective. (2) Because the optimal multiplier likely varies by city, time of day, and event type (the 2.5x finding comes from specific test markets and conditions), pilot a DYNAMIC cap (rather than a single fixed 2.5x number) that adjusts based on real-time observed supply elasticity in each zone, with 2.5x as the default starting point and a defined testing process to refine it further. (3) Retain SOME cap (i.e., don't remove the cap concept entirely) given the reputational risk flagged around extreme multipliers -- even though 3.0x underperforms 2.5x on completed rides in this data, an uncapped model could spike well beyond 3.0x in extreme scenarios (e.g., severe weather, large events) where reputational risk becomes a real business concern independent of the completed-rides math.",
+    "risks": [
+      "The 2.5x and 3.0x data comes from a limited set of test markets and specific peak-demand events -- the relationship between multiplier and completed rides likely isn't identical across all cities, and the recommended dynamic-cap pilot exists specifically to validate whether 2.5x generalizes or needs to be tuned per market before a global rollout.",
+      "Raising the cap to 2.5x still leaves 5 riders unmatched in the test data (96.2% of demand served, not 100%) -- if the true objective is eliminating failed matches entirely rather than maximizing completed rides in relative terms, an even higher multiplier or a different lever (e.g., pre-booking incentives, driver repositioning subsidies during predictable peak windows) may be needed alongside the pricing change.",
+      "This analysis doesn't address rider SENTIMENT and retention risk from experiencing 2.5x pricing more often than today's 2.0x cap -- even if completed rides increase in the aggregate, riders who now pay a higher price than before (even successfully) may have a worse perception of the platform than riders who previously failed to get a ride at all, which the completed-rides metric alone doesn't capture and should be tracked as a secondary metric."
+    ],
+    "cross": [
+      {
+        "q": "What if the interviewer says: 'What if a driver-side survey shows that drivers dislike the unpredictability of a dynamic, real-time-adjusted cap and would prefer a small number of clearly communicated fixed multiplier tiers (like 1.5x, 2x, 2.5x, 3x) rather than a continuously adjusting number?'",
+        "a": "That's a legitimate driver-experience consideration that should shape IMPLEMENTATION without changing the underlying pricing logic -- I'd keep the analytical goal (finding the near-balance point dynamically per zone/time) but implement it as a small set of discrete, clearly labeled tiers rather than a continuously fluctuating number, snapping the real-time-calculated optimal multiplier to the nearest published tier. This preserves the responsiveness benefit driving the completed-ride improvement while giving drivers (and riders) the predictability and transparency a survey suggests they value, which likely also reduces the reputational risk of an opaque, seemingly arbitrary pricing mechanism."
+      },
+      {
+        "q": "What if the interviewer says: 'What if this data was gathered in the client's largest, most driver-dense markets, and the client's real problem cities are smaller markets with a much thinner driver base?'",
+        "a": "That's an important scope caveat -- in a thinner driver-supply market, the SAME multiplier increase may pull in proportionally fewer additional drivers (there are simply fewer available drivers to respond, even at a higher price), meaning the completed-rides-maximizing multiplier could be higher than 2.5x in those markets, or the absolute improvement from raising the cap could be smaller in percentage terms even if directionally similar. I'd recommend the pilot explicitly stratify by market driver-density before generalizing the 2.5x finding, and I would not assume the large-market result transfers directly to the specific smaller markets the CEO is actually most concerned about without market-specific test data."
+      }
+    ],
+    "synthesis": "Testing surge multipliers above the current 2.0x cap reveals a non-monotonic relationship with completed rides: 2.5x nearly balances driver supply and rider demand and maximizes completed rides at 96.2% of demand served, while pushing further to 3.0x actually reduces completed rides because falling rider demand outpaces the additional driver supply pulled in, leaving idle drivers and a worse outcome on the CEO's stated objective. Raising the cap to 2.5x — piloted as a dynamic, market-specific mechanism rather than a single global number, and implemented as discrete driver-facing tiers for predictability — directly improves the completed-ride metric the CEO cares about, while retaining some cap (rather than removing it entirely) protects against the separate reputational risk of extreme, uncapped multipliers in edge-case scenarios."
+  },
+  {
+    "diff": "med",
+    "industry": "Airline — Full-Service Passenger Carrier",
+    "title": "Airline: Designing Price Discrimination (Fare Class) Strategy for a New Route",
+    "prompt": "Our client, a full-service airline, is launching a new long-haul route and needs to design the fare-class structure (how many fare classes, what restrictions, and what price gaps) to maximize revenue on the route. How should they approach it?",
+    "clarify": [
+      {
+        "q": "Do we know the mix of traveler types expected on this route — business, leisure, visiting-friends-and-relatives — and roughly how price-sensitive each group tends to be?",
+        "a": "Market research on comparable routes suggests roughly 25% business travelers, 45% leisure/vacation travelers, and 30% visiting-friends-and-relatives (VFR) travelers -- business travelers are known to be far less price-sensitive but much more sensitive to schedule flexibility and last-minute booking ability, while leisure and VFR travelers are highly price-sensitive but can plan and book far in advance."
+      },
+      {
+        "q": "What's the aircraft configuration and total seat count, and is there an existing comparable route's fare structure we can benchmark against?",
+        "a": "280 total seats (24 business class, 256 economy), and the client has 3 comparable long-haul routes with existing fare-class structures and historical booking/revenue data we can use as a benchmark."
+      },
+      {
+        "q": "Is the goal pure revenue maximization on this route, or are there other constraints like a load-factor (percentage of seats filled) target the airline also cares about for operational/PR reasons?",
+        "a": "Primarily revenue maximization, but the CEO has mentioned a soft load-factor floor of 75% -- he doesn't want the plane flying obviously empty even if theoretically fewer, higher-paying passengers would maximize pure ticket revenue."
+      }
+    ],
+    "mece": "Central question: How should fare classes be structured to\nmaximize revenue while maintaining at least a 75% load factor?\n\nL1 (MECE, price discrimination mechanism): Effective fare-class\n  segmentation requires a FENCE -- a restriction that lets the\n  airline charge business travelers more without losing price-\n  sensitive leisure/VFR travelers to a cheaper option, because\n  each group self-selects based on what they value differently.\n  The three classic fence types: (A) Advance-purchase requirements\n  (leisure/VFR can plan ahead; business often can't). (B) Change/\n  refund flexibility (business needs it; leisure/VFR can commit).\n  (C) Cabin/seat-based segmentation (business class vs. economy,\n  a physical rather than behavioral fence).\n\nL2: Design an economy fare ladder using fences (A) and (B) layered\n  together (e.g., a deeply-discounted, non-refundable, 21-day-\n  advance-purchase fare vs. a higher, flexible, book-anytime fare)\n  to capture the leisure/VFR segment at low prices and the last-\n  minute or itinerary-uncertain segment at higher prices, alongside\n  the separate business-class cabin as fence (C) for travelers\n  wanting the physical product upgrade regardless of price.",
+    "hypothesis": "Given business travelers are known to be schedule-sensitive rather than price-sensitive while leisure/VFR travelers are the reverse, my leading hypothesis is that the advance-purchase and refundability fences will do most of the segmentation work within economy (since they naturally separate travelers who can plan ahead from those who can't or won't commit), while the business-class cabin serves a smaller, distinct high-willingness-to-pay segment -- meaning the fare-class design should focus primarily on getting the ECONOMY fare ladder right (since it's 256 of 280 seats), rather than over-engineering the smaller business cabin.",
+    "data": "Data (benchmark from 3 comparable existing routes, per-flight averages):\n  256 economy seats, 24 business seats\n  Comparable route historical fare-class mix and average realized\n    fares:\n    Deep-discount (21-day advance, non-refundable): $420 avg fare,\n      typically fills ~45% of economy seats when offered\n    Standard (7-day advance, one free change): $680 avg fare,\n      typically fills ~35% of economy seats\n    Flexible (book anytime, fully refundable): $1,150 avg fare,\n      typically fills ~10-15% of economy seats (the rest going\n      unsold if not enough last-minute demand materializes)\n    Business class (flexible, includes lounge/priority): $3,200 avg\n      fare, typically fills ~85% of the 24 seats on this route type",
+    "calc": "Model expected per-flight revenue using the benchmark fill rates\nand fares, checking the load-factor constraint:\n\n  Economy (256 seats):\n    Deep-discount: 256 x 0.45 = 115 seats x $420 = $48,300\n    Standard: 256 x 0.35 = 90 seats x $680 = $61,200\n    Flexible: 256 x 0.12 (midpoint of 10-15%) = 31 seats x $1,150\n      = $35,650\n    Total economy seats sold: 115+90+31 = 236 of 256 (92.2% economy\n      load factor)\n    Total economy revenue: $48,300+$61,200+$35,650 = $145,150\n\n  Business (24 seats):\n    24 x 0.85 = 20 seats x $3,200 = $64,000 (83.3% business load\n      factor)\n\n  Total per-flight revenue: $145,150 + $64,000 = $209,150\n  Total load factor: (236+20)/280 = 91.4% -- comfortably above the\n    75% soft floor, so the load-factor constraint isn't binding\n    given this fare-class mix; the design can focus purely on\n    revenue optimization rather than trading off against the floor",
+    "insight": "Using the three-tier economy fare ladder (deep-discount, standard, flexible) layered with a separate business cabin produces a projected 91.4% load factor, well above the CEO's 75% soft floor, meaning revenue optimization and the load-factor concern aren't actually in tension for this fare structure -- the CEO's worry about an obviously empty plane is more likely to materialize from under-differentiated pricing (e.g., only offering the expensive flexible fare and failing to capture price-sensitive leisure/VFR demand) than from the layered fence-based structure, which naturally fills seats across the full spectrum of traveler price sensitivity.",
+    "recommendation": "(1) Launch with the three-tier economy fare ladder (deep-discount/non-refundable, standard/one-change, flexible/fully-refundable) plus the business-class cabin, sized using the comparable-route benchmark as the starting point, since it already comfortably clears the load-factor floor while capturing meaningfully different price points across the business/leisure/VFR mix. (2) Because this is a NEW route without its own booking history, treat the benchmark-based fare levels as a starting hypothesis and implement dynamic, algorithm-driven fare-class availability (a standard airline revenue-management practice) that opens and closes discount-fare inventory in real time based on actual booking pace versus the comparable-route benchmark curve, rather than fixing the fare mix rigidly for the route's full life. (3) Monitor the deep-discount tier's fill rate most closely in the first 60 days, since it's both the largest revenue contributor by seat count and the tier most exposed to demand-mix differences between this new route and the benchmark routes (e.g., if this specific route skews more heavily VFR than the 30% benchmark assumption, deep-discount demand could run higher than modeled).",
+    "risks": [
+      "The fare-class fill rates are drawn from 3 comparable EXISTING routes, but a brand-new route has no booking history of its own and could have a meaningfully different traveler mix (e.g., if it serves a market with a much higher VFR concentration than the 30% benchmark assumption) -- the dynamic revenue-management recommendation exists specifically to adapt to this uncertainty rather than locking in the benchmark-based mix rigidly.",
+      "This model doesn't account for COMPETITOR pricing on the same or substitute routes -- if a competitor offers a notably cheaper deep-discount fare on a similar route, the client's 45% assumed fill rate at $420 could be optimistic, and competitive fare-matching capability should be built into the revenue-management system from launch, not added later.",
+      "Optimizing purely for the modeled revenue figure risks under-weighting longer-term customer relationship value -- e.g., business travelers who feel the flexible fare is priced punitively relative to competitors may simply choose a competitor for future trips even on days when they'd have paid the flexible fare here, a loyalty effect the single-flight revenue model doesn't capture."
+    ],
+    "cross": [
+      {
+        "q": "What if the interviewer says: 'What if bookings in the first month come in showing the deep-discount tier selling out completely within days of each flight opening, well before the standard and flexible tiers see meaningful bookings?'",
+        "a": "That's a strong signal the deep-discount fare is underpriced relative to true demand on this specific route -- rapid sellout of the cheapest tier while higher tiers lag suggests price-sensitive demand is even larger (or willingness-to-pay even higher within that segment) than the benchmark assumed. I'd recommend the dynamic revenue-management system respond by closing deep-discount inventory earlier and shifting remaining demand up into the standard tier faster than the benchmark curve suggests, and I'd flag this as a signal to test a modestly higher deep-discount price point (e.g., $450-$480) on the next scheduling cycle, since a fare that sells out that fast on every flight is very likely priced below the revenue-maximizing point, not just popular."
+      },
+      {
+        "q": "What if the interviewer says: 'What if the client's Head of Sales says a major corporate account has asked for a negotiated flat corporate rate on this route, bypassing the public fare-class structure entirely?'",
+        "a": "A negotiated corporate rate is a different, and legitimate, price-discrimination lever than the public fare classes -- corporate accounts with guaranteed volume commitments justify a separate negotiated price precisely because they reduce the airline's demand uncertainty (predictable volume) in exchange for a discount off the flexible/business fare levels. I'd want to see the account's expected volume and evaluate the negotiated rate against what that volume would likely have generated across the standard public fare mix -- if the guaranteed volume and reduced demand-uncertainty value exceeds the discount being requested, it's a sound complement to the public fare-class structure rather than a threat to it, and shouldn't be evaluated using the same open-market elasticity assumptions as the public fares."
+      }
+    ],
+    "synthesis": "A layered economy fare ladder (deep-discount/non-refundable, standard/one-change, flexible/fully-refundable) combined with a separate business-class cabin uses advance-purchase and refundability as fences to separate price-sensitive leisure/VFR travelers from schedule-sensitive business travelers, and modeling this structure against comparable-route benchmarks projects a 91.4% load factor — comfortably clearing the CEO's 75% floor without any revenue-load factor trade-off. Because the route is new and has no booking history of its own, the fare levels should be treated as a starting hypothesis refined by dynamic, real-time revenue management rather than fixed rigidly, with the deep-discount tier's early fill rate as the most important signal to watch given both its outsized revenue contribution and its exposure to demand-mix uncertainty versus the benchmark routes."
+  },
+  {
+    "diff": "hard",
+    "industry": "Consumer Electronics — New Product Launch",
+    "title": "Consumer Electronics: Penetration vs. Skimming Pricing for a New Product Launch",
+    "prompt": "Our client is launching a genuinely novel wireless home-audio product with no direct competitor yet on the market, though competitors are expected to enter within 12-18 months with similar products. Should they price to skim (high initial price, capturing early-adopter willingness-to-pay) or penetrate (low initial price, capturing market share fast before competitors arrive)?",
+    "clarify": [
+      {
+        "q": "What's the unit cost of production, and does it improve meaningfully with scale (i.e., is there a real cost-curve benefit to higher volume)?",
+        "a": "Unit cost is currently $85 at the planned initial production volume, and manufacturing has confirmed a real learning-curve effect: at 3x the initial volume, unit cost is projected to fall to roughly $62 due to component bulk-purchasing and manufacturing efficiency, so there IS a genuine scale-driven cost benefit, not just a hoped-for one."
+      },
+      {
+        "q": "How defensible is the product's novelty — is there patent protection, or is it more of a first-mover/design-lead advantage that competitors can replicate quickly once they see it?",
+        "a": "There is a provisional patent on a key underlying technology, but the client's own legal team assesses meaningful risk that competitors could design around it within the 12-18 month window rather than being fully blocked -- so treat the patent as a moderate but not absolute barrier."
+      },
+      {
+        "q": "What is the CEO's priority between near-term profitability and long-term market position/brand leadership in this new product category?",
+        "a": "The CEO has been explicit that long-term category leadership matters more to him than near-term profit on this specific launch -- he sees this as a strategic, multi-year category-defining bet, not a single-quarter profit opportunity."
+      }
+    ],
+    "mece": "Central question: Skim or penetrate on initial pricing, given a\n12-18 month competitive-entry window?\n\nL1 (MECE, the strategic trade-off): (A) Skimming benefits --\n  capture high early-adopter willingness-to-pay before competition\n  arrives, funding R&D/marketing from strong initial margins. (B)\n  Penetration benefits -- build market share and volume fast while\n  uncontested, capturing scale-driven cost advantages (per the\n  learning curve data) and establishing brand/distribution lead-in\n  before competitors enter, which can matter for LONG-TERM position\n  even if it sacrifices near-term margin. (C) Hybrid strategies --\n  is there a way to sequence or segment pricing rather than a pure\n  either/or choice.\n\nL2: Given the CEO has explicitly prioritized long-term category\n  leadership over near-term profit, and given genuine (not just\n  theoretical) scale-driven cost advantages exist, weight the\n  analysis toward evaluating whether penetration pricing's volume\n  and cost-curve benefits, compounded over the 12-18 month\n  uncontested window, outweigh the near-term margin skimming would\n  capture -- while also considering a hybrid, time-phased approach.",
+    "hypothesis": "Given the CEO has explicitly stated that long-term category leadership matters more than near-term profit, and given a genuine (not purely theoretical) scale-driven cost curve exists that rewards higher volume, my leading hypothesis is that penetration pricing is the stronger strategic fit here -- but a PURE penetration strategy from day one may leave real early-adopter willingness-to-pay on the table unnecessarily, since early adopters of a genuinely novel product typically have meaningfully higher willingness-to-pay than the mass market that penetration pricing is designed to capture, suggesting a time-phased hybrid (moderate initial price, stepping down as volume and the cost curve improve) may capture more total value than either pure strategy alone.",
+    "data": "Data:\n  Unit cost at initial volume: $85\n  Unit cost at 3x volume (learning-curve effect): $62 (-27%)\n  Comparable prior category-defining launches (2 analogous products\n    in adjacent categories) show early-adopter segments (first\n    ~15% of eventual category buyers) had realized willingness-to-\n    pay 40-60% above the eventual mass-market equilibrium price\n    that emerged once competitors entered\n  Competitive entry expected in 12-18 months\n  Planned initial annual volume at a moderate price point: 500,000\n    units; at a low (penetration) price point, planning estimates\n    suggest volume could reach 1.4M units in year one, crossing the\n    3x threshold needed to hit the $62 unit cost",
+    "calc": "Compare three pricing paths over the 12-18 month uncontested\nwindow: pure skim, pure penetrate, and a phased hybrid.\n\n  Pure skim: price at $220 (high, capturing early-adopter WTP)\n    Estimated volume at this price: 350,000 units (below the 3x\n      scale threshold, so unit cost stays near $85)\n    Gross profit: 350,000 x ($220-$85) = $47.25M\n\n  Pure penetrate: price at $130 (low, well above cost but far\n    below skim level, designed to maximize volume)\n    Estimated volume: 1.4M units (crosses 3x threshold, unit cost\n      falls to $62)\n    Gross profit: 1.4M x ($130-$62) = $95.2M\n\n  Phased hybrid: launch at $190 for the first 4 months (capturing\n    early-adopter WTP identified in comparable launches), estimated\n    180,000 units at that price given the shorter window, THEN drop\n    to $130 for the remaining 8-14 months to drive volume\n    First phase: 180,000 x ($190-$85) = $18.9M (at $85 cost, below\n      scale threshold still)\n    Second phase: assume remaining volume to reach a similar total\n      1.3M units (slightly below pure-penetrate's 1.4M since some\n      early-adopter demand was already captured at the higher\n      price and won't re-appear as NEW volume in phase two):\n      1.3M x ($130-$62) = $88.4M (now at scaled $62 cost)\n    Hybrid total: $18.9M + $88.4M = $107.3M",
+    "insight": "The phased hybrid ($107.3M) outperforms both pure skim ($47.25M) and pure penetrate ($95.2M) in this model, because it captures the real early-adopter willingness-to-pay premium documented in comparable launches WITHOUT sacrificing the scale-driven cost advantage that pure penetration relies on -- the key mechanism is that early-adopter demand and mass-market volume are largely SEPARATE pools of buyers (the comparable-launch data shows early adopters are a distinct ~15% segment with distinctly higher WTP), so pricing high for a short initial window doesn't meaningfully cannibalize the larger volume opportunity that follows once price drops, it just captures value from a segment that was going to buy anyway at a higher price.",
+    "recommendation": "(1) Launch with the phased hybrid: an initial premium price (~$190) for approximately the first 3-4 months to capture early-adopter willingness-to-pay, explicitly informed by the comparable-launch data showing this segment's WTP runs 40-60% above eventual mass-market equilibrium. (2) Pre-announce (or at minimum internally plan) a price step-down to a penetration-level price (~$130) once early-adopter demand shows signs of saturating (e.g., week-over-week unit sales growth slowing, a leading indicator visible in the comparable launches before the full 4-month window elapses), rather than fixing the phase-one duration rigidly to a calendar date. (3) Use the phase-one premium-price revenue to fund accelerated production scale-up specifically so the client crosses the 3x volume/cost-curve threshold as early as possible into phase two, compounding the cost advantage further within the 12-18 month uncontested window before competitors arrive and the pricing calculus changes entirely.",
+    "risks": [
+      "The comparable-launch early-adopter WTP premium (40-60% above eventual mass-market price) comes from only 2 analogous products in ADJACENT categories, not this exact product category -- if this product's early-adopter segment is smaller or less WTP-differentiated than those comparables, the phase-one premium-price revenue could be meaningfully lower than modeled, and a shorter, more conservative phase-one window (e.g., 2 months rather than 4) with close sales-velocity monitoring would reduce this risk.",
+      "The phased approach assumes the price STEP-DOWN itself doesn't create a negative signal (e.g., early buyers who paid $190 feeling penalized once the price drops to $130 within the same year) -- a poorly communicated price cut could generate real brand/loyalty damage that this purely financial model doesn't capture, and the step-down should be paired with a clear communications plan, potentially including a loyalty credit or upgrade path for early buyers.",
+      "This entire analysis is built on planning-stage volume ESTIMATES (500,000 / 1.4M / 180,000+1.3M units) rather than observed market data, since the product is pre-launch -- actual demand at each price point is uncertain until real sales data exists, and the recommendation to monitor sales velocity and adjust the phase-one duration dynamically exists specifically to reduce reliance on these pre-launch estimates once real data becomes available."
+    ],
+    "cross": [
+      {
+        "q": "What if the interviewer says: 'What if the provisional patent turns out to be stronger than legal initially assessed, and a competitor is genuinely blocked from entering for the full 18 months or longer?'",
+        "a": "A stronger, longer-lasting patent barrier shifts the calculus back somewhat toward skimming, since one of penetration's core rationales -- 'grab share before competitors arrive and erode the opportunity' -- becomes less urgent if competitors are durably blocked rather than just delayed. I'd revisit the phase-one premium-pricing WINDOW specifically: with a longer protected period, I'd extend phase one closer to 6-8 months rather than 3-4, capturing more early-adopter value before stepping down to the penetration price, since the competitive-entry clock that was creating urgency to reach volume and scale economies quickly is now less pressing -- though I would NOT abandon the eventual step-down entirely, since the CEO's stated priority (long-term category leadership) still favors building volume and market position over pure margin extraction even under weaker competitive pressure."
+      },
+      {
+        "q": "What if the interviewer says: 'What if retail partners (the client sells primarily through big-box electronics retailers, not direct-to-consumer) push back and say a mid-launch price CUT will upset customers who bought at full retail price recently and create returns/complaints they have to handle?'",
+        "a": "That's a real channel-management concern the direct-to-consumer framing of my model doesn't fully address -- retail partners bear the customer-facing friction of a visible price cut in a way a direct-to-consumer brand wouldn't. I'd address this by working WITH retail partners on the phase-one-to-phase-two transition rather than announcing a unilateral price cut: options include a bounded-time promotional 'launch price' framing from day one (so the eventual lower price is pre-communicated as the standard price, and the higher day-one price is understood as a limited launch premium, not a cut from an established price), or working with retailers on a rebate/credit mechanism for recent full-price buyers at the transition point, which preserves the phased-pricing economics while managing the channel relationship and end-customer perception more carefully than a simple posted-price change would."
+      }
+    ],
+    "synthesis": "Modeling pure skim, pure penetrate, and a phased hybrid strategy shows the hybrid — a premium price for roughly the first 3-4 months to capture the distinct early-adopter willingness-to-pay segment documented in comparable category-defining launches, followed by a step-down to a penetration-level price to drive the volume needed to reach the genuine scale-driven cost advantage — outperforms both pure strategies, because early-adopter and mass-market demand are largely separate buyer pools rather than a single elastic curve. Given the CEO's explicit preference for long-term category leadership over near-term profit and a real (not theoretical) cost curve, this hybrid captures meaningful near-term value without sacrificing the volume and cost-scale position that matters most before the 12-18 month competitive window closes, provided the price step-down is carefully sequenced with sales-velocity signals and managed through the retail channel to avoid brand and partner friction."
+  },
+  {
+    "diff": "hard",
+    "industry": "Telecom — Mobile, Broadband & Streaming Bundling",
+    "title": "Telecom Operator: Designing Bundle Pricing Across Mobile, Broadband, and Streaming",
+    "prompt": "Our client is a telecom operator that sells mobile service, home broadband, and (through a partnership) a streaming video service, currently all priced and sold entirely separately. They want to design a bundled pricing offer across all three to grow revenue and reduce churn. How should the bundle be priced?",
+    "clarify": [
+      {
+        "q": "What's the current standalone pricing for each service, and roughly what percentage of the customer base already subscribes to more than one?",
+        "a": "Mobile: $65/month average. Broadband: $70/month average. Streaming: $12/month (via the partnership). Currently only 18% of customers subscribe to 2+ services, and just 4% subscribe to all three -- most customers are single-service today, representing real untapped cross-sell opportunity."
+      },
+      {
+        "q": "Do we have churn data by number of services subscribed, to understand if bundling itself tends to reduce churn independent of price?",
+        "a": "Yes -- internal data shows single-service customers churn at 18% annually, two-service customers at 11% annually, and three-service (all bundled) customers at 6% annually, a strong and consistent pattern suggesting bundling itself has real retention value, not just a pricing effect."
+      },
+      {
+        "q": "Is the streaming partnership cost fixed per subscriber, or does the client pay the streaming partner based on some other structure (e.g., revenue share)?",
+        "a": "Fixed cost: the client pays the streaming partner $9/subscriber/month regardless of what the client charges the end customer, so the client's margin on the streaming component depends entirely on what price it sets above that $9 floor."
+      }
+    ],
+    "mece": "Central question: How should the three-service bundle be priced\nto grow revenue and reduce churn?\n\nL1 (MECE, bundle value creation): (A) Discount depth -- how much\n  cheaper should the bundle be than buying all three a la carte,\n  balancing customer-perceived value against margin given away.\n  (B) Retention value -- separately from the discount, bundling\n  itself reduces churn (per the observed 18%->11%->6% pattern),\n  which has its own quantifiable revenue-protection value beyond\n  the immediate transaction. (C) Migration path -- how existing\n  single- and two-service customers are incentivized to upgrade\n  into the bundle, versus how the bundle is priced for brand-new\n  customers.\n\nL2: Size the bundle discount using standalone prices as the anchor,\n  then separately quantify the churn-reduction value using the\n  observed churn-by-tier pattern as a second, additive source of\n  value beyond the headline discount -- since a bundle can be\n  revenue-accretive even at a real discount once churn reduction is\n  priced in, which a simple 'sum of parts minus discount' view\n  would miss.",
+    "hypothesis": "Given the strong and consistent churn-by-tier pattern (18% -> 11% -> 6% single/two/three-service) and the fact that only 4% of customers currently subscribe to all three services, my leading hypothesis is that the bundle's real value driver is churn reduction on customers who UPGRADE into it, not just the headline transaction discount -- meaning the bundle can be priced with a meaningful, customer-visible discount (to actually drive upgrade behavior) while still being NET revenue-accretive to the client once the retention value of moving customers from the 11-18% churn tiers down to the 6% three-service tier is factored in, which a naive 'discount = pure cost' framing would miss entirely.",
+    "data": "Data:\n  Standalone prices: Mobile $65, Broadband $70, Streaming $12 ->\n    sum-of-parts total: $147/month\n  Streaming cost to client: $9/subscriber/month (fixed)\n  Current base: 18% two-service (11% churn), 4% three-service (6%\n    churn), remainder ~78% single-service (18% churn) -- treat the\n    82% of customers NOT already fully bundled (single or two-\n    service) as the addressable upgrade opportunity, roughly 2\n    million customers on a 2.44M total customer base\n  Average customer lifetime value framing: for this analysis, use\n    a simplified 1-year revenue-at-risk view where reducing annual\n    churn by X percentage points is treated as protecting X% of\n    that customer segment's annual revenue that would otherwise be\n    lost to churn and need to be replaced via new acquisition",
+    "calc": "Price the bundle at $119/month (a $28, or 19%, discount off the\n$147 sum-of-parts) and evaluate against a representative segment\nof single-service mobile-only customers upgrading into the bundle:\n\n  Representative segment: 500,000 mobile-only customers currently\n    paying $65/month, at 18% annual churn\n    Current annual revenue from this segment: 500,000 x $65 x 12 =\n      $390M, with 18% churn meaning ~$70.2M of that is at ongoing\n      annual churn risk\n\n  If 30% of this segment (150,000 customers) upgrades to the\n  $119/month bundle:\n    New monthly revenue from upgraders: 150,000 x $119 = $17.85M/mo\n      vs. their prior mobile-only revenue: 150,000 x $65 = $9.75M/mo\n      -> +$8.1M/month incremental TRANSACTION revenue from upgraders\n    Cost to client for the streaming component on upgraders:\n      150,000 x $9 = $1.35M/month\n      Net incremental transaction revenue: $8.1M - $1.35M =\n      $6.75M/month\n\n  Churn-reduction value on the SAME 150,000 upgraders (moving from\n  18% single-service churn to 6% three-service churn, a 12-point\n  reduction):\n    Annual revenue protected: 150,000 x $119 x 12 x 0.12 (the\n      churn-rate reduction) = $25.7M/year, or roughly $2.14M/month\n      in churn-protection value, ADDITIVE to the transaction margin\n\n  Total monthly value from the upgraded segment: $6.75M (net\n    transaction) + $2.14M (churn protection) = $8.89M/month, versus\n    a naive view that might only count the $6.75M and undervalue\n    the bundle's true impact by roughly 24%",
+    "insight": "The churn-reduction value ($2.14M/month) adds roughly 24% on top of the net transaction revenue ($6.75M/month) from the same upgrading customer segment, meaning a bundle-pricing analysis that only looks at 'discount given vs. revenue from higher combined price' meaningfully understates the bundle's true value -- the $28 discount off sum-of-parts isn't just an acceptable cost of driving upgrades, it's more than paid for by the retention value alone, which should reframe how aggressively the client can discount to drive upgrade VOLUME (the real lever, since only 30% of the addressable segment upgrading was assumed) without worrying the discount itself is destroying value.",
+    "recommendation": "(1) Launch the three-service bundle at $119/month (a $28/19% discount off sum-of-parts), sized to be meaningfully attractive enough to drive real upgrade volume rather than a token discount, since the churn-reduction value comfortably justifies the discount depth even before counting the direct transaction margin. (2) Prioritize marketing and sales incentives toward the largest addressable segment -- the ~78% single-service customer base -- rather than spreading effort evenly, since single-service customers see the largest churn-reduction jump (18% down to 6%, a 12-point improvement) versus two-service customers upgrading to three (11% down to 6%, only a 5-point improvement), meaning the SAME discount creates roughly 2.4x more churn-protection value per single-service upgrader than per two-service upgrader. (3) Build a lighter, two-service bundle option (e.g., mobile + broadband at a smaller discount) as a stepping-stone offer for customers not ready to commit to all three, since the churn data shows even the two-service tier captures meaningful retention value (18% to 11%) relative to single-service, giving the client a broader on-ramp into eventual three-service upgrades over time.",
+    "risks": [
+      "The 30% upgrade-rate assumption for the representative segment is a planning estimate, not observed data -- actual upgrade rates in response to a real $119 offer need to be measured via a pilot or soft launch before the full customer base is targeted, since the whole value case scales directly with how many customers actually upgrade.",
+      "The churn-reduction value calculation assumes the OBSERVED churn-by-tier pattern is causal (bundling reduces churn) rather than partly reflecting SELECTION (customers who were already more loyal/less price-sensitive self-selected into multi-service bundles historically, and would have churned less even without the bundle) -- if the pattern is partly selection rather than pure causation, the true churn-reduction value of the NEW discounted bundle offer could be smaller than modeled, and this should be tested via the same pilot recommended above, comparing churn of a matched cohort that upgrades under the new offer against a cohort that doesn't.",
+      "The fixed $9/subscriber streaming cost is contractual with the partner and assumed stable, but if the bundle drives streaming subscriptions well beyond what the partner anticipated when setting that rate, it's worth confirming the $9 rate is genuinely fixed at scale and not subject to renegotiation or volume-tiered terms that could change the margin math materially at high adoption."
+    ],
+    "cross": [
+      {
+        "q": "What if the interviewer says: 'What if a pilot shows the actual upgrade rate is only 12%, not the 30% assumed in your model?'",
+        "a": "At a 12% upgrade rate rather than 30%, both the transaction revenue and churn-protection value scale down proportionally (roughly 40% of the modeled figures, since the model is linear in upgrade count), which would reduce the total monthly value to somewhere around $3.6M rather than $8.89M for this segment -- still a positive, real result, just smaller than initially modeled. Rather than concluding the bundle strategy is wrong, I'd want to understand WHY the upgrade rate came in lower: if it's a discount-depth problem (customers don't see $28/19% off as compelling enough), I'd test a deeper discount and re-run the same churn-protection math, since the analysis showed real room to discount further before the churn-value stops covering it; if it's an AWARENESS or friction problem (customers don't know the bundle exists, or the upgrade process is cumbersome) rather than a pricing problem, the fix is in marketing and process, not price, and deepening the discount further wouldn't solve the actual issue."
+      },
+      {
+        "q": "What if the interviewer says: 'What if the streaming partner tells the client they're planning to raise the per-subscriber cost from $9 to $14 in the next contract renewal?'",
+        "a": "That directly compresses the margin on the streaming component of the bundle, and I'd re-run the transaction-margin math specifically (not the churn-protection value, which is independent of the streaming cost): at $14 cost instead of $9, the net transaction revenue from the 150,000-customer example segment falls from $6.75M/month to $6.0M/month (a $0.75M reduction, since 150,000 x ($14-$9) = $0.75M in added cost) -- still solidly positive once combined with the unchanged $2.14M churn-protection value. If the cost increase were large enough to threaten the overall bundle economics, I'd first explore renegotiating bundle-specific volume terms with the streaming partner (since the bundle itself likely drives meaningful subscriber volume the partner values), and only as a fallback consider passing part of the cost increase through in the bundle price itself, re-testing whether a smaller discount still clears the upgrade-volume threshold needed to preserve the churn-protection value."
+      }
+    ],
+    "synthesis": "Bundling mobile, broadband, and streaming at $119/month (a $28, 19% discount off the $147 sum-of-parts) is justified not just by the direct transaction margin from upgrading customers, but by the strong, consistent churn-reduction pattern observed across service tiers (18% single-service down to 6% three-service churn) — which adds roughly 24% in additional monthly value on top of transaction margin alone for a representative upgrading segment, and which a naive discount-only view of bundle economics would miss entirely. Prioritizing the single-service base (where the churn-reduction jump and per-upgrade value are largest), validating the assumed upgrade rate via a pilot before full rollout, and building a lighter two-service stepping-stone offer round out a bundle strategy that can sustain a real, upgrade-driving discount while remaining comfortably net-positive on both transaction and retention value."
+  },
+  {
+    "diff": "hard",
+    "industry": "E-commerce — Direct-to-Consumer Apparel",
+    "title": "E-commerce Retailer: Is Deep Promotional Discounting Destroying Value Through Cannibalization?",
+    "prompt": "Our client is a direct-to-consumer apparel retailer that runs frequent promotional discounts (30-50% off) roughly every 3-4 weeks. Sales spike sharply during each promotion, but the CFO suspects the promotions are mostly just pulling forward purchases customers would have made anyway at full price, rather than generating truly incremental revenue. How should we investigate and what should the client do?",
+    "clarify": [
+      {
+        "q": "Do we have purchase-level data that would let us see individual customer buying patterns across promotional and non-promotional periods, not just aggregate sales spikes?",
+        "a": "Yes -- the client has full transaction-level data with customer IDs, so we can trace individual customers' purchase timing and see whether promotional buyers show reduced full-price purchasing in the weeks immediately before and after each promotion."
+      },
+      {
+        "q": "What's the current gross margin at full price versus during a typical 40% discount promotion, and roughly what share of total revenue now comes from promotional periods?",
+        "a": "Full-price gross margin is 58%; at a 40% discount, gross margin falls to roughly 30% (cost basis stays fixed while price drops). Promotional periods, despite being only about 30% of calendar days across the year, now generate roughly 55% of total annual revenue -- a disproportionate and growing share."
+      },
+      {
+        "q": "Is there evidence customers have started to EXPECT the promotions and are timing their purchases around them, e.g., cart abandonment near a promotion's typical timing?",
+        "a": "Yes -- cart abandonment rate has risen from 62% to 74% over the past 18 months, and customer service has anecdotally reported comments like 'I'll just wait for the next sale,' though this hasn't been rigorously quantified yet."
+      }
+    ],
+    "mece": "Central question: Are promotions generating truly incremental\nrevenue, or mostly pulling forward/cannibalizing full-price demand?\n\nL1 (MECE, decomposing promotional revenue): Total promotional-\n  period revenue = (A) Genuinely incremental purchases -- customers\n  who wouldn't have bought at all without the discount -- PLUS (B)\n  Pulled-forward purchases -- customers who would have bought at\n  full price later, just moved their purchase timing to capture\n  the discount -- PLUS (C) Cannibalized future full-price purchases\n  that show up as REDUCED full-price revenue in the weeks after a\n  promotion, even beyond simple timing shift, if the discount also\n  changes future price expectations (per the cart-abandonment trend).\n\nL2: Use the transaction-level, customer-ID data to directly measure\n  (B) and (C) -- compare each promotional buyer's purchase frequency\n  and average price paid in the 4 weeks before, during, and after\n  each promotion against a matched cohort of customers who did NOT\n  buy during that promotion, isolating how much of the promotional\n  spike is genuinely new versus shifted/cannibalized.",
+    "hypothesis": "Given gross margin nearly halves during promotions (58% to 30%) while promotional periods already generate a disproportionate 55% of revenue from just 30% of days, and given the rising cart-abandonment trend consistent with customers learning to wait for discounts, my leading hypothesis is that a meaningful share of promotional revenue is pulled-forward or cannibalized rather than genuinely incremental -- meaning the PROFIT impact of the promotional cadence is likely worse than the raw revenue-spike data suggests, and the pattern of increasingly promotion-trained customer behavior (rising cart abandonment) suggests the problem is getting structurally worse over time, not stable.",
+    "data": "Data (matched-cohort analysis design, transaction-level):\n  Promotional buyers (customers who purchase during a given 40%-\n    off promotion): compare their FULL-PRICE purchase frequency in\n    the 8 weeks before and 8 weeks after that promotion against a\n    matched cohort of similar customers (same historical purchase\n    frequency/value) who did NOT buy during that specific promotion\n  Illustrative matched-cohort result from one representative\n    promotion cycle:\n    Promotional-buyer cohort (10,000 customers): average 0.9 full-\n      price purchases in the 8 weeks BEFORE the promotion, 0.4\n      full-price purchases in the 8 weeks AFTER (a 56% decline)\n    Matched non-buying cohort (10,000 customers): average 0.85\n      full-price purchases in the 8 weeks before, 0.80 in the 8\n      weeks after (a 6% decline, roughly seasonal/normal variation)",
+    "calc": "Isolate the cannibalization effect by comparing the promotional\ncohort's post-promotion decline against the matched control cohort's\nnormal (non-promotional) decline:\n\n  Promotional cohort: 0.9 -> 0.4 full-price purchases (56% decline)\n  Control cohort: 0.85 -> 0.80 full-price purchases (6% decline,\n    the 'normal' baseline drift not attributable to the promotion)\n  Excess decline attributable to the promotion: 56% - 6% = 50\n    percentage points -- this is the cannibalization signal: roughly\n    half of the promotional cohort's post-promotion full-price\n    purchase frequency, beyond normal variation, appears to have\n    been PULLED FORWARD into the promotional purchase itself\n\n  Translate to revenue terms for the 10,000-customer promotional\n  cohort: at an average full-price transaction value of $85,\n    Expected 'normal' full-price purchases in the 8-week post\n      window (if this cohort behaved like the control): 10,000 x\n      0.80 = 8,000 purchases x $85 = $680,000\n    Actual full-price purchases observed: 10,000 x 0.4 = 4,000\n      purchases x $85 = $340,000\n    Cannibalized full-price revenue: $680,000 - $340,000 = $340,000\n      in LOST full-price revenue in just the 8 weeks following this\n      one promotion, from this one 10,000-customer cohort\n\n  Compare against the promotion's own immediate revenue: if this\n  cohort purchased an average of 1.3 items at the 40%-off price\n  ($85 x 0.6 = $51/item) during the promotion itself:\n    Promotional revenue: 10,000 x 1.3 x $51 = $663,000\n\n  Net revenue impact for this cohort across promotion + 8-week\n  aftermath: $663,000 (promo) - $340,000 (cannibalized full-price)\n  = $323,000 in TRUE net incremental revenue -- meaning roughly\n  half of the promotion's headline $663,000 revenue figure is\n  offset by cannibalization NOT visible in the promotion's own\n  sales numbers",
+    "insight": "The matched-cohort analysis reveals that roughly half of a promotion's headline revenue is offset by cannibalized full-price purchases in the following 8 weeks -- a cost that is completely invisible if the client (as is common) only looks at each promotion's own sales spike in isolation, without tracking what happens to the SAME customers afterward. Combined with the fact that promotional-period margin is nearly half of full-price margin (30% vs. 58%), the TRUE profit impact of the promotional cadence is substantially worse than either the revenue-spike data or a naive 'discount reduces margin but drives volume' framing would suggest -- this is a case where the diagnostic (matched-cohort, before/after analysis) matters as much as the final recommendation, since the problem was invisible without it.",
+    "recommendation": "(1) Reduce promotional frequency from roughly every 3-4 weeks to a meaningfully longer cadence (e.g., quarterly, aligned to genuine inventory clearance needs or seasonal moments) to reduce the customer-training effect evident in the rising cart-abandonment trend, since frequent promotions appear to be teaching customers to delay full-price purchases rather than genuinely expanding the customer base. (2) For the promotions that remain, shift toward MORE TARGETED discounting (e.g., personalized offers to lapsed or price-sensitive customer segments identified via the same transaction data, rather than blanket site-wide discounts) to capture the genuinely incremental purchase behavior (segment A from the MECE framing) while reducing the blanket cannibalization of customers who would have bought at full price regardless. (3) Introduce a loyalty or early-access program as a partial substitute value lever, giving frequent full-price customers a non-discount-based reason to feel rewarded (e.g., early access to new drops, free shipping thresholds), which can reduce the perceived need for customers to 'wait for the sale' without directly training them toward discount-seeking behavior the way blanket price cuts do.",
+    "risks": [
+      "The illustrative matched-cohort result shown here is from one representative promotion cycle -- before committing to a major cadence change, the client should run this same matched-cohort analysis across several recent promotion cycles to confirm the ~50-point cannibalization signal is consistent and not specific to one unusual promotional event or season.",
+      "Reducing promotional frequency carries real near-term revenue risk if a meaningful share of the customer base has genuinely come to rely on promotional pricing as their primary access point to the brand (i.e., some cannibalization-adjacent customers may simply not purchase AT ALL at full price, rather than just shifting timing) -- the recommended shift toward targeted rather than eliminated discounting is designed to hedge this risk, but the transition should be piloted on a subset of promotional cycles before a full cadence change, monitoring total (not just full-price) revenue closely.",
+      "This analysis focuses on the DIRECT cannibalization/margin effect but doesn't fully quantify the potential BRAND value of reduced promotional dependence (e.g., a stronger full-price brand positioning over time) versus the harder-to-model risk of losing deal-seeking customers to promotion-heavy competitors entirely -- both are real considerations for the CEO beyond the quantified analysis here."
+    ],
+    "cross": [
+      {
+        "q": "What if the interviewer says: 'What if the CFO says a competitor started running EVEN MORE frequent promotions last quarter, and he's worried that reducing this client's promotional cadence would just hand price-sensitive customers to that competitor?'",
+        "a": "That's a real competitive dynamic the internal cannibalization analysis alone doesn't address, since it only looks at this client's own customers' behavior, not competitive switching. I'd want customer-level data (even directional, e.g., from a customer survey or win/loss data if available) on whether price-sensitive customers who might otherwise wait for THIS client's promotion would actually switch to a competitor's more frequent promotions instead of simply waiting longer for this client's less-frequent one -- if genuine switching risk is high, I'd moderate the recommendation from 'quarterly' to a more moderate cadence reduction (e.g., every 6-8 weeks rather than every 3-4), still meaningfully reducing the cannibalization/customer-training effect while not creating as large a promotional gap for a more aggressive competitor to exploit, and I'd pair this with the targeted/personalized discounting lever more heavily as the primary tool for actually price-sensitive, switching-prone customers specifically, rather than relying on cadence reduction alone."
+      },
+      {
+        "q": "What if the interviewer says: 'What if the matched-cohort analysis on other promotion cycles shows the cannibalization effect is much SMALLER for promotions tied to genuinely new product launches or new seasonal collections, versus promotions on older, ongoing inventory?'",
+        "a": "That would be an important and useful refinement -- it would suggest the cannibalization problem isn't inherent to discounting itself, but specific to discounting on inventory customers were ALREADY likely to buy at full price eventually (which is exactly the pulled-forward-demand mechanism), whereas a new-launch promotion may be capturing more genuinely incremental trial purchases from customers who wouldn't otherwise have engaged with that specific new product at all. I'd revise the recommendation to differentiate promotion TYPE rather than applying a blanket cadence reduction: keep or even increase promotional support tied to new launches (where the data shows less cannibalization and more genuine incrementality), while more aggressively reducing or eliminating blanket promotions on ongoing/older inventory (where the cannibalization effect is concentrated) -- a more surgical response than a uniform frequency cut, and a better use of the segmented data than my original recommendation assumed was available."
+      }
+    ],
+    "synthesis": "A matched-cohort, transaction-level analysis comparing promotional buyers' full-price purchase behavior against a similar non-buying cohort reveals that roughly half of a representative promotion's headline revenue is offset by cannibalized full-price purchases in the following 8 weeks — an effect invisible in the aggregate sales-spike data the client had been using to evaluate promotions, and compounded by promotional-period margin running nearly half of full-price margin. Reducing promotional frequency, shifting toward targeted rather than blanket discounting, and introducing non-price loyalty value are the core levers to address this, though the recommendation should be refined further — potentially differentiated by promotion type (new-launch versus ongoing-inventory) and moderated for competitive-switching risk — once the cannibalization pattern is validated across multiple promotion cycles rather than the single illustrative cycle analyzed here."
+  },
+  {
+    "diff": "expert",
+    "industry": "Enterprise Software — Workflow Automation Platform",
+    "title": "Enterprise Software Company: Should They Shift from Per-Seat to Usage-Based (Value-Based) Pricing?",
+    "prompt": "Our client sells enterprise workflow-automation software priced per-seat ($150/user/month). Customers increasingly complain that per-seat pricing penalizes them for adding users even when actual platform usage (number of automated workflows run) varies enormously between light and heavy users, and several competitors have moved to usage-based pricing (charging per workflow run rather than per seat). Should the client make the shift, and how?",
+    "clarify": [
+      {
+        "q": "Do we have data on the actual distribution of usage across current seats — is usage genuinely as uneven as customers describe, and would we know how to define a usage unit fairly (e.g., what exactly counts as one 'workflow run')?",
+        "a": "Yes -- internal usage data across the customer base shows the top 20% of seats by usage account for roughly 70% of total workflow runs, while the bottom 40% of seats run fewer than 10 workflows a month combined, confirming usage is highly uneven; 'workflow run' is already a clean, well-instrumented unit in the product, so defining it isn't a barrier."
+      },
+      {
+        "q": "What's the CFO's primary concern about a pricing model change — revenue risk during the transition, complexity of billing/product changes, or something else like sales team readiness?",
+        "a": "The CFO's primary concern is REVENUE PREDICTABILITY -- per-seat pricing gives clean, forecastable MRR, and he's worried usage-based pricing introduces revenue volatility that complicates forecasting and could spook investors ahead of a planned fundraising round in 12 months."
+      },
+      {
+        "q": "Are competitors who've already moved to usage-based pricing seeing measurably better win rates or customer satisfaction, or is this mostly customer sentiment/anecdote so far?",
+        "a": "There is some hard evidence: in the last 6 months of competitive deal data, the client has lost 9 competitive deals specifically citing per-seat pricing as unfair for their intended use case (versus 2 such losses in the prior 6 months when competitors were less uniformly usage-based), suggesting this is becoming a real and growing competitive vulnerability, not just anecdotal sentiment."
+      }
+    ],
+    "mece": "Central question: Should the client shift from per-seat to\nusage-based pricing, and if so, how, given the CFO's revenue-\npredictability concern?\n\nL1 (MECE, the pricing-model trade-off): (A) Fairness/value-alignment\n  benefit -- usage-based pricing charges customers proportional to\n  value received, directly addressing the customer complaint and\n  the emerging competitive-loss pattern. (B) Revenue-predictability\n  cost -- the CFO's concern that usage fluctuates and complicates\n  forecasting, especially ahead of the fundraising round. (C)\n  Structural options that aren't a binary pure-per-seat vs. pure-\n  usage choice -- hybrid models (e.g., a base seat fee plus usage\n  overage, or usage-based with a committed minimum) that could\n  capture (A)'s benefit while mitigating (B)'s cost.\n\nL2: Since this is a genuine trade-off rather than a dominant-\n  strategy choice, evaluate a HYBRID model explicitly (base fee +\n  usage-based overage, with a committed-minimum-usage contract\n  structure) as the primary candidate, rather than treating this as\n  a binary per-seat-vs-usage decision, since the CFO's specific\n  concern (predictability) and the customer/competitive concern\n  (value-alignment) are not mutually exclusive if the model is\n  designed correctly.",
+    "hypothesis": "Given usage is highly uneven (top 20% of seats driving 70% of workflow runs) and the competitive-loss pattern is a real, measurable, and recently GROWING signal (9 losses vs. 2 in the prior period), my leading hypothesis is that some shift toward usage-based pricing is competitively necessary, but a PURE usage-based model would validate the CFO's predictability concern unnecessarily -- a hybrid model (a lower base per-seat/platform fee that covers most 'light' usage, plus usage-based charges only for workflow volume above a generous included allowance) can address the fairness complaint and competitive vulnerability for HEAVY users specifically (where the complaint concentrates) while preserving a predictable revenue floor from the base fee that addresses the CFO's forecasting concern.",
+    "data": "Data:\n  Current: flat $150/seat/month, all usage levels charged identically\n  Usage distribution: top 20% of seats = 70% of total workflow runs;\n    bottom 40% of seats = <10 workflow runs/month combined (very\n    light usage)\n  Competitive-loss data: 9 deals lost in the last 6 months citing\n    unfair per-seat pricing (vs. 2 in the prior 6 months) -- these\n    9 lost deals were disproportionately concentrated among\n    prospects with HIGH-VOLUME, UNEVEN usage profiles (e.g., a\n    handful of power users running huge workflow volumes alongside\n    many light/occasional users), exactly the profile per-seat\n    pricing penalizes most\n  Current customer base: 800 enterprise customers, average 45 seats\n    per customer, current total MRR: 800 x 45 x $150 = $5.4M/month",
+    "calc": "Design a hybrid model and test it against a representative\ncustomer to check both revenue-neutrality (avoiding an unintended\nprice cut or hike) and fairness for uneven-usage customers:\n\n  Proposed hybrid: $90/seat/month base fee (down from $150,\n    addressing the per-seat penalty directly) INCLUDING an\n    allowance of 50 workflow runs/seat/month, plus $0.80 per\n    workflow run beyond that allowance\n\n  Representative customer: 50 seats, highly uneven usage --\n    10 heavy-usage seats averaging 400 workflow runs/month each,\n    40 light-usage seats averaging 15 workflow runs/month each\n    Total monthly workflow runs: (10 x 400) + (40 x 15) = 4,000 +\n      600 = 4,600 runs\n    Included allowance: 50 seats x 50 runs = 2,500 runs\n    Overage: 4,600 - 2,500 = 2,100 runs x $0.80 = $1,680\n\n  New monthly bill: (50 x $90) + $1,680 = $4,500 + $1,680 = $6,180\n  Old monthly bill (flat $150/seat): 50 x $150 = $7,500\n  Change: -$1,320/month (-17.6%) for this customer -- a MEANINGFUL\n    decrease, since this customer's heavy usage is concentrated in\n    a small number of seats and most of their 50 seats are light-\n    usage, exactly the profile that was being OVERCHARGED under\n    flat per-seat pricing\n\n  Check against a LOW-variance customer (usage evenly spread, 50\n  seats each averaging 50 runs/month = right at the allowance):\n    Total runs: 50 x 50 = 2,500 = exactly the included allowance,\n      $0 overage\n    New bill: 50 x $90 = $4,500 vs. old $7,500 -- a LARGER\n      decrease (-40%), which is a problem: this customer isn't the\n      one the pricing change was meant to help, yet sees the\n      biggest price cut, which would be revenue-destructive at\n      scale across the base if this pattern is common",
+    "insight": "The initial hybrid design ($90 base + 50-run allowance + $0.80 overage) fixes the fairness problem for uneven-usage customers but unintentionally OVER-discounts even-usage customers who were never the ones complaining -- since $90 base plus a 50-run allowance is priced too low relative to the original $150 across the board, not just for the specific overage mechanism. The base fee and allowance need to be calibrated using the FULL usage distribution (not just the two illustrative examples) so that revenue-neutral customers (average, even usage) see roughly FLAT pricing, uneven/heavy-usage customers see an increase reflecting their true consumption, and it's specifically LIGHT, even-usage customers whose bills should fall -- meaning the calibration target should be modeled against the full 800-customer base's usage distribution, not assumed from two illustrative examples.",
+    "recommendation": "(1) Recalibrate the hybrid model using the full customer base's usage distribution as the calibration target, setting the base fee and included-allowance level such that a customer with AVERAGE, EVEN usage patterns sees roughly flat total pricing (protecting the CFO's revenue-predictability concern in aggregate), while customers with heavy or highly uneven usage see a price INCREASE reflecting genuine additional value consumed, and customers with light, even usage see a modest decrease -- directly addressing the competitive-loss pattern (concentrated among heavy/uneven users) without broadly discounting the base. (2) To address the CFO's forecasting concern directly, require a COMMITTED MINIMUM usage-overage estimate at contract signing (informed by the customer's actual usage in the prior 3-6 months where available), converting a meaningful share of the 'variable' usage revenue into a contractually predictable floor, with true-up billing only for usage materially above the committed estimate. (3) Offer the hybrid model to NEW customers and as an OPT-IN for existing customers initially (rather than a forced migration), specifically targeting the migration offer at existing customers most likely to benefit (uneven-usage profiles matching the 9 lost-competitive-deal pattern) to capture competitive retention value fastest, while giving the CFO real transition data on revenue-predictability impact before considering a full-base migration.",
+    "risks": [
+      "Recalibrating using the full usage distribution requires confidence that CURRENT usage patterns are representative of usage under the NEW pricing model -- customers may change behavior once workflow runs have a visible marginal cost (e.g., light users staying light, but some previously-heavy users optimizing workflow efficiency to reduce runs), meaning the calibration should be revisited with real post-launch usage data within the first 1-2 quarters, not treated as permanently fixed from pre-launch data.",
+      "The committed-minimum-usage mechanism, while addressing the CFO's predictability concern, adds real contract and billing complexity (estimating commitments per customer, true-up processes) that the sales and billing operations teams need to be resourced and trained for before a broad rollout -- this operational readiness should be validated during the opt-in phase, not assumed.",
+      "Making the hybrid model opt-in initially means the client won't fully capture the competitive-win benefit until a meaningful share of the base (and new-logo pipeline) has adopted it -- if competitive losses are concentrated in NEW-LOGO deals rather than existing customers, prioritizing new-logo availability of the hybrid model on a faster timeline than the existing-base opt-in migration may be more urgent than the existing-customer-first sequencing implies."
+    ],
+    "cross": [
+      {
+        "q": "What if the interviewer says: 'What if the CFO says even an opt-in pilot introduces unacceptable revenue-forecasting uncertainty ahead of the fundraising round, and wants ZERO pricing model changes for the next 12 months?'",
+        "a": "I'd separate the STRATEGIC question (should this shift eventually happen) from the TIMING question (can it wait 12 months) -- given the competitive-loss trend is real but has grown from a small base (2 to 9 deals over two 6-month periods, still a modest absolute number relative to the 800-customer base and broader new-logo pipeline), I'd assess whether the vulnerability is acute enough that waiting 12 months poses a serious risk, versus being something the client can monitor and mitigate tactically in the interim (e.g., ad hoc negotiated pricing concessions for specific at-risk competitive deals, without a formal pricing model change) while doing the FULL calibration and committed-minimum contract design work in the background during the fundraising-sensitive period, so the hybrid model is fully ready to launch immediately once the CFO's 12-month window has passed, rather than losing that preparation time entirely."
+      },
+      {
+        "q": "What if the interviewer says: 'What if usage data reveals that a large share of the heaviest-usage seats belong to just a handful of the client's largest, most strategically important enterprise accounts, who might react very badly to a price increase even if it's usage-justified?'",
+        "a": "That's an important account-level consideration beyond the aggregate calibration -- I would NOT apply the recalibrated pricing uniformly and immediately to the client's most strategically important accounts without a dedicated conversation, since losing or souring the relationship with a handful of the largest accounts could outweigh the aggregate pricing-model benefit. I'd recommend identifying the top-tier strategic accounts specifically, and for those accounts, either grandfather them at current per-seat pricing for a defined transition period with advance notice and a value-based justification conversation led by account management (rather than a blanket billing change), or negotiate a customized enterprise agreement that captures some of the usage-based logic (e.g., a higher committed-minimum reflecting their real usage, priced favorably relative to the standard hybrid rate) as a relationship-preserving alternative to applying the standard formula mechanically to accounts where the relationship value clearly exceeds the pricing-optimization value."
+      }
+    ],
+    "synthesis": "Usage is highly uneven across the client's seat base (the top 20% of seats drive 70% of workflow runs), and this unevenness is directly tied to a growing, measurable competitive-loss pattern (9 deals lost to unfair per-seat pricing complaints in the last 6 months, up from 2), making some shift toward usage-based pricing competitively necessary rather than optional. A hybrid model — a base fee plus usage-based overage beyond a generous allowance — can address the fairness and competitive-loss problem specifically for heavy, uneven-usage customers, but only if the base fee and allowance are calibrated against the FULL customer usage distribution rather than illustrative examples, so that average-usage customers see roughly flat pricing (protecting the CFO's forecasting concern) rather than an unintended broad discount; a committed-minimum-usage contract mechanism and an opt-in rollout sequenced toward the most competitively at-risk segment further balance the fairness benefit against revenue predictability during the sensitive pre-fundraising window."
+  }
+];
+} catch (err) { console.error('Stage 19 data error:', err); }
+</script>
+<script>
+try {
+  var diffLabel = {easy:"Easier", med:"Medium", hard:"Hard", expert:"Expert"};
+
+  function renderCases(list){
+    var wrap = document.getElementById('caselist');
+    wrap.innerHTML = '';
+    list.forEach(function(c, i){
+      var det = document.createElement('details');
+      det.className = 'case';
+      det.id = 'case-' + (i+1);
+
+      var clarifyHtml = c.clarify.map(function(qa){
+        return '<div class="qa-pair"><div class="q">Q: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
+      }).join('');
+
+      var risksHtml = '<ul>' + c.risks.map(function(r){ return '<li>' + esc(r) + '</li>'; }).join('') + '</ul>';
+
+      var crossHtml = c.cross.map(function(qa){
+        return '<div class="qa-pair"><div class="q">Interviewer: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
+      }).join('');
+
+      det.innerHTML =
+        '<summary><span class="cnum">Case ' + (i+1) + '</span>' +
+        '<span class="cdiff ' + c.diff + '">' + diffLabel[c.diff] + '</span>' +
+        '<span class="cind">' + esc(c.industry) + '</span>' +
+        '<span class="ctitle">' + esc(c.title) + '</span></summary>' +
+        '<div class="case-body">' +
+          '<div class="case-prompt">"' + esc(c.prompt) + '"</div>' +
+          '<div class="case-sec"><h5>Clarifying Questions &amp; Answers</h5>' + clarifyHtml + '</div>' +
+          '<div class="case-sec"><h5>MECE Structure</h5><div class="calc-block">' + esc(c.mece) + '</div></div>' +
+          '<div class="case-sec"><h5>Hypothesis</h5><p>' + esc(c.hypothesis) + '</p></div>' +
+          '<div class="case-sec"><h5>Data &amp; Exhibits</h5><div class="calc-block">' + esc(c.data) + '</div></div>' +
+          '<div class="case-sec"><h5>Calculation</h5><div class="calc-block">' + esc(c.calc) + '</div></div>' +
+          '<div class="case-sec"><h5>Insight</h5><p>' + esc(c.insight) + '</p></div>' +
+          '<div class="case-sec"><h5>Recommendation</h5><p>' + esc(c.recommendation) + '</p></div>' +
+          '<div class="case-sec"><h5>Risks &amp; Caveats</h5>' + risksHtml + '</div>' +
+          '<div class="case-sec"><h5>Interviewer Cross-Questions</h5>' + crossHtml + '</div>' +
+          '<div class="synth-box"><h5>Synthesis</h5><p>' + esc(c.synthesis) + '</p></div>' +
+        '</div>';
+      wrap.appendChild(det);
+    });
+  }
+
+  renderCases(cases);
+
+  document.getElementById('casefilter').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if(!btn) return;
+    document.querySelectorAll('#casefilter button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var diff = btn.getAttribute('data-diff');
+    var filtered = diff === 'all' ? cases : cases.filter(function(c){ return c.diff === diff; });
+    renderCases(filtered);
+  });
+
+  var masteryItems = cases.map(function(c, i){ return 'Case ' + (i+1) + ' — ' + c.title + ': I can walk through the full structure, calculation, and synthesis cold.'; });
+  var STORE = 'masterbook-s19-mastery';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var mBox = document.getElementById('masteryBox');
+  mBox.innerHTML = masteryItems.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+esc(t)+'</span></div>';
+  }).join('');
+  mBox.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 500){ backtop.classList.add('show'); } else { backtop.classList.remove('show'); }
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 19 loaded — cases:', cases.length);
+} catch (err) { console.error('Stage 19 render error:', err); }
+</script>

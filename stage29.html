@@ -1,0 +1,534 @@
+<meta name="robots" content="noindex, nofollow">
+<title>Capgemini Deep Dive</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+
+  .case-sec{ margin-top:20px; }
+  .case-sec h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .case-sec h5::before{ content:""; width:14px; height:2px; background:var(--accent); display:inline-block; }
+  .case-sec p, .case-sec li{ font-size:.9rem; color:var(--ink-soft); margin:0 0 6px; }
+  .qa-pair{ margin-bottom:10px; padding:10px 14px; background:var(--paper-sunken); border-radius:8px; }
+  .qa-pair .q{ font-size:.88rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .qa-pair .a{ font-size:.87rem; color:var(--ink-soft); }
+  .case-sec ul{ margin:0; padding-left:20px; }
+  .synth-box{ margin-top:20px; padding:15px 18px; background:var(--accent-soft); border-radius:8px; border-left:4px solid var(--accent); }
+  .synth-box h5{ color:var(--accent-ink); }
+  .synth-box p{ color:var(--ink); font-weight:500; }
+
+  .cv-role-meta{ font-size:.85rem; color:var(--ink-faint); margin:2px 0 10px; }
+  .cv-role-meta .co{ color:var(--ink); font-weight:600; }
+
+  .draftflag{ display:inline-flex; align-items:center; gap:5px; font-size:.68rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; background:var(--lvlB-soft); color:var(--lvlB); text-transform:uppercase; letter-spacing:.03em; }
+  .okflag{ display:inline-flex; align-items:center; gap:5px; font-size:.68rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; background:var(--data-soft); color:var(--data); text-transform:uppercase; letter-spacing:.03em; }
+
+  .ladder{ display:flex; flex-direction:column; gap:12px; margin-top:6px; }
+  .ladder-tier{ padding:15px 18px; border-radius:10px; background:var(--paper-sunken); border-left:4px solid var(--data); }
+  .ladder-tier .tier-label{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--data); margin-bottom:8px; display:block; }
+  .ladder-tier p{ margin:0; font-size:.91rem; color:var(--ink); }
+
+  .verb-row{ display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+  .verb-chip{ font-size:.8rem; padding:5px 12px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); }
+  .verb-chip .src{ font-size:.68rem; color:var(--ink-faint); margin-left:5px; }
+  .verb-chip.chosen{ background:var(--accent-soft); color:var(--accent-ink); border-color:var(--accent); font-weight:700; }
+
+  .star-card{ border:1px solid var(--line); border-radius:12px; padding:20px 22px; background:var(--paper-raised); box-shadow:var(--shadow); margin-bottom:16px; }
+  .star-card h4{ font-size:1.02rem; margin-bottom:12px; }
+  .star-row{ margin-bottom:9px; font-size:.9rem; color:var(--ink-soft); }
+  .star-row b{ color:var(--accent-ink); font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; margin-right:8px; display:inline-block; min-width:70px; }
+
+  .claimcard{ border:1px solid var(--line); border-radius:14px; background:var(--paper-raised); box-shadow:var(--shadow); padding:26px 28px; margin-bottom:20px; }
+  .claimcard .chead{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:10px; }
+  .claimcard .chead h3{ font-size:1.22rem; flex:1; min-width:200px; }
+  .bulletquote{ margin:14px 0; padding:14px 18px; background:var(--paper-sunken); border-left:4px solid var(--ink-faint); border-radius:0 8px 8px 0; font-style:italic; font-size:.92rem; color:var(--ink-soft); }
+  .scopebox{ margin:14px 0; padding:14px 18px; background:var(--data-soft); border-radius:8px; border-left:4px solid var(--data); }
+  .scopebox h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--data); margin-bottom:6px; }
+  .scopebox p{ margin:0; color:var(--ink); font-size:.9rem; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <a class="backlink" href="stage14.html">← Stage 14 · Product Management</a>
+    <a class="backlink" href="stage15.html">← Stage 15 · Structured Problem Solving &amp; Frameworks</a>
+    <a class="backlink" href="stage16.html">← Stage 16 · Profitability Case Bank</a>
+    <a class="backlink" href="stage17.html">← Stage 17 · Market Entry Case Bank</a>
+    <a class="backlink" href="stage18.html">← Stage 18 · Growth Case Bank</a>
+    <a class="backlink" href="stage19.html">← Stage 19 · Pricing Case Bank</a>
+    <a class="backlink" href="stage20.html">← Stage 20 · Market Sizing Case Bank</a>
+    <a class="backlink" href="stage21.html">← Stage 21 · Operations Case Bank</a>
+    <a class="backlink" href="stage22.html">← Stage 22 · Product Case Bank</a>
+    <a class="backlink" href="stage23.html">← Stage 23 · Analytics Case Bank</a>
+    <a class="backlink" href="stage24.html">← Stage 24 · AI/GenAI Case Bank</a>
+    <a class="backlink" href="stage25.html">← Stage 25 · FinTech Case Bank</a>
+    <a class="backlink" href="stage26.html">← Stage 26 · Pharma Case Bank</a>
+    <a class="backlink" href="stage27.html">← Stage 27 · Axtria Deep Dive</a>
+    <a class="backlink" href="stage28.html">← Stage 28 · NanoCloud Deep Dive</a>
+    <div class="stage-pill">● Stage 29 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#overview">Role Overview</a></li>
+      <li><a href="#claim-userstories">500+ User Stories &amp; PRDs</a></li>
+      <li><a href="#claim-automation">Lead Automation, +15%</a></li>
+      <li><a href="#claim-governance">Quality Governance, -30%</a></li>
+      <li><a href="#claim-prd">PRDs as Data Dictionary</a></li>
+      <li><a href="#salesforce">Salesforce/CRM Foundation</a></li>
+      <li><a href="#star">STAR Story Bank</a></li>
+      <li><a href="#audience">Consistent Wording, Two Audiences</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+      <li><a href="#bridge">How This Connects</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next (Part XI)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 30 (Hero Electronics Deep Dive, plus Projects &amp; Case Competitions) is live — Part XI is complete. Stage 31 (hands-on Portfolio projects) is next.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part XI · Stage 29 of 33</div>
+      <h1>Capgemini Deep Dive</h1>
+      <p class="lede">The third Work Experience Deep Dive — your 18-month role as Senior Analyst, CRM &amp; Product Delivery at Capgemini, taken apart bullet by bullet. This role is different again from the first two: it's the one role where none of your five CV versions actually disagree with each other — no verb-drift risk, no confirmed-but-undersold framing to fix. The real work here is different: your flagship claim (500+ user stories and PRDs) is flagged "Very High" interview odds specifically for Product Management-track interviews, which means the same honest facts need to be told in two registers — a PM-interviewer register that wants requirements-and-prioritization depth, and a general analytics/consulting register that wants the CRM-automation and quality-governance side. Nothing here changes the facts; it changes which facts you lead with.</p>
+      <div class="statusbar">
+        <div class="statuschip">💼 <b>4</b> CV bullets, fully deep-dived</div>
+        <div class="statuschip">✓ Zero CV-wording risk flagged — the one role with no variant to resolve</div>
+        <div class="statuschip">🎯 <b>1</b> Level-A claim — "Very High" odds specifically for PM-track rounds</div>
+        <div class="statuschip">🗣️ 30-sec / 2-min / 5-min answer ladder for the flagship claim</div>
+      </div>
+    </header>
+
+    <section id="overview">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Role Overview</h2>
+        <p>The factual anchor everything below builds on — pulled directly from your Consolidated CV (Stage 1) with nothing added or reworded.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <h3 style="font-size:1.1rem">Senior Analyst — CRM &amp; Product Delivery</h3>
+        <p class="cv-role-meta"><span class="co">Capgemini</span> · Gurgaon · Sept 2020 – Feb 2022 (18 mo)</p>
+        <p style="margin:10px 0 16px;font-size:.93rem;color:var(--ink-soft)">Capgemini is a global IT and consulting firm; this role sat inside a CRM/product-delivery engagement for retail and telecom clients, on the Salesforce platform. It's your longest single role by tenure (18 months) and the one most clearly aligned with Product Management-track interviews — the reason Stage 1's Priority Matrix flags your 500+ user stories claim as "Very High" odds specifically for PM rounds, and why Stage 14 (Product Management) and this stage are cross-referenced together.</p>
+        <div class="case-sec" style="margin-top:4px">
+          <h5>The Four CV Bullets, Classified</h5>
+          <ul style="margin-top:6px">
+            <li><span class="lvl lvl-B" style="margin-right:8px">B</span> Redesigned lead management automation for retail and telecom clients, driving a client-reported 15% increase in lead-to-conversion performance. <a href="#claim-automation" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-A" style="margin-right:8px">A</span> Owned requirements alignment across client and internal stakeholders, translating business needs into 500+ prioritized user stories that shaped Salesforce platform delivery. <a href="#claim-userstories" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-B" style="margin-right:8px">B</span> Coordinated cross-team quality governance ahead of releases, reducing defects by 30%. <a href="#claim-governance" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-C" style="margin-right:8px">C</span> Authored PRDs that served as the reference data dictionary for product, technology, and stakeholder teams. <a href="#claim-prd" style="font-size:.82rem">↓ deep dive</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-userstories">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Claim 1 — 500+ User Stories, PRDs &amp; Requirements Ownership</h2>
+        <p>Priority Matrix rank #06, Level A, "Very High" interview odds for PM-track rounds specifically, "Low-Medium" risk. This is the flagship Capgemini claim and the single strongest PM-interview asset on the whole CV.</p>
+      </div>
+
+      <div class="claimcard">
+        <div class="bulletquote">"Owned requirements alignment across client and internal stakeholders, translating business needs into 500+ prioritized user stories that shaped Salesforce platform delivery."</div>
+
+        <div class="scopebox">
+          <h5>Honest Scope</h5>
+          <p>"Owned" here means you were the requirements-alignment owner — the person client and internal stakeholders went to when a business need had to become something engineering could build. Turning that into a defensible interview story means being able to show, not just claim, the mechanics: how a business need became a user story, how 500+ of them were kept prioritized and non-duplicative, and how you resolved disagreement when client and internal stakeholders wanted different things from the same feature.</p>
+        </div>
+
+        <div class="case-sec">
+          <h5>The Mechanism — Requirements Alignment to Prioritized Backlog</h5>
+          <p>The most defensible honest description of how 500+ user stories accumulate into a usable backlog rather than an unmanageable pile: (1) intake — a business need surfaces from a client stakeholder (a process gap, a compliance requirement, a competitive feature ask) or an internal stakeholder (a technical constraint, a platform limitation); (2) translation — the need gets written as a user story in standard form ("As a [role], I want [capability], so that [outcome]"), with acceptance criteria specific enough that engineering and QA can build and test against it without further clarification; (3) alignment — where client and internal stakeholders wanted different things (a common source of conflict on a shared CRM platform serving multiple clients), the story gets scoped or split so the disagreement is resolved at the requirements stage rather than discovered mid-build; (4) prioritization — stories get sequenced against release capacity and business urgency, feeding the cross-team quality governance process (Claim 3) ahead of each release. <span class="draftflag">Draft — confirm which specific prioritization framework (RICE, MoSCoW, straight urgency-ranking, or an internal Capgemini method) was actually used</span></p>
+        </div>
+
+        <div class="case-sec">
+          <h5>Why 500+ Is a Meaningful Number, Not Just a Big One</h5>
+          <p>Framed correctly, the number signals sustained requirements discipline across an 18-month engagement, not a one-time large ask — roughly 27-28 stories per month on average, which only holds together with a consistent, repeatable intake-to-backlog process rather than ad hoc requirements gathering. That repeatability is exactly what a PM interviewer is listening for when they ask about this claim: not the raw count, but evidence of a system behind it.</p>
+        </div>
+
+        <div class="case-sec">
+          <h5>Answer Ladder — "Walk me through how you managed 500+ user stories"</h5>
+          <p>The same three-depth format used for the flagship claims on Stages 27 and 28, applied here since this is the claim most likely to anchor a PM-track interview's opening question.</p>
+          <div class="ladder">
+            <div class="ladder-tier">
+              <span class="tier-label">30 seconds</span>
+              <p>"At Capgemini I owned requirements alignment for a Salesforce CRM platform serving retail and telecom clients — translating business needs from both client and internal stakeholders into more than 500 prioritized user stories over 18 months, which shaped what actually got built each release."</p>
+            </div>
+            <div class="ladder-tier">
+              <span class="tier-label">2 minutes</span>
+              <p>Adds: the repeatable process behind the number (intake, translation into standard user-story form with acceptance criteria, alignment when client and internal asks conflicted, prioritization against release capacity); why that process mattered on a shared CRM platform specifically (multiple clients' needs competing for the same engineering capacity, so poorly scoped stories created rework and conflict downstream); and how this connects to the next claim — the same prioritized backlog fed the cross-team quality governance process that cut defects by 30% ahead of releases.</p>
+            </div>
+            <div class="ladder-tier">
+              <span class="tier-label">5 minutes</span>
+              <p>Full walkthrough: (1) the platform context — a Salesforce CRM implementation serving multiple retail and telecom clients, meaning requirements came from several stakeholder groups with sometimes-competing priorities; (2) the intake process — business needs surfaced from client teams (process gaps, compliance, competitive asks) and internal teams (technical constraints, platform limits); (3) translation into user stories — standard story form with acceptance criteria specific enough to build and test against without repeated clarification; (4) alignment — the genuinely hard part: resolving cases where a client ask conflicted with a technical constraint or another client's need, scoping or splitting stories so the conflict got resolved at requirements stage; (5) prioritization — sequencing 500+ stories against release capacity and business urgency <span class="draftflag">Draft — confirm exact prioritization method used</span>; (6) the downstream effect — a well-scoped backlog is what made the cross-team quality governance process (Claim 3) actually work, because ambiguous requirements are one of the most common root causes of pre-release defects; (7) what this demonstrates for a PM interview specifically — the full requirements-to-delivery loop, not just the writing of stories in isolation.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions — PM-Track</h5>
+          <div class="qa-pair"><div class="q">Q: Walk me through one specific user story you wrote, start to finish.</div><div class="a">A: <span class="draftflag">Needs confirmation — a specific real story, client anonymized if needed</span> — draft shape: a client-specific field-validation rule on a lead-intake form, written as a standard story with acceptance criteria covering both the happy path and the edge cases (invalid format, required-but-missing field), reviewed with both the client stakeholder and an internal engineer before entering the backlog.</div></div>
+          <div class="qa-pair"><div class="q">Q: How did you prioritize 500+ stories — what framework?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — honest answer if pressed without confirmed specifics: "We prioritized against release capacity and business urgency; I'd want to confirm whether that used a named framework like RICE or MoSCoW versus an internal method before claiming a specific one by name."</div></div>
+          <div class="qa-pair"><div class="q">Q: Tell me about a time a client and an internal stakeholder disagreed on a requirement.</div><div class="a">A: <span class="draftflag">Needs confirmation — real instance</span> — this is the single most likely PM-interview follow-up on this claim; a specific, real example should be pinned down before any PM-track interview.</div></div>
+        </div>
+
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>This is the Capgemini CV's single highest-value claim for any Product Management-track interview, and the reason it's flagged "Very High" odds specifically for PM roles rather than generally — the strength is the full requirements-to-delivery loop (intake, translation, alignment, prioritization, and its downstream effect on quality), not the raw 500+ count on its own.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-automation">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>Claim 2 — Lead Management Automation, +15% Lead-to-Conversion</h2>
+        <p>Level B, "Medium-High" interview odds, "Medium" risk. A concrete, Salesforce-specific technical claim — the one most likely to draw a "what exactly did the automation do?" follow-up.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Redesigned lead management automation for retail and telecom clients, driving a client-reported 15% increase in lead-to-conversion performance."</div>
+        <div class="scopebox">
+          <h5>Honest Scope</h5>
+          <p>"Redesigned" implies you changed an existing automation setup rather than building one from a blank platform — the honest framing is improving/rebuilding a lead-routing and follow-up automation that was underperforming, most likely using Salesforce's native workflow/automation tooling (Workflow Rules or Process Builder, given the CV's explicit "Salesforce Lightning, Workflow Automation" skill listing) rather than custom code. <span class="draftflag">Needs confirmation — exact Salesforce tooling used and what specifically was redesigned</span></p>
+        </div>
+        <div class="case-sec">
+          <h5>What "Redesigned" Likely Meant — a Defensible Draft</h5>
+          <p>The most defensible honest framing, given the CRM/lead-management context: the prior automation likely had a lead-routing or follow-up-timing gap — leads sitting unassigned too long, or routed to the wrong rep/queue — and the redesign tightened the rules governing how a new lead gets assigned and when a follow-up trigger fires. A 15% lift in lead-to-conversion is consistent with fixing a routing/timing gap rather than a wholesale automation rebuild, since conversion is highly sensitive to how quickly and appropriately a lead gets first contact. <span class="draftflag">Draft — confirm the actual gap being fixed</span></p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: What exactly did the automation do, before and after your redesign?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — honest framing until confirmed: "It's a lead-routing and follow-up automation on Salesforce; I'd want to confirm the specific before/after rule change before describing it in technical detail."</div></div>
+          <div class="qa-pair"><div class="q">Q: How was the 15% figure measured and attributed?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — the CV specifies this is client-reported, which is worth being precise about in an interview: distinguishing "I built the change" from "the client's own reporting attributed 15% to it" is the honest line, similar to how the $10M Axtria figure is framed.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Solid, plausible claim as worded — the work needed is pinning down the specific rule change and measurement method so a technical follow-up doesn't outrun what's currently confirmed.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-governance">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>Claim 3 — Cross-Team Quality Governance, -30% Defects</h2>
+        <p>Level B, "Medium" interview odds, "Low" risk. Directly downstream of Claim 1's requirements-ownership work.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Coordinated cross-team quality governance ahead of releases, reducing defects by 30% and protecting client trust in platform reliability."</div>
+        <div class="scopebox">
+          <h5>Honest Scope</h5>
+          <p>"Coordinated" is the honest word — you ran or organized the pre-release quality-governance process across teams (likely product, QA, and engineering), rather than personally testing or fixing defects. The strongest honest link: better-scoped requirements (Claim 1) are one of the most common levers for reducing pre-release defects, since ambiguous acceptance criteria are a frequent root cause of build-vs-intent mismatches caught late.</p>
+        </div>
+        <div class="case-sec">
+          <h5>The Likely Mechanism — Requirements Discipline Feeding Quality Governance</h5>
+          <p>The most defensible honest story: coordinating quality governance meant organizing a structured pre-release review — checking that what got built matched the acceptance criteria written into each user story (Claim 1), catching scope drift or misinterpretation before release rather than after. A 30% defect reduction is consistent with tightening that requirements-to-build feedback loop, rather than a purely QA-process change unrelated to requirements quality. <span class="draftflag">Draft — confirm the specific governance mechanism (a formal review gate, a checklist, a cross-team sign-off step) and the baseline period the 30% was measured against</span></p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: What governance mechanism actually cut defects?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — draft: "A structured pre-release review checking built functionality against each story's acceptance criteria, catching scope drift before release rather than after — tightening the same requirements discipline behind the 500+ user stories."</div></div>
+          <div class="qa-pair"><div class="q">Q: How does 'protecting client trust' connect to a 30% defect reduction, concretely?</div><div class="a">A: Fewer post-release defects on a multi-client shared platform means fewer client-facing incidents and escalations — on a platform serving several retail and telecom clients at once, a defect affecting one client's configuration risks looking like a platform-wide reliability problem, so catching issues pre-release protects trust disproportionately relative to the raw defect count.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Low-risk claim as worded — the strongest interview answer explicitly connects this claim back to Claim 1 rather than treating it as an isolated QA-process story.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-prd">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Claim 4 — PRDs as Reference Data Dictionary</h2>
+        <p>Level C, "Low" interview odds, "Low" risk. A documentation-practice claim, unlikely to be probed deeply but easy to speak to honestly.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Authored PRDs that served as the reference data dictionary for product, technology, and stakeholder teams."</div>
+        <div class="scopebox">
+          <h5>Honest Scope — Level C</h5>
+          <p>This is a documentation-practice claim rather than a technical or quantified-outcome claim — the honest scope is straightforward: you wrote PRDs (Product Requirements Documents) thorough and consistent enough that other teams treated them as the canonical reference for what a feature was supposed to do, rather than needing to ask you directly each time.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Why "Reference Data Dictionary" Is a Meaningful Framing</h5>
+          <p>The phrase signals the PRDs weren't just handed off and forgotten — they became the thing people actually consulted when a question came up later (a new team member onboarding, a dispute over what a feature was meant to do, an audit of why a decision was made). That's a real, if modest, claim about documentation quality and consistency, distinct from and complementary to the user-story-writing skill in Claim 1.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: What made your PRDs different from a typical requirements doc?</div><div class="a">A: <span class="draftflag">Needs confirmation — specific structural habit, if any (e.g. a consistent glossary section, versioning, explicit assumptions/out-of-scope calls)</span> — honest answer without confirmed specifics: consistency and completeness across documents made them a reliable single source of truth rather than any one distinguishing format innovation.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Low-stakes claim, honest as worded, unlikely to need more than a brief, confident mention in most interviews.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="salesforce">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Salesforce/CRM Foundation — Hands-On Project Note</h2>
+        <p>Stage 1's Hands-On Project Requirements list flags a "Salesforce/CRM workflow automation walkthrough" as a portfolio item for this exact stage — unlike NanoCloud, this role does have a scoped hands-on project attached.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <p style="margin:0 0 12px">The honest read: Claims 1–3 above (requirements ownership, lead automation, quality governance) are real work-experience claims, defensible as described. A separate, self-built Salesforce workflow-automation walkthrough (Stage 31) is the complementary piece — something built from scratch, on your own account, that can be demonstrated and defended at unlimited technical depth with zero risk of misremembering a Capgemini-specific implementation detail. The two are not redundant: the CV claims establish that you did this work in a real client context; the portfolio project proves the underlying Salesforce mechanics cold.</p>
+        <p style="margin:0"><span class="draftflag">Needs confirmation</span> — until the Stage 31 portfolio project exists, keep technical Salesforce questions ("what exactly does a Process Builder flow look like for lead routing?") answered at the honest depth currently available: real hands-on experience, exact configuration specifics for the Capgemini engagement still to be confirmed.</p>
+      </div>
+    </section>
+
+    <section id="star">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>STAR Story Bank</h2>
+        <p>Structured behavioral stories drawn from the Capgemini role — skewed toward requirements-alignment and cross-team-coordination stories, matching this role's actual strength.</p>
+      </div>
+
+      <div class="star-card">
+        <h4>Resolving a Client-vs-Internal Requirements Conflict</h4>
+        <div class="star-row"><b>Situation</b>A client's requested feature conflicted with an internal technical constraint or another client's existing configuration on the shared Salesforce platform.</div>
+        <div class="star-row"><b>Task</b>Resolve the conflict at the requirements stage, before it became a mid-build surprise.</div>
+        <div class="star-row"><b>Action</b>Scoped or split the user story so both the client's underlying need and the technical constraint were addressed, rather than picking one side. <span class="draftflag">Needs confirmation — real instance</span></div>
+        <div class="star-row"><b>Result</b>A story both sides could sign off on before it entered the backlog, avoiding downstream rework.</div>
+      </div>
+
+      <div class="star-card">
+        <h4>Scaling a Requirements Process Across 500+ Stories</h4>
+        <div class="star-row"><b>Situation</b>An 18-month engagement generating a high, steady volume of business needs from multiple client and internal stakeholders.</div>
+        <div class="star-row"><b>Task</b>Keep requirements quality consistent at volume, rather than letting later stories get rushed or under-specified.</div>
+        <div class="star-row"><b>Action</b>Relied on a consistent intake-to-backlog process (per §02's mechanism) rather than improvising fresh for each story.</div>
+        <div class="star-row"><b>Result</b>500+ stories that shaped actual platform delivery, feeding directly into the quality-governance process that cut defects 30%.</div>
+      </div>
+
+      <div class="star-card">
+        <h4>Connecting Requirements Quality to a Measurable Defect Reduction</h4>
+        <div class="star-row"><b>Situation</b>Pre-release defects were undermining client trust in platform reliability.</div>
+        <div class="star-row"><b>Task</b>Reduce defects without simply adding more QA headcount.</div>
+        <div class="star-row"><b>Action</b>Coordinated a structured pre-release review checking build against acceptance criteria, tightening the requirements-to-build feedback loop. <span class="draftflag">Needs confirmation — real instance and exact mechanism</span></div>
+        <div class="star-row"><b>Result</b>A 30% defect reduction and stronger client trust in a platform serving multiple accounts at once.</div>
+      </div>
+
+      <div class="star-card">
+        <h4>Diagnosing and Fixing a Lead-Routing Gap</h4>
+        <div class="star-row"><b>Situation</b>Lead-to-conversion performance was underperforming on the existing automation setup.</div>
+        <div class="star-row"><b>Task</b>Identify and fix the gap in the automation without a full platform rebuild.</div>
+        <div class="star-row"><b>Action</b>Redesigned the lead-routing/follow-up rules governing how new leads were assigned and triggered. <span class="draftflag">Needs confirmation — real instance and exact rule change</span></div>
+        <div class="star-row"><b>Result</b>A client-reported 15% increase in lead-to-conversion performance.</div>
+      </div>
+    </section>
+
+    <section id="audience">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Consistent Wording, Two Interview Audiences</h2>
+        <p>Unlike Axtria (an open verb-drift question) or NanoCloud (a confirmed framing upgrade), Capgemini has no CV-wording risk at all in Stage 1's Risk/Gap Matrix — every version describes this role the same way. The real work here is audience-tailoring, not scope resolution.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <p style="margin:0 0 12px">Because the wording is already consistent, there is no "which verb is honest" or "which framing is stronger" decision to make for this role — a genuinely different situation from Stages 27 and 28, and worth naming as such rather than forcing this section into the same shape by default.</p>
+        <p style="margin:0 0 12px">What does need active management: the same four honest facts land differently depending on who's asking. A <b style="color:var(--ink)">Product Management-track interviewer</b> will weight Claim 1 (500+ user stories, requirements ownership, prioritization) most heavily — that's the "Very High" odds claim, and the one worth leading with, alongside a readiness to discuss the IBM Certified Product Manager and KPMG Lean Six Sigma Green Belt certifications (Stage 1, Risk Matrix #3 — these appear on the Product Management CV only, so have a one-sentence description of each ready even in a non-PM interview if asked). A <b style="color:var(--ink)">general analytics/consulting-track interviewer</b> is more likely to probe Claims 2 and 3 (the automation redesign and the quality-governance process) for their technical-process and measurable-outcome content.</p>
+        <p style="margin:0">The one-breath framing to have ready for either audience: <i>"At Capgemini I owned the requirements-to-delivery loop on a multi-client Salesforce CRM platform — writing and prioritizing 500+ user stories, redesigning lead-routing automation that lifted conversion 15%, and coordinating the quality governance that cut defects 30% ahead of releases."</i> Lead with whichever clause fits the room, without needing to change any underlying fact.</p>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>Mastery Checklist</h2>
+        <p>Check off once you can deliver each item cold, without re-reading this page.</p>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>How This Connects to the Rest of the Masterbook</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <div class="bridge-flow">
+          <span class="node">Stage 14 · Product Management</span><span class="arrow">→</span>
+          <span class="node">Stage 15 · MECE/structured scoping</span><span class="arrow">→</span>
+          <span class="node">Stage 22 · Prioritization frameworks</span><span class="arrow">→</span>
+          <span class="node">Stage 31 · Salesforce/CRM portfolio project</span><span class="arrow">→</span>
+          <span class="node">Stages 27–28 · contrast in scope-resolution shape</span>
+        </div>
+        <p style="margin:14px 0 0">This stage completes the three-role comparison across Part XI so far: Axtria is a from-scratch technical build with an open verb-drift question; NanoCloud is client-facing ownership with a confirmed framing upgrade and two honestly Level C claims; Capgemini is the one role with no CV-wording risk at all, where the real skill is audience-tailoring the same honest facts for PM-track versus general interviews. Stage 30 (Hero Electronics Deep Dive, plus Projects and Case Competitions) closes out Part XI next, applying this same honest-scope treatment to your internship and side-project work.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  var masteryItems = [
+    'I can deliver the 500+ user-stories flagship claim’s 30-sec, 2-min, and 5-min answers cold, in order.',
+    'I can explain the full intake-to-backlog mechanism (intake, translation, alignment, prioritization) from memory.',
+    'I can explain how Claim 1 (requirements) and Claim 3 (quality governance) connect to each other, not just recite them separately.',
+    'I know which specifics (prioritization framework, lead-automation rule change, governance mechanism, real conflict example) still need Pranav’s confirmation.',
+    'I can state the one-breath framing that works for both a PM-track and a general analytics/consulting interviewer.',
+    'I can explain why this role has no CV-wording risk, unlike Axtria and NanoCloud, and what that changes about prep.',
+    'I have both certifications (IBM Certified PM, KPMG Lean Six Sigma) ready to mention naturally if asked, even outside a PM interview.',
+    'I have all four STAR stories ready, including which details still need confirmation.',
+    'I can explain the honest gap between the CV claims here and the still-to-build Stage 31 Salesforce portfolio project.',
+    'I can contrast this role against Axtria and NanoCloud in one sentence when asked to compare my experience.'
+  ];
+  var STORE = 'masterbook-s29-mastery';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var mBox = document.getElementById('masteryBox');
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  mBox.innerHTML = masteryItems.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+esc(t)+'</span></div>';
+  }).join('');
+  mBox.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 500){ backtop.classList.add('show'); } else { backtop.classList.remove('show'); }
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 29 loaded — mastery items:', masteryItems.length);
+} catch (err) { console.error('Stage 29 render error:', err); }
+</script>

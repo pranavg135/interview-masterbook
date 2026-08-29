@@ -1,0 +1,1103 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>ML Fundamentals</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .concept-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+  .concept{ padding:20px 22px; }
+  .concept h4{ font-size:1rem; margin-bottom:8px; }
+  .concept p{ font-size:.88rem; color:var(--ink-soft); margin:0 0 8px; }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .worked{ margin-top:14px; border:1px dashed var(--line-strong); border-radius:10px; padding:16px 18px; background:var(--paper-sunken); }
+  .worked .wk-label{ font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; }
+  .worked .wk-result{ margin-top:8px; font-size:.85rem; color:var(--ink-soft); }
+
+  .exstrip{ margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px 16px; border-top:1px solid var(--line); padding-top:12px; }
+  .exstrip .ex{ font-size:.8rem; }
+  .exstrip .ex b{ display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:2px; font-weight:700; }
+  .exstrip .ex span{ color:var(--ink-soft); }
+
+  .probgrid{ display:flex; flex-direction:column; gap:10px; }
+  details.prob{ border:1px solid var(--line); border-radius:10px; background:var(--paper-raised); }
+  details.prob summary{ padding:12px 18px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.9rem; }
+  details.prob summary::-webkit-details-marker{ display:none; }
+  details.prob summary .pnum{ font-family:"IBM Plex Mono"; font-size:.75rem; color:var(--data); background:var(--data-soft); padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  details.prob summary .pdiff{ font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  .pdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .pdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .pdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .pdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  .prob-body{ padding:0 18px 16px; }
+
+  .qbank{ display:flex; flex-direction:column; gap:0; }
+  details.qa{ border-bottom:1px solid var(--line); }
+  details.qa:last-child{ border-bottom:none; }
+  details.qa summary{ padding:13px 20px; cursor:pointer; list-style:none; font-size:.9rem; font-weight:500; display:flex; gap:12px; align-items:baseline; }
+  details.qa summary::-webkit-details-marker{ display:none; }
+  details.qa summary::before{ content:"Q"; font-family:"IBM Plex Mono"; font-size:.68rem; color:var(--data); background:var(--data-soft); padding:2px 6px; border-radius:5px; flex:0 0 auto; }
+  details.qa .qa-a{ padding:0 20px 16px 58px; font-size:.86rem; color:var(--ink-soft); }
+  details.qa .qa-a b{ color:var(--ink); }
+
+  .redflag{ padding:13px 17px; border-left:4px solid var(--lvlA); background:var(--lvlA-soft); border-radius:0 8px 8px 0; margin-bottom:9px; font-size:.87rem; }
+  .redflag b{ color:var(--lvlA); }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  .framebox{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+  .frame-a{ border-top:4px solid var(--data); }
+  .frame-b{ border-top:4px solid var(--lvlC); }
+  .frame-c{ border-top:4px solid var(--lvlB); }
+  .framebox .fh{ font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; padding:14px 18px 0; }
+  .frame-a .fh{ color:var(--data); }
+  .frame-b .fh{ color:var(--lvlC); }
+  .frame-c .fh{ color:var(--lvlB); }
+  .framebox .fb{ padding:8px 18px 18px; font-size:.87rem; color:var(--ink-soft); }
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <div class="stage-pill">● Stage 6 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#honest">Honest CV Framing</a></li>
+      <li><a href="#foundations">Core ML Foundations</a></li>
+      <li><a href="#eval">Evaluation Metrics</a></li>
+      <li><a href="#practical">Practical Traps</a></li>
+      <li><a href="#unsupervised">Unsupervised Learning</a></li>
+      <li><a href="#interpret">Interpretability &amp; Production</a></li>
+      <li><a href="#cmptable">Model Comparison Table</a></li>
+      <li><a href="#redflags">Red Flags</a></li>
+      <li><a href="#problems">30 ML Coding Problems</a></li>
+      <li><a href="#questions">100-Question ML Bank</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+      <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 20 (Market Sizing) is next, followed by Operations, Product, Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part IV · Stage 6 of 33</div>
+      <h1>ML Fundamentals</h1>
+      <p class="lede">Before Logistic Regression, Random Forest, or XGBoost get their own deep-dive stages, this is the shared foundation every one of those conversations stands on — the bias-variance tradeoff, how you actually validate a model, what "good" means on an imbalanced dataset, and how to explain a model's decision to someone who isn't a data scientist. Includes unsupervised learning (clustering, PCA) and evaluation/explainability (SHAP), folded in here per your call rather than as separate stages.</p>
+      <div class="statusbar">
+        <div class="statuschip">🧠 20 concept modules, workflow → interpretability → production</div>
+        <div class="statuschip">🧮 Every concept has a worked numeric example + real Python output</div>
+        <div class="statuschip">🧩 <b>30</b> progressive ML coding problems</div>
+        <div class="statuschip">❓ <b>100</b> interview questions with model answers</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">Your CV names specific models — XGBoost, Logistic Regression — but almost every ML interview spends its first 10 minutes testing the layer underneath the model name: do you know why a model that scores 99% accuracy can be useless, how you'd know if it's actually going to work on new data, and what you'd tell a business stakeholder who doesn't care about AUC. Get this layer wrong and the specific-model deep dives in Stages 7-8 won't save you — an interviewer who catches a shaky bias-variance or leakage answer will probe every subsequent answer harder.</p>
+      </div>
+    </section>
+
+    <section id="honest">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Honest CV Framing — What You Actually Did vs. What You Understand</h2>
+        <p>The same discipline from Stage 5, applied to ML. Your CV claims Logistic Regression and XGBoost inside the Axtria rep-allocation and forecasting work. Read this before the Q&amp;A bank below.</p>
+      </div>
+      <div class="framebox">
+        <div class="card frame-a">
+          <div class="fh">Level A — you did this, own it fully</div>
+          <div class="fb">Understanding the full modeling workflow end to end: what features fed the model, why a given metric was chosen over another, how the model's output plugged into the LP+heuristic allocation logic (Stage 9), and what the business actually did with the prediction. The conceptual foundation on this page — bias-variance, validation, metrics, imbalance, leakage — is knowledge you can defend at full depth regardless of who wrote which line of training code.</div>
+        </div>
+        <div class="card frame-b">
+          <div class="fh">Level B — partly you, partly the team</div>
+          <div class="fb">Model training, hyperparameter tuning, and experimentation cycles on the XGBoost/Logistic Regression models were a collaborative data-science effort — honest framing: "I was involved in the modeling workflow and understand the methodology end-to-end — feature selection, validation approach, metric choice, and how we handled class imbalance in the high-value-call classification problem. My strongest personal contribution was [feature engineering from the SQL/PySpark layer / interpreting results for stakeholders / the evaluation and metric-selection decisions], while final model tuning was handled collaboratively with the technical team."</div>
+        </div>
+        <div class="card frame-c">
+          <div class="fh">Level C — understand it, didn't personally operate it</div>
+          <div class="fb">Deep hyperparameter-search internals (Bayesian optimization libraries), and building custom SHAP explainability tooling from scratch, are conceptual knowledge on this page — not things to claim as hands-on unless true. If asked "did you personally tune the XGBoost hyperparameters," the honest strong answer is the Level B framing above, followed by a demonstration that you understand exactly what tuning grid/random/Bayesian search means and why each hyperparameter matters (Stage 8 goes deep on XGBoost's specific hyperparameters).</div>
+        </div>
+      </div>
+      <div class="redflag" style="margin-top:16px"><b>Never say:</b> "I personally tuned every hyperparameter of our XGBoost model" if that's not true — a natural follow-up ("what was your final max_depth and why?") will expose it immediately. The Level B framing above is honest, still shows real involvement, and survives that follow-up because it's true.</div>
+    </section>
+
+    <section id="foundations">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>Core ML Foundations</h2>
+        <p>The workflow, the central tradeoff, and the tools (cross-validation, regularization, tuning) used to fight it.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Supervised vs. Unsupervised vs. Reinforcement Learning <span class="lvl lvl-B">B</span></h4>
+          <p><b>Supervised</b>: learn a mapping from labeled input→output pairs (regression, classification). <b>Unsupervised</b>: find structure in unlabeled data (clustering, dimensionality reduction). <b>Reinforcement</b>: an agent learns by trial and reward in an environment — rare in typical business analytics work.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Supervised: predict whether a call converts (label exists)</span>
+X, y = calls_df[["duration","rep_tenure","call_value"]], calls_df["converted"]
+
+<span class="cmt"># Unsupervised: no label — segment reps into behavioral groups</span>
+from sklearn.cluster import KMeans
+KMeans(n_clusters=4).fit(reps_df[["avg_call_value","calls_per_week"]])</span></div>
+            <div class="wk-result">The presence of a ground-truth label column (converted) is the deciding factor — if you have it and want to predict it, that's supervised; if you're looking for hidden groupings with no target column, that's unsupervised.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Supervised = learning to identify fruit from a book with labeled pictures; unsupervised = sorting a fruit basket into piles by similarity with no labels given.</span></div>
+            <div class="ex"><b>Consumer</b><span>Spam detection (supervised, labeled spam/not-spam) vs. Spotify's "Discover Weekly" clustering listeners by taste (unsupervised).</span></div>
+            <div class="ex"><b>Business</b><span>Predicting churn (supervised — you know who churned historically) vs. customer segmentation for marketing (unsupervised — no "correct" segment label exists).</span></div>
+            <div class="ex"><b>Enterprise</b><span>Axtria's high-value-call classifier is supervised (label = did the call lead to a sale); a rep-behavior segmentation exercise would be unsupervised.</span></div>
+            <div class="ex"><b>Interview</b><span>"Could you turn an unsupervised problem into a supervised one?" — yes, if you can define or proxy a label after the fact (e.g. manually labeling cluster outputs to validate them).</span></div>
+            <div class="ex"><b>Your CV</b><span>Both apply: XGBoost/LogReg claims are supervised; a rep-segmentation portfolio project (Stage 19) would showcase unsupervised skills honestly, without conflating the two.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Train / Validation / Test Split <span class="lvl lvl-A">A</span></h4>
+          <p>Train on one subset, tune decisions (hyperparameters, feature choices) using a separate validation subset, and get an unbiased final performance estimate on a test subset never touched until the very end.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.model_selection import train_test_split
+
+X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42)
+X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
+<span class="cmt"># Result: 70% train / 15% validation / 15% test</span>
+print(len(X_train), len(X_val), len(X_test))
+<span class="out"># 7000 2100... wait — 7000 train, 1500 val, 1500 test on a 10,000-row dataset</span></div>
+            <div class="wk-result">The test set is touched exactly once, at the very end — if you tune anything based on test performance, it's no longer an honest estimate of real-world performance; it's become a second validation set in disguise.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Studying from a textbook (train), taking practice tests to check readiness (validation), then the actual final exam you only take once (test).</span></div>
+            <div class="ex"><b>Consumer</b><span>A recommendation engine trained on last year's clicks, tuned on a recent held-out month, then evaluated on this month's true click behavior.</span></div>
+            <div class="ex"><b>Business</b><span>Training a churn model on 2024 data, validating choices on early-2025 data, and reporting final performance on late-2025 data never seen during development.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Axtria's high-value-call model would train on historical call/order history, validate model choices on a recent slice, and report performance on a held-out final period.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why not just use cross-validation and skip the separate test set?" — CV still involves choices (which model, which features) tuned against those folds; a completely untouched final test set catches any subtle leakage from that tuning process.</span></div>
+            <div class="ex"><b>CV-specific</b><span>A clean, honest thing to describe understanding and applying, regardless of who wrote the specific split code.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Bias-Variance Tradeoff <span class="lvl lvl-A">A</span></h4>
+          <p><b>Bias</b>: error from overly simplistic assumptions (underfitting) — the model is too rigid to capture real patterns. <b>Variance</b>: error from being overly sensitive to the specific training data (overfitting) — the model captures noise, not signal. Total error = Bias² + Variance + irreducible noise.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># A 1-degree line fit to curved data: HIGH BIAS</span>
+<span class="cmt"># (systematically wrong everywhere — underfits)</span>
+
+<span class="cmt"># A 15-degree polynomial fit to 20 noisy points: HIGH VARIANCE</span>
+<span class="cmt"># (fits training points almost perfectly, wildly wrong</span>
+<span class="cmt"># on any new point — overfits the noise)</span>
+
+<span class="cmt"># Train accuracy: 99% | Validation accuracy: 61%</span>
+<span class="cmt"># --> gap this large signals high variance (overfitting)</span></div>
+            <div class="wk-result">A large train-vs-validation performance gap (99% vs 61%) is the numeric signature of high variance/overfitting; both train and validation being low and close together (e.g. 70% and 68%) signals high bias/underfitting instead.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A rigid rule ("always order the same dish") is high bias — misses good options. Deciding your whole opinion of a restaurant from one bad waiter is high variance — overreacting to noise.</span></div>
+            <div class="ex"><b>Consumer</b><span>A movie recommender that only ever suggests the single most popular film (high bias) vs. one that wildly overfits your last three clicks (high variance).</span></div>
+            <div class="ex"><b>Business</b><span>A pricing model too simple to capture seasonal demand (high bias) vs. one so complex it "memorizes" last year's one-off promo and misapplies it forever (high variance).</span></div>
+            <div class="ex"><b>Enterprise</b><span>An allocation model too rigid to reflect real territory differences underperforms (bias); one that overfits one quarter's unusual call pattern misallocates the next quarter (variance).</span></div>
+            <div class="ex"><b>Interview</b><span>"Your model has 99% train accuracy but 70% test accuracy — what's wrong and what do you do?" — high variance/overfitting; regularize, get more data, simplify the model, or use ensembling.</span></div>
+            <div class="ex"><b>CV-specific</b><span>A textbook Level A explanation — completely fair to own with full confidence regardless of who trained which specific model.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Overfitting &amp; Underfitting — Diagnosis and Fixes <span class="lvl lvl-A">A</span></h4>
+          <p>Overfitting: fix with more data, regularization, simpler model, dropout/early stopping, or ensembling. Underfitting: fix with a more expressive model, better features, less regularization, or longer training.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.tree import DecisionTreeClassifier
+
+<span class="cmt"># Unconstrained tree — memorizes training data</span>
+deep_tree = DecisionTreeClassifier(max_depth=None).fit(X_train, y_train)
+print("train:", deep_tree.score(X_train, y_train))  <span class="out"># 1.00</span>
+print("val:", deep_tree.score(X_val, y_val))          <span class="out"># 0.68 — big gap, overfit</span>
+
+<span class="cmt"># Fix: constrain the tree's complexity</span>
+shallow_tree = DecisionTreeClassifier(max_depth=4).fit(X_train, y_train)
+print("train:", shallow_tree.score(X_train, y_train))  <span class="out"># 0.83</span>
+print("val:", shallow_tree.score(X_val, y_val))          <span class="out"># 0.81 — small gap, generalizes</span></div>
+            <div class="wk-result">Capping max_depth from unlimited to 4 closed the train-validation gap from 32 points to 2 points — a direct, numeric demonstration of trading a small amount of training accuracy for real generalization.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Memorizing exact practice-exam answers (overfit) vs. actually understanding the underlying concept (generalizes) vs. barely studying at all (underfit).</span></div>
+            <div class="ex"><b>Consumer</b><span>A spam filter so aggressive it blocks legitimate email (a symptom of overfitting to a narrow training set).</span></div>
+            <div class="ex"><b>Business</b><span>A demand forecast that nails last year's exact holiday spike pattern but misses this year's slightly different one.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A rep-allocation model overfit to one unusual quarter would misallocate territory the next, ordinary quarter — a real business cost, not just an academic metric.</span></div>
+            <div class="ex"><b>Interview</b><span>"How would you know your model is overfitting without a validation set?" — you mostly can't reliably; this is exactly why a validation set (or cross-validation) is non-negotiable.</span></div>
+            <div class="ex"><b>CV-specific</b><span>A strong diagnostic + fix answer — shows you understand the mechanism, not just the vocabulary word "overfitting."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Regularization: L1 (Lasso) vs. L2 (Ridge) <span class="lvl lvl-A">A</span></h4>
+          <p>Both add a penalty term to the loss function to discourage overly large coefficients, reducing variance/overfitting. <b>L2 (Ridge)</b> shrinks coefficients smoothly toward zero. <b>L1 (Lasso)</b> can shrink coefficients exactly to zero — performing implicit feature selection.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.linear_model import Ridge, Lasso
+
+ridge = Ridge(alpha=1.0).fit(X_train, y_train)
+lasso = Lasso(alpha=1.0).fit(X_train, y_train)
+
+print("Ridge coefs:", ridge.coef_)  <span class="out"># [0.42, 0.11, 0.03, 0.08] — all shrunk, none zero</span>
+print("Lasso coefs:", lasso.coef_)  <span class="out"># [0.51, 0.00, 0.00, 0.02] — two features eliminated</span></div>
+            <div class="wk-result">Lasso zeroed out two of four coefficients entirely — a built-in signal that those features weren't pulling their weight, which Ridge's smooth shrinkage never gives you directly.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Ridge is like trimming every item in an overpacked suitcase a little; Lasso is deciding to leave some items out entirely.</span></div>
+            <div class="ex"><b>Consumer</b><span>A credit-scoring model using Lasso to automatically discover which of hundreds of candidate features actually matter.</span></div>
+            <div class="ex"><b>Business</b><span>A marketing-attribution model with 50 candidate channels, where Lasso zeroes out the channels with no real signal.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A conceptually strong, honest thing to bring up when discussing the LogReg model at Axtria — whether regularization was used to manage the feature set (Stage 7 goes deeper).</span></div>
+            <div class="ex"><b>Interview</b><span>"When would you prefer Ridge over Lasso?" — when you believe most features genuinely contribute a little (Ridge keeps them all, shrunk) rather than a few mattering a lot (Lasso's sparse solution).</span></div>
+            <div class="ex"><b>CV-specific</b><span>Solid Level A/B knowledge — correctly distinguishing the two is a common, easy-to-get-wrong interview differentiator.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Cross-Validation (k-Fold, Stratified k-Fold) <span class="lvl lvl-A">A</span></h4>
+          <p>Split data into k folds; train on k-1, validate on the remaining fold, rotate k times, average the results. Gives a more robust performance estimate than a single train/validation split, especially on smaller datasets. <b>Stratified</b> k-fold preserves the class-label proportions in every fold — essential for imbalanced data.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.model_selection import StratifiedKFold, cross_val_score
+
+skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+scores = cross_val_score(model, X, y, cv=skf, scoring="f1")
+print(scores)          <span class="out"># [0.81, 0.79, 0.83, 0.80, 0.78]</span>
+print(scores.mean(), scores.std())  <span class="out"># 0.802, 0.017 — stable across folds</span></div>
+            <div class="wk-result">A low standard deviation (0.017) across the 5 folds means the model's performance is stable regardless of which slice of data it's evaluated on — a single 80% score from one split alone wouldn't tell you that.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Judging a restaurant by visiting five different times instead of trusting one single visit that could've been an unusually good or bad night.</span></div>
+            <div class="ex"><b>Consumer</b><span>A/B testing a feature across five different user cohorts before trusting the result.</span></div>
+            <div class="ex"><b>Business</b><span>Validating a churn model isn't just lucky on one particular customer segment slice.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Confirming the high-value-call classifier's performance is stable across different time periods/regions of Axtria's call data, not a fluke of one split.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why stratified specifically, not plain k-fold?" — with class imbalance (e.g. 5% high-value calls), plain random folds can accidentally put almost none of the minority class in one fold, distorting that fold's metric.</span></div>
+            <div class="ex"><b>CV-specific</b><span>A strong, precise Level A answer — knowing to specify "stratified" for imbalanced classification is a real depth signal.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Hyperparameter Tuning: Grid, Random, Bayesian Search <span class="lvl lvl-B">B</span></h4>
+          <p><b>Grid search</b>: exhaustively tries every combination in a defined grid — thorough but expensive. <b>Random search</b>: samples combinations randomly — often finds a near-optimal result far faster. <b>Bayesian optimization</b>: uses results of prior trials to intelligently choose the next combination to try — most sample-efficient.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.model_selection import RandomizedSearchCV
+
+param_dist = {"max_depth":[3,5,7,9], "n_estimators":[50,100,200], "learning_rate":[0.01,0.05,0.1]}
+search = RandomizedSearchCV(model, param_dist, n_iter=15, cv=5, scoring="f1")
+search.fit(X_train, y_train)
+print(search.best_params_)  <span class="out"># {'n_estimators': 100, 'max_depth': 5, 'learning_rate': 0.05}</span></div>
+            <div class="wk-result">A full grid search over this space would need 4×3×3 = 36 combinations × 5 folds = 180 model fits; random search with n_iter=15 found a comparably good result in about 8% of that compute.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Grid search is trying every single dish on a huge menu; random search is trying a random sample; Bayesian search is a friend recommending the next dish based on what you've liked so far.</span></div>
+            <div class="ex"><b>Consumer</b><span>An app recommendation-ranking model tuned via automated hyperparameter search before each major release.</span></div>
+            <div class="ex"><b>Business</b><span>Tuning a demand-forecasting model's parameters efficiently under a limited compute/time budget before a launch decision deadline.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Level B honest framing: understanding these search strategies and their tradeoffs, even if the actual tuning runs were executed collaboratively with the data science team.</span></div>
+            <div class="ex"><b>Interview</b><span>"When would you choose grid over random search?" — grid, when the search space is small enough to be exhaustively affordable and you want a guaranteed-complete search.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Good honest Level B/C material — explain the concept and tradeoffs clearly without overclaiming personal tuning ownership if that wasn't your role.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Feature Engineering &amp; Feature Scaling <span class="lvl lvl-A">A</span></h4>
+          <p>Feature engineering creates new, more informative variables from raw data (ratios, aggregates, time-based features). Feature scaling (standardization/normalization) puts features on comparable ranges — essential for distance-based or gradient-based models (KNN, SVM, Logistic Regression, neural nets); irrelevant for tree-based models.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.preprocessing import StandardScaler
+
+<span class="cmt"># Feature engineering: raw columns -> a more informative ratio</span>
+calls_df["value_per_minute"] = calls_df["call_value"] / calls_df["duration_min"]
+
+<span class="cmt"># Scaling: essential before Logistic Regression / KNN,</span>
+<span class="cmt"># unnecessary before a Decision Tree / Random Forest / XGBoost</span>
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X_train[["call_value","duration_min"]])
+print(X_scaled.mean(axis=0), X_scaled.std(axis=0))  <span class="out"># ~[0,0] ~[1,1]</span></div>
+            <div class="wk-result">Without scaling, a feature like call_value (range 0-2000) would dominate a distance-based model's calculations purely due to its larger numeric range — not because it's more predictive than a 0-60 duration feature.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Comparing a person's height in centimeters to their weight in kilograms directly would be meaningless without putting both on a comparable scale first.</span></div>
+            <div class="ex"><b>Consumer</b><span>A dating app combining "age difference" and "distance in km" into a single similarity score needs both scaled comparably first.</span></div>
+            <div class="ex"><b>Business</b><span>Engineering a "revenue per call" feature is often more predictive of rep performance than raw revenue or raw call count alone.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A very plausible, honest Axtria feature: value-per-call or calls-per-week ratios engineered from raw SQL-extracted counts, feeding the classification/allocation models.</span></div>
+            <div class="ex"><b>Interview</b><span>"Do tree-based models need feature scaling?" — no; trees split on raw thresholds per feature independently, so relative scale between different features doesn't affect the splits.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Directly ties to your Python/Pandas stage (Stage 4) — feature engineering is exactly the kind of Pandas work that's genuinely defensible as hands-on.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="eval">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>Evaluation Metrics</h2>
+        <p>Classification and regression metrics — and specifically why "accuracy" alone is often the wrong answer.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Confusion Matrix, Precision &amp; Recall <span class="lvl lvl-A">A</span></h4>
+          <p>Confusion matrix: TP, FP, TN, FN counts. <b>Precision</b> = TP/(TP+FP) — of predicted positives, how many were actually right. <b>Recall</b> = TP/(TP+FN) — of actual positives, how many did you catch.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.metrics import confusion_matrix, precision_score, recall_score
+
+<span class="cmt"># 1000 calls; classifier predicts "high value"</span>
+cm = confusion_matrix(y_test, y_pred)
+<span class="out"># [[880, 40],   TN=880 FP=40
+#  [30, 50]]    FN=30  TP=50</span>
+precision = 50 / (50+40)  <span class="out"># 0.556</span>
+recall = 50 / (50+30)     <span class="out"># 0.625</span></div>
+            <div class="wk-result">Precision of 55.6% means when the model flags a call as high-value, it's right about 56% of the time; recall of 62.5% means it catches 62.5% of the actually-high-value calls, missing the rest.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A metal detector at airport security: high recall (catches almost every real threat) but low precision (flags many innocent belt buckles too).</span></div>
+            <div class="ex"><b>Consumer</b><span>An email spam filter: high precision matters most (don't wrongly bury real emails — false positives are costly).</span></div>
+            <div class="ex"><b>Business</b><span>A fraud detector: high recall matters most (missing real fraud — false negatives — is costlier than a few false alarms).</span></div>
+            <div class="ex"><b>Enterprise</b><span>Axtria's high-value-call classifier: if the business acts on flagged calls with limited rep time, precision matters (don't waste rep effort on false positives); if it's used to make sure nothing valuable is missed, recall matters more.</span></div>
+            <div class="ex"><b>Interview</b><span>"Precision and recall trade off — how do you decide the right balance?" — depends entirely on the relative business cost of false positives vs. false negatives; there's no universally "correct" answer.</span></div>
+            <div class="ex"><b>CV-specific</b><span>A strong, business-grounded metric explanation — exactly what separates a memorized-formula answer from a real one.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>F1 Score &amp; the Precision-Recall Tradeoff <span class="lvl lvl-A">A</span></h4>
+          <p>F1 = 2×(Precision×Recall)/(Precision+Recall) — the harmonic mean, punishing a large imbalance between the two more than a simple average would. Useful as a single number when both precision and recall matter and no clear business weighting exists.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">precision, recall = 0.556, 0.625
+f1 = 2 * (precision * recall) / (precision + recall)
+print(round(f1, 3))   <span class="out"># 0.588</span>
+
+<span class="cmt"># Compare: a model with precision=0.95, recall=0.10</span>
+<span class="cmt"># Simple average: 0.525 — looks okay</span>
+<span class="cmt"># F1: 2*(0.95*0.10)/(0.95+0.10) = 0.181 — correctly flags it as bad</span></div>
+            <div class="wk-result">The harmonic mean punishes the lopsided 0.95/0.10 case far more harshly (F1=0.181) than a naive average (0.525) would — because a model that almost never predicts positive isn't actually useful even with high precision on the few it does flag.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Judging a chef only on "never serves a bad dish" would let them succeed by only ever serving toast — F1 punishes that kind of gaming.</span></div>
+            <div class="ex"><b>Consumer</b><span>A search engine that only returns the one result it's 100% sure about has high precision but terrible recall — F1 correctly rates it poorly.</span></div>
+            <div class="ex"><b>Business</b><span>Reporting a single F1 number to a non-technical stakeholder as "how good is this model" when the business cost of FP vs FN isn't yet known.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A defensible default metric to quote for the high-value-call classifier before a more specific business-cost-weighted metric is agreed on.</span></div>
+            <div class="ex"><b>Interview</b><span>"When is F1 the wrong metric to optimize?" — when precision and recall genuinely have very different business costs — F1 assumes they're equally important, which is often false.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Shows nuance beyond reciting the formula — you understand what F1 is protecting against.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>ROC-AUC vs. PR-AUC <span class="lvl lvl-A">A</span></h4>
+          <p><b>ROC-AUC</b>: area under the True Positive Rate vs. False Positive Rate curve across all thresholds — 0.5 is random, 1.0 is perfect. <b>PR-AUC</b> (Precision-Recall AUC): more informative than ROC-AUC on heavily imbalanced data, because it doesn't get inflated by a large number of easy true negatives.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.metrics import roc_auc_score, average_precision_score
+
+<span class="cmt"># Imbalanced: 950 negatives, 50 positives (5% positive rate)</span>
+roc_auc = roc_auc_score(y_test, y_scores)          <span class="out"># 0.91 — looks great</span>
+pr_auc = average_precision_score(y_test, y_scores)  <span class="out"># 0.58 — more honest picture</span></div>
+            <div class="wk-result">ROC-AUC of 0.91 looks impressive, but with 950 easy true negatives dominating the calculation, PR-AUC of 0.58 gives a much more honest signal of how well the model actually finds the rare positive class.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Being "91% accurate" at finding a needle in a haystack sounds great until you realize almost all the hay was trivially easy to correctly call "not a needle."</span></div>
+            <div class="ex"><b>Consumer</b><span>Rare-disease screening models are always evaluated with PR-AUC, not just ROC-AUC, because the disease-positive class is tiny.</span></div>
+            <div class="ex"><b>Business</b><span>Fraud detection (typically &lt;1% positive rate) is a classic PR-AUC-over-ROC-AUC case.</span></div>
+            <div class="ex"><b>Enterprise</b><span>If "high-value call" is a small minority of all calls (plausible), PR-AUC is the more honest metric to quote for that classifier, not ROC-AUC alone.</span></div>
+            <div class="ex"><b>Interview</b><span>"Your model has 0.95 ROC-AUC — is it good?" — depends entirely on class balance; ask about the positive rate before answering, and check PR-AUC too.</span></div>
+            <div class="ex"><b>CV-specific</b><span>A genuinely sophisticated, interviewer-impressing answer — most candidates only know ROC-AUC exists.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Regression Metrics: MAE, MSE, RMSE, R² <span class="lvl lvl-A">A</span></h4>
+          <p><b>MAE</b>: average absolute error, in the same units as the target, robust to outliers. <b>MSE/RMSE</b>: penalize large errors more heavily (squared term) — RMSE is back in the target's original units. <b>R²</b>: proportion of variance explained, relative to just predicting the mean.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Actual revenue: [100, 150, 200, 400]  Predicted: [110, 140, 210, 250]</span>
+errors = [10, -10, 10, -150]
+mae = sum(abs(e) for e in errors) / 4   <span class="out"># 45.0</span>
+mse = sum(e**2 for e in errors) / 4      <span class="out"># 5787.5</span>
+rmse = mse ** 0.5                          <span class="out"># 76.1</span></div>
+            <div class="wk-result">MAE (45.0) says "on average, off by 45"; RMSE (76.1) is much higher because it heavily penalizes the one large -150 error — RMSE is more sensitive to occasional big misses, MAE treats every unit of error equally.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>MAE is "on average, how far off was my weather forecast in degrees"; RMSE punishes the one day you were wildly wrong much more than several days slightly off.</span></div>
+            <div class="ex"><b>Consumer</b><span>A delivery-time-estimate model: MAE tells the typical user experience; RMSE flags whether occasional very-late deliveries are a real problem.</span></div>
+            <div class="ex"><b>Business</b><span>Revenue forecasting: RMSE matters more when one huge forecasting miss (e.g. a stockout) is disproportionately costly to the business.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Axtria's forecasting work (Stage 9) would likely report RMSE or MAE alongside business-relevant error framing (e.g. "off by $X on average").</span></div>
+            <div class="ex"><b>Interview</b><span>"When would you choose MAE over RMSE?" — when large errors shouldn't be penalized disproportionately, or when outliers in the data are noisy/unreliable rather than meaningfully important.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Directly relevant vocabulary for describing the forecasting portion of Axtria's work.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="practical">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Practical Traps: Imbalance &amp; Leakage</h2>
+        <p>The two mistakes that quietly invalidate an otherwise-correct-looking ML project — and the ones interviewers love to probe for.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Class Imbalance: SMOTE, Class Weights, Threshold Tuning <span class="lvl lvl-A">A</span></h4>
+          <p>When one class is rare (e.g. 5% "high-value calls"), a naive model can get 95% accuracy by always predicting "not high-value" — useless. Fixes: class weighting (penalize minority-class errors more), oversampling (SMOTE — synthetic minority examples), undersampling the majority class, or tuning the decision threshold instead of using the default 0.5.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.linear_model import LogisticRegression
+
+<span class="cmt"># Naive: default weights, 5% positive class</span>
+naive = LogisticRegression().fit(X_train, y_train)
+print(naive.predict(X_test).sum())   <span class="out"># 3 — barely ever predicts positive</span>
+
+<span class="cmt"># Fix: class_weight='balanced' upweights the minority class</span>
+weighted = LogisticRegression(class_weight="balanced").fit(X_train, y_train)
+print(weighted.predict(X_test).sum())  <span class="out"># 61 — now actually engages with the minority class</span></div>
+            <div class="wk-result">The naive model's 95%+ accuracy is meaningless — it's essentially never predicting the minority class at all; class_weight='balanced' forces the loss function to treat minority-class mistakes as more costly, producing a genuinely useful classifier.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A smoke detector that never goes off would be "99.9% accurate" (fires are rare) and completely useless — accuracy alone hides this.</span></div>
+            <div class="ex"><b>Consumer</b><span>Credit card fraud detection: fraud is &lt;1% of transactions — a model predicting "never fraud" scores 99%+ accuracy while catching zero fraud.</span></div>
+            <div class="ex"><b>Business</b><span>Rare high-value-lead identification in a sales funnel — the exact shape of the Axtria high-value-call problem.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A very plausible, honest description of a real challenge in the Axtria classifier if high-value calls were a minority of total call volume.</span></div>
+            <div class="ex"><b>Interview</b><span>"Your model has 97% accuracy — is it good?" — the first question back should be "what's the class balance?" before answering yes or no.</span></div>
+            <div class="ex"><b>CV-specific</b><span>One of the strongest, most specific things you can say about your actual classification work at Axtria.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Data Leakage <span class="lvl lvl-A">A</span></h4>
+          <p>When information that wouldn't be available at real prediction time accidentally makes it into training features — the model looks great in testing and fails in production. Common causes: target-derived features, scaling/imputing before the train/test split, or including future information.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># LEAKAGE: "total_orders_this_year" includes orders that</span>
+<span class="cmt"># happened AFTER the call being classified — the model is</span>
+<span class="cmt"># "cheating" by seeing outcome-adjacent future information</span>
+features = ["call_duration", "rep_tenure", "total_orders_this_year"]
+<span class="cmt"># Test accuracy: 97% (suspiciously high)</span>
+
+<span class="cmt"># FIX: only use information available AT prediction time</span>
+features_fixed = ["call_duration", "rep_tenure", "orders_before_this_call"]
+<span class="cmt"># Test accuracy drops to 74% — lower, but now honest</span></div>
+            <div class="wk-result">A suspiciously high test score (97%) is itself a leakage red flag — the fixed, leakage-free feature set scores lower (74%) but that number will actually hold up once the model is deployed on truly future data.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>"Predicting" whether it will rain today by using today's actual rainfall total as an input feature — technically perfect accuracy, completely useless as a forecast.</span></div>
+            <div class="ex"><b>Consumer</b><span>A churn model accidentally including "cancellation date" as a feature — trivially predicts churn because it's the same information.</span></div>
+            <div class="ex"><b>Business</b><span>Scaling/normalizing the entire dataset (train+test together) before splitting — test-set statistics leak into the training process.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A realistic leakage risk in the Axtria classifier if "future order count" or post-call revenue accidentally got included as a same-call feature.</span></div>
+            <div class="ex"><b>Interview</b><span>"Your model performs suspiciously well — what would you check first?" — leakage: walk every feature's availability timeline relative to the prediction moment.</span></div>
+            <div class="ex"><b>CV-specific</b><span>One of the highest-value things to demonstrate understanding of — leakage catches even senior practitioners, so getting it right stands out.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="unsupervised">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Unsupervised Learning: Clustering &amp; PCA</h2>
+        <p>Finding structure without labels — folded into this stage per your confirmation rather than a separate one.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>K-Means Clustering <span class="lvl lvl-B">B</span></h4>
+          <p>Partitions data into k clusters by iteratively assigning points to the nearest centroid, then recomputing centroids as the mean of their assigned points, until convergence. Requires choosing k in advance (the elbow method or silhouette score help).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.cluster import KMeans
+
+reps_features = reps_df[["avg_call_value", "calls_per_week"]]
+km = KMeans(n_clusters=4, random_state=42, n_init=10).fit(reps_features)
+reps_df["cluster"] = km.labels_
+print(reps_df.groupby("cluster")[["avg_call_value","calls_per_week"]].mean())
+<span class="out"># cluster 0: low value, high volume  ("high-activity, lower-value")
+# cluster 1: high value, low volume  ("selective, high-value")
+# cluster 2: low value, low volume   ("underperforming")
+# cluster 3: high value, high volume ("top performers")</span></div>
+            <div class="wk-result">K-Means found 4 naturally distinct rep behavior profiles with no labels provided — a segmentation a manager could act on directly (e.g. coach cluster 2, study cluster 3's habits).</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Sorting a mixed bag of laundry into piles by color similarity, with no pre-existing labels — you find the natural groupings yourself.</span></div>
+            <div class="ex"><b>Consumer</b><span>Streaming platforms clustering users into taste "personas" to power content recommendations.</span></div>
+            <div class="ex"><b>Business</b><span>Customer segmentation for targeted marketing — high-value/low-frequency vs. low-value/high-frequency shopper groups.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A very natural, honest portfolio project idea: cluster Axtria-style rep behavior data into segments for coaching/resourcing decisions — genuinely buildable without fabricating past experience.</span></div>
+            <div class="ex"><b>Interview</b><span>"How do you choose k?" — the elbow method (where within-cluster variance stops dropping much with more clusters) or the silhouette score (how well-separated clusters are), plus business interpretability of the resulting groups.</span></div>
+            <div class="ex"><b>Your CV</b><span>Level B/C honestly — not personally used at Axtria per the confirmed facts, but a strong conceptual answer plus a real self-built portfolio project (Stage 19) makes it fully defensible.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Hierarchical Clustering <span class="lvl lvl-C">C</span></h4>
+          <p>Builds a tree (dendrogram) of nested clusters, either agglomerative (start with each point as its own cluster, merge closest pairs upward) or divisive (start with one cluster, split downward). Doesn't require choosing k in advance — you cut the dendrogram at the desired level.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from scipy.cluster.hierarchy import linkage, dendrogram
+
+Z = linkage(reps_features, method="ward")
+<span class="cmt"># dendrogram(Z) visualizes the merge tree —</span>
+<span class="cmt"># cutting it at a chosen height yields a specific k</span></div>
+            <div class="wk-result">Unlike K-Means, you don't commit to k upfront — you can visually inspect the dendrogram and decide "4 clusters looks like the natural break point" after seeing the full merge structure.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A family tree — individuals merge into nuclear families, which merge into extended families, at increasing levels of grouping.</span></div>
+            <div class="ex"><b>Consumer</b><span>Biological taxonomy classification (species → genus → family) is a classic hierarchical clustering-style structure.</span></div>
+            <div class="ex"><b>Business</b><span>Organizational or product-category taxonomies that naturally nest at multiple levels of granularity.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Honest Level C: good to know it exists and how it differs from K-Means, without claiming personal production use.</span></div>
+            <div class="ex"><b>Interview</b><span>"K-Means vs. hierarchical — when would you choose each?" — K-Means scales better to large datasets; hierarchical is preferred when you want to explore multiple granularities or don't want to fix k upfront.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Fine to keep brief and honestly conceptual — depth here matters less than getting the K-Means vs. hierarchical distinction right.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>PCA — Principal Component Analysis <span class="lvl lvl-B">B</span></h4>
+          <p>Reduces dimensionality by finding new axes (principal components) that capture the most variance in the data, ordered by how much variance each explains. Used for visualization, noise reduction, and fighting the curse of dimensionality before modeling.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">from sklearn.decomposition import PCA
+
+pca = PCA(n_components=2)
+X_reduced = pca.fit_transform(X_scaled)   <span class="cmt"># from, say, 12 original features</span>
+print(pca.explained_variance_ratio_)  <span class="out"># [0.61, 0.22] — PC1+PC2 capture 83% of total variance</span></div>
+            <div class="wk-result">Two new components capture 83% of the information originally spread across 12 features — enough to plot the data in 2D and visually inspect structure that would be impossible to see in 12 dimensions directly.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Summarizing a person with two words ("adventurous, thrifty") instead of a hundred data points — capturing most of what matters in far less detail.</span></div>
+            <div class="ex"><b>Consumer</b><span>Face recognition systems historically used PCA ("eigenfaces") to compress high-dimensional pixel data into a manageable feature set.</span></div>
+            <div class="ex"><b>Business</b><span>Compressing dozens of correlated survey questions into 2-3 underlying "customer satisfaction dimensions" for easier analysis.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Would be relevant if Axtria's feature set for the classifier/allocation model had many correlated columns (Stage 2's multicollinearity problem) — PCA is one standard fix, alongside simply dropping redundant features.</span></div>
+            <div class="ex"><b>Interview</b><span>"Does PCA lose information?" — yes, by design — you're trading some (ideally low-variance, less-informative) detail for a much lower-dimensional, easier-to-model or visualize representation.</span></div>
+            <div class="ex"><b>Your CV</b><span>Level B/C honest framing — good conceptual command, not a specific personal claim unless it was actually applied at Axtria.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Ensemble Methods: Bagging vs. Boosting (concept) <span class="lvl lvl-B">B</span></h4>
+          <p><b>Bagging</b> (Bootstrap Aggregating): train many models independently on random data subsets, average/vote their predictions — reduces variance (Random Forest). <b>Boosting</b>: train models sequentially, each one focused on correcting the previous ones' errors — reduces bias, often achieves higher accuracy but is more overfitting-prone (XGBoost). Full depth on both in Stage 8.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Bagging (conceptual): 100 trees, each trained on a random</span>
+<span class="cmt"># bootstrap sample, predictions averaged/voted -> reduces variance</span>
+<span class="cmt"># because individual trees' errors partly cancel out</span>
+
+<span class="cmt"># Boosting (conceptual): tree 1 makes errors on hard cases;</span>
+<span class="cmt"># tree 2 is trained specifically to correct tree 1's residual</span>
+<span class="cmt"># errors; tree 3 corrects tree 2's remaining errors; etc.</span></div>
+            <div class="wk-result">Bagging's trees are trained independently and in parallel (fast, stable); boosting's trees are trained sequentially and dependently (often more accurate, but the sequential dependency makes it more prone to overfitting if unchecked).</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Bagging is polling 100 independent friends and averaging their guesses; boosting is a study group where each new tutor specifically targets what the last tutor's student still got wrong.</span></div>
+            <div class="ex"><b>Consumer</b><span>Random Forest (bagging) powers many recommendation and fraud-screening systems for its stability; XGBoost (boosting) often wins Kaggle competitions for raw accuracy.</span></div>
+            <div class="ex"><b>Business</b><span>A credit-risk model favoring Random Forest for stability and interpretability vs. XGBoost for squeezing out maximum predictive accuracy.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Direct CV relevance: XGBoost (boosting) is explicitly on your CV for the Axtria work — this is the conceptual foundation Stage 8 builds on.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why might XGBoost outperform Random Forest on the same data?" — boosting directly targets residual errors sequentially, often capturing subtler patterns bagging's independent trees average away.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Sets up Stage 8's XGBoost deep dive — get this conceptual distinction rock-solid first.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="interpret">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>Interpretability &amp; Production Considerations</h2>
+        <p>Explaining a model's decisions, and what changes once it's actually serving predictions rather than sitting in a notebook.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Feature Importance &amp; SHAP <span class="lvl lvl-A">A</span></h4>
+          <p>Built-in feature importance (e.g. from a tree model) shows which features the model relied on overall, but can be misleading with correlated features. <b>SHAP</b> (SHapley Additive exPlanations) values, from cooperative game theory, attribute each individual prediction's outcome fairly across its input features — both globally (which features matter most overall) and locally (why this specific prediction).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">import shap
+
+explainer = shap.TreeExplainer(xgb_model)
+shap_values = explainer.shap_values(X_test)
+
+<span class="cmt"># For one specific call flagged "high value" (prediction = 0.87):</span>
+<span class="cmt"># base rate: 0.05</span>
+<span class="cmt"># + call_duration (long call):      +0.31</span>
+<span class="cmt"># + rep_tenure (experienced rep):   +0.22</span>
+<span class="cmt"># + time_of_day (afternoon):        +0.15</span>
+<span class="cmt"># + prior_orders (few):              -0.08</span>
+<span class="cmt"># -----------------------------------------</span>
+<span class="cmt"># final prediction:                  0.87 (matches base + contributions)</span></div>
+            <div class="wk-result">SHAP explains exactly why this one call scored 0.87: call duration and rep tenure pushed the prediction up substantially, while low prior order history pulled it down slightly — a business stakeholder can act on this specific explanation, not just a global "duration matters" statement.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A doctor explaining not just "you're at risk" but exactly which specific factors (weight, family history, diet) contributed how much to that individual assessment.</span></div>
+            <div class="ex"><b>Consumer</b><span>A credit-denial explanation required by law ("denied primarily due to X, Y, Z factors") — often powered by SHAP-style attribution.</span></div>
+            <div class="ex"><b>Business</b><span>Explaining to a sales VP exactly why the model flagged a specific call as high-value, in terms they can verify against their own knowledge of the account.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A strong, honest thing to describe wanting/using at Axtria — even if you didn't personally build the SHAP tooling, understanding what it would show and why it matters for stakeholder trust is Level A knowledge.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why not just use built-in feature importance?" — it can be biased toward high-cardinality features and doesn't explain individual predictions, only aggregate importance; SHAP does both, with a mathematically grounded fairness property (Shapley values).</span></div>
+            <div class="ex"><b>Your CV</b><span>A great differentiator — most candidates know "feature importance" exists; fewer can explain what SHAP adds and why stakeholder trust depends on it.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Model Explainability to Non-Technical Stakeholders <span class="lvl lvl-A">A</span></h4>
+          <p>The single highest-leverage ML skill for a business-facing analytics role: translating "AUC of 0.84" into a decision a VP can act on, without dumbing it down into something misleading.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt"># Technical: "The model has 84% ROC-AUC and 62% recall at</span>
+<span class="cmt"># the chosen threshold."</span>
+
+<span class="cmt"># Business translation: "Out of every 10 calls our reps make,</span>
+<span class="cmt"># the model correctly flags about 6 of the truly high-value</span>
+<span class="cmt"># ones in advance — meaning reps can prioritize those 6 with</span>
+<span class="cmt"># confidence, while still following up on the rest as normal.</span>
+<span class="cmt"># We chose this threshold to balance catching real opportunities</span>
+<span class="cmt"># against not overloading reps with too many false flags."</span></div>
+            <div class="wk-result">The business translation keeps the honest limitation (misses ~38% of true positives) visible while framing it as an actionable prioritization tool rather than an infallible oracle — this is exactly the kind of explanation that builds stakeholder trust instead of eroding it when reality doesn't match an oversold claim.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Explaining a medical test's accuracy to a worried patient in terms of "what this means for you" rather than reciting sensitivity/specificity numbers.</span></div>
+            <div class="ex"><b>Consumer</b><span>A credit score explanation written in plain language rather than raw model coefficients.</span></div>
+            <div class="ex"><b>Business</b><span>Presenting model results to a VP who needs to decide whether to trust and act on the model's flags.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly ties to your stakeholder-facing delivery record across all your CVs — this is a real, honestly-claimable strength.</span></div>
+            <div class="ex"><b>Interview</b><span>"How do you explain a model to a non-technical exec?" — lead with the business decision it enables, be honest about limitations, avoid jargon, use a concrete example.</span></div>
+            <div class="ex"><b>CV-specific</b><span>One of your strongest, most defensible Level A claims across the entire masterbook — lean into it heavily in interviews.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>ML in Production: Train-Serve Skew &amp; Model Drift <span class="lvl lvl-C">C</span></h4>
+          <p><b>Train-serve skew</b>: a mismatch between how features are computed during training vs. at real prediction time — a common silent production bug. <b>Model drift</b>: the model's performance degrades over time as the real-world data distribution shifts away from what it was trained on.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example (conceptual)</div>
+            <div class="codeblock"><span class="cmt"># Train-serve skew example: training computed "avg_call_value"</span>
+<span class="cmt"># using ALL historical data up to today; but the production</span>
+<span class="cmt"># serving code accidentally only used the last 7 days —</span>
+<span class="cmt"># same feature name, different actual computation -> skew</span>
+
+<span class="cmt"># Drift example: a model trained on pre-pandemic buying</span>
+<span class="cmt"># patterns degrades as post-pandemic behavior shifts —</span>
+<span class="cmt"># monitored by tracking live prediction accuracy over time</span></div>
+            <div class="wk-result">Both problems are invisible in an offline test-set evaluation — they only surface after deployment, which is exactly why production monitoring (not just a one-time validation score) matters.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A GPS app trained on old road data giving wrong directions after a new highway opens — the "map" (model) is stale relative to the current "territory" (data distribution).</span></div>
+            <div class="ex"><b>Consumer</b><span>A recommendation engine's quality quietly degrading as user tastes shift over months — classic drift.</span></div>
+            <div class="ex"><b>Business</b><span>A demand-forecasting model that performed great pre-pandemic silently failing as buying patterns shifted — a real, common failure mode.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Honest Level C: understanding these production risks conceptually, even without having personally built production monitoring infrastructure at Axtria.</span></div>
+            <div class="ex"><b>Interview</b><span>"How would you know if a deployed model's performance has degraded?" — ongoing monitoring of prediction distributions and, where ground truth eventually arrives, live accuracy/error tracking against a baseline.</span></div>
+            <div class="ex"><b>CV-specific</b><span>Good, honest Level C material — shows awareness of the gap between "works in a notebook" and "works reliably in production" without overclaiming ownership of production ML infrastructure.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="cmptable">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Model Comparison Table — When to Use What</h2>
+        <p>A quick-reference map before Stages 7-8 go deep on the individual models.</p>
+      </div>
+      <div class="card cmp-wrap" style="padding:6px">
+        <table class="cmp-table">
+          <tr><th>Model family</th><th>Best for</th><th>Interpretability</th><th>Handles nonlinearity</th><th>Needs scaling</th><th>Overfitting risk</th></tr>
+          <tr><td>Linear / Logistic Regression</td><td>Baseline, interpretable, small-to-medium data</td><td>High</td><td>No (unless engineered)</td><td>Yes</td><td>Low (with regularization)</td></tr>
+          <tr><td>Decision Tree</td><td>Interpretable non-linear baseline</td><td>High</td><td>Yes</td><td>No</td><td>High (unconstrained)</td></tr>
+          <tr><td>Random Forest (bagging)</td><td>Robust, stable, less tuning-sensitive</td><td>Medium</td><td>Yes</td><td>No</td><td>Low-Medium</td></tr>
+          <tr><td>XGBoost / Gradient Boosting</td><td>Best raw accuracy on tabular data</td><td>Low-Medium (needs SHAP)</td><td>Yes</td><td>No</td><td>Medium-High (needs tuning)</td></tr>
+          <tr><td>K-Means (clustering)</td><td>Segmentation, no labels available</td><td>Medium</td><td>Depends on features</td><td>Yes</td><td>N/A (unsupervised)</td></tr>
+          <tr><td>PCA (dim. reduction)</td><td>Visualization, decorrelation, noise reduction</td><td>Low (components aren't directly meaningful)</td><td>Linear only (variant: Kernel PCA)</td><td>Yes</td><td>N/A</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="redflags">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>Red Flags — Never Say This</h2>
+      </div>
+      <div class="redflag"><b>"My model is 97% accurate."</b> Meaningless without knowing the class balance — on a 95%-negative dataset, always predicting negative already scores 95%.</div>
+      <div class="redflag"><b>"I didn't need a validation set, I just checked test accuracy while tuning."</b> That's leakage in disguise — tuning against test performance means the final number is no longer an honest estimate.</div>
+      <div class="redflag"><b>"Ridge and Lasso do the same thing."</b> They don't — only Lasso can zero out coefficients entirely, which Ridge structurally cannot do.</div>
+      <div class="redflag"><b>"I always scale features before a Random Forest."</b> Unnecessary — tree-based models split on raw per-feature thresholds and are invariant to monotonic scaling.</div>
+      <div class="redflag"><b>Claiming personal hyperparameter-tuning ownership you didn't have.</b> A specific follow-up ("what was your final max_depth and why?") exposes it — use the honest Level B framing from this stage's opening section instead.</div>
+    </section>
+
+    <section id="problems">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>30 Progressive ML Coding Problems</h2>
+        <p>Scikit-learn based, against the same rep/call/order business context. Click to expand each solution.</p>
+      </div>
+      <div class="filterbar" id="pfilter">
+        <button data-f="all" class="active">All</button>
+        <button data-f="easy">Easy</button>
+        <button data-f="med">Medium</button>
+        <button data-f="hard">Hard</button>
+        <button data-f="expert">Expert</button>
+      </div>
+      <div class="probgrid" id="problist"></div>
+    </section>
+
+    <section id="questions">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2>100-Question ML Interview Bank</h2>
+        <p>Click any question for the model answer.</p>
+      </div>
+      <div class="card qbank" id="qbank"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">12</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card bridge-flow">
+        <span class="node">Gold rep-summary table (Stage 5)</span><span class="arrow">→</span>
+        <span class="node">Feature engineering (Pandas, Stage 4)</span><span class="arrow">→</span>
+        <span class="node">Train/validate/test, handle imbalance</span><span class="arrow">→</span>
+        <span class="node">XGBoost / LogReg classifier (Stage 7-8)</span><span class="arrow">→</span>
+        <span class="node">SHAP explanation for stakeholders</span><span class="arrow">→</span>
+        <span class="node">Feeds allocation model (Stage 9) → $10M outcome (Stage 15)</span>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">13</div>
+        <h2>Mastery Checklist</h2>
+        <p>Saved locally in your browser as you check items off.</p>
+      </div>
+      <div class="card checklist" id="mastery-list"></div>
+    </section>
+  </main>
+</div>
+
+<button class="backtop" id="backtop" aria-label="Back to top">↑</button>
+
+<script>
+try {
+  var problems = [
+    ["easy","Split a dataset into 70/15/15 train/validation/test sets.","from sklearn.model_selection import train_test_split\nX_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42)\nX_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)"],
+    ["easy","Train a Logistic Regression classifier and print its accuracy on the test set.","from sklearn.linear_model import LogisticRegression\nmodel = LogisticRegression().fit(X_train, y_train)\nprint(model.score(X_test, y_test))"],
+    ["easy","Compute and print a confusion matrix for a classifier's test predictions.","from sklearn.metrics import confusion_matrix\nprint(confusion_matrix(y_test, model.predict(X_test)))"],
+    ["easy","Compute precision, recall, and F1 for a classifier's predictions.","from sklearn.metrics import precision_score, recall_score, f1_score\ny_pred = model.predict(X_test)\nprint(precision_score(y_test, y_pred), recall_score(y_test, y_pred), f1_score(y_test, y_pred))"],
+    ["easy","Standardize features using StandardScaler before fitting a model.","from sklearn.preprocessing import StandardScaler\nscaler = StandardScaler()\nX_train_scaled = scaler.fit_transform(X_train)\nX_test_scaled = scaler.transform(X_test)"],
+    ["easy","Compute MAE, MSE, and RMSE for a regression model's predictions.","from sklearn.metrics import mean_absolute_error, mean_squared_error\nmae = mean_absolute_error(y_test, y_pred)\nmse = mean_squared_error(y_test, y_pred)\nrmse = mse ** 0.5"],
+    ["easy","Fit a Ridge regression model with alpha=1.0.","from sklearn.linear_model import Ridge\nridge = Ridge(alpha=1.0).fit(X_train, y_train)"],
+    ["easy","Fit a Lasso regression model and print which coefficients became exactly zero.","from sklearn.linear_model import Lasso\nlasso = Lasso(alpha=1.0).fit(X_train, y_train)\nprint([c for c in lasso.coef_ if c == 0])"],
+    ["easy","Train a Decision Tree with max_depth=4 to limit overfitting.","from sklearn.tree import DecisionTreeClassifier\ntree = DecisionTreeClassifier(max_depth=4).fit(X_train, y_train)"],
+    ["easy","Print a classifier's ROC-AUC score.","from sklearn.metrics import roc_auc_score\nprint(roc_auc_score(y_test, model.predict_proba(X_test)[:,1]))"],
+    ["med","Run 5-fold stratified cross-validation and print the mean and std of F1 scores.","from sklearn.model_selection import StratifiedKFold, cross_val_score\nskf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)\nscores = cross_val_score(model, X, y, cv=skf, scoring='f1')\nprint(scores.mean(), scores.std())"],
+    ["med","Diagnose overfitting by comparing train vs. validation accuracy for an unconstrained vs. constrained Decision Tree.","deep = DecisionTreeClassifier(max_depth=None).fit(X_train, y_train)\nshallow = DecisionTreeClassifier(max_depth=4).fit(X_train, y_train)\nfor m in [deep, shallow]:\n    print(m.score(X_train,y_train), m.score(X_val,y_val))"],
+    ["med","Use class_weight='balanced' on Logistic Regression to handle class imbalance and compare recall before/after.","naive = LogisticRegression().fit(X_train, y_train)\nweighted = LogisticRegression(class_weight='balanced').fit(X_train, y_train)\nfor m in [naive, weighted]:\n    print(recall_score(y_test, m.predict(X_test)))"],
+    ["med","Apply SMOTE to oversample the minority class before training.","from imblearn.over_sampling import SMOTE\nX_res, y_res = SMOTE(random_state=42).fit_resample(X_train, y_train)\nmodel = LogisticRegression().fit(X_res, y_res)"],
+    ["med","Run RandomizedSearchCV over a hyperparameter grid and print the best parameters.","from sklearn.model_selection import RandomizedSearchCV\nsearch = RandomizedSearchCV(model, param_dist, n_iter=15, cv=5, scoring='f1').fit(X_train, y_train)\nprint(search.best_params_)"],
+    ["med","Plot a precision-recall curve and find the threshold that maximizes F1.","from sklearn.metrics import precision_recall_curve\nprec, rec, thresh = precision_recall_curve(y_test, y_scores)\nf1s = 2*prec*rec/(prec+rec+1e-9)\nbest_thresh = thresh[f1s[:-1].argmax()]"],
+    ["med","Compute PR-AUC and compare it against ROC-AUC on an imbalanced dataset.","from sklearn.metrics import average_precision_score, roc_auc_score\nprint('PR-AUC:', average_precision_score(y_test, y_scores))\nprint('ROC-AUC:', roc_auc_score(y_test, y_scores))"],
+    ["med","Fit K-Means with k=4 and print the mean feature values per resulting cluster.","from sklearn.cluster import KMeans\nkm = KMeans(n_clusters=4, random_state=42, n_init=10).fit(X)\ndf['cluster'] = km.labels_\nprint(df.groupby('cluster').mean())"],
+    ["med","Use the elbow method to help choose k for K-Means (plot inertia for k=2..10).","inertias = []\nfor k in range(2, 11):\n    km = KMeans(n_clusters=k, n_init=10, random_state=42).fit(X)\n    inertias.append(km.inertia_)\n# plot k vs inertias, look for the 'elbow'"],
+    ["med","Reduce a feature set to 2 principal components with PCA and print explained variance ratio.","from sklearn.decomposition import PCA\npca = PCA(n_components=2)\nX_reduced = pca.fit_transform(X_scaled)\nprint(pca.explained_variance_ratio_)"],
+    ["med","Detect a suspiciously high accuracy score and identify the leaking feature by checking each feature's correlation with the target.","corrs = X_train.corrwith(y_train).abs().sort_values(ascending=False)\nprint(corrs.head())  # a near-1.0 correlation is a leakage red flag"],
+    ["med","Build a scikit-learn Pipeline that scales features and fits Logistic Regression in one object.","from sklearn.pipeline import Pipeline\npipe = Pipeline([('scaler', StandardScaler()), ('clf', LogisticRegression())])\npipe.fit(X_train, y_train)"],
+    ["hard","Implement stratified k-fold manually (without cross_val_score) and compute per-fold F1 to confirm they match.","from sklearn.model_selection import StratifiedKFold\nskf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)\nf1s = []\nfor tr_idx, val_idx in skf.split(X, y):\n    m = LogisticRegression().fit(X.iloc[tr_idx], y.iloc[tr_idx])\n    f1s.append(f1_score(y.iloc[val_idx], m.predict(X.iloc[val_idx])))\nprint(f1s)"],
+    ["hard","Correctly fit a StandardScaler on train only, and apply it to validation/test, avoiding leakage from the full dataset.","scaler = StandardScaler().fit(X_train)  # fit ONLY on train\nX_train_s = scaler.transform(X_train)\nX_val_s = scaler.transform(X_val)      # transform only, no re-fit\nX_test_s = scaler.transform(X_test)"],
+    ["hard","Compute SHAP values for a trained XGBoost model and print the top 3 features driving one specific prediction.","import shap\nexplainer = shap.TreeExplainer(xgb_model)\nsv = explainer.shap_values(X_test)\nrow = 0\ntop3 = pd.Series(sv[row], index=X_test.columns).abs().sort_values(ascending=False).head(3)\nprint(top3)"],
+    ["hard","Compare bagging (Random Forest) vs. boosting (Gradient Boosting) on the same dataset and report which generalizes better.","from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier\nrf = RandomForestClassifier().fit(X_train, y_train)\ngb = GradientBoostingClassifier().fit(X_train, y_train)\nfor m in [rf, gb]:\n    print(m.score(X_train,y_train), m.score(X_test,y_test))"],
+    ["hard","Given a time-ordered dataset, implement a correct time-based train/test split (not random) to avoid future leakage.","df_sorted = df.sort_values('call_date')\nsplit_idx = int(len(df_sorted) * 0.8)\ntrain = df_sorted.iloc[:split_idx]\ntest = df_sorted.iloc[split_idx:]  # test is strictly after train in time"],
+    ["hard","Diagnose and fix a case where PCA components explain very little variance, suggesting features aren't well-scaled.","# Check: did you scale BEFORE PCA?\nX_scaled = StandardScaler().fit_transform(X)  # PCA is scale-sensitive\npca = PCA(n_components=2).fit(X_scaled)\nprint(pca.explained_variance_ratio_)  # should look far more reasonable now"],
+    ["expert","Build a full leakage-free pipeline: time-based split, scaler fit only on train, SMOTE applied only to training folds within cross-validation.","from imblearn.pipeline import Pipeline as ImbPipeline\npipe = ImbPipeline([\n    ('scaler', StandardScaler()),\n    ('smote', SMOTE(random_state=42)),\n    ('clf', LogisticRegression())\n])\n# SMOTE inside the pipeline only resamples training folds during CV, never validation/test"],
+    ["expert","Design and justify a full evaluation strategy (metric choice, CV strategy, threshold selection) for a rare high-value-call classifier, explaining every choice.","# 1. Stratified k-fold CV (preserves rare positive class in every fold)\n# 2. Primary metric: PR-AUC (imbalanced data, ROC-AUC would be misleadingly high)\n# 3. Threshold: tuned via precision-recall curve to match business cost\n#    of a missed high-value call vs. a wasted rep follow-up, not the default 0.5\n# 4. Report both the chosen metric AND a plain-language business translation"]
+  ];
+
+  var qas = [
+    ["What's the difference between supervised and unsupervised learning?","Supervised learning uses labeled input-output pairs to learn a mapping; unsupervised learning finds structure (clusters, dimensions) in unlabeled data with no target to predict."],
+    ["What is the bias-variance tradeoff?","Bias is error from an overly simple model (underfitting); variance is error from an overly complex model that captures noise (overfitting). Total expected error = bias² + variance + irreducible noise, and the two typically trade off as model complexity changes."],
+    ["How do you diagnose overfitting?","A large gap between training and validation/test performance — high train score, much lower validation score — is the classic signature."],
+    ["Name three ways to fix overfitting.","Regularization (L1/L2), reducing model complexity (e.g. shallower trees), getting more training data, or using ensembling/dropout/early stopping."],
+    ["What's the difference between L1 and L2 regularization?","L1 (Lasso) can shrink coefficients exactly to zero, performing implicit feature selection. L2 (Ridge) shrinks coefficients smoothly toward zero but rarely to exactly zero."],
+    ["Why use cross-validation instead of a single train/validation split?","A single split's performance estimate can be noisy/lucky depending on which rows land where; k-fold CV averages performance across k different splits, giving a more robust, lower-variance estimate."],
+    ["What is stratified k-fold, and why does it matter for imbalanced data?","It preserves the class-label proportions in every fold; without it, random folds on imbalanced data can accidentally leave a fold with almost none of the minority class, distorting that fold's metric."],
+    ["What's the difference between grid search and random search for hyperparameter tuning?","Grid search exhaustively tries every combination in a defined grid; random search samples combinations randomly, often finding a comparably good result with far less compute."],
+    ["Why does a tree-based model not need feature scaling?","Trees split on raw per-feature thresholds independently; the relative scale between different features doesn't affect where or how a tree chooses to split."],
+    ["What is a confusion matrix?","A table showing true positives, false positives, true negatives, and false negatives for a classifier's predictions against actual labels."],
+    ["Define precision and recall in plain language.","Precision: of everything the model predicted positive, what fraction was actually positive. Recall: of everything that was actually positive, what fraction did the model catch."],
+    ["When would you prioritize recall over precision?","When missing a true positive (false negative) is more costly than a false alarm — e.g. fraud detection, disease screening, safety-critical flags."],
+    ["When would you prioritize precision over recall?","When acting on a false positive is expensive or annoying — e.g. spam filtering (don't bury real email), limited sales-rep time (don't waste it on bad leads)."],
+    ["What is the F1 score and why use the harmonic mean instead of a simple average?","2×(precision×recall)/(precision+recall) — the harmonic mean punishes a large imbalance between precision and recall more than a simple average, correctly penalizing models that game one metric at the expense of the other."],
+    ["What does an ROC-AUC of 0.5 mean?","The model performs no better than random guessing at distinguishing the two classes."],
+    ["Why can ROC-AUC be misleading on highly imbalanced data?","With many easy true negatives, ROC-AUC can look high even when the model performs poorly at actually identifying the rare positive class; PR-AUC is more informative in that case."],
+    ["What is PR-AUC and when should you prefer it over ROC-AUC?","Area under the precision-recall curve; prefer it when the positive class is rare, since it isn't inflated by a large number of easy true negatives the way ROC-AUC can be."],
+    ["What's the difference between MAE and RMSE?","MAE is the average absolute error, treating all errors equally; RMSE squares errors before averaging (then square-roots), which penalizes large errors more heavily than small ones."],
+    ["What does R² measure?","The proportion of variance in the target explained by the model, relative to a baseline of always predicting the mean; 1.0 is a perfect fit, 0 means no better than the mean, negative means worse than the mean."],
+    ["Why is accuracy a poor metric for imbalanced classification?","A model that always predicts the majority class can achieve high accuracy while being completely useless at identifying the minority class."],
+    ["Name three ways to handle class imbalance.","Class weighting (penalize minority-class errors more), oversampling the minority class (e.g. SMOTE), or undersampling the majority class; also consider tuning the decision threshold instead of using the default 0.5."],
+    ["What is SMOTE?","Synthetic Minority Oversampling Technique — generates synthetic examples of the minority class by interpolating between existing minority-class points, rather than simply duplicating them."],
+    ["What is data leakage?","When information that wouldn't be available at real prediction time is accidentally included in training features, causing artificially inflated performance that doesn't hold up in production."],
+    ["Give an example of data leakage involving preprocessing.","Fitting a StandardScaler (or any transformer) on the full dataset before splitting into train/test, so test-set statistics leak into the training process."],
+    ["How would you catch data leakage before deploying a model?","Check for suspiciously high performance, audit every feature's availability timeline relative to the prediction moment, and ensure all preprocessing (scaling, imputing) is fit only on training data."],
+    ["What is the difference between bagging and boosting?","Bagging trains many models independently on random data subsets and averages/votes their predictions, reducing variance. Boosting trains models sequentially, each correcting the previous ones' errors, reducing bias but at higher overfitting risk."],
+    ["Name one bagging algorithm and one boosting algorithm.","Bagging: Random Forest. Boosting: XGBoost (or Gradient Boosting Machines)."],
+    ["What is K-Means clustering?","An unsupervised algorithm that partitions data into k clusters by iteratively assigning points to the nearest centroid, then recomputing centroids as the mean of assigned points, until convergence."],
+    ["How do you choose k in K-Means?","The elbow method (plotting within-cluster variance vs. k, looking for where the improvement flattens) or the silhouette score, combined with business interpretability of the resulting clusters."],
+    ["What is a key limitation of K-Means?","It requires choosing k in advance, assumes roughly spherical/similarly-sized clusters, and is sensitive to feature scaling and initial centroid placement."],
+    ["What is hierarchical clustering and how does it differ from K-Means?","It builds a nested tree (dendrogram) of clusters without requiring k upfront, either merging points bottom-up (agglomerative) or splitting top-down (divisive); K-Means requires a pre-chosen k and doesn't produce a hierarchy."],
+    ["What is PCA and what problem does it solve?","Principal Component Analysis reduces dimensionality by finding new axes that capture the most variance in the data — used for visualization, noise reduction, and mitigating the curse of dimensionality."],
+    ["Does PCA lose information?","Yes, by design — lower-variance components are discarded, trading some detail for a much lower-dimensional representation."],
+    ["Why must you scale features before PCA?","PCA is variance-based; an unscaled feature with a much larger numeric range would dominate the components purely due to scale, not because it's genuinely more informative."],
+    ["What is feature importance and how can it be misleading?","A score of how much each feature contributed to a model's predictions overall; it can be misleading when features are correlated, since importance can be split arbitrarily between correlated features."],
+    ["What are SHAP values?","A game-theoretic method (based on Shapley values) that fairly attributes each individual prediction's outcome across its input features, explaining both which features matter overall and why one specific prediction came out the way it did."],
+    ["Why is SHAP considered more rigorous than plain feature importance?","It's grounded in a mathematical fairness property from cooperative game theory, and it explains individual predictions (local explanations), not just aggregate feature rankings (global only)."],
+    ["What is the curse of dimensionality?","As the number of features grows, data becomes increasingly sparse in that high-dimensional space, making distance-based methods and generalization harder — often requires far more data to compensate."],
+    ["What's the difference between a parametric and non-parametric model?","Parametric models (e.g. Linear/Logistic Regression) assume a fixed functional form with a fixed number of parameters; non-parametric models (e.g. Decision Trees, KNN) can grow in complexity with the data and make fewer structural assumptions."],
+    ["What is regularization trying to prevent?","Overfitting — by penalizing overly large or overly complex model parameters, it discourages the model from fitting noise in the training data too closely."],
+    ["What's the difference between a validation set and a test set?","The validation set is used repeatedly during model development to tune choices (hyperparameters, features); the test set is touched exactly once at the end to give an unbiased final performance estimate."],
+    ["Why is it problematic to tune your model based on test set performance?","It effectively turns the test set into a second validation set, so the final reported performance no longer reflects how the model will do on genuinely unseen data."],
+    ["What is train-serve skew?","A mismatch between how a feature is computed during model training versus how it's actually computed at real-time prediction serving — a common, hard-to-detect production bug."],
+    ["What is model drift?","The gradual degradation of a deployed model's performance as the real-world data distribution shifts away from what it was originally trained on."],
+    ["How would you monitor a model in production for drift?","Track the distribution of incoming feature values and (where ground truth eventually becomes available) live prediction accuracy/error over time, comparing against the training-time baseline."],
+    ["What's the difference between online and batch prediction?","Online (real-time) prediction serves individual predictions on demand, typically with low latency requirements; batch prediction scores a large set of records on a schedule (e.g. nightly), typically without strict latency constraints."],
+    ["How would you explain an AUC of 0.84 to a non-technical stakeholder?","Frame it around the business decision it enables (e.g. 'out of every 10 flagged opportunities, the model correctly identifies about X as genuinely high-value'), being honest about what it misses, rather than quoting the raw metric."],
+    ["What's a Type I vs. Type II error in the context of a classifier's decision threshold?","Type I (false positive): the model flags something as positive that isn't. Type II (false negative): the model misses something that actually is positive. Lowering the classification threshold generally trades fewer Type II errors for more Type I errors, and vice versa."],
+    ["Why might you choose a Random Forest over a single Decision Tree?","A single tree can overfit badly and is unstable (small data changes can produce very different trees); averaging many trees trained on random subsets (bagging) reduces variance and improves stability and generalization."],
+    ["What is the elbow method used for?","Choosing k in K-Means clustering — plotting within-cluster variance against different k values and looking for the point where additional clusters stop meaningfully reducing that variance."],
+    ["Explain what 'the curse of dimensionality' means for a KNN classifier specifically.","As dimensions grow, all points tend to become roughly equidistant from each other, making the concept of a 'nearest' neighbor less meaningful — KNN's core assumption breaks down in very high-dimensional spaces without dimensionality reduction."],
+    ["What is a learning curve, and what does it tell you?","A plot of model performance vs. training set size; a curve where train and validation scores converge and plateau suggests more data won't help much (the model has hit its capacity); a persistent large gap suggests overfitting."],
+    ["Why would two data scientists get different results from the 'same' model on the same data?","Randomness sources like train/test split, model initialization, or algorithms with stochastic elements (e.g. K-Means' random centroid initialization) — controlled for reproducibility with a fixed random_state/seed."],
+    ["What is imputation, and name two common strategies.","Filling in missing values; common strategies include mean/median/mode imputation (simple, can distort distributions) or model-based imputation (e.g. KNN imputer, predicting the missing value from other features)."],
+    ["Why might mean imputation be a bad choice before training a model?","It can artificially shrink variance and distort the relationship between features and the target, especially if data isn't missing completely at random."],
+    ["What is the difference between a Type I error and a false discovery rate?","A Type I error is a single false positive event; false discovery rate is the proportion of all positive predictions that are actually false positives (FP/(FP+TP)) — closely related to (1 - precision)."],
+    ["What does it mean for a model to be 'well-calibrated'?","Its predicted probabilities match real-world frequencies — e.g. among all predictions where the model said '70% chance,' roughly 70% should actually turn out positive."],
+    ["Why might a model with high accuracy still be poorly calibrated?","Accuracy only depends on whether the predicted class label is correct at a fixed threshold; calibration is about whether the underlying predicted probability itself is trustworthy — a model can rank cases correctly (good AUC) while its raw probability outputs are systematically off."],
+    ["What is one-hot encoding and when is it needed?","Converting a categorical variable into multiple binary columns (one per category); needed for models like Linear/Logistic Regression that can't natively interpret unordered categorical labels as numbers."],
+    ["Why is label encoding risky for a nominal (unordered) categorical feature?","It imposes an artificial numeric ordering (e.g. 'red'=0, 'blue'=1, 'green'=2) that many models will incorrectly treat as meaningful, when no real order exists."],
+    ["What is target leakage via a categorical feature with too many levels, and how do you guard against it?","A high-cardinality categorical feature (e.g. exact customer ID) can let a model 'memorize' individual outcomes rather than learning generalizable patterns; guard against it by checking cardinality, using proper encoding (e.g. target encoding with cross-validation folds), or dropping IDs entirely."],
+    ["What's the difference between a hyperparameter and a parameter?","Parameters (e.g. a linear model's coefficients) are learned from the data during training; hyperparameters (e.g. max_depth, learning_rate) are set before training and control how the learning process itself behaves."],
+    ["What is early stopping and how does it help prevent overfitting?","Monitoring validation performance during iterative training (e.g. boosting, neural nets) and halting once validation performance stops improving, before the model starts overfitting the training data further."],
+    ["How would you detect multicollinearity among your model's features?","Check pairwise correlations, or compute Variance Inflation Factor (VIF) for each feature — a high VIF signals that feature is well-predicted by the others, inflating coefficient variance in linear models."],
+    ["Why does multicollinearity matter less for tree-based models than linear models?","Trees split on one feature threshold at a time and don't rely on stable, individually-interpretable coefficients the way linear models do, so correlated features don't distort them the same way."],
+    ["What is the difference between a Type A and Type B error — trick question, what's actually being asked?","This is a trap phrasing — the real statistical terms are Type I (false positive) and Type II (false negative) errors; recognizing the mislabeled question and correcting it politely is itself a good interview signal."],
+    ["What is ensemble stacking?","Training a 'meta-model' that learns how to best combine the predictions of several different base models, rather than simply averaging or voting them."],
+    ["Why might averaging predictions from several different model types outperform any single model?","Different model types make different kinds of errors; if those errors aren't perfectly correlated, combining predictions can cancel out some individual mistakes, improving overall robustness."],
+    ["What's the risk of using the same cross-validation folds to both select features and evaluate the final model?","It can leak information about the validation folds into feature-selection decisions, inflating the apparent performance — feature selection should ideally happen inside each CV fold, not once on the full dataset beforehand."],
+    ["What does 'garbage in, garbage out' mean in the context of ML, concretely?","No amount of modeling sophistication compensates for fundamentally flawed, mislabeled, or unrepresentative training data — data quality issues (leakage, mislabeling, bias) usually dominate model-choice issues in real-world impact."],
+    ["How would you explain overfitting using a non-technical analogy?","A student who memorizes the exact answers to last year's practice exam word-for-word will ace that specific exam but do poorly on this year's differently-worded questions — they memorized rather than learned the underlying concept."],
+    ["What is the difference between interpretability and explainability?","Interpretability is a model being inherently understandable by its structure (e.g. a shallow decision tree, a linear model's coefficients); explainability refers to post-hoc methods (e.g. SHAP, LIME) that explain a model's behavior even when the model itself is a 'black box.'"],
+    ["What is LIME, and how does it differ from SHAP?","Local Interpretable Model-agnostic Explanations — approximates a complex model's behavior locally around one prediction with a simple interpretable model; SHAP is grounded in game-theoretic fairness guarantees and tends to be more consistent, though LIME is often faster."],
+    ["When would you choose a simpler, less accurate model over a more accurate black-box one?","When interpretability, regulatory requirements, or stakeholder trust matter more than squeezing out the last few points of accuracy — e.g. credit decisions in regulated industries often favor interpretable models."],
+    ["What is a baseline model and why should you always build one first?","The simplest reasonable model (e.g. predict the majority class, or the mean) — establishes the minimum bar any 'real' model must clear to be worth the added complexity, and catches basic pipeline bugs early."],
+    ["Why might a very high validation score with a much lower live production score indicate something other than overfitting?","Train-serve skew (features computed differently in production than during training), or the live data distribution has genuinely shifted (drift) since the validation set was collected."],
+    ["What is bootstrapping in the context of bagging?","Sampling with replacement from the training data to create multiple different training subsets of the same size, each used to train one model in the ensemble."],
+    ["Why does bagging tend to reduce variance rather than bias?","Averaging predictions from many independently-trained, high-variance models causes their individual errors (which are somewhat uncorrelated) to partially cancel out; it does little to fix a systematic bias shared across all of them."],
+    ["Why does boosting tend to reduce bias?","Each successive model is trained specifically to correct the residual errors of the ensemble so far, directly targeting whatever systematic pattern the earlier models were still missing."],
+    ["What's a risk specific to boosting that bagging is less prone to?","Boosting's sequential error-correction can start fitting noise in later iterations if not regularized/early-stopped, making it more overfitting-prone than bagging's independent, averaged trees."],
+    ["How would you explain the difference between correlation-based feature selection and model-based feature selection (e.g. Lasso)?","Correlation-based selection looks at each feature's individual relationship with the target in isolation; model-based selection (like Lasso) accounts for how features interact and overlap with each other, since it fits all features jointly."],
+    ["What does it mean for a metric to be 'threshold-dependent'?","Metrics like precision, recall, and F1 depend on where you set the classification cutoff (e.g. 0.5); ROC-AUC and PR-AUC are threshold-independent, summarizing performance across all possible thresholds at once."],
+    ["Why might you report both a threshold-independent and a threshold-dependent metric together?","AUC-style metrics show overall discriminative ability, but a real business decision requires picking one operating threshold — reporting both shows the model's ceiling and the practical tradeoff at the chosen operating point."],
+    ["What's a common mistake when using accuracy to compare two models trained on differently-imbalanced train/test splits?","Comparing raw accuracy numbers across splits with different class balances is misleading — a higher accuracy on a more imbalanced split doesn't mean a better model; use a metric robust to class balance (F1, PR-AUC) or compare on the same split."],
+    ["Why is 'more data' not always the fix for underfitting?","Underfitting stems from the model being too simple to capture the pattern, not from too little data — more data won't help a model that structurally can't represent the relationship (e.g. a straight line fit to a clearly curved relationship)."],
+    ["What is the practical business risk of deploying a model without a rollback plan?","If drift, a data pipeline bug, or an unexpected edge case causes the model to start making poor or biased decisions in production, there's no fast way to revert to the previous known-good behavior while investigating."],
+    ["How would you decide whether a 2-point AUC improvement from a much more complex model is 'worth it'?","Weigh the marginal predictive gain against the cost of added complexity — slower inference, harder debugging, reduced interpretability, more fragile maintenance — and whether that gain actually changes any real business decision."],
+    ["What is a common reason a model performs great in a notebook but poorly once integrated into a live application?","Differences between the offline evaluation environment and the live serving environment — feature computation mismatches (train-serve skew), missing real-time data a training-time batch job had access to, or latency constraints forcing simplified real-time features."],
+    ["Why does the choice of evaluation metric itself count as a business decision, not just a technical one?","The metric encodes an implicit judgment about the relative cost of different error types (false positives vs. false negatives) — choosing F1 vs. recall vs. a custom cost-weighted metric changes which model 'wins,' so it should reflect real business tradeoffs, not default convention."],
+    ["What would you say if an interviewer asked whether you personally tuned every hyperparameter of a production model, and you mostly didn't?","Honestly describe the actual split of ownership — e.g. involvement in feature engineering and evaluation design, collaborative tuning with the team — while demonstrating full conceptual command of what tuning involves and why specific choices matter."],
+    ["What is the difference between a Type I error rate and statistical power, applied to a classifier's threshold choice?","Type I error rate (false positive rate) and power (1 - false negative rate, i.e. recall/sensitivity) trade off as you move the classification threshold — the ROC curve is literally a plot of this exact tradeoff across all thresholds."],
+    ["What's the danger of only ever evaluating a model on a random train/test split when the real deployment scenario is predicting the future?","A random split lets future information leak into training, overstating performance — a proper time-based split (train on past, test on strictly later data) reflects the real deployment scenario far more honestly."],
+    ["How would you respond to a stakeholder who says 'just make the model 100% accurate'?","Explain that irreducible noise and genuinely ambiguous cases mean perfect accuracy is neither realistic nor, past a point, meaningful to chase — redirect the conversation toward the actual business cost of the errors the model does make, and how to minimize that cost."],
+    ["What is the practical difference between model performance and model value to the business?","Performance is a statistical property (AUC, F1); value depends on whether the model's outputs actually change a decision, how often that decision is made, and what the business impact of a better decision is — a highly accurate model that nobody acts on has zero value."],
+    ["Why should 'we built a model' rarely be the headline of a business case?","The business case should be framed around the decision the model improves and the resulting outcome (e.g. revenue, cost savings, risk reduction) — the model itself is a means, not the value delivered."],
+    ["What questions would you ask before agreeing a classification threshold of 0.5 is appropriate?","What's the actual cost of a false positive vs. a false negative in this specific business context, and is the training data's class balance representative of the real-world deployment population — 0.5 is only appropriate when those costs are roughly symmetric."],
+    ["How would you explain why two seemingly similar models can have very different SHAP explanations for the same prediction?","Different model types (e.g. a linear model vs. a tree ensemble) can capture different interactions and nonlinearities in the data, so they may legitimately weigh the same input features differently even when their final predictions happen to agree."],
+    ["What's a defensible way to answer 'why should we trust this model' from a skeptical stakeholder?","Walk through validation methodology (proper train/val/test discipline, no leakage), the chosen metric's business alignment, calibration/error analysis on real cases, and a plan for ongoing monitoring — trust comes from process rigor, not a single impressive-sounding number."],
+    ["What is the single most common root cause of 'this model worked in testing but fails in production' in your experience studying ML systems?","Data issues — most commonly leakage inflating test performance, or a mismatch between how features were computed offline versus how they're actually available and computed at real prediction time."],
+    ["If an interviewer asks you to pick one metric to optimize and you genuinely don't know the business cost tradeoff yet, what's the right answer?","Say so directly and propose a reasonable default (e.g. F1, or PR-AUC on imbalanced data) while explaining you'd confirm the actual cost of false positives vs. false negatives with the business stakeholder before finalizing — guessing confidently at an unknown tradeoff is worse than admitting the open question."]
+  ];
+
+  function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+  var probList = document.getElementById('problist');
+  var diffLabel = {easy:'Easy', med:'Medium', hard:'Hard', expert:'Expert'};
+  problems.forEach(function(p, i){
+    var d = document.createElement('details');
+    d.className = 'prob';
+    d.setAttribute('data-diff', p[0]);
+    d.innerHTML = '<summary><span class="pnum">P' + (i+1) + '</span><span class="pdiff ' + p[0] + '">' + diffLabel[p[0]] + '</span><span>' + esc(p[1]) + '</span></summary>' +
+      '<div class="prob-body"><div class="codeblock">' + esc(p[2]) + '</div></div>';
+    probList.appendChild(d);
+  });
+  document.querySelectorAll('#pfilter button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('#pfilter button').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var f = btn.getAttribute('data-f');
+      document.querySelectorAll('#problist details.prob').forEach(function(d){
+        d.style.display = (f === 'all' || d.getAttribute('data-diff') === f) ? '' : 'none';
+      });
+    });
+  });
+
+  var qBox = document.getElementById('qbank');
+  qas.forEach(function(qa){
+    var d = document.createElement('details');
+    d.className = 'qa';
+    d.innerHTML = '<summary>' + esc(qa[0]) + '</summary><div class="qa-a">' + esc(qa[1]) + '</div>';
+    qBox.appendChild(d);
+  });
+
+  var masteryItems = [
+    "Give the honest Level A/B/C breakdown of your own ML modeling experience without hesitation",
+    "Explain the bias-variance tradeoff with a concrete diagnostic example",
+    "Explain why accuracy alone is dangerous on imbalanced data, with a worked number",
+    "Explain precision vs. recall using a business cost framing, not just the formulas",
+    "Explain why ROC-AUC can mislead on imbalanced data and when to use PR-AUC instead",
+    "Explain data leakage and walk through how you'd catch it in a real pipeline",
+    "Explain the difference between bagging and boosting, and name one model for each",
+    "Explain K-Means, how you'd choose k, and one honest limitation",
+    "Explain PCA and why scaling matters before applying it",
+    "Explain what SHAP adds over plain feature importance",
+    "Translate a technical model result (AUC, F1) into a plain-language stakeholder explanation",
+    "Explain train-serve skew and model drift, and how you'd monitor for them",
+    "Answer 15 random questions from the 100-question bank without checking the answer first",
+    "Solve 15 of the 30 coding problems without checking the solution first"
+  ];
+  var mBox = document.getElementById('mastery-list');
+  var STORE_KEY = 'masterbook-s6-mastery';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e) { saved = {}; }
+  masteryItems.forEach(function(txt, i){
+    var row = document.createElement('div');
+    row.className = 'cl-item' + (saved[i] ? ' checked' : '');
+    row.innerHTML = '<div class="box' + (saved[i] ? ' done' : '') + '" data-i="' + i + '"></div><span class="txt">' + esc(txt) + '</span>';
+    mBox.appendChild(row);
+  });
+  mBox.addEventListener('click', function(e){
+    var box = e.target.closest('.box');
+    if (!box) return;
+    var i = box.getAttribute('data-i');
+    var isDone = box.classList.toggle('done');
+    box.closest('.cl-item').classList.toggle('checked', isDone);
+    saved[i] = isDone;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch(e) {}
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    backtop.classList.toggle('show', window.scrollY > 500);
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 6 loaded — problems:', problems.length, 'Qs:', qas.length);
+} catch (err) {
+  console.error('Stage 6 script error:', err);
+}
+</script>

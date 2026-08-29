@@ -1,0 +1,794 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>Operations Case Bank</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+
+  .caselist{ display:flex; flex-direction:column; gap:14px; }
+  details.case{ border:1px solid var(--line); border-radius:12px; background:var(--paper-raised); box-shadow:var(--shadow); overflow:hidden; }
+  details.case summary{ padding:16px 22px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.98rem; font-weight:600; }
+  details.case summary::-webkit-details-marker{ display:none; }
+  details.case summary .cnum{ font-family:"IBM Plex Mono"; font-size:.72rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:3px 9px; border-radius:6px; flex:0 0 auto; }
+  details.case summary .cdiff{ font-size:.66rem; font-weight:700; padding:3px 9px; border-radius:6px; flex:0 0 auto; text-transform:uppercase; letter-spacing:.03em; }
+  .cdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .cdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .cdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .cdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  details.case summary .cind{ font-size:.72rem; font-weight:500; color:var(--ink-faint); flex:0 0 auto; }
+  details.case summary .ctitle{ flex:1; }
+  .case-body{ padding:0 22px 24px; border-top:1px solid var(--line); }
+  .case-prompt{ margin:18px 0; padding:15px 18px; background:var(--paper-sunken); border-left:4px solid var(--ink-faint); border-radius:0 8px 8px 0; font-style:italic; font-size:.93rem; }
+  .case-sec{ margin-top:20px; }
+  .case-sec h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .case-sec h5::before{ content:""; width:14px; height:2px; background:var(--accent); display:inline-block; }
+  .case-sec p, .case-sec li{ font-size:.9rem; color:var(--ink-soft); margin:0 0 6px; }
+  .qa-pair{ margin-bottom:10px; padding:10px 14px; background:var(--paper-sunken); border-radius:8px; }
+  .qa-pair .q{ font-size:.88rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .qa-pair .a{ font-size:.87rem; color:var(--ink-soft); }
+  .case-sec ul{ margin:0; padding-left:20px; }
+  .case-sec .calc-block{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:14px 16px; font-family:"IBM Plex Mono"; font-size:.79rem; overflow-x:auto; line-height:1.65; white-space:pre; margin-top:4px; }
+  .case-sec .result-tag{ display:inline-block; margin-top:8px; font-family:"IBM Plex Mono"; font-size:.8rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:5px 11px; border-radius:6px; }
+  .synth-box{ margin-top:20px; padding:15px 18px; background:var(--accent-soft); border-radius:8px; border-left:4px solid var(--accent); }
+  .synth-box h5{ color:var(--accent-ink); }
+  .synth-box p{ color:var(--ink); font-weight:500; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <a class="backlink" href="stage14.html">← Stage 14 · Product Management</a>
+    <a class="backlink" href="stage15.html">← Stage 15 · Structured Problem Solving &amp; Frameworks</a>
+    <a class="backlink" href="stage16.html">← Stage 16 · Profitability Case Bank</a>
+    <a class="backlink" href="stage17.html">← Stage 17 · Market Entry Case Bank</a>
+    <a class="backlink" href="stage18.html">← Stage 18 · Growth Case Bank</a>
+    <a class="backlink" href="stage19.html">← Stage 19 · Pricing Case Bank</a>
+    <a class="backlink" href="stage20.html">← Stage 20 · Market Sizing Case Bank</a>
+    <div class="stage-pill">● Stage 21 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#howtouse">How to Use This Case Bank</a></li>
+      <li><a href="#cases">The 10 Operations Cases</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 23 (Analytics) is next, followed by AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part X · Stage 21 of 33</div>
+      <h1>Operations Case Bank</h1>
+      <p class="lede">10 full operations cases at full interview depth: bottleneck and capacity diagnosis, inventory/reorder-point analysis, queueing and staffing, network/facility design, root-cause quality diagnosis, make-vs-buy decisions, and multi-layered process redesign under real-world constraints — each solved with a genuine structural approach, worked math, and a real recommendation, walked through exactly as a real case interview runs, including interviewer pushback and model answers.</p>
+      <div class="statusbar">
+        <div class="statuschip">⚙️ <b>10</b> full operations cases, zero compressed</div>
+        <div class="statuschip">🧮 Every case has a genuine worked operational calculation</div>
+        <div class="statuschip">🗣️ Every case includes interviewer cross-questions with model answers</div>
+        <div class="statuschip">🔀 Spans manufacturing, retail, logistics, healthcare, aviation, and quick-commerce</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">Operations cases are the most diagnostic case type in the whole Masterbook: unlike sizing or profitability cases where the deliverable is a number, an operations case's deliverable is a correctly identified root cause — and the discipline that separates a strong answer from a weak one is resisting the first plausible-sounding explanation in favor of actually tracing the process, checking capacity against demand at the right point in time, and using any natural experiment hiding in the data (a shift comparison, a component breakdown, a before/after) to distinguish between competing hypotheses rather than guessing. This stage applies that discipline to 10 genuinely distinct operational situations, from a single-outlet bottleneck diagnosis to a full enterprise-wide supply-chain risk-segmentation redesign, so the underlying diagnostic reasoning becomes second nature.</p>
+      </div>
+    </section>
+
+    <section id="howtouse">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>How to Use This Case Bank</h2>
+        <p>Every case follows the exact same 10-part structure, so you can drill any single part in isolation or run the whole case end to end.</p>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <div class="bridge-flow">
+          <span class="node">Prompt</span><span class="arrow">→</span>
+          <span class="node">Clarifying Qs</span><span class="arrow">→</span>
+          <span class="node">MECE Structure</span><span class="arrow">→</span>
+          <span class="node">Hypothesis</span><span class="arrow">→</span>
+          <span class="node">Data</span><span class="arrow">→</span>
+          <span class="node">Calculation</span><span class="arrow">→</span>
+          <span class="node">Insight</span><span class="arrow">→</span>
+          <span class="node">Recommendation</span><span class="arrow">→</span>
+          <span class="node">Risks</span><span class="arrow">→</span>
+          <span class="node">Cross-Qs</span><span class="arrow">→</span>
+          <span class="node">Synthesis</span>
+        </div>
+        <p style="margin:14px 0 0">Recommended drill: read only the <b>prompt</b>, pause the page, and try to generate your own diagnostic framework (a capacity-vs-demand check, a process-flow map, or a root-cause category set like the 4Ms — Man, Machine, Material, Method) before expanding the rest. Operations cases especially reward looking for a natural experiment hiding in the data — a shift comparison, a before/after, a component breakdown — that can distinguish between competing root-cause hypotheses rather than just asserting one. The 10 cases are tagged by difficulty (easier / medium / hard / expert) and filterable below the case list heading.</p>
+      </div>
+    </section>
+
+    <section id="cases">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>The 10 Operations Cases</h2>
+        <p>Full quota, full depth — every case fully interactive, none compressed to structure-plus-answer-only.</p>
+      </div>
+      <div class="filterbar" id="casefilter">
+        <button class="active" data-diff="all">All (10)</button>
+        <button data-diff="easy">Easier</button>
+        <button data-diff="med">Medium</button>
+        <button data-diff="hard">Hard</button>
+        <button data-diff="expert">Expert</button>
+      </div>
+      <div class="caselist" id="caselist"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">None of these 10 companies or operational situations are Pranav's own work experience, and none should ever be presented as such — they're deliberate practice cases. The honest bridge is the METHOD: tracing a process end to end, checking capacity against demand at the specific point and time that matters, and using a natural experiment in the data to separate competing root causes rather than guessing is the same analytical discipline behind the SQL and Python diagnostic work in Stages 3-4, and the structured problem-solving habits from Stage 15. If an interviewer asks "have you diagnosed an operational problem before," the honest and strong answer is: "Not as a standalone operations-consulting engagement, but I've built the diagnostic habits — mapping a process, isolating where capacity or quality actually breaks down, and using real data to distinguish between competing explanations rather than asserting the first plausible one — through real analytical work, and I've drilled a full bank of operations cases across very different industries to build the root-cause instinct on top of that foundation."</p>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Mastery Checklist</h2>
+        <p>One item per case — check off once you can walk through that case's full structure, calculation, and synthesis cold, without re-reading it.</p>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  var cases = [
+  {
+    "diff": "easy",
+    "industry": "Food & Beverage — Bakery Chain",
+    "title": "A Bakery Chain's Bestselling Croissant Keeps Selling Out by 10am — Fix the Operations",
+    "prompt": "A 12-outlet bakery chain's bestselling item, the butter croissant, sells out by 10am at most locations, frustrating customers and leaving revenue on the table for the rest of the day. The CEO wants an operational fix, not just \"bake more.\"",
+    "clarify": [
+      {
+        "q": "Is the constraint baking capacity (oven space/time), ingredient supply, or staffing — or do we not know yet?",
+        "a": "We don't know yet — that's part of what you need to diagnose. Each outlet has its own small kitchen and bakes in batches through the morning."
+      },
+      {
+        "q": "Is this happening at all 12 outlets equally, or concentrated in a few high-traffic ones?",
+        "a": "It's worse at the 4 highest-traffic outlets (near office districts) — the other 8 sell out later, closer to 1-2pm."
+      },
+      {
+        "q": "Is the CEO open to operational changes only (batch sizing, scheduling), or also willing to consider a centralized/hub-and-spoke production model?",
+        "a": "Open to both — operational fixes at the outlet level first, but also willing to hear a structural recommendation if that's what the data points to."
+      }
+    ],
+    "mece": "I'll diagnose using a simple capacity-vs-demand framework, checking each stage of the croissant's flow from raw ingredient to shelf: (1) demand pattern — how croissant demand is actually distributed across the morning, (2) production capacity — oven throughput, batch size, and baking-cycle time at the constrained outlets, (3) scheduling — whether the baking schedule is matched to the demand curve or front-loaded/back-loaded incorrectly.\n\nL1 — Demand pattern: is demand actually front-loaded (most croissants sold in the first 2 hours) or is the sellout simply a mismatch between total daily bake quantity and total daily demand?\nL1 — Production capacity: oven size, batch count per bake cycle, cycle time (proof + bake), and how many bake cycles fit into the morning before the 10am cutoff.\nL1 — Schedule/mix decision: whether outlets could rebalance oven time toward croissants earlier in the morning (opportunity cost against other items) or run an additional bake cycle.",
+    "hypothesis": "My working hypothesis is that this is primarily a scheduling/capacity-allocation problem, not a true raw-capacity shortage — the ovens likely have unused capacity later in the day (once the morning rush passes) that isn't being redirected toward an earlier, larger croissant bake, because the baking schedule was set up around a fixed daily quantity rather than the actual demand curve.",
+    "data": "At the 4 high-traffic outlets: each has one oven that can bake 2 batches of 60 croissants (120 total) per bake cycle, with a full proof+bake cycle taking 90 minutes. Outlets currently run 2 croissant bake cycles per morning (6am and 7:30am), producing 240 croissants/day, all done baking by 9am. Observed demand: roughly 350-400 croissants/day at these outlets based on when they sell out (by 10am) and estimated walk-away demand after sellout (customers who leave without buying). Oven capacity is otherwise idle between 9am and 11am at these outlets (used for other items at lower volume) before the lunch bake cycle starts.",
+    "calc": "Current daily output = 240 croissants (2 cycles × 120).\nEstimated true demand = 350-375 croissants/day (using sellout time + walk-away estimate), call it 360 for the calculation.\nShortfall = 360 − 240 = 120 croissants/day, roughly one additional full bake cycle.\nAdding a 3rd bake cycle at 8:45am (using the otherwise-idle 9-11am oven window, cycle finishing ~10:15am) adds 120 croissants, bringing supply to 360 — matching estimated demand.\nCost check: each cycle costs roughly ₹450 in ingredients + ₹150 in incremental labor/energy = ₹600/cycle for 120 croissants (₹5/croissant marginal cost) against a ₹45 average selling price — even accounting for some cannibalization of other items' oven time, the incremental cycle is comfortably margin-positive as long as at least ~15 of the 120 additional croissants sell (well below the expected full sellout, given documented walk-away demand).",
+    "insight": "The bottleneck isn't oven capacity in an absolute sense — it's that the existing capacity is scheduled around a fixed historical bake quantity rather than the actual demand curve, and there's already idle oven time later in the morning that a third, later-timed bake cycle could use without requiring any capital investment (a new oven) or major schedule disruption.",
+    "recommendation": "Add a third croissant bake cycle at ~8:45am at the 4 high-traffic outlets specifically (not chain-wide, since the other 8 don't show the same sellout pattern), using existing idle oven capacity, which should close roughly the full estimated demand gap at a clearly margin-positive incremental cost — and track actual sellout time and walk-away estimates for 4-6 weeks after the change to confirm the fix worked and to right-size further if demand is still being underserved or now over-supplied.",
+    "risks": [
+      "The 350-375 estimated true demand is inferred from sellout timing and a rough walk-away estimate, not directly measured — if actual unmet demand is lower (say, 300), the third bake cycle would overshoot and create end-of-day waste, which should be monitored via a short pilot before rolling out permanently.",
+      "Adding a third bake cycle uses oven time that's currently allocated to other items (pastries, bread) in the 9-11am window — if those items have their own unmet demand or higher margin, this could be solving one stockout by creating another, and outlet-level trade-offs should be checked, not just croissant-specific ones.",
+      "This fix addresses the 4 high-traffic outlets but doesn't address whether demand is shifting or growing chain-wide — if the other 8 outlets' 1-2pm sellout time is also creeping earlier over time, this same diagnostic should be reapplied there before it becomes an equally acute problem."
+    ],
+    "cross": [
+      {
+        "q": "Why didn't you recommend simply increasing batch size per bake cycle instead of adding a whole new cycle?",
+        "a": "Because the ovens are already at their physical batch-size limit (60 per batch, 2 batches per cycle using the full oven) — there's no more physical space per cycle, so the only two levers are more cycles (using idle time later in the morning) or a bigger oven, which is a capital investment; adding a cycle using existing idle capacity is the lower-cost, faster-to-implement option and should be tried first before considering equipment investment."
+      },
+      {
+        "q": "This all rests on your estimate of true demand from indirect signals — how would you get a harder number before rolling this out to all 4 outlets?",
+        "a": "I'd run a 1-2 week pilot at a single outlet first, tracking actual sales by hour alongside a simple manual tally of walk-away customers (staff noting when someone leaves after seeing croissants are sold out), which would give a much more direct demand estimate than my current inference; I'd use that pilot data to confirm or adjust the target bake quantity before rolling the third cycle out to the other 3 outlets."
+      }
+    ],
+    "synthesis": "This case is a clean introduction to operations diagnosis: before recommending 'produce more,' check whether the real problem is total capacity or capacity allocation across time — idle capacity hiding later in the day is a common and cheap fix that's easy to miss if you only look at whether the constrained resource is 'full' during the hours you happen to be observing it."
+  },
+  {
+    "diff": "easy",
+    "industry": "E-Commerce — Inventory & Fulfillment",
+    "title": "An E-Commerce Retailer's Bestselling SKU Keeps Stocking Out — Diagnose the Operational Cause",
+    "prompt": "An online retailer's #1 bestselling product (a popular kitchen gadget) stocks out roughly every 3 weeks, each time for 5-7 days before replenishment, causing an estimated 15% of that SKU's potential monthly sales to be lost. Diagnose the operational cause and recommend a fix.",
+    "clarify": [
+      {
+        "q": "Is this a single-supplier product, and do we know the current reorder process (fixed reorder point, manual, forecast-driven)?",
+        "a": "Single supplier, and the reorder process is largely manual — the inventory manager reorders when they notice stock is getting low, roughly every 3-4 weeks, based on a rough gut-feel reorder point."
+      },
+      {
+        "q": "What's the supplier's lead time from order to delivery, and has that changed recently?",
+        "a": "Lead time is currently about 10 days, and it's been fairly stable — no recent supply chain disruption on the supplier side."
+      },
+      {
+        "q": "Is demand for this SKU roughly steady, or does it spike (e.g., around promotions or seasonal events)?",
+        "a": "Demand is fairly steady day to day, with a couple of known spikes around major sale events (which the team does plan inventory for separately) — so let's focus on the steady-state stockout pattern outside of those planned events."
+      }
+    ],
+    "mece": "I'll frame this as a reorder-point problem, since manual, gut-feel reordering against a fixed lead time is a classic setup for exactly this stockout pattern: (1) demand rate — average daily units sold, (2) lead time — days between placing a reorder and receiving stock, (3) reorder point and safety stock — whether the current reorder trigger accounts for lead-time demand plus a buffer, or is set too low/too late.\n\nL1 — Demand rate: average daily sales velocity for this SKU in steady-state (excluding planned promotional spikes).\nL1 — Lead time: supplier lead time, and how much demand accumulates during that window.\nL1 — Reorder point logic: what inventory level should trigger a reorder to avoid stockout, versus what level currently triggers a reorder in practice.",
+    "hypothesis": "I expect the root cause to be a reorder point that's set too low relative to lead-time demand — because the process is manual and gut-feel rather than formula-driven, the team is likely reordering based on when stock 'looks low' rather than calculating the actual inventory level needed to cover the 10-day lead time, which would explain a recurring, predictable stockout pattern rather than a one-off supply shock.",
+    "data": "Average daily sales velocity for this SKU: ~40 units/day in steady state. Supplier lead time: 10 days. Current practice: inventory manager places a reorder when stock drops to roughly 200 units remaining, based on visual/gut-feel check rather than a calculated threshold. Typical reorder quantity: 1,000 units per order (roughly 3.5 weeks of steady-state demand).",
+    "calc": "Lead-time demand = 40 units/day × 10 days = 400 units — this is the minimum stock level needed at the moment of reordering to avoid running out before the new stock arrives, with zero safety margin.\nCurrent reorder trigger = 200 units, which is only half of the 400 units needed to cover lead time.\nGap = 400 − 200 = 200 units short at the moment of reorder, which at 40 units/day of ongoing sales translates to running out roughly 5 days before the new stock arrives (200 ÷ 40 = 5 days) — this matches the observed 5-7 day stockout window almost exactly.\nRecommended reorder point, including a modest safety buffer for demand variability (assume +15% buffer): 400 × 1.15 ≈ 460 units.",
+    "insight": "The math confirms the hypothesis almost precisely — the current 200-unit reorder trigger is roughly half of the 400 units of demand that accumulate during the 10-day lead time, which mechanically produces a 5-day stockout gap that lines up with what's actually being observed, meaning this isn't a supply-chain volatility problem or a demand-forecasting problem, it's a straightforward reorder-point calculation error from relying on gut-feel instead of a formula.",
+    "recommendation": "Move this SKU (and ideally all high-velocity SKUs) from manual, gut-feel reordering to a calculated reorder point of lead-time-demand-plus-safety-buffer — roughly 460 units for this SKU specifically — implemented either as a simple spreadsheet-based alert or, better, as an automated reorder trigger in the inventory system if one exists, which should eliminate this recurring stockout pattern entirely without requiring any change to supplier relationship, lead time, or order quantity.",
+    "risks": [
+      "This fix assumes steady demand and stable lead time — if the supplier's lead time becomes less reliable (a real risk with any single-supplier dependency), the safety buffer built into the 460-unit reorder point may not be sufficient, and lead-time variability should be monitored, not just the average.",
+      "Relying on a single supplier for the bestselling SKU is itself a structural risk independent of the reorder-point fix — a supplier disruption (not just a reorder-timing error) could still cause a stockout regardless of how well-calculated the reorder point is, and a second qualified supplier should be considered as a longer-term risk mitigation.",
+      "The 15% lost-sales estimate assumes those sales are fully lost rather than deferred (customer waits or buys later) — if a meaningful share of demand is actually deferred rather than lost to a competitor, the true revenue impact of the stockout (and therefore the urgency/ROI of this fix) may be somewhat lower than the headline 15% figure suggests."
+    ],
+    "cross": [
+      {
+        "q": "Your calculation lines up suspiciously well with the observed 5-7 day stockout window — are you confident this isn't a coincidence, or could there be another contributing factor?",
+        "a": "It's a strong signal, not proof — the fact that a simple reorder-point gap calculation produces almost exactly the observed stockout duration is good evidence the mechanism I've identified is the primary driver, but I'd still want to rule out secondary factors like order-processing delays on the retailer's side (time between 'stock looks low' and actually placing the order) before concluding the reorder-point formula alone fully explains it — if there's also a 2-3 day internal delay in placing orders after the visual check, that would need to be fixed alongside the reorder-point calculation."
+      },
+      {
+        "q": "Why did you use a 15% safety buffer rather than a more rigorous statistical safety-stock formula based on demand variability?",
+        "a": "For a quick diagnostic in this format, a flat percentage buffer is a reasonable approximation, but you're right that a more rigorous approach would calculate safety stock from the standard deviation of daily demand and the desired service level (e.g., a 95% or 99% in-stock probability) using a standard safety-stock formula; I'd recommend the team move to that more precise method once they have enough sales-variability data, using my flat-buffer number as a reasonable interim fix that already solves the bulk of the problem."
+      }
+    ],
+    "synthesis": "This case is a textbook reorder-point diagnosis: whenever a stockout recurs on a predictable cycle rather than happening randomly, the first hypothesis should be a structural miscalculation in the reorder logic itself (reorder point below lead-time demand) rather than a demand spike or supply disruption — and the fact that the numbers reproduce the observed stockout duration almost exactly is exactly the kind of self-validating check that should increase confidence in a root-cause diagnosis."
+  },
+  {
+    "diff": "easy",
+    "industry": "Customer Service — Call Center Wait Times",
+    "title": "A Customer Support Call Center Has Long Wait Times — Diagnose and Fix the Operational Cause",
+    "prompt": "A company's customer support call center has an average hold time of 12 minutes, well above their 3-minute target, and customer satisfaction scores have dropped. Diagnose the operational cause and recommend a fix.",
+    "clarify": [
+      {
+        "q": "Is the 12-minute average consistent throughout the day, or concentrated in certain hours?",
+        "a": "It's much worse during a mid-morning peak (10am-1pm), averaging closer to 20 minutes then, while other hours are closer to 5-6 minutes."
+      },
+      {
+        "q": "Has call volume increased recently, or has staffing decreased, or is this a longer-standing structural issue?",
+        "a": "Call volume has grown roughly 25% over the past 6 months (from a successful product launch), but staffing levels haven't been adjusted since."
+      },
+      {
+        "q": "Are all agents equally trained to handle all call types, or is there specialization that could be creating uneven load?",
+        "a": "There's some specialization — about a third of agents are only trained on billing issues, not technical support, which is the majority of current call volume."
+      }
+    ],
+    "mece": "This is a queueing/capacity problem, so I'll frame it using the basic drivers of wait time: (1) demand — call volume and its distribution across the day, (2) capacity — number of available agents and their effective handling rate, (3) capacity-demand matching — whether agent skill mix and scheduling actually align with when and what type of calls arrive.\n\nL1 — Demand: total daily call volume, its hourly distribution (confirming the mid-morning peak), and the mix of call types (technical vs. billing).\nL1 — Capacity: total agent headcount, and effective capacity split by skill (technical-capable vs. billing-only), since a billing-only agent can't absorb technical-support overflow.\nL1 — Matching: whether current staffing schedules and skill allocation are aligned with the actual peak-hour, peak-type demand, or are still built around an older, lower-volume, different-mix baseline.",
+    "hypothesis": "I expect this to be a combined volume-growth-plus-skill-mismatch problem: call volume grew 25% without a staffing adjustment, and the fact that a third of agents can only handle billing (a minority call type) while demand is now majority-technical means effective capacity for the dominant call type is more constrained than the headcount number alone suggests — both factors compounding specifically during the mid-morning peak.",
+    "data": "Total call volume: ~800 calls/day (up from ~640/day six months ago, a 25% increase). Current staffing: 30 agents total, 20 technical-capable, 10 billing-only. Call mix: roughly 65% technical, 35% billing. Average handle time: 8 minutes/call across both types. Target service level: 3-minute average wait, requiring enough concurrent capacity to keep the queue short during peak hours specifically.",
+    "calc": "Peak-hour (10am-1pm, 3 hours) call volume: assume peak hours carry roughly 40% of daily volume given the observed skew = 800 × 40% = 320 calls across 3 peak hours ≈ 107 calls/hour during peak.\nOf these, ~65% are technical = ~70 technical calls/hour during peak; ~35% billing = ~37 billing calls/hour.\nTechnical capacity needed: at 8 min/call average handle time, one agent can handle 60/8 = 7.5 calls/hour; to handle 70 technical calls/hour at the target service level (with some buffer for queueing variability, using a rough +20% capacity buffer common in call-center staffing) requires roughly 70/7.5 × 1.2 ≈ 11.2, round to 12 technical-capable agents actively staffed during peak.\nCurrently, technical-capable agents are presumably spread evenly across the day (20 agents ÷ roughly 8 working hours-equivalent shifts ≈ implying far fewer than 12 are actually scheduled during the 10am-1pm window if shifts aren't peak-aligned) — the core issue is very likely that the 20 technical-capable agents are scheduled roughly evenly across the day rather than concentrated toward the known peak, so even though 20 exceeds the 12 needed at peak in raw headcount terms, the scheduling doesn't put enough of them on shift specifically during the peak window.",
+    "insight": "The problem isn't a lack of technical-capable agents in absolute headcount (20 exceeds the ~12 needed at peak) — it's that shift scheduling hasn't been rebuilt around the new, post-launch peak-hour and peak-call-type pattern, so agents are likely spread evenly through the day instead of concentrated where and when the technical-call peak actually hits, and the 10 billing-only agents are structurally unable to absorb any overflow from the now-dominant technical queue no matter how the schedule is adjusted.",
+    "recommendation": "Rebuild agent shift schedules to concentrate technical-capable agent coverage specifically during the 10am-1pm peak window (moving from an evenly-spread schedule to a peak-aligned one), and begin cross-training a portion of the billing-only agents on basic technical triage so they can absorb overflow during peak hours — both changes use existing headcount rather than requiring net-new hiring, and should be tested with a scheduling pilot before committing to a full cross-training program.",
+    "risks": [
+      "This diagnosis assumes the peak-hour call-volume share (40%) and the peak-hour technical/billing mix are stable — if the actual peak-hour split is different from this estimate, the recommended technical-agent count for peak coverage would need to be recalculated, and real hourly call-log data should replace this estimate before finalizing a schedule change.",
+      "Rescheduling agents toward the peak necessarily reduces coverage during off-peak hours — if off-peak call volume isn't as light as assumed, moving agents away from those hours could create a new, smaller wait-time problem outside the peak window that should be monitored after the change.",
+      "Cross-training billing-only agents on technical triage takes time and may not fully solve the peak-capacity gap in the near term — this should be treated as a medium-term structural fix, with the schedule-rebalancing recommendation as the faster, near-term lever to pull first."
+    ],
+    "cross": [
+      {
+        "q": "You calculated that 20 technical-capable agents exceeds the ~12 needed at peak — so why is scheduling your primary recommendation instead of just confirming there's enough capacity and looking elsewhere?",
+        "a": "Because having enough total headcount doesn't help if those agents aren't actually working during the hours when demand peaks — a schedule that spreads 20 agents evenly across an 8-hour day puts far fewer than 12 on the floor during any single 3-hour peak window, so the wait-time problem is really about the timing of coverage, not the total count; that's exactly why I'd want real shift-by-shift staffing data before finalizing the fix, since my 'evenly spread' assumption is inferred, not confirmed, and the actual current schedule might already be partially peak-aware."
+      },
+      {
+        "q": "Is there a cheaper or faster fix than reworking the whole schedule — something that could reduce wait times within days rather than requiring a scheduling overhaul?",
+        "a": "A few near-term levers: adding a callback option during peak hours (so customers don't have to hold in real time, which improves perceived wait-time experience even before the underlying capacity issue is fixed), and temporarily shifting a few billing-only agents' shift times to overlap more with the peak window even without full technical cross-training, since some billing agents can likely handle basic technical triage or at least screen/route calls faster than an untrained queue can; I'd recommend both as quick wins to run in parallel with the more structural schedule-and-training fix."
+      }
+    ],
+    "synthesis": "This case shows why headcount alone is an incomplete answer to a queueing problem — the real questions are always capacity at the specific time and for the specific skill that demand requires, and a common mistake is to check whether total capacity 'exceeds' total demand on average without checking whether it's actually positioned where and when the peak hits."
+  },
+  {
+    "diff": "med",
+    "industry": "Quick Commerce — Dark Store Network Planning (Urban India)",
+    "title": "How Many Dark Stores Should an Online Grocery Delivery Company Open in a City?",
+    "prompt": "A quick-commerce grocery delivery startup (10-15 minute delivery promise) wants to expand into a new city of 5 million people. How many dark stores (micro-fulfillment warehouses) should they open, and where?",
+    "clarify": [
+      {
+        "q": "Is the binding constraint the 10-15 minute delivery promise (a geographic/delivery-radius constraint), or are we also optimizing for cost efficiency per store?",
+        "a": "Both matter, but the delivery-time promise is non-negotiable — treat it as a hard constraint, and optimize store count and placement within that constraint for reasonable unit economics."
+      },
+      {
+        "q": "Should I assume uniform population density and demand across the city, or account for variation between denser and less-dense areas?",
+        "a": "Account for variation — assume the city has a dense urban core and a larger, lower-density periphery, which is realistic for most large Indian cities."
+      },
+      {
+        "q": "Do we know each dark store's fulfillment capacity (how many orders per hour it can realistically pack and dispatch)?",
+        "a": "Yes, I can give you that — treat it as a known operational constraint, not something you need to estimate from scratch."
+      }
+    ],
+    "mece": "This is a network-design problem with two binding constraints working together: (1) delivery-radius coverage — how large a geographic area a single dark store can serve within the 10-15 minute promise, which determines how many stores are needed just for geographic coverage, (2) demand/throughput capacity — how many orders per hour each store can actually fulfill, which could require more stores than geographic coverage alone if demand density in some areas exceeds a single store's throughput.\n\nL1 — Geographic coverage: effective delivery radius per store (accounting for realistic rider speed and pick-pack time, not just straight-line distance), and how many non-overlapping coverage zones are needed to blanket the city.\nL1 — Demand density and throughput: order volume per zone (higher in the dense urban core), checked against each store's maximum orders/hour capacity — a zone might need more than one store even if geographic coverage alone would suggest one, if demand in that zone exceeds single-store throughput.\nL1 — Reconciliation: take the higher of the two store-count requirements (coverage-driven vs. throughput-driven) for each zone, since both constraints must be satisfied simultaneously.",
+    "hypothesis": "I expect the urban core to be throughput-constrained (need more stores than pure geographic coverage would suggest, because demand density is high enough that a single store would be overwhelmed) while the periphery is coverage-constrained (need stores spread out for geographic reach even though demand per store is lower there), meaning the two zones require fundamentally different reasoning even within the same city.",
+    "data": "City population: 5M, split roughly 30% dense urban core (1.5M, ~15,000 people/km², occupying ~100 km²) and 70% lower-density periphery (3.5M, ~3,500 people/km², occupying ~1,000 km²). Effective delivery radius per store (accounting for real rider speed of ~20 km/h in city traffic and needing to leave enough of the 10-15 min window for pick-pack time, roughly 3-4 minutes): usable delivery radius ≈ 2 km, giving each store a coverage area of π × 2² ≈ 12.6 km². Order penetration: assume 8% of the population orders from this service at least weekly, with an average of 2.5 orders/week per ordering household (using ~4 people/household), translating to a daily order-generation rate per zone. Each dark store's maximum throughput: 250 orders/day at full capacity (pick-pack-dispatch constrained).",
+    "calc": "GEOGRAPHIC COVERAGE:\nUrban core (100 km²) ÷ 12.6 km² per store ≈ 8 stores needed for geographic coverage.\nPeriphery (1,000 km²) ÷ 12.6 km² per store ≈ 79 stores needed for full geographic coverage — but full blanket coverage of a large periphery is unrealistic in a launch phase; more realistically, the company would cover only the higher-density pockets of the periphery first, say the top 30% of periphery area by density, ≈ 24 stores for a realistic phase-1 periphery footprint.\n\nDEMAND THROUGHPUT (urban core check):\nUrban core ordering households: 1.5M people ÷ 4 people/household = 375,000 households × 8% penetration = 30,000 ordering households × 2.5 orders/week = 75,000 orders/week ≈ 10,700 orders/day across the urban core.\nAt 250 orders/day/store capacity: 10,700 ÷ 250 ≈ 43 stores needed for throughput in the urban core — this is far higher than the 8 stores geographic coverage alone suggested, confirming the urban core is throughput-constrained, not coverage-constrained.\n\nRECONCILED URBAN CORE ESTIMATE: take the higher of the two (throughput) ≈ 43 stores, but at 12.6 km² per store's nominal coverage radius, 43 stores would actually more than cover the 100 km² core geographically too (43 × 12.6 ≈ 542 km² of theoretical coverage capacity, meaning stores would need smaller, denser placement than the pure-geometric radius implies, effectively overlapping coverage zones to add pure throughput capacity in the same dense area) — so the real recommendation is ~43 smaller/denser urban-core stores, not 8 large ones.\n\nPeriphery: repeat the throughput check — 3.5M × 8% / 4 ≈ 70,000 ordering households × 2.5/week ≈ 175,000 orders/week ≈ 25,000 orders/day, but spread over a much larger area with lower density; at 250/day/store, throughput alone would suggest ~100 stores, but that far exceeds what geographic coverage of the (partial, top-30%-density) periphery footprint requires — so periphery is coverage-constrained after all, at ~24 stores from the geographic calculation, and those 24 stores' combined throughput capacity (24 × 250 = 6,000 orders/day) would only need to serve the portion of periphery demand actually within their coverage zones, not all 25,000 periphery orders/day city-wide (much of which falls outside the phase-1 footprint by design).\n\nTOTAL PHASE-1 RECOMMENDATION: ~43 urban-core stores + ~24 periphery stores ≈ 67 dark stores citywide.",
+    "insight": "The urban core and periphery are governed by opposite constraints — the core needs far more stores than geography alone suggests because demand density overwhelms single-store throughput, while the periphery needs stores primarily for geographic reach even though any individual store there is nowhere near throughput-constrained — and treating the whole city with one blended store-count logic (as a naive 'city population ÷ some average radius' calculation would) would badly under-serve the core and potentially over-invest in unprofitable periphery coverage.",
+    "recommendation": "Launch with a two-tier network: ~43 urban-core stores sized and placed for throughput (dense placement, smaller footprint each), and ~24 periphery stores placed for geographic coverage in the highest-density periphery pockets only — deliberately leaving lower-density periphery unserved in phase 1 rather than chasing full city coverage, and use realized order data from the first 60-90 days to decide whether to add more periphery stores or consolidate underperforming ones.",
+    "risks": [
+      "The 8% penetration assumption is a launch-stage guess for a new city with no track record — if actual adoption is significantly lower in the early months (common for a new-market launch before brand awareness builds), the urban core could be meaningfully over-built relative to real near-term demand, hurting unit economics until penetration catches up.",
+      "The 250 orders/day/store throughput figure assumes consistent operational execution (pick-pack speed, rider availability) from day one — a newly opened store network typically has lower effective throughput during a ramp-up period, which could mean even more stores are needed in the core initially, or that early wait times will exceed the 10-15 minute promise until operations mature.",
+      "This model treats delivery radius as a uniform circle, but real city geography (roads, one-way streets, traffic patterns, physical barriers like rivers) means actual effective coverage per store is rarely a clean circle — a more precise site-selection process would need real routing/GIS data rather than the geometric approximation used here."
+    ],
+    "cross": [
+      {
+        "q": "43 urban-core stores is a huge number and a massive capital commitment for a single city launch — is there a way to phase this more conservatively?",
+        "a": "Yes — I'd recommend not opening all 43 on day one. A more conservative phased approach would open perhaps 15-20 stores in the highest-density, highest-expected-demand core neighborhoods first, monitor actual order volume and wait-time performance against the 10-15 minute promise, and use that real data to decide the pace and placement of the remaining stores, rather than committing the full capital build-out based on a pre-launch estimate that — as I flagged — rests on an uncertain 8% penetration assumption."
+      },
+      {
+        "q": "You reconciled the core's two estimates (8 geographic vs. 43 throughput) by taking the higher number — is that always the right rule in a network-design problem like this?",
+        "a": "Generally yes, because both constraints have to be satisfied simultaneously, not alternately — a network sized only for geographic coverage would fail the throughput constraint (stores overwhelmed, breaching the delivery-time promise), while a network sized only for throughput would trivially satisfy geographic coverage as a side effect (as we saw, since 43 throughput-driven stores also more than cover the core's 100 km²); the only case where you wouldn't simply take the higher number is if the two constraints pulled toward genuinely incompatible store placements, which didn't happen here since denser throughput-driven placement is a superset of, not a conflict with, geographic coverage."
+      }
+    ],
+    "synthesis": "This case is a strong example of a network-design problem where two different constraints (geographic coverage and demand throughput) can each independently justify a store-count answer, and the discipline is recognizing when they'll disagree, computing both explicitly rather than assuming one obviously dominates, and understanding why the higher number usually wins — plus being honest that a pre-launch estimate this size should still be executed as a phased pilot, not a single irreversible capital commitment."
+  },
+  {
+    "diff": "med",
+    "industry": "Manufacturing — Smartphone Assembly Line Quality",
+    "title": "A Smartphone Assembly Line's Defect Rate Has Risen From 1.2% to 4.5% — Diagnose the Root Cause",
+    "prompt": "A contract smartphone manufacturer's assembly line has seen its defect rate (units failing final quality inspection) rise from a historical 1.2% to 4.5% over the past two months. This is increasing rework costs and threatening a key client relationship. Diagnose the root cause and recommend a fix.",
+    "clarify": [
+      {
+        "q": "Do we know what kind of defects are increasing — a specific failure mode, or a general rise across many defect types?",
+        "a": "Good question — quality data shows it's concentrated in one failure mode: screen assembly misalignment, which has gone from being a minor contributor to now accounting for over 60% of all defects."
+      },
+      {
+        "q": "Has anything changed on the line in the past two months — new equipment, new staff, new supplier, process change?",
+        "a": "Yes, two things changed around the same time: a new batch of screen-adhesive material from a different supplier lot started being used about 10 weeks ago, and there was also a round of new hires added to the screen-assembly station about 8 weeks ago to support higher production volume."
+      },
+      {
+        "q": "Is the defect rate rise uniform across all shifts, or concentrated on specific shifts/stations?",
+        "a": "It's higher on the day and evening shifts, which both have a mix of new and experienced workers at the screen-assembly station, versus the night shift, which is entirely staffed by experienced workers and shows a much smaller defect-rate increase."
+      }
+    ],
+    "mece": "I'll use a standard root-cause framework for a manufacturing quality problem — the '4M' categories (Man, Machine, Material, Method) — since the clarifying answers point to two plausible candidate causes that map cleanly onto two different categories: (1) Material — the new adhesive supplier lot, (2) Man — the new hires at the screen-assembly station, and I'll also rule out (3) Machine/Method — whether equipment or process itself changed, which the clarifying answers suggest did not.\n\nL1 — Material: whether the new adhesive lot has different working properties (cure time, viscosity, tackiness) that could cause misalignment if the process wasn't adjusted to match.\nL1 — Man: whether new-hire inexperience at the specific screen-assembly station is producing more misalignment defects, independent of material.\nL1 — Distinguishing signal: the shift-level pattern (night shift, all-experienced, shows a much smaller increase) is a strong natural experiment that should let me separate these two hypotheses rather than guessing.",
+    "hypothesis": "The shift-pattern clue is the most powerful piece of evidence here — since the night shift (experienced workers, presumably using the same adhesive material as everyone else) shows a much smaller defect increase, this points toward the new-hire (Man) factor being the dominant driver rather than the material change, because if the adhesive were the primary cause, all shifts using that same adhesive lot should show a similarly elevated defect rate regardless of worker experience.",
+    "data": "Historical defect rate: 1.2%. Current defect rate: 4.5%, a 3.3 percentage-point increase. Defect breakdown: screen misalignment now 60%+ of defects (up from a much smaller historical share). Shift-level defect rates: day shift ~5.2%, evening shift ~4.8%, night shift ~2.1% (all shifts use the same adhesive material lot, since material is sourced centrally and distributed to all shifts equally). New hires: roughly 8 new workers added to the screen-assembly station 8 weeks ago, spread across day and evening shifts, none on night shift. Total screen-assembly headcount across day+evening: ~24 workers, meaning new hires are roughly one-third of the day/evening screen-assembly workforce.",
+    "calc": "If material were the dominant cause, we'd expect all three shifts (using identical adhesive) to show similarly elevated defect rates — instead there's a clear gradient: night (2.1%, closest to historical 1.2% baseline, though still somewhat elevated) versus day/evening (~5%), a roughly 2.5x difference that tracks almost perfectly with the presence of new hires on those shifts and their absence on night shift.\nEstimating the new-hire-specific contribution: if experienced workers alone produce something close to the night shift's 2.1% rate (itself modestly elevated from 1.2%, suggesting the adhesive lot IS a real but secondary contributor), and day/evening shifts blend 2/3 experienced + 1/3 new-hire workers, then: 5.0% (blended day/evening average) = (2/3 × 2.1%) + (1/3 × X), where X is the new-hire-specific defect rate.\nSolving: 5.0% = 1.4% + (1/3)X → (1/3)X = 3.6% → X ≈ 10.8% — implying new hires are individually running a defect rate roughly 5x higher than experienced workers at this specific station, consistent with a training/skill gap being the dominant driver, layered on top of a smaller, genuine secondary effect from the adhesive lot change (explaining why even the all-experienced night shift ticked up modestly from the 1.2% historical baseline to 2.1%).",
+    "insight": "This is a two-factor problem, not a single-cause one — the new-hire training gap is the dominant driver (roughly 5x the defect rate of experienced workers at this specific station) and explains the majority of the overall increase, but the adhesive-lot change appears to be a real, smaller secondary contributor (evidenced by the night shift's own modest rise above the 1.2% historical baseline) — meaning a fix addressing only one of the two factors would leave a meaningful residual defect-rate problem.",
+    "recommendation": "Implement two parallel fixes: (1) immediately pull the new hires into focused refresher training and pair them with experienced workers at the screen-assembly station for the next 2-3 weeks (a standard buddy-system ramp-up), which should address the dominant driver, and (2) have quality engineering run a controlled comparison of the new adhesive lot against the previous formulation's working properties (cure time, viscosity) to confirm whether a minor process-parameter adjustment (e.g., slightly longer cure/dwell time) is needed to fully neutralize the smaller secondary effect — track defect rate by shift weekly after both fixes to confirm the gap closes.",
+    "risks": [
+      "The estimated 10.8% new-hire-specific defect rate is derived algebraically from a two-shift blend and a night-shift baseline, not measured directly — a more reliable diagnosis would track defect rates by individual worker or at least by tenure cohort directly, which the plant's quality system may or may not currently support.",
+      "This diagnosis assumes the night shift's material and process conditions are otherwise identical to day/evening (same adhesive lot, same equipment) — if there's any other unaccounted-for difference between night shift and the other two (e.g., different equipment calibration, different supervisor oversight), the clean natural-experiment logic used here would be less reliable than assumed.",
+      "Even if the training fix works, a client relationship already strained by two months of elevated defects may need direct communication and a corrective-action report showing the root-cause diagnosis and fix timeline — the operational fix alone doesn't address the relationship-management dimension of the problem, which should run in parallel."
+    ],
+    "cross": [
+      {
+        "q": "You used the shift-level defect-rate difference as your key diagnostic signal — how confident are you that this is a valid 'natural experiment' and not just noise or a coincidence?",
+        "a": "Reasonably confident given the size of the gap (2.1% vs. ~5%, more than double) and that it aligns precisely with where the known process change (new hires) was and wasn't applied — but I'd want to see this pattern hold over at least a few more weeks of data before treating it as fully proven, since a single period of shift-level data could still reflect some other confound I haven't identified; if the pattern were much smaller or noisier, I'd be far less willing to draw a causal conclusion from it."
+      },
+      {
+        "q": "If you could only implement one of your two recommended fixes right now due to resource constraints, which would you prioritize and why?",
+        "a": "The new-hire training fix, without much hesitation — it's the dominant driver by my estimate (accounting for roughly 5x the defect rate versus experienced workers) and it's also the faster, lower-cost fix to implement (pairing and refresher training vs. a materials-engineering investigation that takes longer to run and may require supplier coordination); I'd start the training fix immediately while the adhesive investigation runs in parallel on a slightly longer timeline, rather than sequencing them or picking only one permanently."
+      }
+    ],
+    "synthesis": "This case demonstrates the value of looking for a natural experiment inside your own data — the shift-level split, which existed anyway as a byproduct of how new hires happened to be scheduled, let the diagnosis separate two confounded hypotheses (material vs. training) far more rigorously than either guessing or simply picking whichever explanation sounds most intuitive, and the algebraic back-out of a hidden sub-rate (the new-hire-specific defect rate) is a technique worth having ready whenever a blended average is hiding two different underlying populations."
+  },
+  {
+    "diff": "med",
+    "industry": "Retail Logistics — Last-Mile Delivery Make-vs-Buy Decision",
+    "title": "Should a Furniture Retailer Build Its Own Last-Mile Delivery Fleet or Continue Outsourcing to 3PLs?",
+    "prompt": "A mid-sized furniture retailer currently outsources all last-mile delivery to third-party logistics (3PL) providers and is considering building its own in-house delivery fleet instead, citing complaints about 3PL delivery quality and cost. Should they make this switch?",
+    "clarify": [
+      {
+        "q": "Is this being considered for all delivery volume nationally, or could it be a hybrid/regional decision?",
+        "a": "Let's frame it as a national decision for now, but feel free to flag if your analysis suggests a hybrid approach makes more sense."
+      },
+      {
+        "q": "What specifically is driving dissatisfaction with the 3PL — is it primarily cost, primarily service quality (damage, late deliveries), or both?",
+        "a": "Both, but service quality is the more urgent driver — damage rates and late-delivery complaints have been rising, and customer satisfaction scores for delivery specifically are well below the company's overall NPS."
+      },
+      {
+        "q": "Does the company have any in-house logistics capability today, or would this be starting from scratch?",
+        "a": "Starting from scratch — no existing fleet, drivers, or logistics management infrastructure today; everything would need to be built."
+      }
+    ],
+    "mece": "This is a classic make-vs-buy decision, so I'll structure it across three lenses: (1) cost comparison — total cost of in-house fleet ownership vs. current 3PL spend, (2) service quality and control — whether owning the fleet would actually fix the damage/lateness problems, and (3) strategic fit and risk — capital intensity, scalability, and whether logistics is a core competency worth building in-house for this company.\n\nL1 — Cost: build a bottom-up cost estimate for an in-house fleet (vehicles, drivers, fuel, maintenance, management overhead) and compare it against current and projected 3PL spend at the same delivery volume.\nL1 — Service quality: assess whether the root cause of damage/lateness is something ownership would directly fix (e.g., handling training, route control) versus something that could persist regardless of who operates the fleet (e.g., product packaging design, warehouse handling before it even reaches the delivery leg).\nL1 — Strategic fit: capital intensity and fixed-cost risk of owning a fleet (versus the flexibility of variable-cost outsourcing), and whether furniture retail is a business where logistics excellence is a genuine differentiator worth the investment, or a commodity function better left to specialists.",
+    "hypothesis": "I expect the cost comparison to be closer than either party's stated positions than expected — likely showing 3PL is presently cheaper at current volume but an in-house fleet could become cost-competitive or cheaper at higher volume (a classic fixed-vs-variable-cost crossover) — while the service-quality question is likely only partially solved by ownership alone, since some of the damage/lateness issues plausibly originate upstream of the delivery leg itself (packaging, warehouse handling), meaning ownership without addressing those upstream issues wouldn't fully solve the stated problem.",
+    "data": "Current delivery volume: ~50,000 deliveries/year. Current 3PL cost: ₹850/delivery (all-in, including damage-claim costs the retailer currently absorbs). In-house fleet cost estimate: a delivery van costs ~₹9L (purchase) or can be financed/leased at ~₹22,000/month; each van, with a trained 2-person crew (driver + helper, required for furniture handling), can complete roughly 8 deliveries/day, working ~300 days/year (accounting for weekends/holidays reduction) = ~2,400 deliveries/year per van-crew unit. Driver+helper wages: ~₹45,000/month combined. Fuel/maintenance: ~₹15,000/month per van. Management overhead (dispatch, route planning, HR) estimated at a flat ₹40L/year regardless of fleet size within a reasonable range (10-30 vans). Damage rate: currently 3.5% of deliveries result in a damage claim (₹4,500 average claim cost) under the 3PL; furniture-industry benchmarks suggest a well-trained dedicated fleet with furniture-specific handling protocols could plausibly reduce this to ~1.5-2%, though this is an estimate, not a guarantee.",
+    "calc": "IN-HOUSE FLEET COST (at 50,000 deliveries/year):\nVans needed = 50,000 ÷ 2,400 per van-crew ≈ 21 vans.\nAnnual cost per van-crew: leasing (₹22,000×12=₹2.64L) + wages (₹45,000×12=₹5.4L) + fuel/maintenance (₹15,000×12=₹1.8L) = ₹9.84L/year per van-crew.\n21 vans × ₹9.84L = ₹206.6L (₹20.66Cr).\nPlus management overhead: ₹40L/year (₹0.40Cr).\nTotal in-house cost ≈ ₹20.66Cr + ₹0.40Cr = ₹21.06Cr/year.\nPer-delivery cost (in-house) = ₹21.06Cr ÷ 50,000 = ₹4,212/delivery — this is far HIGHER than the current 3PL rate of ₹850/delivery, which doesn't match the initial hypothesis of a cost crossover and needs re-examination: the likely error is in the per-van annual delivery capacity assumption combined with high fixed crew costs relative to volume — at only 21 vans serving 50,000 deliveries nationally (implying wide geographic dispersion), utilization and route density are probably far below the 8-deliveries/day assumption in a real national network with sparse, spread-out delivery points, meaning the true in-house cost is likely even higher than this already-unfavorable estimate, not lower.\n\nDAMAGE COST COMPARISON (smaller factor): current damage cost = 50,000 × 3.5% × ₹4,500 ≈ ₹0.79Cr/year. Even a full drop to 1.5% would save only ≈ ₹0.45Cr/year — this saving is small relative to the roughly ₹18.5Cr/year cost GAP between in-house (₹21.06Cr) and current 3PL (50,000×₹850=₹4.25Cr), meaning better damage rates alone can't come close to closing the cost gap.",
+    "insight": "The cost math strongly favors staying with the 3PL model at current volume and delivery density — building a dedicated national in-house fleet at only ~21 vans serving 50,000 geographically dispersed deliveries would carry high fixed crew and vehicle costs against relatively low utilization, producing an all-in cost roughly 5x higher than current 3PL spend, and even a meaningful improvement in damage rates wouldn't come close to closing that gap; this means the stated service-quality complaints need to be solved through a different lever (3PL contract renegotiation, packaging redesign, or a narrower regional pilot rather than a full national fleet).",
+    "recommendation": "Do not build a full national in-house fleet — instead, address the service-quality complaints directly: renegotiate 3PL contracts with explicit damage-rate and on-time SLAs tied to penalties/incentives, invest in furniture packaging/protection improvements (likely a much cheaper lever than fleet ownership for reducing damage), and consider a narrow, high-density regional pilot (e.g., only the single metro with the highest delivery density) where van utilization could plausibly approach the 8-deliveries/day assumption, to genuinely test whether in-house ownership is cost-competitive in a favorable density scenario before ever considering national rollout.",
+    "risks": [
+      "The 8-deliveries/day-per-van assumption may not hold even in a dense metro pilot if furniture deliveries require long in-home setup/assembly time per stop — if realistic capacity is closer to 5-6 deliveries/day, even a regional pilot's economics would look worse than modeled here.",
+      "This analysis compares current 3PL pricing to a from-scratch in-house build — but a credible negotiating threat of building in-house (or a genuine regional pilot) could itself extract better pricing and SLA commitments from the 3PL, which is a strategic option value not captured in a pure cost comparison.",
+      "The damage-rate improvement assumption (3.5% → 1.5-2%) is an industry-benchmark estimate, not validated for this company specifically — if in-house crews don't actually handle furniture better than the current 3PL (e.g., if the 3PL's damage issues stem from upstream packaging rather than delivery-crew handling), ownership wouldn't deliver the assumed quality improvement at all, reinforcing the recommendation to investigate the packaging/handling root cause before assuming a fleet-ownership fix."
+    ],
+    "cross": [
+      {
+        "q": "Your in-house cost estimate came out roughly 5x higher than 3PL — is it possible you've made an error somewhere, since a 5x gap seems extreme for what should be a viable business model for other companies that do run their own fleets?",
+        "a": "It's a fair challenge, and the honest answer is that this specific scenario — a mid-sized retailer with modest delivery density spread nationally — is exactly the profile where in-house fleets tend to be uneconomical; companies that successfully run their own delivery fleets (large e-commerce players, for example) typically have far higher delivery density per zone, allowing much higher per-van utilization than the 8-deliveries/day figure I used nationally; my recommendation to pilot only in the highest-density metro is specifically meant to test whether this company could achieve that kind of favorable density locally, even if the national average clearly doesn't support it."
+      },
+      {
+        "q": "You recommended against the fleet but suggested a regional pilot as a next step — how would you decide whether to scale that pilot afterward?",
+        "a": "I'd set a clear pre-defined cost-per-delivery threshold for the pilot to beat (ideally getting within 15-20% of current 3PL cost, given the qualitative service-quality benefits could justify a modest premium) over a meaningful test period (at least 2-3 months to smooth out ramp-up inefficiencies), and track actual van utilization against the 8-deliveries/day assumption directly — if the pilot can't get close to that utilization or cost target even in the most favorable density scenario the company has, that would be strong evidence to abandon the in-house idea entirely rather than trying to scale it further."
+      }
+    ],
+    "synthesis": "This case is a good example of why a make-vs-buy decision needs a real bottom-up cost model, not just a comparison of stated dissatisfaction against an assumed alternative — the initial framing (3PL is bad, so build our own) sounded intuitive, but running the actual unit economics revealed the real problem might be solvable more cheaply through contract terms and packaging design, and a disciplined analysis should be willing to conclude 'don't do the thing being proposed' when the numbers say so, while still identifying a lower-risk way to test the underlying assumption (density-driven viability) before closing the door entirely."
+  },
+  {
+    "diff": "hard",
+    "industry": "Airlines — Fleet & Crew Allocation to Fix Chronic Delays",
+    "title": "An Airline Has Chronic Delays on 6 of Its 40 Routes — Redesign Fleet and Crew Allocation to Fix It",
+    "prompt": "A regional airline has chronic on-time-performance problems on 6 of its 40 routes (average delay 35+ minutes, versus a 12-minute network average), causing customer complaints, regulatory scrutiny, and knock-on delays to connecting flights. The COO wants a fleet and crew reallocation plan to fix this without adding net-new aircraft.",
+    "clarify": [
+      {
+        "q": "Are these 6 problem routes concentrated at particular hub airports, or spread across the network?",
+        "a": "They're concentrated — 5 of the 6 problem routes either originate or connect through a single hub, which has become the airline's busiest hub after a recent expansion."
+      },
+      {
+        "q": "Is the delay primarily on departure (aircraft/crew not ready) or airborne/arrival (air traffic, weather), since those point to very different fixes?",
+        "a": "Primarily departure delay — the data shows these flights are consistently late pushing back from the gate, not late arriving after taking off on time."
+      },
+      {
+        "q": "Are the aircraft used on these routes dedicated to them, or are they shared/rotated with other routes in a broader network schedule?",
+        "a": "Shared — the airline runs a hub-and-spoke rotation where the same aircraft often flies multiple routes in sequence through the day, so a delay on one leg can cascade to the next."
+      }
+    ],
+    "mece": "Since delays are departure-side and concentrated at one hub with shared aircraft rotations, I'll frame this as a scheduling/turnaround-buffer problem with a cascading-delay dimension, structured across: (1) root cause at the gate — whether turnaround time (aircraft servicing, boarding, crew-readiness) at the busy hub is realistically achievable within the scheduled block time, (2) rotation/cascade effect — whether these 6 routes are specifically the ones inheriting delay from an earlier leg in the same aircraft's daily rotation, (3) reallocation options — whether adjusting aircraft/crew assignment (not adding aircraft) can add buffer where it's needed most without degrading performance elsewhere in the network.\n\nL1 — Turnaround feasibility: scheduled turnaround time at the hub vs. actual average turnaround time achieved, and by how much the schedule underestimates real requirements during hub peak hours.\nL1 — Cascade effect: whether these 6 routes tend to be later legs in a rotation (inheriting upstream delay) or the first leg of the day (which would point to a different root cause, like early-morning crew/aircraft readiness).\nL1 — Reallocation levers: within existing fleet and crew headcount, options include adding schedule buffer at the hub (accepting a published-schedule time change), reordering rotations so problem routes get an earlier position (less inherited delay), or swapping aircraft/crew resources between routes to concentrate slack where it's needed.",
+    "hypothesis": "I expect this to be a hub-peak-congestion problem that compounds through the rotation: the expanded hub likely has genuine turnaround-time pressure during its busiest hours (more aircraft competing for limited gates/ground crew), and because aircraft rotate through multiple routes per day, a modest delay at the hub during peak hours likely cascades and grows through the day, meaning the 6 problem routes are probably clustered later in their aircraft's daily rotation sequence, inheriting and compounding upstream hub-congestion delay rather than having an independent root cause of their own.",
+    "data": "Hub scheduled turnaround time: 45 minutes (standard across the network). Actual average turnaround time achieved at this hub during its 3 busiest hours (7-10am and 4-7pm): 62 minutes, a 17-minute average overrun, driven by gate congestion and ground-crew availability stretched thin by the recent hub expansion. Of the 6 problem routes, 5 depart from this hub as the 2nd, 3rd, or 4th leg of their aircraft's daily rotation (i.e., not the first flight of the day), and all 5 have their hub departure scheduled within the 3 peak congestion hours. The 6th problem route is at a different hub with a smaller, separate issue (a specific gate-assignment inefficiency, treated as a smaller side-fix). Network-wide, the airline has some genuine schedule slack on off-peak routes (routes with turnaround buffers exceeding what's actually needed) that could theoretically be reallocated without adding aircraft.",
+    "calc": "Root delay per peak-hour turnaround: 62 actual − 45 scheduled = 17 minutes overrun at the point where a rotation passes through the hub during peak hours.\nFor the 5 hub-cascade routes, this 17-minute hub delay compounds because each is a downstream leg — if an aircraft's rotation has, say, 3 legs before reaching one of the problem routes, and the hub-peak delay hits during one of those upstream legs' turnaround, the delay can persist and even grow slightly through the day (as connecting passengers, crew duty-time management, and gate reassignment add friction) — this matches the observed 35-minute average delay on these routes being roughly double the 17-minute root turnaround overrun, consistent with one round of compounding through the rotation.\nReallocation approach: identify aircraft/crew currently assigned to off-peak, low-utilization routes with turnaround buffers meaningfully exceeding 45 minutes (say, routes with 60+ minute scheduled turnarounds that consistently complete in 40-45 actual minutes, indicating over-buffered slack) — reassign a portion of that slack (specifically, adjust the rotation sequencing so the 5 problem routes' hub-leg turnaround gets pushed outside the 7-10am/4-7pm peak windows where possible, or gets an extra 15-20 minutes of schedule buffer sourced from trimming over-buffered off-peak routes elsewhere in the same aircraft's daily rotation) — without requiring any additional aircraft or crew headcount, just resequencing existing assignments.",
+    "insight": "The 6 problem routes aren't independently broken — 5 of them are downstream victims of a hub-peak turnaround problem that compounds through shared aircraft rotations, meaning the fix isn't route-specific scheduling tweaks on those 6 routes themselves, but rather rebalancing turnaround buffer across each affected aircraft's full daily rotation (borrowing slack from over-buffered off-peak legs) and, where possible, resequencing rotations so hub-peak-hour legs aren't immediately followed by the routes currently absorbing the compounded delay.",
+    "recommendation": "Implement a rotation-resequencing plan for the aircraft serving the 5 hub-cascade routes: (1) reorder each affected aircraft's daily rotation so its hub-peak-hour leg is followed by a route with naturally more schedule slack rather than directly by one of the currently-affected routes, (2) trim 10-15 minutes of over-buffered turnaround time from identified off-peak, low-utilization routes in the same rotations and reallocate it as extra buffer around the hub-peak legs, and (3) separately address the 6th route's gate-assignment inefficiency as a standalone fix — all achievable through existing fleet and crew resources, with a recommended 4-6 week pilot on the affected rotations before declaring the fix complete, since resequencing can have second-order effects on other routes that need to be monitored.",
+    "risks": [
+      "Resequencing rotations and trimming buffer from 'over-buffered' off-peak routes could create new delay problems on those previously-fine routes if the buffer being removed wasn't actually as excessive as the historical averages suggest (e.g., if it existed to absorb occasional weather or ATC delays that don't show up in a simple average) — this should be tested cautiously, route by route, not applied uniformly.",
+      "Crew duty-time regulations (maximum hours, mandatory rest periods) constrain how freely rotations can be resequenced — any resequencing plan needs to be validated against crew scheduling rules before implementation, since a plan that looks good on paper for aircraft utilization alone could violate crew-duty constraints.",
+      "This fix addresses the hub-peak turnaround overrun as the root cause, but doesn't address why the hub expansion created a 17-minute overrun in the first place (gate/ground-crew capacity) — if the hub continues to grow, the underlying congestion problem could resurface even after this reallocation fix, and a longer-term hub-infrastructure investment conversation may still be needed."
+    ],
+    "cross": [
+      {
+        "q": "You didn't recommend adding any ground crew or gates at the hub — was that considered and ruled out, or just outside scope given the COO's 'no new aircraft' constraint?",
+        "a": "The COO's constraint was specifically no new aircraft, not no additional ground resources, so adding gate/ground-crew capacity at the hub is a legitimate complementary option I should have flagged more explicitly — it would directly address the root 17-minute turnaround overrun rather than working around it through rotation resequencing; I'd actually recommend evaluating both in parallel: the resequencing fix as a faster, lower-cost near-term lever, and a ground-capacity investment analysis as a potential structural fix if the hub's growth trajectory suggests peak congestion will keep worsening."
+      },
+      {
+        "q": "How would you validate that the 35-minute average delay on these routes really is explained by hub-cascade compounding, rather than each route having some other independent contributing factor?",
+        "a": "I'd pull route-level delay data broken out by rotation position — specifically checking whether delay minutes on these 5 routes correlate closely with how late the SAME aircraft's immediately preceding hub leg departed on a flight-by-flight basis, not just in aggregate averages; a strong, consistent correlation there would confirm the cascade mechanism, while a weak or inconsistent correlation would suggest each route has its own additional contributing factors that this diagnosis hasn't yet captured and would need separate investigation."
+      }
+    ],
+    "synthesis": "This case tests whether a candidate can see past a route-by-route framing when the real root cause is systemic — recognizing that shared-resource scheduling (aircraft rotations through a congested hub) can make several seemingly separate problems actually be one problem appearing in multiple places, and that the fix belongs at the level of the shared resource (the rotation and hub-turnaround buffer) rather than in six independent route-level patches."
+  },
+  {
+    "diff": "hard",
+    "industry": "Healthcare — Hospital Emergency Room Patient Flow",
+    "title": "A Hospital ER Has Average Patient Wait Times of 3.5 Hours — Redesign the Process to Cut This",
+    "prompt": "A hospital's emergency room has an average patient wait time (from arrival to being seen by a physician) of 3.5 hours, well above the national benchmark of under 1 hour for non-critical cases, and patient satisfaction and safety-incident reports are both suffering. Redesign the ER process to meaningfully cut wait times.",
+    "clarify": [
+      {
+        "q": "Is the 3.5-hour average across all patients regardless of acuity, or does it include a mix of critical and non-critical cases that might be masking very different sub-averages?",
+        "a": "It's a blended average across all patients — critical/trauma cases are seen almost immediately per protocol, but the vast majority of ER visits are lower-acuity, and that's where the long waits are concentrated."
+      },
+      {
+        "q": "Is the bottleneck at initial triage/registration, waiting for a physician, or waiting for test results/bed availability after being seen?",
+        "a": "This is exactly what needs diagnosing — the hospital hasn't broken down where in the process the time is actually being lost."
+      },
+      {
+        "q": "Has ER patient volume grown recently, or is this a longstanding issue independent of any volume change?",
+        "a": "Volume has grown roughly 20% over 18 months (population growth in the area plus reduced urgent-care alternatives nearby), while ER physician staffing and bed count haven't changed in that time."
+      }
+    ],
+    "mece": "I'll map the full patient journey and identify where time is actually being lost, using a process-flow lens: (1) arrival to triage — time to initial assessment, (2) triage to physician — time waiting after triage for an actual physician evaluation (the client's specific complaint metric), (3) physician to disposition — time from being seen to a final decision (discharge, admit, further testing), since bottlenecks anywhere in this chain can back up the whole system even if the specific complaint is about stage 2.\n\nL1 — Arrival/triage capacity: whether triage itself is fast, or whether there's already a queue before triage even begins.\nL1 — Triage-to-physician wait: the core complained-about metric — likely driven by physician capacity relative to demand, but also potentially by how patients are prioritized/queued once triaged.\nL1 — Downstream flow (physician to disposition, and bed/discharge turnover): a hidden but common driver of ER wait times — if patients who've been triaged and are waiting for a bed or test result are occupying capacity that could otherwise be used for new patients, the whole system backs up even if 'physician capacity' looks adequate on paper.",
+    "hypothesis": "Given 20% volume growth with no corresponding increase in physician staffing or bed count, I expect the primary bottleneck to be physician capacity relative to demand, but I also strongly suspect a secondary compounding factor: ER \"boarding\" — patients who've been evaluated and need to be admitted to the hospital but are stuck waiting in ER beds/rooms because no inpatient bed is available upstream, which would tie up ER capacity for patients who are functionally not an ER problem anymore, worsening wait times for new arrivals independent of pure physician throughput.",
+    "data": "Current ER visits: ~180 patients/day (up from ~150/day 18 months ago, the 20% growth). Physician staffing: 6 physicians on the busiest shift, unchanged despite volume growth. Average physician time per patient (evaluation only, not including wait): ~25 minutes for a typical non-critical case. ER has 30 total treatment bays/rooms. A hospital-wide audit shows that on average, 8 of the 30 ER bays are occupied at any given time by 'boarded' patients — already evaluated, awaiting inpatient bed transfer, sometimes for many hours — rather than by patients still in the active ER evaluation process.",
+    "calc": "PHYSICIAN CAPACITY CHECK:\n6 physicians × (assume a 10-hour peak coverage window, with roughly 20 effective patient-evaluation-minutes/hour accounting for realistic non-patient-facing time like documentation) ≈ 6 × 10 × (60/25 minutes per patient × some efficiency factor)... simplified: 6 physicians × 10 hours × (60÷30 effective minutes per patient including overhead) = 6 × 10 × 2 = 120 patients/10-hour peak window capacity.\nIf 180 patients/day are roughly evenly distributed across a 14-hour higher-volume window rather than purely the 10-hour peak, peak-window volume is likely still well above the 120-patient peak capacity — this confirms physician capacity is a real constraint, but let's check the boarding effect's contribution too.\n\nBOARDING BAY IMPACT:\n8 of 30 bays (27%) occupied by boarded patients at any given time means effective usable ER capacity for new patients is only ~22 bays, not 30 — a 27% reduction in effective treatment capacity.\nIf wait time scales roughly inversely with effective bay availability (a reasonable approximation for a queueing system operating near capacity), restoring those 8 bays to active use could reduce wait times by a comparable proportion — even without adding a single physician, recovering that 27% of capacity could bring the 3.5-hour average down meaningfully, plausibly toward the 2.5-hour range, BEFORE even addressing the physician-capacity gap directly.\nCombined effect: closing both the boarding-capacity leak (structural, requires hospital-wide bed-management fix, not just ER) and adding physician capacity during peak hours (an ER-specific fix) would be needed to reach the sub-1-hour benchmark — neither alone is sufficient.",
+    "insight": "This is a two-layered problem where the visible symptom (long triage-to-physician wait) has two distinct root causes operating simultaneously — genuine physician-capacity shortfall from unaddressed volume growth, and a boarding-driven effective-capacity leak that isn't a physician-staffing problem at all but a hospital-wide inpatient-bed-availability problem — and the ER, acting alone, can only fix the first; the second requires hospital-wide coordination (inpatient bed management, discharge planning) that sits outside the ER's own operational control.",
+    "recommendation": "Pursue a two-track fix: (1) within the ER's own control, add physician coverage during the identified peak-volume hours (even a partial increase, like adding 1-2 physicians during the busiest 6-8 hours rather than a full extra shift, targets the capacity gap efficiently) and streamline non-critical low-acuity cases through a fast-track sub-process (a common ER-redesign lever not yet explored here, worth a follow-up analysis), and (2) escalate the boarding problem to hospital leadership as a hospital-wide patient-flow issue, since freeing the 8 boarded-patient bays through faster inpatient bed turnover or better discharge-planning coordination would recover nearly as much effective capacity as adding physicians, at potentially lower cost — track wait time broken out by cause (physician-wait vs. boarding-related bay unavailability) going forward so both fixes' impact can be measured separately.",
+    "risks": [
+      "The physician-capacity calculation uses simplified, rough assumptions about effective patient-evaluation throughput per hour — a more rigorous analysis would need real time-motion data (actual physician-patient contact time, documentation overhead, hand-off time) rather than a single blended 25-minutes-per-patient estimate.",
+      "The boarding fix requires cooperation and change outside the ER department's direct control (inpatient bed management, hospital-wide discharge planning) — if hospital leadership doesn't prioritize this cross-departmental fix, the ER-only lever (adding physicians) would have to work harder alone and might not be sufficient to reach the sub-1-hour benchmark by itself.",
+      "Adding physician headcount during peak hours has real cost and potential physician-availability constraints (a broader healthcare staffing shortage context) — this recommendation should be validated against actual physician labor-market availability and budget before assuming it's a straightforward lever to pull."
+    ],
+    "cross": [
+      {
+        "q": "You identified boarding as potentially the bigger lever, but it's the one the ER department can't directly control — practically, what would you tell the ER director to actually do this week?",
+        "a": "I'd tell them to do both things in parallel rather than waiting on one before starting the other: immediately begin the physician peak-hour staffing conversation (within their own budget authority) as the fix they CAN control directly, while simultaneously escalating a data-backed case to hospital leadership — using the specific '8 of 30 bays, 27% of capacity' figure — to make the boarding problem impossible to ignore or deprioritize, since a hard number tends to get cross-departmental attention faster than a general complaint about ER wait times."
+      },
+      {
+        "q": "Is there a scenario where fixing the boarding problem alone, without adding any physician capacity, could get the ER to the sub-1-hour benchmark?",
+        "a": "It's possible but I wouldn't bet on it being sufficient alone — my rough estimate suggested boarding-fix-alone might bring wait times from 3.5 hours to roughly 2.5 hours, which is a meaningful improvement but still well above the 1-hour benchmark, because the underlying physician-to-volume ratio problem (driven by the 20% real volume growth with flat staffing) would still exist independently; I'd frame the boarding fix as necessary but very likely not sufficient on its own to reach the target, which is why I recommended pursuing both fixes rather than treating them as alternatives to choose between."
+      }
+    ],
+    "synthesis": "This case is a good test of resisting a single-cause narrative for a complex operational problem — a naive diagnosis would stop at 'not enough physicians' and miss that a meaningful chunk of the visible symptom is actually a hidden capacity leak from a completely different part of the system (inpatient bed management), and a strong answer identifies both, quantifies each one's contribution honestly, and is clear about which lever the immediate decision-maker can and can't pull directly."
+  },
+  {
+    "diff": "hard",
+    "industry": "Automotive Manufacturing — Plant OEE (Overall Equipment Effectiveness) Decline",
+    "title": "A Car Manufacturing Plant's OEE Has Dropped From 78% to 61% — Diagnose and Recommend a Fix",
+    "prompt": "An automotive manufacturer's main assembly plant has seen its Overall Equipment Effectiveness (OEE) — a standard manufacturing metric combining availability, performance, and quality — drop from a historical 78% to 61% over the past quarter, well below the plant's target of 75%+. The plant manager wants a diagnosis and a recovery plan.",
+    "clarify": [
+      {
+        "q": "Since OEE combines three sub-metrics (availability, performance, quality), do we have the breakdown of which sub-metric(s) declined, or just the blended OEE number?",
+        "a": "We do have the breakdown — Availability dropped from 92% to 79%, Performance dropped from 90% to 84%, and Quality (first-pass yield) actually held roughly steady at around 94-95%."
+      },
+      {
+        "q": "Has anything changed on the line recently — new equipment, a new model variant added to the line, maintenance schedule changes, staffing changes?",
+        "a": "Yes — the plant introduced a new vehicle model variant onto the same line (a mixed-model line change) about 10 weeks ago, running alongside the existing model rather than replacing it."
+      },
+      {
+        "q": "Is the availability and performance decline uniform across all shifts and all stations on the line, or concentrated somewhere specific?",
+        "a": "It's concentrated at the paint-shop and final-assembly stations specifically, where the new model variant requires different equipment setup/changeover compared to the existing model — other stations on the line are largely unaffected."
+      }
+    ],
+    "mece": "Since we have the OEE component breakdown (Availability down most, Performance down moderately, Quality flat) and a known process change (new model variant added to a mixed line) concentrated at specific stations, I'll diagnose each affected component against that known change: (1) Availability — is the drop driven by more downtime, and specifically more changeover/setup time from switching between the two models at the same stations, (2) Performance — is the drop driven by the line running slower than its rated speed, plausibly because operators and equipment aren't yet fully proficient with the new model's process steps, (3) Quality holding steady — this is a useful negative signal, since if the new variant were causing quality problems we'd expect quality to have dropped too, but it hasn't, which narrows the diagnosis toward availability/performance-specific causes (changeover and learning-curve effects) rather than a fundamental process-capability problem with the new model itself.\n\nL1 — Availability/changeover: mixed-model lines require changeover time (retooling, setup adjustment) whenever the line switches from producing one model to the other — more frequent or longer changeovers directly reduce availability.\nL1 — Performance/learning curve: even once running, operators and equipment may take longer per unit on the new model until proficiency builds (a classic learning-curve effect), which shows up as reduced performance (actual cycle time vs. rated/target cycle time) without necessarily showing up as quality defects if the output is still correct, just slower.\nL1 — Quality (ruled out as primary driver): steady quality suggests the new model's process itself is capable when actually being run — this is a distinguishing signal, not a coincidence to ignore.",
+    "hypothesis": "I expect the Availability decline to be driven primarily by changeover time between the two models at the paint-shop and final-assembly stations (a new source of downtime that didn't exist before the mixed-model change), and the Performance decline to be a learning-curve effect specific to the new model's process steps at those same stations — both effects concentrated exactly where the clarifying answers say the impact is concentrated, and both plausibly resolving somewhat naturally over time as changeover procedures are optimized and operators gain proficiency, but not fast enough without active intervention given the plant is 10 weeks in and still well below target.",
+    "data": "Line runs roughly 60% existing model / 40% new model by volume mix. Changeover time between models at the paint-shop/final-assembly stations: currently averaging 35 minutes per switch, and the line switches models roughly 6 times per shift (given the 60/40 mix isn't run in large batches but interspersed for scheduling flexibility) — this changeover time did not exist before the new model was introduced (single-model line previously had zero changeover downtime). Rated cycle time per vehicle at these stations: 58 seconds (existing model, well-established). New model's actual average cycle time at these stations currently: 79 seconds, versus a target/rated cycle time of 62 seconds once fully proficient (the new model has an intrinsically slightly longer rated cycle time due to added features, but 79 actual vs. 62 rated-target still represents an active performance gap, not just the model's inherent complexity).",
+    "calc": "AVAILABILITY IMPACT FROM CHANGEOVER:\nChangeover downtime per shift = 6 switches × 35 minutes = 210 minutes/shift.\nAssume a standard 8-hour (480-minute) shift: changeover now consumes 210/480 ≈ 44% of... that seems too high for a 13-point availability drop, so let's reconsider — likely not every 'switch' requires the full changeover if some switches are between compatible configurations, or shift length/changeover frequency assumptions need adjustment; using the actual data point instead — Availability dropped from 92% to 79%, a 13-percentage-point drop. If we treat this 13-point drop as entirely attributable to new changeover downtime: 13% of an 480-minute shift ≈ 62 minutes/shift of new downtime, implying roughly 62/35 ≈ 1.8 changeovers per shift are creating this impact, OR more plausibly, only some changeovers are full 35-minute changeovers while others are shorter/partial — the precise changeover frequency should be verified directly with the plant's downtime log rather than inferred, but the direction and rough magnitude (new changeover downtime tracks with a plausible availability drop of this size) is consistent with the hypothesis.\n\nPERFORMANCE IMPACT FROM LEARNING CURVE:\nCycle-time gap at affected stations = 79 actual − 62 rated-target = 17 seconds/unit slower than target on the new model specifically.\nOn the 40% of volume that's the new model, this directly drags down average line performance versus rated speed — a 17-second gap against a 62-second rated cycle is roughly a 27% performance shortfall on that portion of volume, which blended with the unaffected 60% (running at or near normal performance) plausibly produces something close to the observed blended Performance drop from 90% to 84%.",
+    "insight": "Both the Availability and Performance declines trace back to the same root event (the mixed-model line change) but through two distinct mechanisms — new changeover downtime (an availability problem) and an incomplete learning curve on the new model's process steps (a performance problem) — and critically, the flat Quality metric confirms this is fundamentally a ramp-up/process-maturity problem rather than a process-capability problem, meaning both effects should improve over time with the right interventions rather than representing a permanent ceiling on OEE with this mixed-model configuration.",
+    "recommendation": "Pursue two parallel interventions matched to the two root causes: (1) run a focused changeover-time-reduction exercise (a standard lean-manufacturing technique, often called SMED — Single-Minute Exchange of Die) specifically at the paint-shop and final-assembly stations to cut the 35-minute changeover time, which directly recovers Availability, and (2) implement targeted additional training and process-step optimization for operators on the new model's specific steps at those stations, with a clear cycle-time-improvement target (closing the 79-vs-62-second gap) tracked weekly, which directly recovers Performance — both interventions are standard, proven manufacturing responses to exactly this mixed-model ramp-up pattern, and the plant should expect OEE to recover toward target over roughly 8-12 weeks with active management, rather than 10+ weeks of passive, unmanaged learning-curve improvement.",
+    "risks": [
+      "The availability-impact calculation above required backing into an inferred changeover frequency because the initial straightforward calculation (6 switches × 35 min) implied an implausibly large impact — this signals the changeover-time and frequency data should be verified directly from the plant's actual downtime logs rather than relying on the rough figures given in this exercise, since the diagnosis's precision depends heavily on getting this input right.",
+      "SMED-style changeover reduction and accelerated training both take real implementation time and management attention — if the plant is under production-volume pressure in the near term, there may be a temptation to skip the root-cause fix in favor of just running more shifts/overtime to hit output targets despite low OEE, which would treat the symptom rather than the cause and likely perpetuate the underlying inefficiency.",
+      "This diagnosis assumes the new model's rated/target cycle time (62 seconds) is itself accurate and achievable — if that target was set optimistically during product design without accounting for the plant's specific station layout or tooling, the 'performance gap' being chased might be partly an unrealistic target problem, not purely an operator/process learning-curve problem, and the target itself should be sanity-checked against comparable mixed-model line benchmarks elsewhere in the company or industry."
+    ],
+    "cross": [
+      {
+        "q": "Your changeover-time calculation ran into an inconsistency that you had to reason around — walk me through how you'd resolve that before presenting this diagnosis to the plant manager.",
+        "a": "I wouldn't present the specific changeover-frequency inference as a finalized number — I'd flag it explicitly as an estimate that needs validation against the plant's actual downtime-log data (most modern plants track changeover events and durations directly), and I'd go get that real data before finalizing the SMED improvement target; what I'm confident presenting without further validation is the qualitative diagnosis (changeover downtime and learning-curve performance gap, both traceable to the mixed-model change, both consistent with steady quality) — the precise magnitude of each contributor is exactly the kind of number I'd want to replace with real data rather than defend an estimate that didn't fully reconcile on its own."
+      },
+      {
+        "q": "Why do you think Quality held steady while Availability and Performance both dropped — couldn't a rushed, under-trained ramp-up just as easily have caused more defects instead of just slower/less available production?",
+        "a": "It's a fair alternative hypothesis, and in many operational ramp-ups quality does suffer alongside speed — but a plausible explanation for why quality specifically held here is that the plant's quality-control process (final inspection, in-line checks) is a hard gate that catches defects before they'd show up as a lower first-pass-yield number, meaning operators under time pressure on the new model might be working more slowly and carefully specifically to avoid defects, which would show up exactly as we're seeing it: slower cycle times (lower Performance) but preserved quality — that's a reasonable read of the data, though I'd want to confirm it by checking whether in-line defect-catch rates (not just final yield) also stayed flat, since a rising catch-and-rework rate hidden inside a flat final-yield number would tell a different, less reassuring story."
+      }
+    ],
+    "synthesis": "This case rewards using a structured metric (OEE's three components) as a diagnostic tool rather than treating the blended headline number as a black box — decomposing which sub-metric moved and which didn't (quality staying flat here) is itself powerful evidence that narrows the hypothesis space, and being willing to flag your own calculation's internal inconsistency rather than paper over it with a convenient number is exactly the kind of intellectual honesty a good candidate should model in a live case."
+  },
+  {
+    "diff": "expert",
+    "industry": "Global Electronics Manufacturing — Semiconductor Shortage Supply Chain Redesign",
+    "title": "Redesign a Consumer Electronics Company's Supply Chain After a Semiconductor Shortage Exposes Single-Source Risk",
+    "prompt": "A consumer electronics company (mid-sized, makes smart home devices) was hit hard by a semiconductor shortage two years ago — production was down 40% for six months because a single specialized chip, sourced from a single supplier, became unavailable. The shortage has since eased, but the CEO wants a fundamental supply chain redesign to prevent this from happening again, without simply over-building expensive inventory buffers everywhere, which the CFO has flagged as too costly given the company's margin profile.",
+    "clarify": [
+      {
+        "q": "Should this redesign cover the full bill-of-materials (hundreds of components), or should I focus on identifying and prioritizing the highest-risk components first?",
+        "a": "Focus on prioritization — walk me through how you'd identify and triage the components that actually deserve a redesign investment, rather than trying to boil the ocean across the entire BOM."
+      },
+      {
+        "q": "Is dual-sourcing (qualifying a second supplier) always feasible for these components, or are there real constraints — cost, technical complexity, supplier willingness?",
+        "a": "Real constraints exist — some specialized chips genuinely have very few capable global suppliers, and qualifying a second source can take 12-18 months and real engineering cost, so this isn't a simple 'just dual-source everything' answer."
+      },
+      {
+        "q": "Does the CFO's cost concern rule out inventory buffers entirely, or just rule out uniform over-buffering across all components?",
+        "a": "Just rule out uniform over-buffering — the CFO is open to targeted, risk-adjusted buffer investment on the specific components that warrant it, as long as it's not a blanket policy applied to the whole BOM."
+      }
+    ],
+    "mece": "This is a supply chain risk-management redesign, and the right structure is a risk-segmentation framework — not every component needs the same treatment, so I'll build a 2x2 risk matrix (supply risk × business impact) to triage the BOM, then apply differentiated mitigation strategies (dual-sourcing, buffer inventory, design changes, or accept-the-risk) by quadrant: (1) risk segmentation — score every component (or realistically, the top ~50-100 highest-spend/most-critical components) on supply risk (supplier concentration, lead time, geographic/geopolitical exposure) and business impact (revenue at stake if unavailable, substitutability), (2) mitigation strategy by quadrant — different fixes for different risk profiles, since dual-sourcing everything is infeasible and buffering everything is what the CFO already ruled out, (3) implementation sequencing and cost — since 12-18 month dual-sourcing timelines and buffer capital both have real cost and time constraints, the redesign needs a realistic phased plan, not a simultaneous fix-everything mandate.\n\nL1 — Risk segmentation: score components on (a) supply risk: number of qualified suppliers, geographic concentration, historical volatility/lead-time reliability, and (b) business impact: % of product revenue dependent on this component, and whether a substitute/redesign is technically feasible at all.\nL1 — Mitigation strategy by quadrant: high-risk/high-impact components get the most aggressive (and most expensive) treatment — likely dual-sourcing plus modest buffer; high-risk/low-impact might get design-out (re-engineer to avoid the risky component) if a substitute exists; low-risk/high-impact might only need monitoring plus a contractual buffer commitment from the existing supplier rather than a costly second source; low-risk/low-impact gets no special treatment.\nL1 — Sequencing and cost: given dual-sourcing timelines and capital constraints, prioritize the very highest-risk/highest-impact components first, phase the rest over a multi-year roadmap, and track a smaller number of both quantitative (cost of mitigation) and risk-reduction metrics to justify the investment to the CFO.",
+    "hypothesis": "I expect the redesign to reveal that only a small number of components — likely under 10-15 out of the full BOM — actually sit in the high-risk/high-impact quadrant deserving the most expensive mitigation (dual-sourcing), consistent with a Pareto-style concentration of real risk, and that a combination of selective dual-sourcing on that small set, contractual/buffer commitments on a slightly larger 'monitor' set, and no special treatment for the bulk of low-risk components would satisfy both the CEO's resilience goal and the CFO's cost constraint far better than either extreme (buffer everything, or do nothing).",
+    "data": "The company's BOM has roughly 300 distinct components across its smart-home device lineup. A rough risk-scoring exercise (illustrative, would be done rigorously with real procurement data in practice): approximately 12 components are estimated to be both high supply-risk (single or dual-supplier globally, meaningful lead-time volatility, geographic concentration in a small number of fabrication regions) and high business-impact (each individually represents over 15% of at least one major product line's bill-of-materials cost or is functionally non-substitutable without a significant product redesign). A further ~35 components are estimated to be high-risk but lower-impact (specialized but used in lower-volume/lower-revenue product lines, or where a substitute exists with moderate re-engineering effort). The remaining ~250+ components are either low-risk (commodity, widely available from many qualified suppliers) regardless of business impact. Estimated dual-sourcing cost: roughly $400K-800K in qualification/engineering cost per component (varying by complexity) plus 12-18 months timeline. Estimated cost of a targeted 3-month buffer inventory position on a high-risk/high-impact component: varies by component cost and volume, but for the 12 highest-priority components, a blended estimate of roughly $150K-300K in incremental working capital per component for a 3-month buffer.",
+    "calc": "TIER 1 (High-risk/high-impact, ~12 components): recommend BOTH dual-sourcing AND a modest (2-3 month) buffer during the dual-sourcing qualification window, since a buffer alone doesn't solve the underlying single-source structural risk, and dual-sourcing alone still leaves a gap during the 12-18 month qualification period.\nEstimated cost: 12 components × ~$600K (mid-point dual-sourcing cost) = $7.2M in one-time qualification investment, plus 12 × ~$225K (mid-point buffer cost) = $2.7M in working capital during the transition window (much of which is recovered once dual-sourcing is complete and buffer can be reduced to standard levels) — total near-term investment ≈ $9.9M, with the $7.2M being a mostly one-time cost and the $2.7M being working capital, not a permanent cost.\n\nTIER 2 (High-risk/lower-impact, ~35 components): recommend a lighter-touch approach — for components where a substitute/design-out option exists, prioritize re-engineering the highest-volume products to remove the risky component over the next 2-3 product-refresh cycles (a much cheaper fix than dual-sourcing, riding on already-planned engineering work rather than a dedicated project); for components without a viable substitute, negotiate supply-continuity contractual commitments (minimum-allocation guarantees, advance-notice clauses) with the existing supplier rather than the cost of full dual-sourcing.\n\nTIER 3 (Low-risk components, ~250+): no special mitigation needed beyond standard procurement practice — investing here would be exactly the 'uniform over-buffering' the CFO correctly flagged as wasteful.\n\nTotal near-term Tier 1 investment (~$9.9M) should be weighed against the actual cost of the shortage event that triggered this redesign — a 40% production shortfall for 6 months at this company's scale plausibly represents tens of millions of dollars in lost revenue and margin, meaning the $9.9M Tier 1 investment, concentrated on exactly the ~12 components with genuine structural risk, is very likely to be a strongly positive-ROI investment even under conservative assumptions about how likely a similar shortage is to recur.",
+    "insight": "The core insight is that supply chain resilience doesn't require uniform investment — it requires accurately identifying the small subset of components where risk and impact both concentrate (roughly 4% of the BOM by count in this illustrative segmentation) and applying the most expensive mitigation only there, while using cheaper levers (design-out, contractual terms) on the next tier and leaving the bulk of the BOM untouched — this directly resolves the apparent tension between the CEO's resilience mandate and the CFO's cost discipline, because they were never actually in conflict once the problem is properly segmented rather than treated as an all-or-nothing choice.",
+    "recommendation": "Implement the three-tier mitigation plan: dual-source plus transitional buffer on the ~12 Tier 1 components (highest priority, funded first, ~$9.9M near-term investment), design-out or contractual-protection on the ~35 Tier 2 components (phased over 2-3 years, riding on existing product-refresh cycles to minimize incremental cost), and no special action on the remaining ~250+ low-risk components — present this to the CEO and CFO together as a single risk-segmented plan rather than two competing priorities, using the shortage event's estimated cost as the ROI anchor for the Tier 1 investment specifically.",
+    "risks": [
+      "This entire plan rests on an illustrative risk-scoring exercise (12/35/250+ split) rather than a rigorous, data-driven component-by-component assessment — the actual redesign would need real procurement, engineering, and supplier data to properly score each component, and the true Tier 1 list could be larger or smaller than 12 once that real analysis is done.",
+      "Dual-sourcing timelines (12-18 months) mean this plan doesn't eliminate near-term risk on the Tier 1 components immediately — a similar shortage event could still occur during the qualification window, which is exactly why the transitional buffer is included, but the company should be honest that this is a multi-year risk-reduction program, not an instant fix.",
+      "Geopolitical and macro supply-risk conditions can shift components between tiers over time (a component that's low-risk today could become high-risk if, for example, a key fabrication region faces new trade restrictions) — this redesign should include an ongoing, periodic (e.g., annual) re-scoring process rather than being treated as a one-time exercise that's 'done' once implemented."
+    ],
+    "cross": [
+      {
+        "q": "Your Tier 1 investment is roughly $9.9M — how confident are you that this is actually cheaper than what the shortage cost the company, and how would you make that case rigorously to the CFO rather than just asserting it?",
+        "a": "I'd want to go build a real cost estimate of the actual shortage event — lost revenue from the 40% six-month production shortfall, any expedited-freight or spot-market premium costs paid to secure whatever chips were available, margin impact, and any market-share or customer-relationship damage that's harder to quantify but real — and compare that concrete historical cost against the $9.9M Tier 1 investment as a direct payback calculation; I'd expect the historical shortage cost to be substantially higher than $9.9M given the scale of a 40% six-month shortfall, but I'd want to build that comparison explicitly with real financials rather than asserting the ROI case qualitatively, since that's exactly the kind of rigor a CFO would expect before approving an $9.9M investment."
+      },
+      {
+        "q": "You've focused heavily on the supply side (dual-sourcing, buffers) — is there also a demand-side or product-design lever you're missing, like reducing how many different chip variants the company uses across its product line in the first place?",
+        "a": "That's a genuinely good addition I should have included — component standardization/rationalization (reducing the number of distinct specialized components across the product portfolio by designing multiple products around shared components where feasible) is a real complementary lever that reduces total supply-chain complexity and risk exposure without any dual-sourcing or buffer cost at all; I'd add it as a fourth workstream alongside the three-tier mitigation plan, run by the engineering/product organization rather than procurement, since it changes future product design decisions rather than mitigating risk on the existing BOM — and over time it could actually shrink the Tier 1 and Tier 2 lists by design rather than just managing around them."
+      }
+    ],
+    "synthesis": "This expert-level case tests whether a candidate can resolve an apparent resource-allocation conflict (resilience vs. cost) not by picking a side, but by recognizing that the conflict dissolves once the underlying problem is properly segmented — a small number of components carry almost all the real risk, and matching mitigation intensity to that risk concentration, rather than applying a single uniform policy in either direction, is the structural insight that turns two seemingly opposed executive mandates into one coherent, fundable plan."
+  }
+];
+} catch (err) { console.error('Stage 21 data error:', err); }
+</script>
+<script>
+try {
+  var diffLabel = {easy:"Easier", med:"Medium", hard:"Hard", expert:"Expert"};
+
+  function renderCases(list){
+    var wrap = document.getElementById('caselist');
+    wrap.innerHTML = '';
+    list.forEach(function(c, i){
+      var det = document.createElement('details');
+      det.className = 'case';
+      det.id = 'case-' + (i+1);
+
+      var clarifyHtml = c.clarify.map(function(qa){
+        return '<div class="qa-pair"><div class="q">Q: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
+      }).join('');
+
+      var risksHtml = '<ul>' + c.risks.map(function(r){ return '<li>' + esc(r) + '</li>'; }).join('') + '</ul>';
+
+      var crossHtml = c.cross.map(function(qa){
+        return '<div class="qa-pair"><div class="q">Interviewer: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
+      }).join('');
+
+      det.innerHTML =
+        '<summary><span class="cnum">Case ' + (i+1) + '</span>' +
+        '<span class="cdiff ' + c.diff + '">' + diffLabel[c.diff] + '</span>' +
+        '<span class="cind">' + esc(c.industry) + '</span>' +
+        '<span class="ctitle">' + esc(c.title) + '</span></summary>' +
+        '<div class="case-body">' +
+          '<div class="case-prompt">"' + esc(c.prompt) + '"</div>' +
+          '<div class="case-sec"><h5>Clarifying Questions &amp; Answers</h5>' + clarifyHtml + '</div>' +
+          '<div class="case-sec"><h5>MECE Structure</h5><div class="calc-block">' + esc(c.mece) + '</div></div>' +
+          '<div class="case-sec"><h5>Hypothesis</h5><p>' + esc(c.hypothesis) + '</p></div>' +
+          '<div class="case-sec"><h5>Data &amp; Exhibits</h5><div class="calc-block">' + esc(c.data) + '</div></div>' +
+          '<div class="case-sec"><h5>Calculation</h5><div class="calc-block">' + esc(c.calc) + '</div></div>' +
+          '<div class="case-sec"><h5>Insight</h5><p>' + esc(c.insight) + '</p></div>' +
+          '<div class="case-sec"><h5>Recommendation</h5><p>' + esc(c.recommendation) + '</p></div>' +
+          '<div class="case-sec"><h5>Risks &amp; Caveats</h5>' + risksHtml + '</div>' +
+          '<div class="case-sec"><h5>Interviewer Cross-Questions</h5>' + crossHtml + '</div>' +
+          '<div class="synth-box"><h5>Synthesis</h5><p>' + esc(c.synthesis) + '</p></div>' +
+        '</div>';
+      wrap.appendChild(det);
+    });
+  }
+
+  renderCases(cases);
+
+  document.getElementById('casefilter').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if(!btn) return;
+    document.querySelectorAll('#casefilter button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var diff = btn.getAttribute('data-diff');
+    var filtered = diff === 'all' ? cases : cases.filter(function(c){ return c.diff === diff; });
+    renderCases(filtered);
+  });
+
+  var masteryItems = cases.map(function(c, i){ return 'Case ' + (i+1) + ' — ' + c.title + ': I can walk through the full structure, calculation, and synthesis cold.'; });
+  var STORE = 'masterbook-s21-mastery';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var mBox = document.getElementById('masteryBox');
+  mBox.innerHTML = masteryItems.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+esc(t)+'</span></div>';
+  }).join('');
+  mBox.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 500){ backtop.classList.add('show'); } else { backtop.classList.remove('show'); }
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 21 loaded — cases:', cases.length);
+} catch (err) { console.error('Stage 21 render error:', err); }
+</script>

@@ -1,0 +1,220 @@
+<meta name="robots" content="noindex, nofollow">
+
+
+
+
+
+
+
+<title>Interview Masterbook · Contents</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  main{ max-width:980px; margin:0 auto; padding:56px 32px 120px; }
+  @media (max-width:700px){ main{ padding:32px 18px 100px; } }
+
+  header.hero{ margin-bottom:44px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.5rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:66ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:48px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:20px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+
+  .partlabel{ font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); font-weight:600; margin:28px 0 12px; }
+  .partlabel:first-child{ margin-top:0; }
+
+  .stagegrid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
+  a.stagecard{ display:block; background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); padding:16px 18px; text-decoration:none; color:var(--ink); transition:border-color .15s, transform .15s; }
+  a.stagecard:hover{ border-color:var(--data); transform:translateY(-1px); }
+  .stagecard .snum{ display:inline-flex; align-items:center; gap:6px; font-size:.68rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:3px 9px; border-radius:100px; font-weight:600; margin-bottom:8px; }
+  .stagecard .stitle{ font-family:"Fraunces"; font-weight:600; font-size:1.02rem; line-height:1.3; }
+  .stagecard .ssub{ font-size:.78rem; color:var(--ink-faint); margin-top:4px; }
+
+  .stagecard.placeholder{ background:var(--paper-sunken); color:var(--ink-faint); cursor:default; pointer-events:none; }
+  .stagecard.placeholder .snum{ background:var(--paper); color:var(--ink-faint); border:1px solid var(--line); }
+  .stagecard.placeholder .stitle{ color:var(--ink-soft); }
+
+  .note{ font-size:.85rem; color:var(--ink-faint); background:var(--paper-raised); border:1px solid var(--line); border-radius:10px; padding:14px 16px; margin-top:8px; }
+  footer{ border-top:1px solid var(--line); padding-top:20px; margin-top:52px; font-size:.82rem; color:var(--ink-faint); }
+</style>
+
+<main>
+  <header class="hero">
+    <div class="eyebrow">Interview Masterbook · Table of Contents</div>
+    <h1>All Stages</h1>
+    <p class="lede">Every stage of the Interview Masterbook in one place — all 33 stages are now published. Jump straight to any of them below. Each stage page also links back here directly.</p>
+    <div class="statusbar">
+      <div class="statuschip"><b>33</b>&nbsp;of 33 stages published — Masterbook complete</div>
+      <div class="statuschip"><b>11</b>&nbsp;case banks live — case-bank block complete (Profitability, Market Entry, Growth, Pricing, Market Sizing, Operations, Product, Analytics, AI/GenAI, FinTech, Pharma)</div>
+      <div class="statuschip">💼 Work Experience Deep Dives complete — Axtria, NanoCloud, Capgemini, Hero Electronics + Projects live</div>
+      <div class="statuschip">🛠️ Portfolio live — 14 projects, incl. 6 deployed industry ML/AI flagships</div>
+    </div>
+  </header>
+
+  <section id="stages">
+    <div class="sec-head">
+      <div class="num">Published</div>
+      <h2>Stages 1–33</h2>
+      <p>Grouped exactly as Stage 1's own 14-Part Table of Contents groups them — one labeled Part per block, not a merged range.</p>
+    </div>
+
+    <div class="partlabel">Part I · CV Intelligence</div>
+    <div class="stagegrid">
+      <a class="stagecard" href="stage01.html"><div class="snum">● Stage 1</div><div class="stitle">CV Intelligence</div><div class="ssub">Roadmap &amp; priority framing</div></a>
+    </div>
+
+    <div class="partlabel">Part II · Foundations</div>
+    <div class="stagegrid">
+      <a class="stagecard" href="stage02.html"><div class="snum">● Stage 2</div><div class="stitle">Statistics + Math</div></a>
+      <a class="stagecard" href="stage23.html"><div class="snum">● Stage 23</div><div class="stitle">Business Analytics</div><div class="ssub">Also the Analytics Case Bank — Part X</div></a>
+    </div>
+
+    <div class="partlabel">Part III · Data</div>
+    <div class="stagegrid">
+      <a class="stagecard" href="stage03.html"><div class="snum">● Stage 3</div><div class="stitle">SQL</div></a>
+      <a class="stagecard" href="stage04.html"><div class="snum">● Stage 4</div><div class="stitle">Python + Pandas</div></a>
+      <a class="stagecard" href="stage05.html"><div class="snum">● Stage 5</div><div class="stitle">PySpark + Databricks</div></a>
+    </div>
+
+    <div class="partlabel">Part IV · Machine Learning</div>
+    <div class="stagegrid">
+      <a class="stagecard" href="stage06.html"><div class="snum">● Stage 6</div><div class="stitle">ML Fundamentals</div></a>
+      <a class="stagecard" href="stage07.html"><div class="snum">● Stage 7</div><div class="stitle">Regression + Logistic Regression</div></a>
+      <a class="stagecard" href="stage08.html"><div class="snum">● Stage 8</div><div class="stitle">Other Classical ML Models</div></a>
+      <a class="stagecard" href="stage09.html"><div class="snum">● Stage 9</div><div class="stitle">Trees, Random Forest &amp; XGBoost</div></a>
+    </div>
+
+    <div class="partlabel">Part V · Forecasting &amp; Optimization</div>
+    <div class="stagegrid">
+      <a class="stagecard" href="stage10.html"><div class="snum">● Stage 10</div><div class="stitle">Forecasting &amp; Optimization</div></a>
+    </div>
+
+    <div class="partlabel">Part VI · Experimentation</div>
+    <div class="stagegrid">
+      <a class="stagecard" href="stage11.html"><div class="snum">● Stage 11</div><div class="stitle">A/B Testing &amp; Experimentation</div></a>
+    </div>
+
+    <div class="partlabel">Part VII · BI</div>
+    <div class="stagegrid">
+      <a class="stagecard" href="stage12.html"><div class="snum">● Stage 12</div><div class="stitle">Power BI &amp; Advanced Excel</div></a>
+    </div>
+
+    <div class="partlabel">Part VIII · AI</div>
+    <div class="stagegrid">
+      <a class="stagecard" href="stage13.html"><div class="snum">● Stage 13</div><div class="stitle">GenAI, LLMs, RAG &amp; Agents</div></a>
+    </div>
+
+    <div class="partlabel">Part IX · Product</div>
+    <div class="stagegrid">
+      <a class="stagecard" href="stage14.html"><div class="snum">● Stage 14</div><div class="stitle">Product Management</div></a>
+    </div>
+
+    <div class="partlabel">Part X · Case Interview Toolkit &amp; Case Banks</div>
+    <div class="stagegrid">
+      <a class="stagecard" href="stage15.html"><div class="snum">● Stage 15</div><div class="stitle">Structured Problem Solving &amp; Frameworks</div></a>
+      <a class="stagecard" href="stage16.html"><div class="snum">● Stage 16</div><div class="stitle">Profitability Case Bank</div><div class="ssub">20 cases</div></a>
+      <a class="stagecard" href="stage17.html"><div class="snum">● Stage 17</div><div class="stitle">Market Entry Case Bank</div><div class="ssub">15 cases</div></a>
+      <a class="stagecard" href="stage18.html"><div class="snum">● Stage 18</div><div class="stitle">Growth Case Bank</div><div class="ssub">15 cases</div></a>
+      <a class="stagecard" href="stage19.html"><div class="snum">● Stage 19</div><div class="stitle">Pricing Case Bank</div><div class="ssub">10 cases</div></a>
+      <a class="stagecard" href="stage20.html"><div class="snum">● Stage 20</div><div class="stitle">Market Sizing Case Bank</div><div class="ssub">10 cases</div></a>
+      <a class="stagecard" href="stage21.html"><div class="snum">● Stage 21</div><div class="stitle">Operations Case Bank</div><div class="ssub">10 cases</div></a>
+      <a class="stagecard" href="stage22.html"><div class="snum">● Stage 22</div><div class="stitle">Product Case Bank</div><div class="ssub">10 cases</div></a>
+      <a class="stagecard" href="stage23.html"><div class="snum">● Stage 23</div><div class="stitle">Analytics Case Bank</div><div class="ssub">10 cases</div></a>
+      <a class="stagecard" href="stage24.html"><div class="snum">● Stage 24</div><div class="stitle">AI/GenAI Case Bank</div><div class="ssub">10 cases</div></a>
+      <a class="stagecard" href="stage25.html"><div class="snum">● Stage 25</div><div class="stitle">FinTech Case Bank</div><div class="ssub">10 cases</div></a>
+      <a class="stagecard" href="stage26.html"><div class="snum">● Stage 26</div><div class="stitle">Pharma Case Bank</div><div class="ssub">10 cases</div></a>
+    </div>
+
+    <div class="partlabel">Part XI · My Work Experience</div>
+    <div class="stagegrid">
+      <a class="stagecard" href="stage27.html"><div class="snum">● Stage 27</div><div class="stitle">Axtria Deep Dive</div></a>
+      <a class="stagecard" href="stage28.html"><div class="snum">● Stage 28</div><div class="stitle">NanoCloud Deep Dive</div></a>
+      <a class="stagecard" href="stage29.html"><div class="snum">● Stage 29</div><div class="stitle">Capgemini Deep Dive</div></a>
+      <a class="stagecard" href="stage30.html"><div class="snum">● Stage 30</div><div class="stitle">Hero Electronics + Projects Deep Dive</div><div class="ssub">Part XI complete</div></a>
+    </div>
+
+    <div class="partlabel">Part XII · Portfolio</div>
+    <div class="stagegrid">
+      <a class="stagecard" href="stage31.html"><div class="snum">● Stage 31</div><div class="stitle">Portfolio</div><div class="ssub">14 projects · 6 industry flagships</div></a>
+    </div>
+
+    <div class="partlabel">Part XIII · Interview Bank</div>
+    <div class="stagegrid">
+      <a class="stagecard" href="stage32.html"><div class="snum">● Stage 32</div><div class="stitle">Interview Question Bank</div><div class="ssub">93 Q&amp;A · Technical, Business, Case, Work Experience, HR/Behavioral, Tricky · 3 Mock Interviews</div></a>
+    </div>
+
+    <div class="partlabel">Part XIV · Study System + Appendices</div>
+    <div class="stagegrid">
+      <a class="stagecard" href="stage33.html"><div class="snum">● Stage 33</div><div class="stitle">Study System &amp; Appendices</div><div class="ssub">5/10/15-Day Plans, Revision System, 5 Mastery Tests · 10 reference appendices</div></a>
+    </div>
+    <div class="note">Full 14-Part / 93-chapter map lives on Stage 1's own Table of Contents (linked above) — this page mirrors it at the stage level. All 33 stages of the Interview Masterbook are now live.</div>
+  </section>
+
+  <footer>Interview Masterbook — built stage by stage. This page is the hub: every stage links back here so you can jump directly between any of them.</footer>
+</main>
+
+
+
+
+
+

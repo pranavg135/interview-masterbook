@@ -1,0 +1,998 @@
+<meta name="robots" content="noindex, nofollow">
+<title>Study System &amp; Appendices</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+
+  .case-sec{ margin-top:20px; }
+  .case-sec h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .case-sec h5::before{ content:""; width:14px; height:2px; background:var(--accent); display:inline-block; }
+  .case-sec p, .case-sec li{ font-size:.9rem; color:var(--ink-soft); margin:0 0 6px; }
+  .qa-pair{ margin-bottom:10px; padding:10px 14px; background:var(--paper-sunken); border-radius:8px; }
+  .qa-pair .q{ font-size:.88rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .qa-pair .a{ font-size:.87rem; color:var(--ink-soft); }
+  .case-sec ul{ margin:0; padding-left:20px; }
+  .synth-box{ margin-top:20px; padding:15px 18px; background:var(--accent-soft); border-radius:8px; border-left:4px solid var(--accent); }
+  .synth-box h5{ color:var(--accent-ink); }
+  .synth-box p{ color:var(--ink); font-weight:500; }
+
+  .cv-role-meta{ font-size:.85rem; color:var(--ink-faint); margin:2px 0 10px; }
+  .cv-role-meta .co{ color:var(--ink); font-weight:600; }
+
+  .draftflag{ display:inline-flex; align-items:center; gap:5px; font-size:.68rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; background:var(--lvlB-soft); color:var(--lvlB); text-transform:uppercase; letter-spacing:.03em; }
+  .okflag{ display:inline-flex; align-items:center; gap:5px; font-size:.68rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; background:var(--data-soft); color:var(--data); text-transform:uppercase; letter-spacing:.03em; }
+
+  .ladder{ display:flex; flex-direction:column; gap:12px; margin-top:6px; }
+  .ladder-tier{ padding:15px 18px; border-radius:10px; background:var(--paper-sunken); border-left:4px solid var(--data); }
+  .ladder-tier .tier-label{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--data); margin-bottom:8px; display:block; }
+  .ladder-tier p{ margin:0; font-size:.91rem; color:var(--ink); }
+
+  .verb-row{ display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+  .verb-chip{ font-size:.8rem; padding:5px 12px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); }
+  .verb-chip .src{ font-size:.68rem; color:var(--ink-faint); margin-left:5px; }
+  .verb-chip.chosen{ background:var(--accent-soft); color:var(--accent-ink); border-color:var(--accent); font-weight:700; }
+
+  .star-card{ border:1px solid var(--line); border-radius:12px; padding:20px 22px; background:var(--paper-raised); box-shadow:var(--shadow); margin-bottom:16px; }
+  .star-card h4{ font-size:1.02rem; margin-bottom:12px; }
+  .star-row{ margin-bottom:9px; font-size:.9rem; color:var(--ink-soft); }
+  .star-row b{ color:var(--accent-ink); font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; margin-right:8px; display:inline-block; min-width:70px; }
+
+  .claimcard{ border:1px solid var(--line); border-radius:14px; background:var(--paper-raised); box-shadow:var(--shadow); padding:26px 28px; margin-bottom:20px; }
+  .claimcard .chead{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:10px; }
+  .claimcard .chead h3{ font-size:1.22rem; flex:1; min-width:200px; }
+  .bulletquote{ margin:14px 0; padding:14px 18px; background:var(--paper-sunken); border-left:4px solid var(--ink-faint); border-radius:0 8px 8px 0; font-style:italic; font-size:.92rem; color:var(--ink-soft); }
+  .scopebox{ margin:14px 0; padding:14px 18px; background:var(--data-soft); border-radius:8px; border-left:4px solid var(--data); }
+  .scopebox h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--data); margin-bottom:6px; }
+  .scopebox p{ margin:0; color:var(--ink); font-size:.9rem; }
+
+  .partlabel{ display:inline-flex; align-items:center; gap:8px; font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; font-weight:700; color:var(--accent-ink); background:var(--accent-soft); padding:6px 14px; border-radius:100px; margin-bottom:14px; }
+
+  .plantable{ width:100%; border-collapse:collapse; font-size:.86rem; }
+  .plantable th{ text-align:left; padding:8px 10px; background:var(--paper-sunken); color:var(--ink-soft); font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; }
+  .plantable td{ padding:10px; border-bottom:1px solid var(--line); vertical-align:top; color:var(--ink); }
+  .plantable .dnum{ font-family:"IBM Plex Mono"; font-weight:700; color:var(--accent); white-space:nowrap; }
+  .plantable .stg{ color:var(--ink-soft); font-size:.82rem; }
+  .plantable .hrs{ font-family:"IBM Plex Mono"; white-space:nowrap; color:var(--data); }
+  .plantable .chk{ color:var(--ink-soft); font-size:.84rem; }
+
+  .testcard{ padding:20px 24px; margin-bottom:16px; }
+  .test-head{ display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:8px; margin-bottom:6px; }
+  .test-head h4{ font-family:"Fraunces"; font-size:1.08rem; }
+  .test-src{ font-size:.74rem; color:var(--ink-faint); font-family:"IBM Plex Mono"; }
+  .test-instructions{ font-size:.86rem; color:var(--ink-soft); margin-bottom:12px; }
+  details.testq{ border-bottom:1px solid var(--line); padding:10px 0; }
+  details.testq summary{ cursor:pointer; font-weight:600; color:var(--ink); font-size:.92rem; list-style:none; }
+  details.testq summary::before{ content:"▸ "; color:var(--accent); }
+  details.testq[open] summary::before{ content:"▾ "; }
+  .testq-a{ margin-top:8px; padding:10px 14px; background:var(--data-soft); border-radius:8px; font-size:.88rem; color:var(--ink); }
+
+  .cheatgrid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
+  .cheatcard{ padding:16px 18px; }
+  .cheatcard h5{ font-family:"Fraunces"; font-size:.98rem; margin-bottom:10px; color:var(--accent-ink); }
+  .cheatlist{ margin:0; padding-left:18px; font-size:.84rem; color:var(--ink-soft); line-height:1.9; }
+  .codeblock{ background:var(--paper-sunken); border-radius:8px; padding:12px 14px; font-family:"IBM Plex Mono"; font-size:.78rem; line-height:1.6; overflow-x:auto; color:var(--ink); white-space:pre; }
+
+  .cmptable{ width:100%; border-collapse:collapse; font-size:.82rem; }
+  .cmptable th{ text-align:left; padding:8px 10px; background:var(--paper-sunken); color:var(--ink-soft); font-size:.7rem; text-transform:uppercase; }
+  .cmptable td{ padding:9px 10px; border-bottom:1px solid var(--line); }
+
+  .flowdiagram{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:10px 0; }
+  .flowbox{ background:var(--data-soft); color:var(--data); border-radius:8px; padding:10px 14px; font-size:.8rem; font-weight:600; text-align:center; }
+  .flowarrow{ color:var(--ink-faint); font-size:1.1rem; }
+  .patnote{ font-size:.82rem; color:var(--ink-faint); margin-top:8px; }
+  .patref{ font-size:.72rem; color:var(--ink-faint); font-weight:400; }
+  .fwuse{ font-size:.76rem; color:var(--ink-faint); margin:0 0 8px; }
+
+  .glossgrid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px 20px; }
+  .gloss-item{ font-size:.86rem; padding:6px 0; border-bottom:1px solid var(--line); }
+  .gloss-item b{ display:block; color:var(--accent-ink); margin-bottom:2px; }
+  .gloss-item span{ color:var(--ink-soft); }
+
+  .final-banner{ background:linear-gradient(135deg, var(--accent-soft), var(--data-soft)); border-radius:14px; padding:28px 30px; margin-top:10px; text-align:center; }
+  .final-banner h3{ font-family:"Fraunces"; font-size:1.5rem; margin-bottom:8px; }
+  .final-banner p{ color:var(--ink-soft); max-width:60ch; margin:0 auto; }
+</style><div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <a class="backlink" href="stage14.html">← Stage 14 · Product Management</a>
+    <a class="backlink" href="stage15.html">← Stage 15 · Structured Problem Solving &amp; Frameworks</a>
+    <a class="backlink" href="stage16.html">← Stage 16 · Profitability Case Bank</a>
+    <a class="backlink" href="stage17.html">← Stage 17 · Market Entry Case Bank</a>
+    <a class="backlink" href="stage18.html">← Stage 18 · Growth Case Bank</a>
+    <a class="backlink" href="stage19.html">← Stage 19 · Pricing Case Bank</a>
+    <a class="backlink" href="stage20.html">← Stage 20 · Market Sizing Case Bank</a>
+    <a class="backlink" href="stage21.html">← Stage 21 · Operations Case Bank</a>
+    <a class="backlink" href="stage22.html">← Stage 22 · Product Case Bank</a>
+    <a class="backlink" href="stage23.html">← Stage 23 · Analytics Case Bank</a>
+    <a class="backlink" href="stage24.html">← Stage 24 · AI/GenAI Case Bank</a>
+    <a class="backlink" href="stage25.html">← Stage 25 · FinTech Case Bank</a>
+    <a class="backlink" href="stage26.html">← Stage 26 · Pharma Case Bank</a>
+    <a class="backlink" href="stage27.html">← Stage 27 · Axtria Deep Dive</a>
+    <a class="backlink" href="stage28.html">← Stage 28 · NanoCloud Deep Dive</a>
+    <a class="backlink" href="stage29.html">← Stage 29 · Capgemini Deep Dive</a>
+    <a class="backlink" href="stage30.html">← Stage 30 · Hero Electronics + Projects Deep Dive</a>
+    <a class="backlink" href="stage31.html">← Stage 31 · Portfolio</a>
+    <a class="backlink" href="stage32.html">← Stage 32 · Interview Question Bank</a>
+    <div class="stage-pill">● Stage 33 of 33 — final</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#overview">Overview &amp; How To Use This Stage</a></li>
+      <li><a href="#plan5">5-Day Plan</a></li>
+      <li><a href="#plan10">10-Day Plan</a></li>
+      <li><a href="#plan15">15-Day Plan</a></li>
+      <li><a href="#revision">Revision System</a></li>
+      <li><a href="#mastertests">Mastery Tests</a></li>
+      <li><a href="#cheatsheets">Appendix · Cheat Sheets</a></li>
+      <li><a href="#formulas">Appendix · Formula Sheets</a></li>
+      <li><a href="#sqlpatterns">Appendix · SQL Patterns</a></li>
+      <li><a href="#pypatterns">Appendix · Python Patterns</a></li>
+      <li><a href="#mlcompare">Appendix · ML Comparison Tables</a></li>
+      <li><a href="#genaipatterns">Appendix · GenAI Architecture Patterns</a></li>
+      <li><a href="#frameworks">Appendix · Consulting Framework Library</a></li>
+      <li><a href="#answertemplates">Appendix · Interview Answer Templates</a></li>
+      <li><a href="#glossary">Appendix · Glossary</a></li>
+      <li><a href="#references">Appendix · References</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+      <li><a href="#bridge">Masterbook Complete</a></li>
+    </ul>
+    <div class="navgroup-label">Status</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">This is the final stage. All 33 stages of the Interview Masterbook are now live.</p>
+  </nav>
+
+  <main>
+
+    <header class="hero">
+      <div class="eyebrow">Part XIV · Stage 33 of 33 — Study System &amp; Appendices</div>
+      <h1>Study System &amp; Appendices</h1>
+      <p class="lede">The final stage of the Interview Masterbook. Everything built across Stages 1&ndash;32 &mdash; foundations, technical depth, case banks, four work-experience deep dives, a 14-project portfolio, and a 93-question interview bank &mdash; gets pulled together here into a study system you can actually run against a real interview date, plus ten reference appendices for last-mile lookup.</p>
+      <div class="statusbar">
+        <div class="statuschip">📅 <b>3</b> study plans — 5/10/15-day</div>
+        <div class="statuschip">🔁 Revision System — spaced review + weak-area log</div>
+        <div class="statuschip">✅ <b>5</b> Mastery Tests — <b>40</b> self-graded questions</div>
+        <div class="statuschip">📚 <b>10</b> reference appendices</div>
+      </div>
+    </header>
+
+    <section id="overview">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>How To Use This Stage</h2>
+        <p>Step 10 of your master instructions closes here. This stage is not new subject-matter content &mdash; it's the index and rehearsal system that turns 32 stages of built material into an actual pre-interview plan.</p>
+      </div>
+      <div class="card" style="padding:20px 24px">
+      <p style="color:var(--ink-soft);font-size:.92rem;margin-bottom:12px">Pick ONE study plan based on how much time you actually have before your next real interview, not how much you'd ideally like:</p>
+      <ul class="cheatlist" style="font-size:.9rem">
+        <li><b>5-Day Plan</b> &mdash; an interview is imminent (this week). Compressed, triage-only, hits the highest-odds items from Stage 1's Priority Matrix first.</li>
+        <li><b>10-Day Plan</b> &mdash; roughly 1.5&ndash;2 weeks out. Balanced coverage of every pillar with real depth, one case-bank pass, one full mock-interview pass.</li>
+        <li><b>15-Day Plan</b> &mdash; 2+ weeks out or starting from scratch. Full methodical run through all 32 prior stages in order, two case-bank days, two full portfolio/work-experience days.</li>
+      </ul>
+      <p style="color:var(--ink-soft);font-size:.92rem;margin-top:12px">After finishing any plan, move to the <a href="#revision">Revision System</a> to keep what you've learned from decaying, and use the <a href="#mastertests">Mastery Tests</a> as your final go/no-go gate before the real interview. The <a href="#cheatsheets">Appendices</a> are built for quick lookup in the last 24 hours, not first-pass learning.</p>
+    </div>
+    </section>
+
+    <section id="plan5">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>5-Day Plan — Interview This Week</h2>
+        <p>Triage mode. Covers only the highest-odds material from Stage 1's Interview Priority Matrix, in priority order.</p>
+      </div>
+      <div class="card" style="padding:8px;overflow-x:auto"><table class="plantable"><thead><tr><th>Day</th><th>Focus</th><th>Stages / Content</th><th>Hours</th><th>Checkpoint before moving on</th></tr></thead><tbody><tr><td class="dnum">1</td><td>CV Ownership &amp; Foundations Refresh</td><td class="stg">Stage 1 (CV Intelligence, Risk/Gap Matrix, Priority Matrix) &middot; Stage 2 (Statistics/Math quick pass) &middot; Stage 32 Work Experience Qs</td><td class="hrs">5&ndash;6h</td><td class="chk">You can recite all 4 employer flagship claims (Axtria allocation, NanoCloud requirements ownership, Capgemini 500+ stories, Hero Electronics chatbot) at Level A/B honesty, unscripted, in under 90 seconds each.</td></tr><tr><td class="dnum">2</td><td>Technical Core Speed-Pass</td><td class="stg">Stages 3&ndash;5 (SQL, Python/Pandas, PySpark/Databricks) &middot; Stages 6&ndash;9 (ML Fundamentals through XGBoost) &middot; Stage 32 Technical Qs (SQL + Python + ML Classical/Advanced)</td><td class="hrs">6&ndash;7h</td><td class="chk">You can answer all 5 SQL questions and all 5 Python questions from Stage 32 aloud, unscripted, in under 90 seconds each, and explain bias-variance tradeoff without notes.</td></tr><tr><td class="dnum">3</td><td>Applied Quant, GenAI &amp; Product Speed-Pass</td><td class="stg">Stages 10&ndash;12 (Forecasting/Optimization, A/B Testing, BI) &middot; Stage 13 (GenAI/LLMs/RAG/Agents) &middot; Stage 14 (Product Management) &middot; Stage 32 Business + GenAI Technical Qs</td><td class="hrs">5&ndash;6h</td><td class="chk">You can defend XGBoost vs. Logistic Regression AND GraphSAGE vs. XGBoost using the real numbers from Stage 31 (0.7962 vs. 0.8347 AUC; 0.749 vs. 0.687 AUPRC), not just conceptually.</td></tr><tr><td class="dnum">4</td><td>Case Practice + Mock Interview 1</td><td class="stg">Stage 15 (Structured Problem Solving/MECE) &middot; 2 case banks matched to target role (e.g. Profitability + Market Entry for generalist consulting; Analytics + AI/GenAI for data-strategy roles) &middot; Stage 32 Case Approach Qs &middot; Stage 32 Mock Interview 1 run OUT LOUD, not read silently</td><td class="hrs">5&ndash;6h</td><td class="chk">You can structure a brand-new case (not one you've seen before) out loud in under 60 seconds of silent thinking, and you updated a hypothesis live when Mock 1's contradicting exhibit appeared.</td></tr><tr><td class="dnum">5</td><td>Full Dress Rehearsal</td><td class="stg">Stage 31 (Portfolio &mdash; skim project summaries and KPI numbers) &middot; Stage 32 Mock Interviews 2 &amp; 3 run OUT LOUD &middot; Stage 32 HR/Behavioral + Tricky Qs &middot; Stage 33 5-Question Rapid Mastery Check (below) &middot; final CV-claim recitation</td><td class="hrs">5&ndash;6h</td><td class="chk">You pass the Stage 33 Rapid Mastery Check at 4/5 or better across all 5 pillars, and you can deliver the Hero Electronics chatbot 30-second/2-minute/5-minute answer ladder from memory.</td></tr></tbody></table></div>
+    </section>
+
+    <section id="plan10">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>10-Day Plan — Balanced Coverage</h2>
+        <p>One day per major pillar, ending with a full mock-interview and mastery-test day.</p>
+      </div>
+      <div class="card" style="padding:8px;overflow-x:auto"><table class="plantable"><thead><tr><th>Day</th><th>Focus</th><th>Stages / Content</th><th>Hours</th><th>Checkpoint before moving on</th></tr></thead><tbody><tr><td class="dnum">1</td><td>CV Intelligence Deep Read</td><td class="stg">Stage 1 &mdash; full Consolidated CV, Knowledge Map, Risk/Gap Matrix (all 7 cards), Priority Matrix</td><td class="hrs">3h</td><td class="chk">You know which 13 Level-A claims exist and which 7 risk-matrix items need careful wording, without re-reading Stage 1.</td></tr><tr><td class="dnum">2</td><td>Foundations + SQL</td><td class="stg">Stage 2 (Statistics + Math) &middot; Stage 3 (SQL)</td><td class="hrs">4h</td><td class="chk">You can explain p-value, CLT, and bias-variance tradeoff in plain language, and answer 4/5 Stage 32 SQL questions unaided.</td></tr><tr><td class="dnum">3</td><td>Python + Data Engineering</td><td class="stg">Stage 4 (Python + Pandas) &middot; Stage 5 (PySpark + Databricks)</td><td class="hrs">4h</td><td class="chk">You can write a pandas groupby-agg-merge chain from memory and explain why PySpark exists (distributed vs. single-machine).</td></tr><tr><td class="dnum">4</td><td>Machine Learning Core</td><td class="stg">Stages 6&ndash;9 (ML Fundamentals, Regression/Logistic Regression, Classical Models, Trees/RF/XGBoost)</td><td class="hrs">5h</td><td class="chk">You can rank 4 classical algorithms by interpretability vs. accuracy tradeoff and defend XGBoost vs. Logistic Regression with Stage 31's real AUC numbers.</td></tr><tr><td class="dnum">5</td><td>Forecasting, Experimentation &amp; BI</td><td class="stg">Stage 10 (Forecasting &amp; Optimization) &middot; Stage 11 (A/B Testing) &middot; Stage 12 (Power BI/Excel)</td><td class="hrs">4h</td><td class="chk">You can design a full A/B test (hypothesis, sample size, significance threshold) out loud in under 3 minutes.</td></tr><tr><td class="dnum">6</td><td>GenAI &amp; Product</td><td class="stg">Stage 13 (GenAI/LLMs/RAG/Agents) &middot; Stage 14 (Product Management)</td><td class="hrs">4h</td><td class="chk">You can explain RAG and the agent-vs-chatbot distinction without notes, and write a 1-sentence PRD problem statement for a sample feature.</td></tr><tr><td class="dnum">7</td><td>Case Toolkit + 2 Case Banks</td><td class="stg">Stage 15 (Structured Problem Solving/MECE/Frameworks) + 2 case banks matched to target role</td><td class="hrs">5h</td><td class="chk">You can name which of the 11 case banks a real case most resembles within 30 seconds, and close a case with a one-sentence recommendation unaided.</td></tr><tr><td class="dnum">8</td><td>Work Experience Deep Dives</td><td class="stg">Stages 27&ndash;30 (Axtria, NanoCloud, Capgemini, Hero Electronics + Projects)</td><td class="hrs">5h</td><td class="chk">You can give the honest Level A/B/C scoping for all 4 employers without checking Stages 27&ndash;30 first.</td></tr><tr><td class="dnum">9</td><td>Portfolio + Interview Bank (Technical/Business/Case)</td><td class="stg">Stage 31 (Portfolio) &middot; Stage 32 &sect;Technical, &sect;Business, &sect;Case Approach</td><td class="hrs">4h</td><td class="chk">You can walk through 1 project per portfolio tier (Tier 1 CV-defense, Tier 2 flagship) end-to-end from memory, including the KPI numbers.</td></tr><tr><td class="dnum">10</td><td>Mock Interviews + HR/Behavioral + Full Mastery Test</td><td class="stg">Stage 32 &sect;HR/Behavioral, &sect;Tricky, all 3 Mock Interviews (run OUT LOUD) &middot; Stage 33 Full Mastery Test (all 5 pillars, below)</td><td class="hrs">6h</td><td class="chk">You pass the Stage 33 Full Mastery Test at 8/10 or better on every pillar, and you've run all 3 mock interviews out loud at least once each.</td></tr></tbody></table></div>
+    </section>
+
+    <section id="plan15">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>15-Day Plan — Full Run-Through</h2>
+        <p>Methodical, one-to-two days per Part, starting from Stage 1 and finishing on a full mastery test with a revision schedule set up for whatever time remains.</p>
+      </div>
+      <div class="card" style="padding:8px;overflow-x:auto"><table class="plantable"><thead><tr><th>Day</th><th>Focus</th><th>Stages / Content</th><th>Hours</th><th>Checkpoint before moving on</th></tr></thead><tbody><tr><td class="dnum">1</td><td>CV Intelligence &amp; Master Index</td><td class="stg">Stage 1 &mdash; full read: CV, Knowledge Map, Skill Matrix, Risk/Gap Matrix, Priority Matrix, Roadmap</td><td class="hrs">3h</td><td class="chk">You can state your own Interview Priority Matrix top-5 items from memory.</td></tr><tr><td class="dnum">2</td><td>Foundations</td><td class="stg">Stage 2 (Statistics + Mathematics)</td><td class="hrs">3h</td><td class="chk">You can define mean/variance/std, CLT, and p-value correctly and explain each to a non-technical listener.</td></tr><tr><td class="dnum">3</td><td>Data &mdash; SQL</td><td class="stg">Stage 3 (SQL)</td><td class="hrs">3h</td><td class="chk">You can write a window-function query (RANK/ROW_NUMBER over PARTITION BY) from a blank sheet.</td></tr><tr><td class="dnum">4</td><td>Data &mdash; Python &amp; Spark</td><td class="stg">Stage 4 (Python + Pandas) &middot; Stage 5 (PySpark + Databricks)</td><td class="hrs">4h</td><td class="chk">You can explain when to reach for PySpark instead of Pandas, with a concrete data-volume threshold.</td></tr><tr><td class="dnum">5</td><td>Machine Learning I</td><td class="stg">Stage 6 (ML Fundamentals) &middot; Stage 7 (Regression + Logistic Regression)</td><td class="hrs">4h</td><td class="chk">You can derive the logistic function and explain why it's used for classification, not regression.</td></tr><tr><td class="dnum">6</td><td>Machine Learning II</td><td class="stg">Stage 8 (Classical Models: KNN/NB/SVM/LDA-QDA/NN basics) &middot; Stage 9 (Trees, Random Forest &amp; XGBoost)</td><td class="hrs">4h</td><td class="chk">You can explain gradient boosting's core idea (sequential error-correction) without notes.</td></tr><tr><td class="dnum">7</td><td>Forecasting, Optimization &amp; Experimentation</td><td class="stg">Stage 10 (Forecasting &amp; Optimization) &middot; Stage 11 (A/B Testing)</td><td class="hrs">4h</td><td class="chk">You can write out an LP objective function and 2 constraints for a toy resource-allocation problem.</td></tr><tr><td class="dnum">8</td><td>BI, GenAI &amp; Product</td><td class="stg">Stage 12 (Power BI/Excel) &middot; Stage 13 (GenAI/LLMs/RAG/Agents) &middot; Stage 14 (Product Management)</td><td class="hrs">5h</td><td class="chk">You can write a 5-line PRD problem statement + success metric for a sample feature, unaided.</td></tr><tr><td class="dnum">9</td><td>Case Toolkit</td><td class="stg">Stage 15 (Structured Problem Solving, MECE &amp; Frameworks)</td><td class="hrs">3h</td><td class="chk">You can list all 4 MECE-safe profitability-tree branches from memory.</td></tr><tr><td class="dnum">10</td><td>Case Banks I</td><td class="stg">3 case banks matched to target role (choose from Profitability/Market Entry/Growth/Pricing/Market Sizing)</td><td class="hrs">5h</td><td class="chk">You've fully solved (not just read) 3 cases out loud, one per bank.</td></tr><tr><td class="dnum">11</td><td>Case Banks II</td><td class="stg">3 more case banks (choose from Operations/Product/Analytics/AI-GenAI/FinTech/Pharma matched to target industry)</td><td class="hrs">5h</td><td class="chk">You can name which case bank a brand-new case resembles within 30 seconds.</td></tr><tr><td class="dnum">12</td><td>Work Experience I</td><td class="stg">Stage 27 (Axtria) &middot; Stage 28 (NanoCloud)</td><td class="hrs">4h</td><td class="chk">You can deliver Axtria's 30-sec/2-min/5-min answer ladder from memory.</td></tr><tr><td class="dnum">13</td><td>Work Experience II + Portfolio</td><td class="stg">Stage 29 (Capgemini) &middot; Stage 30 (Hero Electronics + Projects) &middot; Stage 31 (Portfolio, full read)</td><td class="hrs">6h</td><td class="chk">You can deliver the Hero Electronics chatbot two-month-tenure pushback answer without sounding defensive.</td></tr><tr><td class="dnum">14</td><td>Interview Question Bank &mdash; Full Pass</td><td class="stg">Stage 32 &mdash; all 93 Q&amp;A across all 6 categories, read and self-tested (not skimmed)</td><td class="hrs">6h</td><td class="chk">You can answer at least 8 of the 12 Stage 32 Business Questions with a real example, not just the definition.</td></tr><tr><td class="dnum">15</td><td>Mock Interviews + Full Mastery Test</td><td class="stg">Stage 32 &mdash; all 3 Mock Interviews run OUT LOUD &middot; Stage 33 Full Mastery Test (all 5 pillars) &middot; Stage 33 Revision System set up for ongoing spaced review</td><td class="hrs">6h</td><td class="chk">You pass the Full Mastery Test at 8/10+ on every pillar and have a working revision schedule for the days remaining until your actual interview.</td></tr></tbody></table></div>
+    </section>
+
+    <section id="revision">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Revision System</h2>
+        <p>The spaced-review layer that runs after you first check off a mastery-checklist item across any of the 33 stages &mdash; keeps material from decaying before interview day.</p>
+      </div>
+      
+<div class="card" style="padding:20px 24px">
+  <h4 style="font-family:'Fraunces';font-size:1.1rem;margin-bottom:10px">The Spaced-Review Schedule</h4>
+  <p style="color:var(--ink-soft);font-size:.92rem;margin-bottom:14px">Every mastery checklist across the 33 stages (32 stage checklists + this stage's own) is a one-time pass/fail. The Revision System is what keeps what you've already checked off from decaying before interview day. Use this schedule against anything you first mark "done":</p>
+  <table class="plantable">
+    <thead><tr><th>Review point</th><th>What to do</th><th>Pass condition</th></tr></thead>
+    <tbody>
+      <tr><td class="dnum">Day + 1</td><td>Re-answer the same item completely from memory, no notes.</td><td>Answered correctly with no hesitation &gt; 3 seconds.</td></tr>
+      <tr><td class="dnum">Day + 3</td><td>Re-answer out loud, timed &mdash; use the 30-sec/2-min/5-min ladder if the item has one.</td><td>Hit the 30-second version cleanly, then expand to 2 minutes without repeating yourself.</td></tr>
+      <tr><td class="dnum">Day + 7</td><td>Re-answer under a mild curveball &mdash; ask a friend (or yourself, in writing) to add one contradicting detail mid-answer.</td><td>You update the answer live instead of ignoring the contradiction (same skill Mock Interview 1 tests).</td></tr>
+      <tr><td class="dnum">Day + 14</td><td>Final check before it's considered "durable" &mdash; teach the answer to someone else in under 2 minutes.</td><td>They could repeat the core claim back to you afterward.</td></tr>
+    </tbody>
+  </table>
+  <p style="color:var(--ink-soft);font-size:.92rem;margin-top:14px">If any review point fails, the item resets to Day 0 &mdash; re-drill it fresh rather than skipping ahead. This is the same mechanism spaced-repetition flashcard systems use (Anki, Leitner boxes); no paid tool is required, a plain notebook or spreadsheet works.</p>
+</div>
+
+<div class="card" style="padding:20px 24px;margin-top:16px">
+  <h4 style="font-family:'Fraunces';font-size:1.1rem;margin-bottom:10px">The Weak-Area Log</h4>
+  <p style="color:var(--ink-soft);font-size:.92rem;margin-bottom:14px">Keep a running log (a notes app or spreadsheet is enough) with one row per item you've ever hesitated on across any of the 32 stage mastery checklists or the 93-question Interview Bank. Five columns:</p>
+  <table class="plantable">
+    <thead><tr><th>Topic</th><th>Source (Stage #)</th><th>Confidence (1&ndash;5)</th><th>Last reviewed</th><th>Next review</th></tr></thead>
+    <tbody>
+      <tr><td>Example: LP shadow-price interpretation</td><td class="stg">Stage 10 / 27 / 31</td><td class="hrs">3</td><td class="hrs">&mdash;</td><td class="hrs">Day 0</td></tr>
+      <tr><td>Example: GraphSAGE vs. XGBoost segmented-eval defense</td><td class="stg">Stage 31 / 32</td><td class="hrs">4</td><td class="hrs">&mdash;</td><td class="hrs">Day 3</td></tr>
+    </tbody>
+  </table>
+  <p style="color:var(--ink-soft);font-size:.92rem;margin-top:14px">Anything below a 3/5 confidence goes back into active daily rotation regardless of which day of the schedule you're on &mdash; the spaced intervals above are for maintenance, not for genuinely weak material. Re-derive weak items from first principles (not just re-read the model answer) before moving on.</p>
+</div>
+
+<div class="card" style="padding:20px 24px;margin-top:16px">
+  <h4 style="font-family:'Fraunces';font-size:1.1rem;margin-bottom:10px">How the 33 Stage Checklists Feed This System</h4>
+  <p style="color:var(--ink-soft);font-size:.92rem;margin:0">Every stage from 2 through 32 ends with its own localStorage-backed Mastery Checklist &mdash; 10&ndash;21 items each, roughly 380 checklist items across the whole Masterbook. The Revision System doesn't replace those; it's the layer that runs after you've first checked an item off. A practical cadence: finish a stage's checklist &rarr; log any item you hesitated on in the Weak-Area Log above &rarr; apply the Day+1/+3/+7/+14 schedule to everything you log. By the time you reach this stage's own Mastery Test below, most of what's still shaky should already be visible in your log rather than a surprise.</p>
+</div>
+
+    </section>
+
+    <section id="mastertests">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Mastery Tests</h2>
+        <p>5 pillars &times; 8 questions = 40 self-graded synthesis questions. Ready threshold: 8/10-equivalent (6.4+/8) on every pillar before you consider yourself interview-ready.</p>
+      </div>
+      <div class="card" style="padding:16px 20px;margin-bottom:16px">
+  <p style="color:var(--ink-soft);font-size:.9rem;margin:0">Five self-graded tests, one per pillar, 8 questions each (40 total). Run each out loud before revealing any answer. These are harder and more synthesis-heavy than the 93 questions in <a href="stage32.html">Stage 32's Interview Question Bank</a> &mdash; treat that stage as the study material and this as the exam.</p>
+</div>
+    <div class="card testcard" id="test-data">
+      <div class="test-head">
+        <h4>Data &amp; Technical Skills Mastery Test</h4>
+        <span class="test-src">Draws on Stages 2&ndash;5, 32&sect;Technical(SQL/Python)</span>
+      </div>
+      <p class="test-instructions">Answer every question out loud, unaided, before revealing the model answer. Self-score 1 point per question answered correctly and completely (partial credit at your own honest discretion). <b>Ready threshold: 6/8 or better, answered aloud unaided.</b></p>
+      <details class="testq"><summary>Write (out loud, describing the logic) a SQL query returning each customer's total spend and rank within their country using a window function.</summary><div class="testq-a"><b>Model answer:</b> SELECT customer_id, country, SUM(amount) OVER (PARTITION BY customer_id) AS total_spend, RANK() OVER (PARTITION BY country ORDER BY SUM(amount) OVER (PARTITION BY customer_id) DESC) AS country_rank FROM orders GROUP BY customer_id, country, amount &mdash; or equivalently a CTE that pre-aggregates per customer, then ranks with RANK() OVER (PARTITION BY country ORDER BY total_spend DESC) in an outer query. The key ideas to say out loud: aggregate first, then window over the aggregate, and PARTITION BY defines the reset boundary for RANK().</div></details><details class="testq"><summary>What's the difference between RANK(), DENSE_RANK(), and ROW_NUMBER()?</summary><div class="testq-a"><b>Model answer:</b> All three assign a position within an ordered partition. ROW_NUMBER() always gives a unique, sequential integer even for ties. RANK() gives ties the same number but skips the next rank(s) (1,1,3). DENSE_RANK() gives ties the same number but does NOT skip (1,1,2).</div></details><details class="testq"><summary>Explain the difference between an inner join, a left join, and a full outer join with a one-sentence business example for each.</summary><div class="testq-a"><b>Model answer:</b> Inner join returns only rows matching in both tables &mdash; e.g. orders that have a matching valid customer record. Left join returns all rows from the left table plus matches from the right, nulling unmatched right-side columns &mdash; e.g. all customers, with order totals null for those who never ordered. Full outer join returns all rows from both sides, matched where possible &mdash; e.g. reconciling two systems' customer lists to see who's missing from each.</div></details><details class="testq"><summary>In pandas, what's the difference between .apply() and a vectorized operation, and why does it matter?</summary><div class="testq-a"><b>Model answer:</b> A vectorized operation (e.g. df['a'] + df['b']) runs in optimized C/NumPy code across the whole column at once. .apply() calls a Python function row-by-row (or column-by-column), which is an interpreted-Python loop under the hood &mdash; often 10&ndash;100x slower on large data. Use vectorized operations whenever a built-in exists; reach for .apply() only when the logic genuinely can't be vectorized.</div></details><details class="testq"><summary>What is the Central Limit Theorem, and why does it matter for A/B testing?</summary><div class="testq-a"><b>Model answer:</b> The CLT says that the sampling distribution of the mean of a sufficiently large number of independent, identically distributed samples approaches a normal distribution, regardless of the underlying population's distribution. It matters for A/B testing because it justifies using normal-distribution-based significance tests (like a z-test on conversion rates) even when the underlying user-level data isn't normally distributed, as long as the sample size is large enough.</div></details><details class="testq"><summary>What's the difference between PySpark and Pandas, and at what rough data scale does the choice start to matter?</summary><div class="testq-a"><b>Model answer:</b> Pandas operates in-memory on a single machine; PySpark distributes computation (and data) across a cluster using lazy evaluation and a DAG execution plan. Pandas is simpler and faster for data that comfortably fits in one machine's RAM (roughly up to a few GB, machine-dependent); PySpark becomes necessary once data exceeds single-machine memory or requires distributed/parallel processing across many nodes, typically the multi-GB-to-TB+ range in production data-engineering settings.</div></details><details class="testq"><summary>What's a p-value, in one sentence a non-technical stakeholder would understand?</summary><div class="testq-a"><b>Model answer:</b> The p-value is the probability of seeing a result at least this extreme if there were actually no real effect &mdash; a small p-value (conventionally &lt;0.05) means the result is unlikely to be random noise, so we treat the effect as real.</div></details><details class="testq"><summary>Name one concrete difference between how you'd structure a data pipeline in Databricks vs. running the same logic in local Python.</summary><div class="testq-a"><b>Model answer:</b> In Databricks the pipeline typically reads from and writes to Delta Lake tables (versioned, ACID-compliant storage) using distributed Spark transformations, often orchestrated as scheduled jobs/notebooks with cluster autoscaling; locally in Python, the same logic would run single-threaded (or multi-threaded via multiprocessing) against local files or a single database connection, with no built-in distributed fault tolerance or version history on the data itself.</div></details>
+    </div>
+    <div class="card testcard" id="test-ml">
+      <div class="test-head">
+        <h4>ML &amp; Applied Quant Mastery Test</h4>
+        <span class="test-src">Draws on Stages 6&ndash;11, 32&sect;Technical(ML), Stage 31 numbers</span>
+      </div>
+      <p class="test-instructions">Answer every question out loud, unaided, before revealing the model answer. Self-score 1 point per question answered correctly and completely (partial credit at your own honest discretion). <b>Ready threshold: 6/8 or better, answered aloud unaided.</b></p>
+      <details class="testq"><summary>Explain the bias-variance tradeoff and give one example of a model on each end.</summary><div class="testq-a"><b>Model answer:</b> Bias is error from overly simplistic assumptions (underfitting); variance is error from being too sensitive to the training data's noise (overfitting). A linear regression on clearly nonlinear data is high-bias/low-variance. A deep, unpruned decision tree fit to a small dataset is low-bias/high-variance. The goal is minimizing total error, which is bias&sup2; + variance + irreducible error &mdash; not minimizing either term alone.</div></details><details class="testq"><summary>Why did XGBoost outperform Logistic Regression in Stage 31's project (0.7962 vs. 0.8347 AUC), and what does that gap actually tell you?</summary><div class="testq-a"><b>Model answer:</b> XGBoost (0.8347) captures nonlinear feature interactions and threshold effects automatically through its tree-based splits, while Logistic Regression (0.7962) assumes a linear relationship between features and the log-odds of the target unless interaction terms are manually engineered. The ~4-point AUC gap suggests real nonlinear structure in the UCI Bank Marketing data that Logistic Regression's linear boundary can't capture &mdash; and the Stage 31 follow-up experiment (adding interaction terms) partially closing that gap confirms this diagnosis rather than just asserting it.</div></details><details class="testq"><summary>What is AUC-ROC actually measuring, in plain terms?</summary><div class="testq-a"><b>Model answer:</b> AUC-ROC is the probability that a randomly chosen positive example is ranked higher (scored more likely positive) by the model than a randomly chosen negative example. An AUC of 0.5 is random guessing; 1.0 is perfect ranking. It's threshold-independent, which is why it's useful for comparing models before picking an operating threshold.</div></details><details class="testq"><summary>Explain precision and recall with a fraud-detection example, and explain when you'd prioritize one over the other.</summary><div class="testq-a"><b>Model answer:</b> Precision = of transactions flagged as fraud, what fraction actually are fraud (false-positive cost). Recall = of all actual fraud, what fraction did we catch (false-negative cost). In fraud detection you'd typically prioritize recall when missing fraud is very costly (e.g. large-value transactions) but accept some investigation cost from false positives; you'd prioritize precision when false alarms directly damage customer trust or cost significant manual-review time, and missed fraud is insured/recoverable another way.</div></details><details class="testq"><summary>What's the core idea behind gradient boosting (as in XGBoost), in one paragraph you could say out loud in under 30 seconds?</summary><div class="testq-a"><b>Model answer:</b> Gradient boosting builds an ensemble of weak learners (typically shallow trees) sequentially, where each new tree is trained to predict the residual errors (technically, the negative gradient of the loss function) left by the ensemble so far. Instead of averaging independent trees like Random Forest, each tree explicitly corrects the mistakes of the ones before it, which is why boosted models often outperform bagged models on tabular data at the cost of being more prone to overfitting without careful regularization (learning rate, max depth, early stopping).</div></details><details class="testq"><summary>Why did GraphSAGE beat XGBoost specifically on ring-connected fraud (0.749 vs. 0.687 AUPRC) in Stage 31, rather than across the board?</summary><div class="testq-a"><b>Model answer:</b> GraphSAGE learns node embeddings by aggregating information from a node's graph neighborhood (who transacted with whom), so it can detect fraud patterns that only show up as unusual connectivity structure &mdash; e.g. a ring of accounts transacting in a closed loop &mdash; which a tabular model like XGBoost literally cannot see, since it only has row-level features with no relational context. The segmented evaluation in Stage 31 (measuring the lift specifically on ring-connected fraud rather than the overall dataset) was what proved the gain was real and localized to that graph-structural signal, not incidental.</div></details><details class="testq"><summary>What's the difference between an LP (linear program) and a heuristic, and why might a real allocation problem (like Stage 10/27/31's ~60-rep problem) use both?</summary><div class="testq-a"><b>Model answer:</b> An LP finds a provably optimal solution within its stated linear constraints, but only if the problem can be fully and accurately formulated as linear objectives/constraints, and it can struggle with problem-specific practical adjustments (continuity, fairness, edge cases) that don't cleanly express as linear terms. A heuristic is a rule-of-thumb adjustment layered on top &mdash; faster and more flexible, but without an optimality guarantee. A real allocation problem often solves the core resource-allocation with an LP for the provably-optimal backbone, then applies heuristic adjustments for practical constraints the LP formulation didn't capture cleanly.</div></details><details class="testq"><summary>What's the difference between RMSE and MAE as forecast-error metrics, and when would you prefer one?</summary><div class="testq-a"><b>Model answer:</b> RMSE squares errors before averaging and taking the square root, so it penalizes large errors disproportionately more than small ones. MAE averages absolute errors, treating all deviations linearly. Prefer RMSE when large errors are especially costly and you want the metric to reflect that (e.g. supply-chain stockouts from a badly wrong forecast); prefer MAE when you want a metric that's robust to a few outlier errors and represents typical error magnitude more intuitively.</div></details>
+    </div>
+    <div class="card testcard" id="test-case">
+      <div class="test-head">
+        <h4>Consulting Case Mastery Test</h4>
+        <span class="test-src">Draws on Stage 15 (frameworks), Stages 16&ndash;26 (case banks), 32&sect;Case Approach</span>
+      </div>
+      <p class="test-instructions">Answer every question out loud, unaided, before revealing the model answer. Self-score 1 point per question answered correctly and completely (partial credit at your own honest discretion). <b>Ready threshold: 6/8 or better, answered aloud unaided.</b></p>
+      <details class="testq"><summary>Structure (out loud) a first-cut approach to: "Our client, a mid-size grocery chain, has seen profits decline 20% over the last year. Why, and what should they do?"</summary><div class="testq-a"><b>Model answer:</b> MECE profitability tree: Profit = Revenue &minus; Costs. Revenue = Price &times; Volume (check both: has price changed? has volume/store traffic dropped?). Costs = Fixed + Variable (check COGS/supplier costs, labor, rent, and whether a new fixed cost was added). State the hypothesis you'd chase first based on what's most likely given a grocery chain (commonly: margin compression from supplier costs, or volume loss from a new competitor) and name what data you'd request to confirm it before diving into any one branch.</div></details><details class="testq"><summary>What does MECE stand for and why does it matter in case interviews?</summary><div class="testq-a"><b>Model answer:</b> Mutually Exclusive, Collectively Exhaustive &mdash; the branches of your structure shouldn't overlap (mutually exclusive) and together should cover the whole problem space (collectively exhaustive). It matters because a non-MECE structure either double-counts an issue (wasting interview time re-analyzing the same driver twice) or misses a real driver of the problem entirely, both of which read as sloppy structured thinking to an interviewer.</div></details><details class="testq"><summary>Name the 4 branches of a standard market-entry framework and one 1-sentence purpose for each.</summary><div class="testq-a"><b>Model answer:</b> (1) Market attractiveness &mdash; size, growth, structure of the target market. (2) Competitive landscape &mdash; who's already there, their share, barriers to entry. (3) Capabilities/fit &mdash; does the client have (or can it build/buy) what's needed to compete. (4) Financial/entry-mode decision &mdash; organic build vs. M&amp;A vs. partnership, and whether the projected returns clear the client's hurdle rate.</div></details><details class="testq"><summary>You're given a market-sizing question with no data provided. Walk through your top-down vs. bottom-up choice logic.</summary><div class="testq-a"><b>Model answer:</b> Top-down starts from a known total market size and narrows down via relevant percentages/segments (fast, good when a credible top-line number exists). Bottom-up builds up from a unit-level assumption (e.g. population &times; adoption rate &times; frequency &times; price) multiplied out (more defensible when no reliable top-line figure exists, but requires more assumptions to be stated and sanity-checked explicitly). State which you're choosing and why before starting the math, and always sanity-check the final number against an intuitive benchmark.</div></details><details class="testq"><summary>A client's exhibit, introduced mid-case, contradicts the hypothesis you stated 5 minutes ago. What do you do?</summary><div class="testq-a"><b>Model answer:</b> Acknowledge the new data explicitly and out loud ("this changes my read on X"), update the hypothesis rather than defending the original one, and explain briefly how the new evidence redirects the analysis. This is exactly the skill Stage 32's Mock Interview 1 tests &mdash; interviewers are evaluating whether you can update on evidence in real time, not whether your first guess was right.</div></details><details class="testq"><summary>What's the difference between a profitability case and a growth case in terms of structure?</summary><div class="testq-a"><b>Model answer:</b> A profitability case decomposes an existing Profit = Revenue &minus; Costs problem to find what's driving a decline or shortfall. A growth case instead asks where NEW profit/revenue should come from &mdash; typically structured via the Ansoff Matrix (existing/new products &times; existing/new markets) or an organic-vs-inorganic (M&amp;A/partnership) growth-lever framework, since the client isn't fixing a problem but choosing among expansion options.</div></details><details class="testq"><summary>How do you close a case in one sentence, and what 4 elements does a strong close include?</summary><div class="testq-a"><b>Model answer:</b> "Based on [top 1&ndash;2 pieces of evidence], I recommend [clear action], with the main risk being [named risk], so the next step should be [concrete next step]." The 4 elements: a clear recommendation (not a hedge), the strongest supporting evidence (not everything you found), a named risk (shows you're not overselling certainty), and a next step (shows forward-thinking, not just analysis for its own sake).</div></details><details class="testq"><summary>Someone in the room disputes your analysis mid-case. How do you respond?</summary><div class="testq-a"><b>Model answer:</b> Stay composed and specific: restate the assumption or data point your conclusion rests on, ask what specifically they're seeing differently, and either defend the logic with evidence or update if their point genuinely changes the analysis. The failure mode to avoid is getting defensive or vague &mdash; the strength being tested is whether you can hold a position under real scrutiny without either caving reflexively or refusing to engage with a valid challenge.</div></details>
+    </div>
+    <div class="card testcard" id="test-workex">
+      <div class="test-head">
+        <h4>Work Experience &amp; Behavioral Mastery Test</h4>
+        <span class="test-src">Draws on Stages 27&ndash;30, 32&sect;WorkEx/HR</span>
+      </div>
+      <p class="test-instructions">Answer every question out loud, unaided, before revealing the model answer. Self-score 1 point per question answered correctly and completely (partial credit at your own honest discretion). <b>Ready threshold: 6/8 or better, answered aloud unaided.</b></p>
+      <details class="testq"><summary>State the Axtria allocation claim (the $10M/~60-rep item) at Level A honesty, in one breath.</summary><div class="testq-a"><b>Model answer:</b> "I owned the data analysis behind a revenue-optimization initiative covering ~$10M in revenue across roughly 60 sales reps &mdash; the underlying method combined a linear-programming allocation model with a heuristic continuity-adjustment layer, and I can walk through the objective function and constraints in detail." (Level A &mdash; you actually did this; specifics like exact tie-break logic remain draftflagged if not yet confirmed with real detail.)</div></details><details class="testq"><summary>How should the NanoCloud network-optimization claim (28% improvement, 50+ heatmaps) be scoped honestly?</summary><div class="testq-a"><b>Model answer:</b> As Level C &mdash; conceptual awareness, not deep technical ownership. The honest framing acknowledges the real client outcome (the 28% figure, the heatmap volume) while being upfront that the underlying technical method (specific network-optimization levers, heatmap-generation tooling) is not something you can defend at implementation depth if pushed, per the LEARN+BUILD+DEFEND flag from Stage 1's Risk Matrix.</div></details><details class="testq"><summary>Deliver the Hero Electronics chatbot claim's honest scope in one sentence that survives a follow-up question about a 2-month internship.</summary><div class="testq-a"><b>Model answer:</b> "I partnered with the technical team on the chatbot's design and validation during a two-month internship &mdash; the confirmed 20% cost reduction happened after the internship ended, on the full-scale rollout, not as a direct two-month outcome I can claim solo." This isolates the two load-bearing clauses: partnering (not solo build) and post-internship timing (not a two-month result).</div></details><details class="testq"><summary>What's the Capgemini flagship claim, and why is it rated 'Very High' odds specifically for PM-track interviews?</summary><div class="testq-a"><b>Model answer:</b> 500+ user stories / PRDs / requirements ownership, rated Very High odds because it's a Level A claim (you actually did this) that maps directly onto core PM-interview competencies (requirements translation, prioritization, stakeholder alignment) &mdash; it's ranked #06 in Stage 1's Interview Priority Matrix specifically because PM-track interviewers ask about exactly this kind of ownership by default.</div></details><details class="testq"><summary>Give a STAR-structured answer to "tell me about a time you failed."</summary><div class="testq-a"><b>Model answer:</b> State a real Situation and Task with a genuine failure (not a disguised success), the Action you actually took including what you got wrong, and a Result that shows what you changed afterward &mdash; the strongest failure stories name a specific behavior change, not just "I learned to work harder." Pull from your own STAR Story Bank entries across Stages 27&ndash;30 rather than inventing one on the spot.</div></details><details class="testq"><summary>How do you answer "why should we hire you over a PhD candidate" without sounding defensive?</summary><div class="testq-a"><b>Model answer:</b> Reframe toward what you concretely bring rather than arguing against the alternative candidate: applied, cross-functional delivery experience (Axtria/NanoCloud/Capgemini/Hero Electronics) translating technical work into business outcomes stakeholders acted on, plus demonstrated breadth (data, ML, product, GenAI) built out in the Portfolio. Avoid disparaging academic depth &mdash; the strongest version of this answer names your differentiator without positioning it as superior to theirs.</div></details><details class="testq"><summary>What's the difference in how you'd tell the Capgemini story to a PM-track interviewer vs. a general interviewer?</summary><div class="testq-a"><b>Model answer:</b> Same true facts (500+ stories, RICE-style prioritization, cross-team defect governance), different emphasis: a PM-track interviewer gets more detail on the prioritization framework and stakeholder-alignment mechanics; a general interviewer gets a more compressed version emphasizing scale (500+) and business outcome (defect reduction) without assuming PM-specific vocabulary. This is Stage 29's core finding &mdash; audience-tailoring the same honest claim, not two different claims.</div></details><details class="testq"><summary>Give an example of staying composed when an interviewer disputes your analysis in the room.</summary><div class="testq-a"><b>Model answer:</b> Restate the evidence your conclusion is built on specifically (not generally), ask a clarifying question about what they're seeing differently, and either defend with evidence or genuinely update &mdash; the same skill tested in Stage 32 Mock Interview 2's SQL-bug self-catch and Mock Interview 1's case-hypothesis update. The tell of a strong answer here is specificity, not confidence alone.</div></details>
+    </div>
+    <div class="card testcard" id="test-genai">
+      <div class="test-head">
+        <h4>GenAI &amp; Product Mastery Test</h4>
+        <span class="test-src">Draws on Stage 13, Stage 14, Stage 31 GenAI projects, 32&sect;Technical(GenAI)</span>
+      </div>
+      <p class="test-instructions">Answer every question out loud, unaided, before revealing the model answer. Self-score 1 point per question answered correctly and completely (partial credit at your own honest discretion). <b>Ready threshold: 6/8 or better, answered aloud unaided.</b></p>
+      <details class="testq"><summary>Explain RAG (Retrieval-Augmented Generation) in one paragraph you could say out loud in under 30 seconds.</summary><div class="testq-a"><b>Model answer:</b> RAG retrieves relevant documents or data (typically via vector-embedding similarity search) at query time and injects them into the LLM's prompt context before generation, so the model answers grounded in retrieved, up-to-date, or proprietary information rather than relying solely on what it memorized during training. It reduces hallucination and lets you update the knowledge base without retraining the model.</div></details><details class="testq"><summary>What's the core distinction between a chatbot and an agent?</summary><div class="testq-a"><b>Model answer:</b> A chatbot follows a largely fixed conversational flow or directly maps user input to a response (rule-based or single-shot LLM call). An agent can plan multi-step actions, call external tools/APIs, and use the results of those calls to decide its next step &mdash; e.g. Stage 31's agentic-content-ops project's LangGraph StateGraph, where a TaggingAgent and SummarizationAgent pipeline plus a separate RAG-grounded CatalogQAAgent each take actions and pass state, rather than just generating one response.</div></details><details class="testq"><summary>What are the two main causes of LLM hallucination, and one mitigation for each?</summary><div class="testq-a"><b>Model answer:</b> (1) The model has no grounding in real data for the query and pattern-matches a plausible-sounding but false answer &mdash; mitigated by RAG (grounding in retrieved real documents) or explicitly instructing the model to say 'I don't know' when uncertain. (2) The model's training data itself contains errors or the prompt leads it toward a confident-but-wrong completion style &mdash; mitigated by lower temperature settings, structured output constraints, and human-in-the-loop verification for high-stakes outputs (e.g. the 6% hallucination rate measured and reported, not hidden, in Stage 31's agentic-content-ops eval).</div></details><details class="testq"><summary>What's an embedding, in plain terms, and why does it enable semantic search?</summary><div class="testq-a"><b>Model answer:</b> An embedding is a numeric vector representation of text (or another data type) positioned in a high-dimensional space such that semantically similar items end up close together geometrically. Semantic search works by embedding the query and comparing its vector (via cosine similarity or similar) against a database of pre-embedded documents, retrieving the closest ones &mdash; which finds conceptually related content even when the exact keywords don't match, unlike traditional keyword search.</div></details><details class="testq"><summary>What's a PRD, and what are the core sections a strong one includes?</summary><div class="testq-a"><b>Model answer:</b> A Product Requirements Document defines what's being built and why before engineering starts. Core sections: the problem statement (what user/business problem this solves), success metrics (how you'll know it worked), user stories/requirements (what the feature must do, often with acceptance criteria), scope boundaries (explicitly what's OUT of scope), and prioritization rationale (why this, why now) &mdash; matching the RICE-scored 40-story backlog pattern built in Stage 31's PRD project.</div></details><details class="testq"><summary>Explain few-shot prompting vs. zero-shot prompting, and when you'd use each.</summary><div class="testq-a"><b>Model answer:</b> Zero-shot gives the model only an instruction with no examples, relying on its pretrained understanding of the task. Few-shot includes a small number of worked examples in the prompt to demonstrate the desired output format/style before the real query. Use zero-shot for well-understood, generic tasks; use few-shot when output format consistency matters (e.g. structured JSON extraction) or the task is unusual enough that examples meaningfully improve accuracy.</div></details><details class="testq"><summary>How would you evaluate whether a GenAI feature is actually ready to ship, beyond 'it works when I tried it'?</summary><div class="testq-a"><b>Model answer:</b> Build a held-out evaluation set of representative queries with known-correct answers (as Stage 31's agentic-content-ops project did with its 100-question eval set), measure accuracy AND a specific failure metric like hallucination rate, and report both numbers rather than anecdotal spot-checks &mdash; an 89% accuracy figure paired with an explicit 6% hallucination rate is a genuinely evaluated system; 'it worked when I tried it three times' is not.</div></details><details class="testq"><summary>What's the tradeoff between using a purpose-built recommender system vs. letting an LLM directly generate recommendations, per Stage 31's genai-shopping project finding?</summary><div class="testq-a"><b>Model answer:</b> A purpose-built recommender (e.g. ALS collaborative filtering) is trained specifically on interaction data and optimized for ranking quality metrics (Recall@20 rising 0.184&rarr;0.241 with LLM-assisted refinement in Stage 31), while an LLM is better at natural-language reasoning and conversational refinement of results but isn't optimized for large-scale ranking precision. The defensible architecture keeps ranking with the purpose-built recommender and uses the LLM layer for conversational refinement/explanation on top &mdash; not the reverse.</div></details>
+    </div>
+    </section>
+
+    <section id="cheatsheets">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>Appendix · Cheat Sheets</h2>
+        <p>Six one-page quick-reference cards for last-mile lookup.</p>
+      </div>
+      
+<div class="cheatgrid">
+  <div class="card cheatcard">
+    <h5>SQL Quick Reference</h5>
+    <pre class="codeblock">SELECT col, AGG(col2)
+FROM table
+WHERE cond
+GROUP BY col
+HAVING agg_cond
+ORDER BY col
+LIMIT n;
+
+-- Window functions
+RANK() OVER (PARTITION BY x ORDER BY y)
+ROW_NUMBER() OVER (...)
+LAG(col,1) OVER (ORDER BY date)
+
+-- CTE
+WITH cte AS (SELECT ...)
+SELECT * FROM cte;</pre>
+  </div>
+  <div class="card cheatcard">
+    <h5>Pandas Quick Reference</h5>
+    <pre class="codeblock">df.groupby('col').agg({'x':'sum'})
+df.merge(df2, on='id', how='left')
+df['x'].apply(fn)          # slow
+df['x'] * 2                # vectorized, fast
+df.pivot_table(index=,
+    columns=, values=, aggfunc=)
+df.loc[cond, 'col']
+pd.to_datetime(df['date'])</pre>
+  </div>
+  <div class="card cheatcard">
+    <h5>Statistics Quick Reference</h5>
+    <ul class="cheatlist">
+      <li><b>p &lt; 0.05</b> &rarr; reject null hypothesis (conventional threshold)</li>
+      <li><b>CLT</b> &rarr; sample means &rarr; normal, regardless of population shape</li>
+      <li><b>Type I error</b> &rarr; false positive (reject true null)</li>
+      <li><b>Type II error</b> &rarr; false negative (fail to reject false null)</li>
+      <li><b>95% CI</b> &rarr; range expected to contain the true value 95% of the time under repeated sampling</li>
+    </ul>
+  </div>
+  <div class="card cheatcard">
+    <h5>ML Algorithm Quick Reference</h5>
+    <ul class="cheatlist">
+      <li><b>Logistic Regression</b> &rarr; interpretable baseline, assumes linear log-odds</li>
+      <li><b>Random Forest</b> &rarr; bagged trees, robust, less tunable ceiling</li>
+      <li><b>XGBoost</b> &rarr; boosted trees, usually best on tabular data</li>
+      <li><b>KNN</b> &rarr; instance-based, slow at scale, no training phase</li>
+      <li><b>SVM</b> &rarr; strong on small/high-dimensional data</li>
+    </ul>
+  </div>
+  <div class="card cheatcard">
+    <h5>Case-Interview Structuring Quick Reference</h5>
+    <ul class="cheatlist">
+      <li>Clarify objective &rarr; confirm constraints &rarr; ask for data</li>
+      <li>State MECE structure out loud before diving into one branch</li>
+      <li>Lead with a hypothesis, not just an issue tree</li>
+      <li>Close: recommendation &rarr; evidence &rarr; risk &rarr; next step</li>
+    </ul>
+  </div>
+  <div class="card cheatcard">
+    <h5>GenAI Quick Reference</h5>
+    <ul class="cheatlist">
+      <li><b>RAG</b> &rarr; retrieve relevant docs, inject into prompt, generate grounded</li>
+      <li><b>Agent</b> &rarr; plans steps, calls tools, uses results to decide next action</li>
+      <li><b>Embedding</b> &rarr; vector representation; similar meaning = close vectors</li>
+      <li><b>Temperature</b> &rarr; lower = more deterministic, higher = more varied</li>
+    </ul>
+  </div>
+</div>
+
+    </section>
+
+    <section id="formulas">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Appendix · Formula Sheets</h2>
+        <p>Every formula referenced across Stages 2, 6&ndash;11, and 31, in one place.</p>
+      </div>
+      
+<div class="cheatgrid">
+  <div class="card cheatcard">
+    <h5>Statistics</h5>
+    <pre class="codeblock">Mean:      x&#772; = &Sigma;x_i / n
+Variance:  s&sup2; = &Sigma;(x_i - x&#772;)&sup2; / (n-1)
+Std dev:   s = &radic;s&sup2;
+Z-score:   z = (x - &mu;) / &sigma;
+t-stat:    t = (x&#772;1 - x&#772;2) / SE(diff)
+95% CI:    x&#772; &plusmn; 1.96 &times; (s/&radic;n)</pre>
+  </div>
+  <div class="card cheatcard">
+    <h5>Classification Metrics</h5>
+    <pre class="codeblock">Precision = TP / (TP + FP)
+Recall    = TP / (TP + FN)
+F1        = 2 &times; (P&times;R) / (P+R)
+AUC-ROC   = P(score(pos) &gt; score(neg))
+Accuracy  = (TP+TN) / Total</pre>
+  </div>
+  <div class="card cheatcard">
+    <h5>Regression / Forecasting Metrics</h5>
+    <pre class="codeblock">RMSE = &radic;(&Sigma;(y - &ycirc;)&sup2; / n)
+MAE  = &Sigma;|y - &ycirc;| / n
+MAPE = (100/n) &times; &Sigma;|y-&ycirc;|/|y|
+R&sup2;   = 1 - SS_res / SS_tot</pre>
+  </div>
+  <div class="card cheatcard">
+    <h5>Optimization (LP)</h5>
+    <pre class="codeblock">Maximize:  c&#7488;x
+Subject to: Ax &le; b
+            x &ge; 0
+
+Shadow price = &Delta;objective per
+  1-unit relax of a binding
+  constraint (dual value)</pre>
+  </div>
+  <div class="card cheatcard">
+    <h5>Hypothesis Testing</h5>
+    <pre class="codeblock">H0: no effect / no difference
+H1: real effect exists
+&alpha; = significance threshold (0.05)
+Power = 1 - &beta; (P(correctly
+  rejecting a false H0))
+Sample size &uarr; as effect size &darr;</pre>
+  </div>
+  <div class="card cheatcard">
+    <h5>Business Metrics</h5>
+    <pre class="codeblock">CAC = Total acquisition cost /
+      New customers acquired
+LTV = Avg revenue per customer
+      &times; avg customer lifespan
+Churn rate = Customers lost /
+      Customers at period start</pre>
+  </div>
+</div>
+
+    </section>
+
+    <section id="sqlpatterns">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>Appendix · SQL Patterns</h2>
+        <p>Reusable query templates matching the real patterns built in Stages 3 and 31.</p>
+      </div>
+      
+<div class="card" style="padding:20px 24px">
+  <h5>Cohort Retention Pattern <span class="patref">&mdash; used in Stage 31's cohort-retention project</span></h5>
+  <pre class="codeblock">WITH first_order AS (
+  SELECT customer_id, MIN(DATE_TRUNC('month', order_date)) AS cohort_month
+  FROM orders GROUP BY customer_id
+),
+activity AS (
+  SELECT o.customer_id, f.cohort_month,
+         DATE_TRUNC('month', o.order_date) AS order_month
+  FROM orders o JOIN first_order f USING (customer_id)
+)
+SELECT cohort_month,
+       DATEDIFF('month', cohort_month, order_month) AS month_number,
+       COUNT(DISTINCT customer_id) AS active_customers
+FROM activity
+GROUP BY cohort_month, month_number
+ORDER BY cohort_month, month_number;</pre>
+</div>
+<div class="card" style="padding:20px 24px;margin-top:14px">
+  <h5>Funnel Conversion Pattern</h5>
+  <pre class="codeblock">SELECT
+  COUNT(DISTINCT CASE WHEN step='view' THEN user_id END) AS viewed,
+  COUNT(DISTINCT CASE WHEN step='cart' THEN user_id END) AS carted,
+  COUNT(DISTINCT CASE WHEN step='purchase' THEN user_id END) AS purchased
+FROM funnel_events
+WHERE event_date BETWEEN :start AND :end;</pre>
+</div>
+<div class="card" style="padding:20px 24px;margin-top:14px">
+  <h5>Period-over-Period Comparison (Self-Join / LAG)</h5>
+  <pre class="codeblock">SELECT month, revenue,
+       LAG(revenue) OVER (ORDER BY month) AS prev_month_revenue,
+       ROUND(100.0 * (revenue - LAG(revenue) OVER (ORDER BY month))
+             / NULLIF(LAG(revenue) OVER (ORDER BY month), 0), 1) AS pct_change
+FROM monthly_revenue
+ORDER BY month;</pre>
+</div>
+<div class="card" style="padding:20px 24px;margin-top:14px">
+  <h5>Ranking / Top-N per Group</h5>
+  <pre class="codeblock">WITH ranked AS (
+  SELECT product_id, category, revenue,
+         RANK() OVER (PARTITION BY category ORDER BY revenue DESC) AS rnk
+  FROM product_sales
+)
+SELECT * FROM ranked WHERE rnk &le; 3;   -- top 3 products per category</pre>
+</div>
+
+    </section>
+
+    <section id="pypatterns">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>Appendix · Python Patterns</h2>
+        <p>Reusable pandas/sklearn idioms and the gotchas that trip people up in live coding rounds.</p>
+      </div>
+      
+<div class="card" style="padding:20px 24px">
+  <h5>GroupBy &rarr; Agg &rarr; Merge Chain</h5>
+  <pre class="codeblock">summary = (df.groupby(['region','month'])
+             .agg(total_rev=('revenue','sum'),
+                  n_orders=('order_id','nunique'))
+             .reset_index())
+
+df2 = df.merge(summary, on=['region','month'], how='left')</pre>
+</div>
+<div class="card" style="padding:20px 24px;margin-top:14px">
+  <h5>Train/Test Split + Pipeline (sklearn)</h5>
+  <pre class="codeblock">from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler
+from xgboost import XGBClassifier
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, stratify=y, random_state=42)
+
+pipe = Pipeline([('scale', StandardScaler()),
+                  ('model', XGBClassifier(n_estimators=200))])
+pipe.fit(X_train, y_train)
+auc = roc_auc_score(y_test, pipe.predict_proba(X_test)[:,1])</pre>
+</div>
+<div class="card" style="padding:20px 24px;margin-top:14px">
+  <h5>Datetime Handling</h5>
+  <pre class="codeblock">df['date'] = pd.to_datetime(df['date'])
+df['month'] = df['date'].dt.to_period('M')
+df['days_since'] = (pd.Timestamp.now() - df['date']).dt.days
+df = df.set_index('date').resample('W').sum()  # weekly rollup</pre>
+</div>
+<div class="card" style="padding:20px 24px;margin-top:14px">
+  <h5>Common Gotchas</h5>
+  <ul class="cheatlist">
+    <li><code>SettingWithCopyWarning</code> &rarr; use <code>.loc[]</code> for assignment, not chained indexing</li>
+    <li><code>df.apply(fn, axis=1)</code> is slow &rarr; prefer vectorized ops or <code>np.where</code></li>
+    <li>Always check <code>df.isnull().sum()</code> before merging &mdash; a bad join key silently produces NaN rows</li>
+    <li><code>pd.merge</code> default is inner join &mdash; be explicit with <code>how=</code></li>
+  </ul>
+</div>
+
+    </section>
+
+    <section id="mlcompare">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2>Appendix · ML Comparison Tables</h2>
+        <p>Algorithm-selection tables for defending 'why this model' on the spot.</p>
+      </div>
+      
+<div class="card" style="padding:16px 20px;overflow-x:auto">
+  <h5>Classical Algorithm Comparison</h5>
+  <table class="cmptable">
+    <thead><tr><th>Algorithm</th><th>Interpretability</th><th>Handles nonlinearity</th><th>Needs scaling</th><th>Overfitting risk</th><th>Best for</th></tr></thead>
+    <tbody>
+      <tr><td>Logistic Regression</td><td>High</td><td>No (unless engineered)</td><td>Yes</td><td>Low</td><td>Interpretable baseline, regulated domains</td></tr>
+      <tr><td>Decision Tree</td><td>High</td><td>Yes</td><td>No</td><td>High (unpruned)</td><td>Quick interpretable nonlinear fit</td></tr>
+      <tr><td>Random Forest</td><td>Medium</td><td>Yes</td><td>No</td><td>Medium (bagging reduces it)</td><td>Robust general-purpose tabular model</td></tr>
+      <tr><td>XGBoost</td><td>Low-Medium</td><td>Yes</td><td>No</td><td>Medium (needs tuning)</td><td>Best-in-class tabular accuracy</td></tr>
+      <tr><td>KNN</td><td>Medium</td><td>Yes</td><td>Yes</td><td>Medium</td><td>Small datasets, no training phase needed</td></tr>
+      <tr><td>SVM</td><td>Low</td><td>Yes (kernel trick)</td><td>Yes</td><td>Low-Medium</td><td>High-dimensional, small-to-medium data</td></tr>
+      <tr><td>Neural Network</td><td>Low</td><td>Yes</td><td>Yes</td><td>High (needs regularization)</td><td>Very large data, complex patterns</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="card" style="padding:16px 20px;margin-top:14px;overflow-x:auto">
+  <h5>Classical ML vs. Deep Learning vs. GenAI</h5>
+  <table class="cmptable">
+    <thead><tr><th></th><th>Classical ML</th><th>Deep Learning</th><th>GenAI / LLMs</th></tr></thead>
+    <tbody>
+      <tr><td>Data needed</td><td>Small-medium, structured</td><td>Large, can be unstructured</td><td>Pretrained on massive corpora; fine-tuning needs less</td></tr>
+      <tr><td>Typical use</td><td>Tabular prediction/classification</td><td>Images, sequences, complex patterns</td><td>Language generation, reasoning, retrieval-grounded Q&amp;A</td></tr>
+      <tr><td>Interpretability</td><td>Higher (esp. linear/tree models)</td><td>Low</td><td>Very low (black-box reasoning)</td></tr>
+      <tr><td>Example from this Masterbook</td><td>XGBoost fraud/forecasting (Stage 31)</td><td>LSTM clinical-deterioration &amp; RUL models (Stage 31)</td><td>GraphSAGE embeddings + LangGraph agentic pipeline (Stage 31)</td></tr>
+    </tbody>
+  </table>
+</div>
+
+    </section>
+
+    <section id="genaipatterns">
+      <div class="sec-head">
+        <div class="num">12</div>
+        <h2>Appendix · GenAI Architecture Patterns</h2>
+        <p>RAG, agent-loop, and prompting patterns matching Stage 31's real GenAI projects.</p>
+      </div>
+      
+<div class="card" style="padding:20px 24px">
+  <h5>RAG Pipeline</h5>
+  <div class="flowdiagram">
+    <div class="flowbox">User Query</div><div class="flowarrow">&rarr;</div>
+    <div class="flowbox">Embed Query</div><div class="flowarrow">&rarr;</div>
+    <div class="flowbox">Vector Search (top-k docs)</div><div class="flowarrow">&rarr;</div>
+    <div class="flowbox">Inject into Prompt</div><div class="flowarrow">&rarr;</div>
+    <div class="flowbox">LLM Generates Grounded Answer</div>
+  </div>
+  <p class="patnote">Used in Stage 31's genai-shopping project's catalog retrieval layer and Stage 31's agentic-content-ops CatalogQAAgent.</p>
+</div>
+<div class="card" style="padding:20px 24px;margin-top:14px">
+  <h5>Agent Loop (Planner &rarr; Tool Call &rarr; Observe &rarr; Repeat)</h5>
+  <div class="flowdiagram">
+    <div class="flowbox">Goal / Task</div><div class="flowarrow">&rarr;</div>
+    <div class="flowbox">Agent Plans Next Step</div><div class="flowarrow">&rarr;</div>
+    <div class="flowbox">Calls Tool / API</div><div class="flowarrow">&rarr;</div>
+    <div class="flowbox">Observes Result</div><div class="flowarrow">&rarr;</div>
+    <div class="flowbox">Decide: Done or Repeat</div>
+  </div>
+  <p class="patnote">Matches Stage 31's agentic-content-ops LangGraph StateGraph: a TaggingAgent + SummarizationAgent pipeline, with state passed between steps and a separate RAG-grounded CatalogQAAgent.</p>
+</div>
+<div class="card" style="padding:20px 24px;margin-top:14px">
+  <h5>Prompt Engineering Patterns</h5>
+  <ul class="cheatlist">
+    <li><b>Zero-shot</b> &rarr; instruction only, no examples</li>
+    <li><b>Few-shot</b> &rarr; 2&ndash;5 worked examples before the real query, improves format consistency</li>
+    <li><b>Chain-of-thought</b> &rarr; ask the model to reason step-by-step before the final answer, improves multi-step accuracy</li>
+    <li><b>System / user / assistant roles</b> &rarr; system sets persistent behavior, user carries the query, assistant is the model's prior turns (for multi-turn context)</li>
+  </ul>
+</div>
+
+    </section>
+
+    <section id="frameworks">
+      <div class="sec-head">
+        <div class="num">13</div>
+        <h2>Appendix · Consulting Framework Library</h2>
+        <p>Eight core frameworks from Stage 15, each with a one-line 'when to use.'</p>
+      </div>
+      
+<div class="cheatgrid">
+  <div class="card cheatcard">
+    <h5>MECE Profitability Tree</h5>
+    <p class="fwuse">When: profit decline/shortfall cases.</p>
+    <pre class="codeblock">Profit = Revenue - Costs
+Revenue = Price &times; Volume
+Costs = Fixed + Variable</pre>
+  </div>
+  <div class="card cheatcard">
+    <h5>Porter's 5 Forces</h5>
+    <p class="fwuse">When: industry attractiveness / competitive-intensity questions.</p>
+    <pre class="codeblock">Competitive rivalry
+Threat of new entrants
+Threat of substitutes
+Buyer power
+Supplier power</pre>
+  </div>
+  <div class="card cheatcard">
+    <h5>3C Framework</h5>
+    <p class="fwuse">When: broad strategy/positioning questions.</p>
+    <pre class="codeblock">Company (capabilities, cost)
+Customer (needs, segments)
+Competitor (positioning, share)</pre>
+  </div>
+  <div class="card cheatcard">
+    <h5>4P Marketing Mix</h5>
+    <p class="fwuse">When: go-to-market / product-launch questions.</p>
+    <pre class="codeblock">Product, Price, Place, Promotion</pre>
+  </div>
+  <div class="card cheatcard">
+    <h5>Market Entry Framework</h5>
+    <p class="fwuse">When: should we enter market X.</p>
+    <pre class="codeblock">Market attractiveness
+Competitive landscape
+Capabilities/fit
+Financial &amp; entry-mode decision</pre>
+  </div>
+  <div class="card cheatcard">
+    <h5>Ansoff Matrix (Growth)</h5>
+    <p class="fwuse">When: where should growth come from.</p>
+    <pre class="codeblock">Existing product &times; Existing market
+  = Market penetration
+New product &times; Existing market
+  = Product development
+Existing product &times; New market
+  = Market development
+New product &times; New market
+  = Diversification</pre>
+  </div>
+  <div class="card cheatcard">
+    <h5>Pricing Framework</h5>
+    <p class="fwuse">When: how should we price this.</p>
+    <pre class="codeblock">Cost-plus (cost + margin)
+Value-based (willingness-to-pay)
+Competitive (benchmark vs. rivals)</pre>
+  </div>
+  <div class="card cheatcard">
+    <h5>Market Sizing Approaches</h5>
+    <p class="fwuse">When: estimate a market/opportunity size.</p>
+    <pre class="codeblock">Top-down: total market &times; relevant %
+Bottom-up: units &times; frequency &times; price</pre>
+  </div>
+</div>
+
+    </section>
+
+    <section id="answertemplates">
+      <div class="sec-head">
+        <div class="num">14</div>
+        <h2>Appendix · Interview Answer Templates</h2>
+        <p>Reusable answer structures — STAR, the answer ladder, case-opening, weakness, and salary templates.</p>
+      </div>
+      
+<div class="card" style="padding:20px 24px">
+  <h5>STAR Template</h5>
+  <pre class="codeblock">Situation: 1-2 sentences of real context
+Task:      what you specifically needed to do
+Action:    what YOU did (not "we"), concretely
+Result:    the measurable outcome + what you'd
+           do differently / what you learned</pre>
+</div>
+<div class="card" style="padding:20px 24px;margin-top:14px">
+  <h5>30-Second / 2-Minute / 5-Minute Answer Ladder <span class="patref">&mdash; used throughout Stages 27&ndash;30</span></h5>
+  <pre class="codeblock">30 sec: the claim + the headline number, nothing else
+2 min:  + the mechanism (how it actually worked)
+5 min:  + a technical/business follow-up example,
+        a named limitation, and the honest scope
+        boundary (what you did vs. team/conceptual)</pre>
+</div>
+<div class="card" style="padding:20px 24px;margin-top:14px">
+  <h5>Case-Opening Template</h5>
+  <pre class="codeblock">1. Restate the question in your own words
+2. Ask 1-2 clarifying questions (objective, timeframe, constraint)
+3. Ask for a moment to structure
+4. State your MECE framework out loud before analyzing
+5. Lead with a hypothesis, not just a tree</pre>
+</div>
+<div class="card" style="padding:20px 24px;margin-top:14px">
+  <h5>Weakness-Answer Template</h5>
+  <pre class="codeblock">1. Name a REAL weakness (not a disguised strength)
+2. Give one concrete example of it showing up
+3. State the specific action you're taking to address it
+4. Show recent evidence of improvement, if any</pre>
+</div>
+<div class="card" style="padding:20px 24px;margin-top:14px">
+  <h5>Salary-Question Template</h5>
+  <pre class="codeblock">1. Anchor to market range (research beforehand),
+   not a single fixed number
+2. State it's negotiable based on full scope/comp
+3. Redirect: "What range does this role budget for?"</pre>
+</div>
+
+    </section>
+
+    <section id="glossary">
+      <div class="sec-head">
+        <div class="num">15</div>
+        <h2>Appendix · Glossary</h2>
+        <p>30 key terms spanning every pillar of the Masterbook, A to Z.</p>
+      </div>
+      <div class="card" style="padding:20px 24px"><div class="glossgrid"><div class="gloss-item"><b>A/B Test</b><span>A controlled experiment comparing two variants (A and B) to measure which performs better on a defined metric.</span></div><div class="gloss-item"><b>AUC-ROC</b><span>Area under the ROC curve; the probability a model ranks a random positive above a random negative.</span></div><div class="gloss-item"><b>Agent (GenAI)</b><span>An LLM-driven system that plans multi-step actions and calls external tools, using results to decide its next step.</span></div><div class="gloss-item"><b>Bias-Variance Tradeoff</b><span>The balance between underfitting (high bias) and overfitting (high variance) that determines a model's total error.</span></div><div class="gloss-item"><b>CLT (Central Limit Theorem)</b><span>Sample means approach a normal distribution as sample size grows, regardless of the population's underlying distribution.</span></div><div class="gloss-item"><b>CTE (Common Table Expression)</b><span>A named temporary result set in SQL, defined with WITH, usable within a single query.</span></div><div class="gloss-item"><b>Case Interview</b><span>A structured problem-solving interview simulating a real business scenario, common in consulting recruiting.</span></div><div class="gloss-item"><b>Cohort Analysis</b><span>Grouping users by shared starting characteristic (e.g. signup month) to track behavior over time.</span></div><div class="gloss-item"><b>Confidence Interval</b><span>A range expected to contain the true population value a stated percentage of the time under repeated sampling.</span></div><div class="gloss-item"><b>Embedding</b><span>A numeric vector representation of data such that semantically similar items are positioned close together.</span></div><div class="gloss-item"><b>Feature Engineering</b><span>Creating or transforming input variables to improve a model's ability to learn patterns.</span></div><div class="gloss-item"><b>Gradient Boosting</b><span>An ensemble technique building trees sequentially, each correcting the residual errors of the ensemble so far.</span></div><div class="gloss-item"><b>GraphSAGE</b><span>A graph neural network that learns node embeddings by aggregating information from a node's local neighborhood.</span></div><div class="gloss-item"><b>Hallucination</b><span>An LLM generating plausible-sounding but factually incorrect or ungrounded output.</span></div><div class="gloss-item"><b>Hypothesis Testing</b><span>A statistical framework for deciding whether observed data provides evidence against a null hypothesis.</span></div><div class="gloss-item"><b>LP (Linear Program)</b><span>An optimization method finding the best outcome from a linear objective function subject to linear constraints.</span></div><div class="gloss-item"><b>MECE</b><span>Mutually Exclusive, Collectively Exhaustive; a structuring principle ensuring no overlap and full coverage of a problem.</span></div><div class="gloss-item"><b>Overfitting</b><span>A model fitting training-data noise rather than the underlying pattern, hurting generalization to new data.</span></div><div class="gloss-item"><b>PRD (Product Requirements Document)</b><span>A document defining a feature's problem statement, success metrics, requirements, and scope boundaries.</span></div><div class="gloss-item"><b>RAG (Retrieval-Augmented Generation)</b><span>Retrieving relevant documents at query time and injecting them into an LLM's prompt to ground its answer.</span></div><div class="gloss-item"><b>RICE Scoring</b><span>A prioritization framework scoring initiatives by Reach, Impact, Confidence, and Effort.</span></div><div class="gloss-item"><b>Random Forest</b><span>An ensemble of decision trees trained on bootstrapped samples, averaging predictions to reduce variance.</span></div><div class="gloss-item"><b>STAR Method</b><span>A behavioral-answer structure: Situation, Task, Action, Result.</span></div><div class="gloss-item"><b>Shadow Price</b><span>The change in an LP's objective value per one-unit relaxation of a binding constraint; also called a dual value.</span></div><div class="gloss-item"><b>Type I / Type II Error</b><span>Type I: false positive (rejecting a true null). Type II: false negative (failing to reject a false null).</span></div><div class="gloss-item"><b>Vector Database</b><span>A database optimized for storing and searching high-dimensional embedding vectors by similarity.</span></div><div class="gloss-item"><b>Window Function</b><span>A SQL function computing a value across a set of rows related to the current row, without collapsing them via GROUP BY.</span></div><div class="gloss-item"><b>XGBoost</b><span>An optimized, regularized implementation of gradient boosting, widely used for tabular-data prediction tasks.</span></div><div class="gloss-item"><b>Z-score</b><span>The number of standard deviations a value is from the mean of its distribution.</span></div><div class="gloss-item"><b>p-value</b><span>The probability of observing a result at least this extreme if the null hypothesis were true.</span></div></div></div>
+    </section>
+
+    <section id="references">
+      <div class="sec-head">
+        <div class="num">16</div>
+        <h2>Appendix · References</h2>
+        <p>Every public dataset and free-tier tool used across the Portfolio (Stage 31), plus the CV source of truth.</p>
+      </div>
+      
+<div class="card" style="padding:20px 24px">
+  <h5>Public Datasets Used Across the Portfolio (Stage 31)</h5>
+  <ul class="cheatlist">
+    <li><b>PhysioNet Sepsis Challenge</b> &mdash; clinical deterioration early-warning (healthcare-ews)</li>
+    <li><b>IEEE-CIS Fraud Detection (Kaggle)</b> &mdash; fraud graph-neural-network project (fraud-gnn)</li>
+    <li><b>H&amp;M Personalized Fashion Recommendations (Kaggle)</b> &mdash; GenAI shopping assistant (genai-shopping)</li>
+    <li><b>NASA C-MAPSS Turbofan Degradation</b> &mdash; predictive maintenance / RUL forecasting</li>
+    <li><b>TMDB (The Movie Database, public data)</b> &mdash; agentic content-operations catalog</li>
+    <li><b>UCI Bank Marketing Dataset</b> &mdash; XGBoost vs. Logistic Regression comparison</li>
+    <li><b>Kaggle Ad A/B Testing Dataset</b> &mdash; A/B test design &amp; analysis project</li>
+    <li><b>Online Retail II (UCI/Kaggle)</b> &mdash; cohort-retention &amp; funnel-analysis project</li>
+    <li>Public solar-plant generation data &mdash; renewable-dispatch forecasting + LP project</li>
+  </ul>
+</div>
+<div class="card" style="padding:20px 24px;margin-top:14px">
+  <h5>Free-Tier Tools &amp; Platforms Referenced</h5>
+  <ul class="cheatlist">
+    <li>Streamlit Community Cloud &amp; Hugging Face Spaces &mdash; free-tier app hosting (Stage 31 Deployment Kit)</li>
+    <li>Groq API (free tier, no card) &mdash; LLM inference for the GenAI projects</li>
+    <li>GitHub (free tier) &mdash; portfolio repo hosting</li>
+    <li>Kaggle (free) &mdash; dataset source and notebook environment</li>
+  </ul>
+</div>
+<div class="card" style="padding:20px 24px;margin-top:14px">
+  <h5>Primary Source</h5>
+  <p style="color:var(--ink-soft);font-size:.9rem;margin:0">Every work-experience claim across the Masterbook (Stages 27&ndash;30, and every Work Experience question in Stage 32) traces back to Pranav's own CV as consolidated and cross-checked in <a href="stage01.html">Stage 1's CV Intelligence page</a> &mdash; the single source of truth for what's Level A (actually did), Level B (team/collaborative), and Level C (conceptual-only) across all 5 CV versions.</p>
+</div>
+
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">17</div>
+        <h2>Mastery Checklist — Stage 33</h2>
+        <p>The 33rd and final mastery checklist. Passing this one, combined with the Mastery Tests above, is the closing gate before you consider the whole Masterbook interview-ready.</p>
+      </div>
+      <div class="card" id="masteryBox" style="padding:12px 18px"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">18</div>
+        <h2>The Masterbook Is Complete</h2>
+        <p>One closing view of how all 33 stages connect, and what running the study system above actually gets you ready for.</p>
+      </div>
+      
+<div class="final-banner">
+  <h3>All 33 Stages Are Now Live</h3>
+  <p>Part I (CV Intelligence) through Part XIV (Study System) plus the Appendices are complete — foundations, the full technical stack, 11 case banks, four Work Experience deep dives, a 14-project two-tier Portfolio, a 93-question Interview Bank with 3 mock interviews, and this closing study system. Everything traces back to Stage 1's honest CV scoping — nothing in the Masterbook overstates what you've actually done.</p>
+</div>
+<div class="card bridge-flow" style="margin-top:20px">
+  <div class="node">Stages 2&ndash;14 Foundations</div><div class="arrow">→</div>
+  <div class="node">Stages 15&ndash;26 Consulting &amp; Cases</div><div class="arrow">→</div>
+  <div class="node">Stages 27&ndash;30 Work Experience</div><div class="arrow">→</div>
+  <div class="node">Stage 31 Portfolio</div><div class="arrow">→</div>
+  <div class="node">Stage 32 Interview Bank</div><div class="arrow">→</div>
+  <div class="node" style="background:var(--accent-soft);color:var(--accent-ink)">Stage 33 Study System — you are here</div>
+</div>
+
+    </section>
+
+  </main>
+</div>
+
+<button class="backtop" id="backtop" title="Back to top" aria-label="Back to top">↑</button>
+<script>
+try {
+  var STORE_KEY = "masterbook-s33-mastery";
+  function loadDone(){ try { return JSON.parse(localStorage.getItem(STORE_KEY) || "[]"); } catch(e){ return []; } }
+  function saveDone(arr){ try { localStorage.setItem(STORE_KEY, JSON.stringify(arr)); } catch(e){} }
+
+  var MASTERY_ITEMS = ["I've picked exactly one study plan (5/10/15-day) matching my real time-to-interview, not the most thorough one available.", "I can name my own top-5 Interview Priority Matrix items from Stage 1 without looking them up.", "I've set up a Weak-Area Log and logged at least one real item from a prior stage's mastery checklist.", "I understand the Day+1/+3/+7/+14 spaced-review schedule and can explain why an item resets to Day 0 on a failed review.", "I scored 6/8 or better on the Data & Technical Skills Mastery Test, answered aloud unaided.", "I scored 6/8 or better on the ML & Applied Quant Mastery Test, answered aloud unaided.", "I scored 6/8 or better on the Consulting Case Mastery Test, answered aloud unaided.", "I scored 6/8 or better on the Work Experience & Behavioral Mastery Test, answered aloud unaided.", "I scored 6/8 or better on the GenAI & Product Mastery Test, answered aloud unaided.", "I can locate the right cheat sheet or formula for any topic in under 10 seconds using the Appendices.", "I can write the cohort-retention SQL pattern from the SQL Patterns appendix from memory.", "I can state all 8 Consulting Framework Library entries and when to use each, without looking.", "I can deliver the STAR template and the 30-sec/2-min/5-min answer ladder from memory, unprompted.", "I know all 4 datasets used in Stage 31's Tier-2 flagships by name and what each project demonstrates.", "I've run at least one full mock interview (Stage 32) after completing my chosen study plan, not before.", "I can explain, in one sentence, how all 33 stages of the Masterbook connect to each other.", "I feel genuinely ready — not just checklist-complete — for a real interview in my target track."];
+  (function renderMastery(){
+    var box = document.getElementById("masteryBox");
+    if (!box) return;
+    var done = loadDone();
+    MASTERY_ITEMS.forEach(function(text, i){
+      var row = document.createElement("div");
+      row.className = "cl-item" + (done.indexOf(i) > -1 ? " checked" : "");
+      var b = document.createElement("div");
+      b.className = "box" + (done.indexOf(i) > -1 ? " done" : "");
+      b.addEventListener("click", function(){
+        var d = loadDone();
+        var idx = d.indexOf(i);
+        if (idx > -1) { d.splice(idx,1); row.classList.remove("checked"); b.classList.remove("done"); }
+        else { d.push(i); row.classList.add("checked"); b.classList.add("done"); }
+        saveDone(d);
+      });
+      var span = document.createElement("span");
+      span.className = "txt";
+      span.textContent = text;
+      row.appendChild(b); row.appendChild(span);
+      box.appendChild(row);
+    });
+  })();
+
+  var backtop = document.getElementById("backtop");
+  if (backtop){
+    window.addEventListener("scroll", function(){
+      if (window.scrollY > 500) backtop.classList.add("show");
+      else backtop.classList.remove("show");
+    });
+    backtop.addEventListener("click", function(){ window.scrollTo({top:0, behavior:"smooth"}); });
+  }
+} catch (err) { console.error('Stage 33 data error:', err); }
+</script>

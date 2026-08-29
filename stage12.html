@@ -1,0 +1,983 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>Power BI &amp; Advanced Excel</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .concept-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px; }
+  .concept{ padding:20px 22px; }
+  .concept h4{ font-size:1rem; margin-bottom:8px; }
+  .concept p{ font-size:.88rem; color:var(--ink-soft); margin:0 0 8px; }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .worked{ margin-top:14px; border:1px dashed var(--line-strong); border-radius:10px; padding:16px 18px; background:var(--paper-sunken); }
+  .worked .wk-label{ font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; }
+  .worked .wk-result{ margin-top:8px; font-size:.85rem; color:var(--ink-soft); }
+
+  .exstrip{ margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px 16px; border-top:1px solid var(--line); padding-top:12px; }
+  .exstrip .ex{ font-size:.8rem; }
+  .exstrip .ex b{ display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:2px; font-weight:700; }
+  .exstrip .ex span{ color:var(--ink-soft); }
+
+  .probgrid{ display:flex; flex-direction:column; gap:10px; }
+  details.prob{ border:1px solid var(--line); border-radius:10px; background:var(--paper-raised); }
+  details.prob summary{ padding:12px 18px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.9rem; }
+  details.prob summary::-webkit-details-marker{ display:none; }
+  details.prob summary .pnum{ font-family:"IBM Plex Mono"; font-size:.75rem; color:var(--data); background:var(--data-soft); padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  details.prob summary .pdiff{ font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  .pdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .pdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .pdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .pdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  .prob-body{ padding:0 18px 16px; }
+
+  .qbank{ display:flex; flex-direction:column; gap:0; }
+  details.qa{ border-bottom:1px solid var(--line); }
+  details.qa:last-child{ border-bottom:none; }
+  details.qa summary{ padding:13px 20px; cursor:pointer; list-style:none; font-size:.9rem; font-weight:500; display:flex; gap:12px; align-items:baseline; }
+  details.qa summary::-webkit-details-marker{ display:none; }
+  details.qa summary::before{ content:"Q"; font-family:"IBM Plex Mono"; font-size:.68rem; color:var(--data); background:var(--data-soft); padding:2px 6px; border-radius:5px; flex:0 0 auto; }
+  details.qa .qa-a{ padding:0 20px 16px 58px; font-size:.86rem; color:var(--ink-soft); }
+  details.qa .qa-a b{ color:var(--ink); }
+
+  .redflag{ padding:13px 17px; border-left:4px solid var(--lvlA); background:var(--lvlA-soft); border-radius:0 8px 8px 0; margin-bottom:9px; font-size:.87rem; }
+  .redflag b{ color:var(--lvlA); }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  .framebox{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px; }
+  .frame-a{ border-top:4px solid var(--data); }
+  .frame-b{ border-top:4px solid var(--lvlC); }
+  .frame-c{ border-top:4px solid var(--lvlB); }
+  .framebox .fh{ font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; padding:14px 18px 0; }
+  .frame-a .fh{ color:var(--data); }
+  .frame-b .fh{ color:var(--lvlC); }
+  .frame-c .fh{ color:var(--lvlB); }
+  .framebox .fb{ padding:8px 18px 18px; font-size:.87rem; color:var(--ink-soft); }
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+  .subhead{ font-family:"Fraunces"; font-size:1.15rem; font-weight:600; margin:36px 0 14px; padding-top:8px; border-top:1px solid var(--line); }
+  .subhead:first-child{ border-top:none; padding-top:0; margin-top:0; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <div class="stage-pill">● Stage 12 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#honest">Honest CV Framing</a></li>
+      <li><a href="#datamodel">Power BI Data Modeling &amp; Star Schema</a></li>
+      <li><a href="#dax">DAX Fundamentals</a></li>
+      <li><a href="#daxadv">Advanced DAX</a></li>
+      <li><a href="#viz">Dashboard Design &amp; Visualization</a></li>
+      <li><a href="#excelformulas">Advanced Excel Formulas</a></li>
+      <li><a href="#pivotpq">Pivot Tables &amp; Power Query</a></li>
+      <li><a href="#finmodel">Financial Modeling &amp; Solver</a></li>
+      <li><a href="#altmodels">Alternative Tools — Why This, Why Not That</a></li>
+      <li><a href="#cmptable">BI Tool Comparison Table</a></li>
+      <li><a href="#redflags">Red Flags</a></li>
+      <li><a href="#problems">30 Coding/Formula Problems</a></li>
+      <li><a href="#questions">80-Question Interview Bank</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+      <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 20 (Market Sizing) is next, followed by Operations, Product, Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part VII · Stage 12 of 33</div>
+      <h1>Power BI &amp; Advanced Excel</h1>
+      <p class="lede">Power BI, Advanced Excel, PowerPoint, and KPI Reporting are named skills across your CVs — this stage builds the real depth behind them: star-schema data modeling, DAX from calculated columns through context transition, dashboard design principles, and the Excel formula/Power Query/financial-modeling toolkit that a genuinely BI-fluent analyst is expected to have cold.</p>
+      <div class="statusbar">
+        <div class="statuschip">📊 15 concept modules: Data Modeling → DAX → Dashboards → Excel Formulas → Power Query → Financial Modeling</div>
+        <div class="statuschip">🧮 Every concept has a worked numeric example + real formula/output</div>
+        <div class="statuschip">🧩 <b>30</b> progressive coding/formula problems</div>
+        <div class="statuschip">❓ <b>80</b> interview questions with model answers</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">Power BI and Advanced Excel are exactly the kind of CV line that's easy to underestimate in prep — they feel like "soft" tools next to Python and XGBoost, so it's tempting to assume basic familiarity is enough. It isn't: a BI-focused or analytics-manager interviewer will probe DAX's context transition, star-vs-snowflake schema tradeoffs, and the difference between INDEX-MATCH and VLOOKUP with the same rigor a technical interviewer applies to SQL joins. This stage treats Power BI and Excel with that same seriousness — full data modeling depth, real DAX patterns, and the Excel formula/Power Query toolkit an experienced analyst actually reaches for daily, not a surface-level feature tour.</p>
+      </div>
+    </section>
+
+    <section id="honest">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Honest CV Framing</h2>
+        <p>"Power BI, Advanced Excel, PowerPoint, KPI Reporting, Data Visualization" appears as a named skill line across your CVs — a genuine Level A claim.</p>
+      </div>
+      <div class="framebox">
+        <div class="card frame-a">
+          <div class="fh">Level A — What I actually did</div>
+          <div class="fb">Built KPI reports and dashboards using Power BI and Advanced Excel as part of the analytics/consulting work at Axtria and Capgemini — pulling data together, building visualizations, and delivering stakeholder-facing reporting, consistent with the "KPI Reporting, Data Visualization" skill line on the CV.</div>
+        </div>
+        <div class="card frame-b">
+          <div class="fh">Level B — What I should understand deeply</div>
+          <div class="fb">The full technical depth beneath everyday dashboard-building: proper star-schema data modeling (versus a single flat table), DAX's evaluation context model (row context, filter context, context transition), and the Excel formula/Power Query patterns that separate someone who's clicked through Excel from someone who builds genuinely maintainable, auditable spreadsheet and dashboard logic.</div>
+        </div>
+        <div class="card frame-c">
+          <div class="fh">Level C — Honest framing for anything beyond that</div>
+          <div class="fb">If asked about enterprise-scale Power BI administration (Row-Level Security governance across a large tenant, DirectQuery performance tuning at massive scale, custom visual development), the honest answer is: "My hands-on Power BI/Excel work was at the report- and dashboard-building level for specific business questions, not platform administration — I understand the enterprise governance concerns conceptually but haven't personally operated at that scale." Never claim BI platform administration experience that didn't happen.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="datamodel">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>Power BI Data Modeling &amp; Star Schema</h2>
+        <p>The foundation every DAX measure and dashboard sits on top of — get this wrong and everything downstream inherits the problem.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Star Schema vs. a Single Flat Table <span class="lvl lvl-A">A</span></h4>
+          <p>A <b>star schema</b> separates data into <b>fact tables</b> (transactional/measurable events — sales, calls, orders — with foreign keys and numeric measures) and <b>dimension tables</b> (descriptive attributes — date, product, rep, territory — each with a unique key), connected by one-directional one-to-many relationships radiating from the fact table like a star. This is dramatically more performant and maintainable in Power BI than a single denormalized flat table, and is what "proper data modeling" means in a BI context.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- A flat table repeats rep/territory/date info on every single call row:</span>
+<span class="cmt">-- call_id | rep_name | rep_tenure | territory | territory_region | date | date_quarter | ... | call_value</span>
+<span class="cmt">-- vs. a star schema:</span>
+
+<span class="cmt">-- FACT_Calls:      call_id, rep_key, territory_key, date_key, call_value, converted</span>
+<span class="cmt">-- DIM_Rep:         rep_key, rep_name, rep_tenure, hire_date</span>
+<span class="cmt">-- DIM_Territory:   territory_key, territory_name, region</span>
+<span class="cmt">-- DIM_Date:        date_key, date, quarter, month, is_holiday</span>
+
+<span class="cmt">-- 1 million call rows in the flat table repeat rep_name ~16,000 times each (60 reps)</span>
+<span class="cmt">-- The star schema stores rep_name exactly once per rep, in DIM_Rep</span></div>
+            <div class="wk-result">The star schema stores each rep's name and tenure exactly once (in DIM_Rep) rather than redundantly on every one of their ~16,000 calls — this isn't just tidiness, it's what lets Power BI's compression engine (VertiPaq) work efficiently, and what makes a single "rename this rep" edit take effect everywhere instantly instead of requiring a bulk update across a million rows.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A well-organized filing cabinet with one folder per category (dimension) that documents reference, versus photocopying every fact onto every single sheet of paper — the star schema is the filing cabinet.</span></div>
+            <div class="ex"><b>Consumer</b><span>A shopping app's backend separating "product catalog" (dimension) from "individual orders" (fact) rather than repeating full product descriptions on every order row.</span></div>
+            <div class="ex"><b>Business</b><span>A sales dashboard that needs to slice revenue by region, product, AND time simultaneously is exactly the multi-dimensional slicing a star schema is purpose-built for.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly the structure a well-built Power BI/KPI reporting model for Axtria-style call/conversion data would use — FACT_Calls at the center, with DIM_Rep, DIM_Territory, and DIM_Date radiating out.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why not just use one big flat table in Power BI — isn't that simpler?" — a flat table is initially simpler to build but scales terribly: bloated file size (redundant data), slower calculations, and any change to a dimension attribute requires updating every repeated row instead of one dimension row.</span></div>
+            <div class="ex"><b>Your CV</b><span>"Explaining star schema versus a flat table, with a concrete redundancy example like this one, is exactly what I'd walk through if asked how a KPI dashboard's underlying data model was actually built."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Relationships, Cardinality &amp; Cross-Filter Direction <span class="lvl lvl-B">B</span></h4>
+          <p>A relationship between two tables has a <b>cardinality</b> (one-to-many is standard and healthiest; many-to-many should generally be avoided or handled via a bridge table) and a <b>cross-filter direction</b> (single-direction is the default and usually correct — filtering DIM_Territory filters FACT_Calls, but not the reverse; bidirectional filtering is powerful but can cause ambiguous filter paths and should be used deliberately, not by default).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Correct: DIM_Territory (1) -----> FACT_Calls (many), single-direction</span>
+<span class="cmt">-- Filtering DIM_Territory to "West" correctly filters FACT_Calls to West-region calls</span>
+
+<span class="cmt">-- Common mistake: setting this relationship to bidirectional "just in case"</span>
+<span class="cmt">-- With TWO bidirectional many-to-one paths converging on the same fact table</span>
+<span class="cmt">-- (e.g. DIM_Territory and DIM_Rep both bidirectional), Power BI can produce</span>
+<span class="cmt">-- ambiguous or unexpectedly filtered results that are hard to debug</span></div>
+            <div class="wk-result">Defaulting every relationship to bidirectional "to be safe" is a common beginner mistake that actually introduces subtle, hard-to-diagnose filtering bugs — the disciplined default is single-direction, made bidirectional only for a specific, deliberate reason (like a many-to-many bridge scenario), not as a blanket setting.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A one-way street (single-direction filtering) is predictable; making every street two-way "just in case" creates unpredictable traffic patterns nobody planned for.</span></div>
+            <div class="ex"><b>Consumer</b><span>A well-designed filter panel on a shopping site (category filters products, not the reverse) mirrors correct single-direction relationship design.</span></div>
+            <div class="ex"><b>Business</b><span>A dashboard where selecting a specific product unexpectedly also filters an unrelated metric is usually a symptom of an over-permissive bidirectional relationship.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A genuinely common real-world debugging scenario for any Power BI dashboard built at Axtria/Capgemini — an unexpected filter interaction is very often traced back to a relationship's cardinality or cross-filter direction setting.</span></div>
+            <div class="ex"><b>Interview</b><span>"When would you deliberately use a bidirectional relationship?" — a genuine many-to-many scenario needing a bridge table, or a specific, tested case where the cross-filtering is intentional and verified — never as an unexamined default.</span></div>
+            <div class="ex"><b>Your CV</b><span>"Diagnosing an unexpected filter result by checking relationship cardinality/direction first is exactly the kind of practical debugging instinct I'd demonstrate if walked through a real dashboard issue."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="dax">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>DAX Fundamentals</h2>
+        <p>Calculated columns, measures, and CALCULATE — the three concepts that unlock everything else in DAX.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Calculated Columns vs. Measures <span class="lvl lvl-A">A</span></h4>
+          <p>A <b>calculated column</b> is computed row-by-row and stored physically in the table (uses memory, computed once at refresh) — appropriate for slicer/filter values. A <b>measure</b> is computed dynamically at query time based on the current filter context (visual selections, slicers, page filters) — appropriate for aggregations shown in visuals. Using a calculated column where a measure belongs is one of the most common DAX beginner mistakes, wasting memory and producing static, non-context-aware values.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- WRONG: a calculated column for total revenue (static per row, wastes memory,</span>
+<span class="cmt">-- doesn't respond to slicers/filters the way a visual total needs to)</span>
+Total Revenue Column = SUM(FACT_Calls[call_value])   <span class="cmt">-- this doesn't even work as a column; illustrates the wrong instinct</span>
+
+<span class="cmt">-- RIGHT: a measure, dynamically responsive to whatever filter context is active</span>
+Total Revenue = SUM(FACT_Calls[call_value])
+
+<span class="cmt">-- A calculated column IS appropriate here, for slicing (not aggregating):</span>
+Tenure Bucket = IF(DIM_Rep[rep_tenure] < 1, "New", IF(DIM_Rep[rep_tenure] < 3, "Mid", "Senior"))</span></div>
+            <div class="wk-result">The "Total Revenue" measure recalculates correctly no matter what's currently filtered (a specific territory, a date range, a rep) because it evaluates at query time within the current filter context — a calculated column with the same formula would instead compute one static value per row at refresh time and never respond to interactive filtering, which is exactly the wrong behavior for a dashboard total.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A printed total on a fixed receipt (calculated column, frozen at print time) versus a live running total on a calculator that updates as you add or remove items (measure, responsive to current context).</span></div>
+            <div class="ex"><b>Consumer</b><span>A shopping cart's live subtotal recalculating instantly as you add/remove items is exactly measure-like, context-responsive behavior.</span></div>
+            <div class="ex"><b>Business</b><span>A "Total Revenue" KPI card on a dashboard needs to update the moment someone clicks a different region filter — only a measure does that correctly.</span></div>
+            <div class="ex"><b>Enterprise</b><span>The most common real DAX mistake to catch and fix in a KPI reporting dashboard built at Axtria/Capgemini — misusing calculated columns for aggregation logic that should be measures.</span></div>
+            <div class="ex"><b>Interview</b><span>"When would you deliberately choose a calculated column over a measure?" — when you need the value to be usable as a slicer/filter/axis category (like the Tenure Bucket example), or when a row-level static classification genuinely doesn't need to respond to filter context.</span></div>
+            <div class="ex"><b>Your CV</b><span>"This exact calculated-column-vs-measure distinction is the first thing I'd check if a dashboard's numbers weren't updating the way a stakeholder expected."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>CALCULATE — DAX's Most Important Function <span class="lvl lvl-A">A</span></h4>
+          <p><b>CALCULATE</b> evaluates an expression within a modified filter context — it's the function that makes almost every non-trivial DAX pattern possible (year-over-year comparisons, "% of total," excluding/adding filters). Its filter arguments either add a new filter or override an existing one on that column, letting you compute a value "as if" a different filter were applied.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">Total Revenue = SUM(FACT_Calls[call_value])
+
+<span class="cmt">-- Revenue for just the "West" region, regardless of what region slicer is selected:</span>
+West Revenue = CALCULATE([Total Revenue], DIM_Territory[region] = "West")
+
+<span class="cmt">-- Prior Year revenue, using time intelligence built on CALCULATE:</span>
+Revenue PY = CALCULATE([Total Revenue], SAMEPERIODLASTYEAR(DIM_Date[date]))
+
+<span class="cmt">-- YoY % growth, combining both:</span>
+Revenue YoY % = DIVIDE([Total Revenue] - [Revenue PY], [Revenue PY])</span></div>
+            <div class="wk-result">CALCULATE lets "West Revenue" compute correctly even when a user has a different region selected in a dashboard slicer — it overrides just the region filter while respecting every other active filter (date range, product, etc.) — and stacking CALCULATE with time-intelligence functions like SAMEPERIODLASTYEAR is exactly how a YoY growth measure gets built, one of the single most common real dashboard KPIs.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Asking "what would my grocery bill have been if I'd only bought fruit" while still keeping every other real constraint (same store, same week) — CALCULATE lets you hypothetically override just one dimension.</span></div>
+            <div class="ex"><b>Consumer</b><span>A retail app showing "you'd save $12 with the annual plan" is computing a value under a hypothetically different filter/scenario, conceptually identical to a CALCULATE override.</span></div>
+            <div class="ex"><b>Business</b><span>Any "this quarter vs. last quarter" or "this region vs. company average" comparison on a KPI dashboard is built on CALCULATE overriding one specific filter while keeping others intact.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Genuinely one of the most-used DAX patterns in any real Power BI KPI reporting build — YoY/QoQ growth, region-vs-total comparisons, and "as of a specific date" snapshots all go through CALCULATE.</span></div>
+            <div class="ex"><b>Interview</b><span>"What's the difference between a FILTER argument in CALCULATE and a plain boolean filter?" — a boolean filter (like region="West") is a shorthand CALCULATE understands directly; FILTER() lets you apply more complex row-by-row logic when a simple boolean condition isn't expressive enough.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd walk through a YoY-growth-measure build like this one if asked to demonstrate real DAX fluency, not just recite that CALCULATE is 'important.'"</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="daxadv">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Advanced DAX</h2>
+        <p>Context transition and iterator functions — the concepts that separate genuine DAX fluency from copy-pasted formulas.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Row Context vs. Filter Context &amp; Context Transition <span class="lvl lvl-B">B</span></h4>
+          <p><b>Row context</b> exists when DAX evaluates a formula one row at a time (inside a calculated column, or inside an iterator like SUMX). <b>Filter context</b> is the set of filters currently applied (from slicers, visual axes, or CALCULATE) that determines what data a measure aggregates over. <b>Context transition</b> is what happens when CALCULATE is used inside a row context — it converts the current row's values into an equivalent filter context, which is genuinely one of the most conceptually tricky ideas in DAX.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Inside a calculated column on FACT_Calls (row context: one row = one call):</span>
+Rep's Total Revenue =
+    CALCULATE([Total Revenue], ALLEXCEPT(FACT_Calls, FACT_Calls[rep_key]))
+
+<span class="cmt">-- Context transition: for THIS row's rep_key value, CALCULATE converts</span>
+<span class="cmt">-- the row context into a filter context of "only this rep's rows,"</span>
+<span class="cmt">-- then [Total Revenue] aggregates across exactly that filtered set</span></div>
+            <div class="wk-result">Without CALCULATE, a measure reference inside row context has no filter context to aggregate over and would either error or return an unexpected single-row value; CALCULATE's context transition is specifically what converts "the rep on this particular row" into "filter everything to just this rep," letting [Total Revenue] correctly sum that rep's calls — this single mechanism is behind most "why isn't my calculated column showing what I expect" DAX debugging sessions.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Being handed one specific receipt (row context) and asked "what's this store's total revenue for the whole month" — you have to translate "this one receipt's store" into "filter to that entire store's data" before the question even makes sense to answer.</span></div>
+            <div class="ex"><b>Consumer</b><span>A loyalty app showing "you're in the top 10% of customers at this store" is implicitly doing a context-transition-style calculation — translating one customer's row into a filtered comparison set.</span></div>
+            <div class="ex"><b>Business</b><span>Any "this rep's total versus their peers" or "this product's rank within its category" dashboard visual relies on exactly this row-to-filter-context conversion under the hood.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A genuinely advanced DAX concept worth having fluent, not just theoretically — real Axtria/Capgemini dashboards comparing individual reps/territories against aggregates would be built on exactly this pattern.</span></div>
+            <div class="ex"><b>Interview</b><span>"What's the most conceptually difficult part of DAX, in your experience?" — context transition is a widely-agreed-upon answer among experienced DAX users; being able to explain it correctly (not just name it) is a genuine signal of real depth versus copy-pasted formula familiarity.</span></div>
+            <div class="ex"><b>Your CV</b><span>"Being able to actually explain context transition, not just use the term, is exactly the kind of depth check I'd expect and want to be ready for in a Power BI-focused interview."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Iterator Functions: SUMX, AVERAGEX &amp; Variables <span class="lvl lvl-B">B</span></h4>
+          <p>Iterator functions (SUMX, AVERAGEX, COUNTX, etc.) evaluate an expression row-by-row (creating row context) and then aggregate the results — needed whenever a calculation can't be expressed as a single column aggregation (e.g. "sum of quantity times price" when quantity and price are separate columns). <b>Variables</b> (VAR/RETURN) improve readability and performance by computing a sub-expression once and reusing it, instead of re-evaluating the same logic multiple times.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- WRONG: SUM(quantity) * SUM(price) is mathematically incorrect when</span>
+<span class="cmt">-- price varies per row -- it doesn't compute a true line-item total</span>
+
+<span class="cmt">-- RIGHT: SUMX evaluates quantity*price PER ROW, then sums those results</span>
+Total Line Value =
+    SUMX(FACT_Orders, FACT_Orders[quantity] * FACT_Orders[unit_price])
+
+<span class="cmt">-- Using a variable to avoid recomputing the same measure twice:</span>
+Margin % =
+    VAR Revenue = [Total Revenue]
+    VAR Cost = [Total Cost]
+    RETURN DIVIDE(Revenue - Cost, Revenue)</span></div>
+            <div class="wk-result">SUMX computing quantity×price per row before summing gives the mathematically correct line-item total, while naively multiplying two separate SUM()s would silently produce a wrong number whenever price varies across rows — a subtle, easy-to-miss bug that a real DAX interview question would specifically probe for.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Computing a grocery bill correctly means multiplying each item's price by its quantity individually, then summing those totals — not multiplying "total quantity of all items" by "total of all prices," which would be nonsensical.</span></div>
+            <div class="ex"><b>Consumer</b><span>Any shopping cart's correct total calculation is fundamentally a SUMX-style per-line-item computation, not a single aggregate multiplication.</span></div>
+            <div class="ex"><b>Business</b><span>Computing total commission (rate × deal size, varying per deal) across a sales team requires exactly this per-row-then-sum pattern, not a naive aggregate multiplication.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly relevant to any revenue/commission/margin calculation built into an Axtria-style KPI dashboard where the per-row multiplier (price, rate, value) genuinely varies row to row.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why would SUM(qty) * SUM(price) give a wrong answer?" — it multiplies two independently-aggregated totals rather than the true per-transaction product, which is only correct by coincidence if price is literally constant across every row — the exact kind of subtle DAX bug worth being able to explain clearly.</span></div>
+            <div class="ex"><b>Your CV</b><span>"Catching and explaining this exact SUMX-vs-naive-multiplication distinction is a concrete way to demonstrate real DAX rigor beyond surface-level dashboard building."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="viz">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Dashboard Design &amp; Visualization</h2>
+        <p>The design judgment layer on top of the technical modeling — choosing the right chart, and building something a stakeholder will actually use.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Choosing the Right Visual for the Question <span class="lvl lvl-B">B</span></h4>
+          <p>Chart choice should follow the question being answered: trend over time → line chart; comparing categories → bar chart (horizontal for many/long category names); part-to-whole → stacked bar or (sparingly) a pie chart, only with few categories; correlation between two measures → scatter plot; single KPI with target → a card/gauge with clear context (not a gauge alone, which is often criticized as low-information-density). A dashboard's job is fast comprehension, not visual complexity.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Poor choice: a pie chart with 14 territory slices -- nearly impossible</span>
+<span class="cmt">-- to compare slice sizes accurately once past 5-6 categories</span>
+
+<span class="cmt">-- Better choice: a horizontal bar chart, sorted descending by revenue,</span>
+<span class="cmt">-- with territory names as labels -- immediately scannable, easy to compare,</span>
+<span class="cmt">-- and scales to many more categories than a pie chart ever could</span></div>
+            <div class="wk-result">Sorting the bar chart descending means the most important information (which territories are largest/smallest) is readable in under a second, without needing to mentally compare 14 wedge angles — a small design choice that measurably changes how usable the dashboard is for a busy stakeholder.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A well-organized grocery receipt sorted by category is far faster to scan than one listed in random purchase order — sorting is a free comprehension upgrade.</span></div>
+            <div class="ex"><b>Consumer</b><span>A fitness app showing a weekly trend as a line chart (not a table of 7 numbers) because the shape of the trend is the actual insight.</span></div>
+            <div class="ex"><b>Business</b><span>An executive dashboard needs to be understandable in the 10 seconds someone glances at it before a meeting — chart choice directly determines whether that's possible.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A genuinely important, easy-to-underestimate skill for any KPI reporting/dashboard work at Axtria/Capgemini — a technically correct dashboard that's hard to read fails at its actual job.</span></div>
+            <div class="ex"><b>Interview</b><span>"When, if ever, would you use a pie chart?" — only with a small number of categories (3-5) where part-to-whole is the specific point being made — beyond that, a sorted bar chart almost always communicates the same information more clearly.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd frame dashboard design choices around 'what question is this stakeholder trying to answer in 10 seconds,' not just 'what visual looks impressive.'"</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Row-Level Security (RLS) &amp; Performance Basics <span class="lvl lvl-C">C</span></h4>
+          <p><b>Row-Level Security</b> restricts which rows of data a given user can see (e.g. a regional manager only sees their own region's data) by applying a DAX filter expression tied to the user's identity. Performance basics: prefer Import mode over DirectQuery when data volume allows (Import is precomputed/compressed and much faster); avoid excessive bidirectional relationships and overly complex calculated columns, which both slow down model refresh and query time.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- RLS role "Regional Manager" defined with this filter on DIM_Territory:</span>
+[region] = USERPRINCIPALNAME()  <span class="cmt">-- maps the logged-in user's email to their assigned region</span>
+
+<span class="cmt">-- A user logged in as west.manager@company.com sees ONLY West-region rows</span>
+<span class="cmt">-- across every visual in the report -- enforced automatically, not per-visual</span></div>
+            <div class="wk-result">RLS enforces the restriction once, at the data-model level, so every visual in the report automatically respects it — a regional manager can never accidentally (or deliberately) see another region's data through any chart, filter, or export, which is a meaningfully stronger guarantee than trying to filter each visual manually.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A shared family calendar app where each person only sees their own appointments by default — access control built into the underlying data, not just the display.</span></div>
+            <div class="ex"><b>Consumer</b><span>A banking app where you only ever see your own account's transactions is enforced at the data-access level, the same principle as RLS.</span></div>
+            <div class="ex"><b>Business</b><span>A company-wide sales dashboard where each regional manager should only see their own region's numbers — a genuine, common real-world requirement for any multi-region KPI reporting tool.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A very plausible real requirement for Axtria/Capgemini-style multi-territory or multi-client dashboards, where different stakeholders should see different data slices from the same underlying report.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why prefer Import mode over DirectQuery when possible?" — Import mode pre-loads and compresses the data into Power BI's in-memory engine, making visuals and DAX calculations much faster than DirectQuery's live pass-through queries to the source, at the cost of needing scheduled refreshes rather than always-live data.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd name RLS specifically if asked how a multi-stakeholder dashboard's data access was controlled — it's a concrete, correct answer rather than a vague 'we set permissions.'"</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="excelformulas">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>Advanced Excel Formulas</h2>
+        <p>XLOOKUP, INDEX-MATCH, and SUMIFS — the formulas that separate "Advanced Excel" on a CV from basic spreadsheet use.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>XLOOKUP &amp; INDEX-MATCH vs. VLOOKUP <span class="lvl lvl-A">A</span></h4>
+          <p><b>VLOOKUP</b> only looks rightward from its lookup column and breaks if columns are inserted/reordered. <b>INDEX-MATCH</b> (the traditional "advanced Excel" combo) separates the lookup logic from the column position, working in any direction and surviving column reordering. <b>XLOOKUP</b> (in modern Excel) does everything INDEX-MATCH does with simpler, more readable syntax, plus built-in error handling and the ability to return multiple columns at once.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- VLOOKUP: rep_name must be in the FIRST column of the lookup range,</span>
+<span class="cmt">-- and territory (the value wanted) must be to its RIGHT</span>
+=VLOOKUP(A2, RepTable!A:C, 3, FALSE)
+
+<span class="cmt">-- INDEX-MATCH: works regardless of column order/position</span>
+=INDEX(RepTable!C:C, MATCH(A2, RepTable!A:A, 0))
+
+<span class="cmt">-- XLOOKUP: cleanest syntax, built-in "not found" handling</span>
+=XLOOKUP(A2, RepTable!A:A, RepTable!C:C, "Not found")</span></div>
+            <div class="wk-result">If someone inserts a new column between RepTable's name and territory columns, the VLOOKUP formula silently returns the wrong value (it's still counting "3 columns over," which now points somewhere else) — INDEX-MATCH and XLOOKUP are immune to this because they reference the target column directly by its own position, not by an offset count, which is exactly why they're considered the more robust, "advanced" choice.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Looking someone up by name in a phone book that's alphabetized by last name (works regardless of what other info is nearby) versus counting "3 entries down from wherever I started," which breaks if anything shifts.</span></div>
+            <div class="ex"><b>Consumer</b><span>Any spreadsheet-based budget tracker that pulls category names via lookup rather than manual re-typing is using this same pattern.</span></div>
+            <div class="ex"><b>Business</b><span>A commission-calculation spreadsheet that looks up each rep's tier from a reference table needs a lookup robust enough to survive someone adding a new column to that table later.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A very concrete, commonly-tested Excel skill for any KPI reporting/financial modeling work at Axtria/Capgemini — VLOOKUP's fragility is a well-known real-world source of silent spreadsheet errors.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why would you choose INDEX-MATCH or XLOOKUP over VLOOKUP even though VLOOKUP is more commonly known?" — robustness to column reordering, ability to look leftward as well as rightward, and (for XLOOKUP specifically) cleaner built-in error handling — genuine, concrete advantages, not just a preference.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd default to XLOOKUP/INDEX-MATCH and explain exactly why, rather than defaulting to VLOOKUP out of habit — a small but real signal of genuine 'Advanced Excel' fluency."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>SUMIFS, COUNTIFS &amp; Array Formulas <span class="lvl lvl-A">A</span></h4>
+          <p><b>SUMIFS/COUNTIFS/AVERAGEIFS</b> aggregate based on multiple simultaneous conditions (unlike single-condition SUMIF). Modern Excel's <b>dynamic array formulas</b> (like FILTER, UNIQUE, SORT) can return a whole range of results from a single formula, spilling automatically into adjacent cells — a genuinely different, more powerful paradigm than classic single-cell formulas.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Total revenue for West region, Q4, converted calls only:</span>
+=SUMIFS(CallValue, Region, "West", Quarter, "Q4", Converted, TRUE)
+
+<span class="cmt">-- Dynamic array: list all unique territories with revenue over $50,000,</span>
+<span class="cmt">-- sorted descending -- spills into as many rows as needed automatically</span>
+=SORT(FILTER(UNIQUE(Territory), SUMIFS(CallValue, Territory, UNIQUE(Territory)) > 50000), , -1)</span></div>
+            <div class="wk-result">The dynamic array formula combines UNIQUE, FILTER, and SORT into a single cell that automatically spills a full, sorted, filtered list into however many rows it needs — no manual copy-down, no helper columns, and it updates automatically if the underlying data changes, which is a meaningfully more powerful and maintainable pattern than the equivalent classic-Excel approach (a pivot table or several helper columns).</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Asking "how much did I spend on groceries in March, only on Tuesdays" — a naturally multi-condition question, exactly what SUMIFS is built for.</span></div>
+            <div class="ex"><b>Consumer</b><span>A budgeting spreadsheet totaling spend by category AND month simultaneously is a direct SUMIFS use case.</span></div>
+            <div class="ex"><b>Business</b><span>Computing total converted-call revenue for a specific region and quarter, exactly as above, is a routine real KPI-reporting calculation.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A very plausible, common Excel-based reporting task at Axtria/Capgemini before or alongside a Power BI dashboard — multi-condition aggregation is one of the most frequent real spreadsheet needs.</span></div>
+            <div class="ex"><b>Interview</b><span>"What's the advantage of dynamic array formulas over a pivot table for this kind of summary?" — a dynamic array formula updates live and can be embedded directly into other formulas/calculations, while a pivot table needs a manual refresh and is more of a standalone report object — different tools for slightly different needs.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd be ready to write a real SUMIFS formula on the spot, and explain when I'd reach for it versus a pivot table, if asked to demonstrate Excel skills live."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pivotpq">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Pivot Tables &amp; Power Query</h2>
+        <p>The two Excel tools built specifically for reshaping and summarizing real-world messy data.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Pivot Tables: Beyond the Basics <span class="lvl lvl-A">A</span></h4>
+          <p>Beyond drag-and-drop summarization, real pivot table fluency includes: <b>calculated fields</b> (custom aggregations within the pivot), <b>grouping</b> (bucketing dates into months/quarters, or numeric values into ranges), <b>slicers/timelines</b> for interactive filtering, and the <b>GETPIVOTDATA</b> function for referencing specific pivot values in other formulas reliably even if the pivot's layout changes.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Pivot table: Rows = Territory, Columns = Quarter, Values = Sum of CallValue</span>
+<span class="cmt">-- Adding a calculated field for conversion rate within the pivot itself:</span>
+Calculated Field: Conversion Rate = Converted Calls / Total Calls
+
+<span class="cmt">-- Referencing a specific pivot cell reliably even if rows get reordered:</span>
+=GETPIVOTDATA("Sum of CallValue", $A$3, "Territory", "West", "Quarter", "Q4")</span></div>
+            <div class="wk-result">GETPIVOTDATA locates "West, Q4" by its actual labels rather than a fixed cell reference like $D$7 — so if the pivot table is later resorted, filtered, or has rows added/removed, the formula still correctly finds the right value instead of silently pointing at whatever now happens to occupy that cell.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Reorganizing a messy pile of receipts into neat category totals in seconds, rather than manually adding them up one by one — exactly what a pivot table automates.</span></div>
+            <div class="ex"><b>Consumer</b><span>A personal budget spreadsheet's "spend by category by month" summary is a textbook pivot table use case.</span></div>
+            <div class="ex"><b>Business</b><span>A quick "revenue by territory by quarter" cross-tab report, exactly as in the worked example, is one of the single most common real spreadsheet deliverables in analytics/consulting work.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A very plausible, frequent tool at Axtria/Capgemini for quick ad-hoc analysis before or instead of building a full Power BI report — pivot tables remain genuinely useful for fast, one-off summarization.</span></div>
+            <div class="ex"><b>Interview</b><span>"When would you use a pivot table instead of Power BI?" — for quick, one-off, ad-hoc analysis on data that's already in Excel and doesn't need to be a recurring, interactive, shareable dashboard — Power BI is the better investment for anything recurring or multi-stakeholder.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd frame pivot tables and Power BI as complementary tools for different jobs, not competing — exactly the judgment call I'd want to demonstrate."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Power Query: ETL Inside Excel/Power BI <span class="lvl lvl-A">A</span></h4>
+          <p>Power Query is Excel and Power BI's built-in ETL (Extract, Transform, Load) tool — cleaning, reshaping, and combining data from multiple sources through a recorded, repeatable sequence of steps (the "Applied Steps" pane), rather than manual one-off cleanup. Common transformations: unpivoting wide data into long/tidy format, merging/appending queries (joins and unions), removing duplicates, and splitting/combining columns.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Raw monthly sales data arrives wide: one column per month</span>
+<span class="cmt">-- Territory | Jan | Feb | Mar | ... | Dec</span>
+
+<span class="cmt">-- Power Query "Unpivot Columns" (all month columns) transforms it to tidy/long format:</span>
+<span class="cmt">-- Territory | Month | Sales</span>
+<span class="cmt">-- West      | Jan   | 42000</span>
+<span class="cmt">-- West      | Feb   | 44500</span>
+<span class="cmt">-- ...</span>
+
+<span class="cmt">-- Recorded as a repeatable step -- next month's refreshed data automatically</span>
+<span class="cmt">-- goes through the same unpivot transformation with zero manual rework</span></div>
+            <div class="wk-result">Unpivoting the wide monthly-column format into a tidy long format is exactly what's needed to build proper DAX time-intelligence measures or a clean pivot table — and because Power Query records this as a repeatable step, next month's fresh data extract runs through the identical transformation automatically on refresh, with zero manual rework required.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Setting up a recipe once (a repeatable sequence of steps) rather than re-deciding from scratch how to cook the same dish every single time.</span></div>
+            <div class="ex"><b>Consumer</b><span>An app that automatically reformats a bank statement export into a clean budget-friendly table is doing Power-Query-style ETL under the hood.</span></div>
+            <div class="ex"><b>Business</b><span>Combining monthly sales extracts from five different regional systems into one clean, consistent table — a routine, high-value Power Query use case.</span></div>
+            <div class="ex"><b>Enterprise</b><span>Directly relevant to any real Axtria/Capgemini reporting pipeline pulling from multiple raw source extracts before they can feed a Power BI star schema or an Excel KPI report.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why use Power Query instead of manually cleaning data in Excel each time new data arrives?" — manual cleanup has to be redone from scratch (and can introduce inconsistent mistakes) every time new data arrives; Power Query records the transformation once and reapplies it identically and automatically on every refresh.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd point to Power Query specifically as the tool that made a recurring KPI report's data prep repeatable and low-maintenance, rather than a one-off manual cleanup exercise."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="finmodel">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>Financial Modeling &amp; Solver</h2>
+        <p>Building a realistic, auditable financial model, and using Excel's built-in optimization tool for smaller-scale problems.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Building a Realistic 3-Statement-Style Model <span class="lvl lvl-B">B</span></h4>
+          <p>A well-built financial model separates <b>inputs/assumptions</b> (clearly labeled, usually color-coded, all in one place) from <b>calculations</b> (formulas referencing only those inputs, never hardcoded numbers) from <b>outputs</b> (summary/presentation view) — this separation is what makes a model auditable and easy to sensitivity-test, versus a tangled spreadsheet where changing one number requires hunting through dozens of hardcoded formulas.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- INPUTS tab (all assumptions, clearly labeled, editable cells):</span>
+<span class="cmt">-- Growth Rate: 8%   |   Conversion Rate: 12%   |   Avg Deal Size: $4,200</span>
+
+<span class="cmt">-- CALCULATIONS tab (formulas reference INPUTS tab cells, never hardcode 8%/12%/4200):</span>
+=Inputs!GrowthRate * PriorYearRevenue
+=Inputs!ConversionRate * TotalLeads * Inputs!AvgDealSize
+
+<span class="cmt">-- Changing Growth Rate from 8% to 10% on the INPUTS tab instantly</span>
+<span class="cmt">-- flows through every downstream calculation and output automatically</span></div>
+            <div class="wk-result">Because every formula references the INPUTS tab rather than hardcoding 8%, changing one assumption cell instantly and correctly propagates through the entire model — a hardcoded-formula version would require manually finding and editing every place 8% appears, a slow, error-prone process that's a well-known source of real financial modeling mistakes.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>A recipe listing ingredient quantities once at the top (inputs) rather than repeating "2 cups flour" scattered throughout the instructions — change the batch size once, everything scales.</span></div>
+            <div class="ex"><b>Consumer</b><span>A mortgage calculator app where changing the interest rate input instantly recalculates every downstream number (monthly payment, total interest) is the same input/calculation/output separation.</span></div>
+            <div class="ex"><b>Business</b><span>A revenue-projection model a stakeholder wants to stress-test ("what if growth is only 5%, not 8%") needs this clean separation to answer that question in seconds rather than requiring a rebuild.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A genuinely important, commonly-expected financial modeling discipline for Advanced Excel work at Axtria/Capgemini — auditability and easy sensitivity testing are what separate a professional model from an ad-hoc spreadsheet.</span></div>
+            <div class="ex"><b>Interview</b><span>"What's the biggest sign a financial model was NOT built well?" — hardcoded numbers scattered directly inside formulas instead of centralized, clearly-labeled input cells — makes the model fragile, hard to audit, and error-prone to update.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd describe this inputs/calculations/outputs separation as the first thing I'd check — or build in myself — for any financial model I was asked to defend or hand off to someone else."</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Excel Solver — Small-Scale Optimization <span class="lvl lvl-C">C</span></h4>
+          <p>Excel's <b>Solver</b> add-in finds the input values that optimize (maximize/minimize) a target cell subject to constraints — a smaller-scale, spreadsheet-native cousin of the linear programming covered in Stage 10, useful when the problem is modest enough to live entirely in a spreadsheet rather than needing Python/PuLP.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock"><span class="cmt">-- Objective: maximize Total Profit (a formula cell)</span>
+<span class="cmt">-- By changing: Units of Product A, Units of Product B (two input cells)</span>
+<span class="cmt">-- Subject to:  Total Labor Hours <= 400</span>
+<span class="cmt">--              Total Material Cost <= $12,000</span>
+<span class="cmt">--              Units of A, B >= 0</span>
+
+<span class="cmt">-- Solver output (simplex LP method):</span>
+<span class="cmt">-- Units of A: 85   Units of B: 62   Total Profit: $18,940 (optimal)</span></div>
+            <div class="wk-result">Solver finds the exact production mix (85 units of A, 62 of B) that maximizes profit while respecting both the labor and material constraints — structurally the same objective/decision-variables/constraints formulation as Stage 10's linear programming, just solved inside a spreadsheet rather than with scipy/PuLP, which is genuinely appropriate for smaller, self-contained business problems.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Daily-life</b><span>Figuring out the best mix of activities to fit into a limited weekend (limited hours, limited budget) to maximize enjoyment — the same objective/constraints structure, solved informally.</span></div>
+            <div class="ex"><b>Consumer</b><span>A meal-planning spreadsheet optimizing nutritional value within a grocery budget is a small, real Solver-appropriate problem.</span></div>
+            <div class="ex"><b>Business</b><span>A small business deciding the optimal product mix given limited labor and material — exactly the worked example, and a genuinely common real spreadsheet use case.</span></div>
+            <div class="ex"><b>Enterprise</b><span>A smaller-scale, spreadsheet-native alternative worth naming alongside Stage 10's full LP treatment — appropriate when a business problem is modest enough not to need a dedicated Python optimization pipeline.</span></div>
+            <div class="ex"><b>Interview</b><span>"When would you use Excel Solver instead of a Python LP library like PuLP?" — for smaller, more self-contained problems already living in a spreadsheet, especially when the audience needs to interact with and understand the model directly in Excel rather than through code — Python/PuLP scales better for larger, more complex, or production-embedded optimization.</span></div>
+            <div class="ex"><b>Your CV</b><span>"I'd connect this directly to Stage 10's LP material if asked — Solver and PuLP/scipy solve the same kind of problem, just at different scales and in different environments."</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="altmodels">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>Alternative Tools — Why This, Why Not That</h2>
+        <p>Power BI and Excel sit in a real competitive landscape of BI/analytics tools — the comparative reasoning that shows genuine tool judgment.</p>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p><b>Why Power BI over Tableau?</b> Power BI has tighter native integration with the Microsoft ecosystem (Excel, Azure, Teams, SharePoint) and a generally lower licensing cost, with DAX offering powerful, code-like calculation flexibility once learned; Tableau is often considered to have a more polished out-of-the-box visual/interaction design and a gentler initial learning curve for pure visualization work, with a calculation language (LOD expressions) that some practitioners find more intuitive than DAX for certain patterns. The honest comparison is ecosystem fit and team familiarity more than one being objectively superior.</p>
+        <p><b>Why Power BI/Excel over a custom Python/pandas-plus-matplotlib reporting pipeline?</b> Power BI/Excel are dramatically faster to build interactive, stakeholder-facing, self-service dashboards that non-technical users can filter and explore themselves; a Python-based pipeline offers more flexibility and is often better for one-off deep-dive analysis or when the output needs to feed directly into a broader code-based workflow (like Stage 9-10's ML/optimization work) — the two are genuinely complementary, not competing, in most real analytics workflows.</p>
+        <p><b>Why Excel over a full database/BI stack for a smaller, one-off analysis?</b> Excel's near-universal familiarity and zero setup cost make it the right tool when an analysis is small, one-off, and needs to be immediately shareable with non-technical stakeholders; a full database/BI stack is the right investment once data volume, recurrence, or the number of consumers grows large enough to justify the setup and maintenance cost.</p>
+        <p><b>Why Looker/Looker Studio instead of Power BI, in some organizations?</b> Looker's LookML modeling layer centralizes business logic in version-controlled code (appealing to engineering-heavy organizations), and Looker Studio integrates especially well with Google's ecosystem (BigQuery, Google Analytics, Sheets) — a genuinely reasonable choice for a Google-centric data stack, the same way Power BI is the natural choice for a Microsoft-centric one.</p>
+        <p style="margin-bottom:0"><b>Why not skip proper data modeling and just build dashboards on flat, denormalized extracts?</b> It's faster to start but scales poorly — performance degrades, storage bloats, and any change to shared reference data (like a rep's name) requires updating potentially millions of redundant rows instead of one — exactly Stage 12's star schema material, and a real tradeoff worth naming when justifying the extra upfront modeling effort.</p>
+      </div>
+    </section>
+
+    <section id="cmptable">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2>BI Tool Comparison Table</h2>
+      </div>
+      <div class="card cmp-wrap">
+        <table class="cmp-table">
+          <tr><th>Tool</th><th>Best for</th><th>Learning curve</th><th>Ecosystem fit</th><th>Calculation power</th><th>Self-service friendliness</th></tr>
+          <tr><td>Power BI</td><td>Microsoft-centric orgs, deep DAX calculations</td><td>Medium-High (DAX)</td><td>Microsoft (Excel/Azure/Teams)</td><td>Very high (DAX)</td><td>High</td></tr>
+          <tr><td>Excel</td><td>Ad-hoc analysis, financial modeling, small datasets</td><td>Low-Medium</td><td>Universal</td><td>High (formulas + Solver)</td><td>Very high</td></tr>
+          <tr><td>Tableau</td><td>Polished exploratory visualization</td><td>Low-Medium</td><td>Tool-agnostic</td><td>Medium-High (LOD expressions)</td><td>High</td></tr>
+          <tr><td>Looker</td><td>Google-centric orgs, version-controlled modeling</td><td>Medium (LookML)</td><td>Google (BigQuery/GA/Sheets)</td><td>High (LookML)</td><td>Medium-High</td></tr>
+          <tr><td>Python + pandas/matplotlib</td><td>Deep custom analysis, ML-integrated reporting</td><td>High</td><td>Code-based, any stack</td><td>Unlimited (full programming)</td><td>Low (needs a coder)</td></tr>
+        </table>
+      </div>
+    </section>
+
+    <section id="redflags">
+      <div class="sec-head">
+        <div class="num">12</div>
+        <h2>Red Flags — Never Say This</h2>
+      </div>
+      <div class="redflag"><b>"I just use VLOOKUP for everything, it's simpler."</b> Signals unfamiliarity with VLOOKUP's real, well-known fragility (breaks on column insertion, can't look leftward) — a red flag specifically for someone claiming "Advanced Excel."</div>
+      <div class="redflag"><b>"Calculated columns and measures are basically the same thing."</b> A fundamental DAX misunderstanding — conflating row-context-computed, stored values with dynamically filter-context-computed values is one of the most telling signs of surface-level-only Power BI experience.</div>
+      <div class="redflag"><b>"I just use one big flat table, it's easier."</b> Reveals no real data modeling depth — while occasionally defensible for a genuinely tiny dataset, presenting it as a universal best practice rather than a scale-dependent tradeoff misses the whole point of star schema design.</div>
+      <div class="redflag"><b>"A pie chart is fine for any number of categories."</b> A known, well-documented data visualization anti-pattern — pie charts become unreadable well before 10 categories, and presenting this as fine anyway signals a lack of real dashboard-design judgment.</div>
+      <div class="redflag"><b>"Bidirectional relationships should be the default, just to be safe."</b> The opposite of correct practice — bidirectional-by-default is a common beginner mistake that introduces ambiguous filtering bugs, not a safety measure.</div>
+    </section>
+
+    <section id="problems">
+      <div class="sec-head">
+        <div class="num">13</div>
+        <h2>30 Progressive Coding/Formula Problems</h2>
+        <p>From a basic SUMIFS through a full star-schema model with context-transition DAX measures.</p>
+      </div>
+      <div class="filterbar" id="probfilter">
+        <button data-f="all" class="active">All</button>
+        <button data-f="easy">Easy</button>
+        <button data-f="med">Medium</button>
+        <button data-f="hard">Hard</button>
+        <button data-f="expert">Expert</button>
+      </div>
+      <div class="probgrid" id="probgrid"></div>
+    </section>
+
+    <section id="questions">
+      <div class="sec-head">
+        <div class="num">14</div>
+        <h2>80-Question Interview Bank</h2>
+        <p>Split into Power BI &amp; DAX (40 questions, meeting the standing spec minimum) and Advanced Excel (40 questions, meeting the standing spec minimum).</p>
+      </div>
+      <div class="subhead">Power BI, Data Modeling &amp; DAX (40 questions)</div>
+      <div class="card qbank" id="qbankPowerBI"></div>
+      <div class="subhead">Advanced Excel: Formulas, Pivot Tables, Power Query &amp; Financial Modeling (40 questions)</div>
+      <div class="card qbank" id="qbankExcel"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">15</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card bridge-flow">
+        <span class="node">Raw source extracts</span><span class="arrow">→</span>
+        <span class="node">Power Query ETL / Excel cleanup</span><span class="arrow">→</span>
+        <span class="node">Star schema data model</span><span class="arrow">→</span>
+        <span class="node">DAX measures (CALCULATE, SUMX, time intelligence)</span><span class="arrow">→</span>
+        <span class="node">Dashboard design (right visual, RLS)</span><span class="arrow">→</span>
+        <span class="node">"Power BI, Advanced Excel, KPI Reporting" CV claim, fully defensible</span>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">16</div>
+        <h2>Mastery Checklist</h2>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+
+    <div class="card" style="padding:22px 26px; margin-top:60px;">
+      <p style="margin:0; font-size:.9rem; color:var(--ink-soft)">Next: <b>Stage 13 — GenAI + LLM + RAG + Agents</b>. Say "go" whenever you're ready.</p>
+    </div>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  var problems = [
+    ["easy","Write a SUMIFS formula totaling call value for West region, Q4, converted calls only.","=SUMIFS(CallValue, Region, \"West\", Quarter, \"Q4\", Converted, TRUE)"],
+    ["easy","Write an XLOOKUP formula returning a rep's territory, with a 'Not found' fallback.","=XLOOKUP(A2, RepTable!A:A, RepTable!C:C, \"Not found\")"],
+    ["easy","Write an INDEX-MATCH formula equivalent to a VLOOKUP that looks leftward.","=INDEX(RepTable!A:A, MATCH(A2, RepTable!C:C, 0))"],
+    ["easy","Write a basic Power BI measure summing total revenue.","Total Revenue = SUM(FACT_Calls[call_value])"],
+    ["easy","Write a CALCULATE measure returning revenue for the West region only, overriding any active region filter.","West Revenue = CALCULATE([Total Revenue], DIM_Territory[region] = \"West\")"],
+    ["easy","Write a calculated column bucketing rep tenure into New/Mid/Senior categories.","Tenure Bucket = IF(DIM_Rep[rep_tenure] < 1, \"New\", IF(DIM_Rep[rep_tenure] < 3, \"Mid\", \"Senior\"))"],
+    ["easy","Write a SUMX measure correctly computing total line value from quantity and unit price columns.","Total Line Value = SUMX(FACT_Orders, FACT_Orders[quantity] * FACT_Orders[unit_price])"],
+    ["easy","Write a UNIQUE + SORT dynamic array formula listing distinct territories sorted alphabetically.","=SORT(UNIQUE(Territory))"],
+    ["easy","Write a basic pivot table calculated field for conversion rate.","Calculated Field: Conversion Rate = Converted Calls / Total Calls"],
+    ["easy","Set up a simple Excel Solver problem: maximize profit by changing units of two products, subject to a labor-hours constraint.","Objective: Total Profit (max) | Changing: UnitsA, UnitsB | Constraint: LaborHours <= 400"],
+    ["med","Write a DAX measure computing Prior Year revenue using SAMEPERIODLASTYEAR.","Revenue PY = CALCULATE([Total Revenue], SAMEPERIODLASTYEAR(DIM_Date[date]))"],
+    ["med","Write a DAX measure computing YoY % growth using the Prior Year measure and DIVIDE for safe division.","Revenue YoY % = DIVIDE([Total Revenue] - [Revenue PY], [Revenue PY])"],
+    ["med","Write a DAX measure using ALLEXCEPT to compute a rep's total revenue regardless of other active filters except rep.","Rep's Total Revenue = CALCULATE([Total Revenue], ALLEXCEPT(FACT_Calls, FACT_Calls[rep_key]))"],
+    ["med","Write a margin percentage measure using VAR/RETURN for readability and to avoid recomputation.","Margin % = VAR Rev = [Total Revenue] VAR Cost = [Total Cost] RETURN DIVIDE(Rev - Cost, Rev)"],
+    ["med","Design a star schema (fact + dimension tables) for a call-center dataset with reps, territories, and dates.","FACT_Calls(call_id, rep_key, territory_key, date_key, call_value, converted) | DIM_Rep(rep_key, rep_name, tenure) | DIM_Territory(territory_key, name, region) | DIM_Date(date_key, date, quarter)"],
+    ["med","Write a Power Query M step (conceptually) to unpivot wide monthly columns into a tidy long format.","= Table.UnpivotOtherColumns(Source, {\"Territory\"}, \"Month\", \"Sales\")"],
+    ["med","Write a dynamic array formula returning territories with revenue over $50,000, sorted descending.","=SORT(FILTER(UNIQUE(Territory), SUMIFS(CallValue, Territory, UNIQUE(Territory)) > 50000), , -1)"],
+    ["med","Write a GETPIVOTDATA formula reliably referencing a specific pivot cell by label rather than fixed position.","=GETPIVOTDATA(\"Sum of CallValue\", $A$3, \"Territory\", \"West\", \"Quarter\", \"Q4\")"],
+    ["med","Define a Row-Level Security DAX filter restricting a Regional Manager role to their own region.","[region] = USERPRINCIPALNAME()"],
+    ["med","Write a COUNTIFS formula counting converted calls for reps with tenure over 2 years, in Q3.","=COUNTIFS(Converted, TRUE, Tenure, \">2\", Quarter, \"Q3\")"],
+    ["hard","Build a full financial model tab structure separating INPUTS, CALCULATIONS, and OUTPUTS, with all calculation formulas referencing only the INPUTS tab.","INPUTS!GrowthRate=8%, ConversionRate=12%, AvgDealSize=4200 | CALCULATIONS: =Inputs!GrowthRate*PriorYearRevenue"],
+    ["hard","Diagnose and fix a DAX measure that returns an unexpected single value instead of aggregating, caused by missing context transition inside a calculated column.","-- Original (broken): Column = [Total Revenue]  -- no context transition\n-- Fixed: Column = CALCULATE([Total Revenue], ALLEXCEPT(FACT_Calls, FACT_Calls[rep_key]))"],
+    ["hard","Build a complete Power BI dashboard page plan for an executive KPI summary: identify the primary KPI cards, one trend chart, one comparison chart, and one detail table, each with a justification.","KPI cards: Total Revenue, Conversion Rate | Trend: Revenue by Month (line) | Comparison: Revenue by Territory (sorted bar) | Detail table: Rep-level breakdown with drill-through"],
+    ["hard","Write an Excel Solver setup (objective, changing cells, constraints) for maximizing modeled LP revenue across two reps and two territories, matching Stage 10's simplified LP example.","Objective: max SUMPRODUCT(Hours, RevPerHour) | Changing: Hours (4 cells) | Constraints: RepHours<=160 each, TerritoryA coverage=120"],
+    ["hard","Build a DAX time-intelligence measure computing a rolling 3-month average of revenue.","Rolling 3M Avg = AVERAGEX(DATESINPERIOD(DIM_Date[date], LASTDATE(DIM_Date[date]), -3, MONTH), [Total Revenue])"],
+    ["hard","Design a Power Query merge (join) combining a Calls fact extract with a Rep dimension extract, handling unmatched rows explicitly.","= Table.NestedJoin(Calls, \"rep_id\", Reps, \"rep_id\", \"RepInfo\", JoinKind.LeftOuter)"],
+    ["hard","Write a DAX measure computing each rep's rank by revenue within their territory, using RANKX with context transition.","Rep Rank = RANKX(ALLEXCEPT(FACT_Calls, FACT_Calls[territory_key]), [Total Revenue],, DESC, DENSE)"],
+    ["expert","Build a full sensitivity-analysis Excel model using a two-variable data table showing profit across a grid of growth-rate and conversion-rate assumptions.","Data Table: Row input=ConversionRate cell, Column input=GrowthRate cell, Formula cell references TotalProfit output"],
+    ["expert","Design and document a complete star schema with a many-to-many bridge table for a scenario where one call can involve multiple products, explaining why a bridge table is needed.","FACT_Calls(call_id,...) | BRIDGE_CallProducts(call_id, product_key) | DIM_Product(product_key, name) -- bridge resolves the many-to-many between calls and products"],
+    ["expert","Build a full DAX measure suite (Total Revenue, YoY %, Rank, Rolling Average, RLS-filtered Regional Total) for a complete executive dashboard, and document each measure's evaluation context (row vs. filter) explicitly.","-- Suite of 5 measures with inline comments documenting row context vs filter context for each, referencing CALCULATE/SUMX/RANKX/AVERAGEX/ALLEXCEPT patterns from this stage"]
+  ];
+
+  var qasPowerBI = [
+    ["What is a star schema?","A data model that separates fact tables (transactional/measurable events) from dimension tables (descriptive attributes), connected by one-to-many relationships radiating from the fact table like a star."],
+    ["Why is a star schema generally preferred over a single flat table in Power BI?","It dramatically reduces data redundancy, improves compression and query performance (Power BI's VertiPaq engine is optimized for this structure), and makes updates to shared reference data (like a rep's name) take effect in one place instead of every repeated row."],
+    ["What's the difference between a fact table and a dimension table?","A fact table holds transactional/measurable events with foreign keys and numeric measures (e.g. call value); a dimension table holds descriptive attributes with a unique key (e.g. rep name, territory, date)."],
+    ["What does 'cardinality' mean in the context of a table relationship?","Whether the relationship is one-to-many, one-to-one, or many-to-many — describing how many matching rows exist on each side of the relationship."],
+    ["Why should most Power BI relationships be single-direction rather than bidirectional by default?","Bidirectional filtering can create ambiguous or unexpected filter propagation paths, especially with multiple relationships converging on the same fact table — single-direction is the safer, more predictable default, made bidirectional only for a specific, tested reason."],
+    ["What's the difference between a calculated column and a measure?","A calculated column is computed row-by-row and stored physically in the table at refresh time; a measure is computed dynamically at query time based on the current filter context."],
+    ["When would you deliberately choose a calculated column over a measure?","When the value needs to be usable as a slicer, filter, or axis category (e.g. a tenure bucket classification) rather than a dynamically-aggregated dashboard value."],
+    ["What is CALCULATE, and why is it considered DAX's most important function?","A function that evaluates an expression within a modified filter context — it underlies nearly every non-trivial DAX pattern, including time intelligence, category overrides, and % of total calculations."],
+    ["What is filter context?","The set of filters currently applied to a calculation — from slicers, visual axes, row/column headers, or CALCULATE — that determines what subset of data a measure aggregates over."],
+    ["What is row context?","The context that exists when DAX evaluates an expression one row at a time, such as inside a calculated column or inside an iterator function like SUMX."],
+    ["What is context transition?","What happens when CALCULATE is used inside a row context — it converts the current row's values into an equivalent filter context, letting a measure aggregate correctly over exactly that row's implied filter."],
+    ["Why is context transition considered one of the trickiest concepts in DAX?","It's not immediately intuitive that CALCULATE, when placed inside a row context, silently converts that row context into a filter context — a subtlety that causes many real-world DAX debugging headaches until it's genuinely understood."],
+    ["Why would SUM(quantity) * SUM(price) give a wrong answer for total line value when price varies per row?","It multiplies two independently-aggregated totals rather than computing the true per-row product then summing — only coincidentally correct if price is constant across every row."],
+    ["What does SUMX do differently from SUM?","SUMX evaluates a specified expression row-by-row (creating row context) and then sums the results, allowing calculations that can't be expressed as a single column aggregation, like quantity times price."],
+    ["Why use VAR/RETURN in a DAX measure instead of repeating the same sub-expression multiple times?","Improves readability and can improve performance by computing a sub-expression once and reusing the stored variable, rather than re-evaluating the same logic multiple times within the measure."],
+    ["What is SAMEPERIODLASTYEAR used for?","A time-intelligence function used inside CALCULATE to shift the current filter context back exactly one year, commonly used to build Prior Year and YoY comparison measures."],
+    ["Why should you use DIVIDE() instead of the standard division operator in DAX?","DIVIDE() gracefully handles division by zero (returning a specified alternate result, like BLANK or 0) instead of throwing an error, which is especially important in measures evaluated across many different, sometimes-empty filter contexts."],
+    ["What is Row-Level Security (RLS) in Power BI?","A feature that restricts which rows of data a given user can see, based on a DAX filter expression tied to their identity — enforced automatically across every visual in the report."],
+    ["Why is RLS considered a stronger data-access control than manually filtering each visual?","It's enforced once at the data-model level, so it's impossible to accidentally (or deliberately) bypass through any individual visual, filter, or export — a manual per-visual approach could be missed or worked around."],
+    ["What's the difference between Import mode and DirectQuery in Power BI?","Import mode loads and compresses data into Power BI's in-memory engine (fast queries, needs scheduled refresh); DirectQuery sends live queries to the source system on every interaction (always current data, but typically slower and more limited in DAX capability)."],
+    ["When would you choose DirectQuery over Import mode despite the performance tradeoff?","When data needs to be truly real-time/live, or when the data volume is too large to practically import and store in Power BI's in-memory model."],
+    ["What is a snowflake schema, and how does it differ from a star schema?","A snowflake schema further normalizes dimension tables into sub-dimensions (e.g. splitting DIM_Territory into DIM_Territory and DIM_Region) — reduces redundancy further but adds more relationships and generally worse query performance than a pure star schema, which is why star schema is usually preferred in Power BI."],
+    ["Why might you avoid excessive use of calculated columns in a large Power BI model?","Calculated columns are stored and consume memory for every row at refresh time — overusing them, especially with complex formulas, bloats the model's size and can slow down refresh performance."],
+    ["What is the purpose of a Date dimension table, and why build a custom one instead of using each table's native dates directly?","A dedicated Date table enables proper time-intelligence functions (SAMEPERIODLASTYEAR, DATESINPERIOD, etc.), supports consistent fiscal/calendar logic, and lets multiple fact tables share one consistent date filtering mechanism."],
+    ["What does ALLEXCEPT do in a CALCULATE expression?","Removes all filters from a table except the ones specified — commonly used to preserve one specific filter (like a rep) while clearing all others, useful for 'this rep's total across everything else' calculations."],
+    ["What's the difference between ALL and ALLEXCEPT?","ALL removes every filter from the specified table (or columns) entirely; ALLEXCEPT removes all filters except the ones explicitly named — the two are near-opposites in what they preserve."],
+    ["What is RANKX used for?","Computing a rank for each row/category based on a measure's value within a specified context — e.g. ranking reps by revenue within their territory."],
+    ["Why might a pie chart be a poor choice for a dashboard visual with many categories?","Human perception struggles to accurately compare angular/area sizes across many wedges, especially once past roughly 5-6 categories — a sorted bar chart communicates the same comparison far more clearly at any scale."],
+    ["What should you check first if a Power BI visual is showing an unexpectedly filtered or unfiltered result?","The relevant relationships' cardinality and cross-filter direction — an unexpected bidirectional relationship or wrong cardinality setting is a very common cause of surprising filter behavior."],
+    ["What is a KPI card, and what's a common mistake in how it's used?","A visual showing a single summary number (often with a trend/target comparison); a common mistake is showing a bare number with no context (no comparison point, no trend, no target) — reducing its usefulness for a quick, informed glance."],
+    ["Why would you use a bookmark or drill-through in a Power BI report?","Bookmarks capture a specific state of filters/visuals for guided navigation (e.g. a presentation-style walkthrough); drill-through lets a user click a data point to jump to a detail page filtered to that specific context — both improve interactivity beyond static filtering."],
+    ["What is the honest, defensible framing if asked whether you've administered a large-scale Power BI tenant?","Distinguishing clearly between hands-on report/dashboard building experience (genuine) and enterprise governance/administration experience (conceptual understanding only, if not personally done) — exactly the Level A/B/C framing from this stage's opening."],
+    ["Why might a well-designed Power BI model separate 'staging' queries from the final model tables?","Staging queries hold intermediate transformation steps (often disabled from loading into the model) that keep the final, loaded tables clean and the transformation logic auditable, without cluttering the actual data model with intermediate artifacts."],
+    ["What is a measure table, and why create one?","A dedicated, empty table used purely to organize and hold DAX measures (rather than scattering them across various fact/dimension tables) — a best-practice organizational convention for larger models with many measures."],
+    ["Why does Power BI's compression (VertiPaq) work especially well on columns with low cardinality?","It uses column-oriented storage and dictionary encoding, so a column with few distinct repeated values (like a region name) compresses far more efficiently than one with many unique values (like a transaction ID) — a reason dimension tables with descriptive, often-repeated attributes model so efficiently."],
+    ["What's a practical reason to avoid using CALCULATE with too many nested filter modifications in a single measure?","Readability and maintainability — deeply nested CALCULATE logic becomes hard to debug and modify later; breaking complex logic into named variables (VAR) or separate intermediate measures is usually clearer."],
+    ["How would you explain the tradeoff between DAX's power and its learning curve to someone starting out?","DAX's steep initial learning curve (especially context transition) pays off with genuinely powerful, flexible calculation capability once understood — comparable to learning a real programming language's core concepts, not just memorizing formula syntax."],
+    ["What's a defensible answer to 'walk me through how you'd build a YoY revenue dashboard from scratch'?","Star schema design first (FACT_Calls + DIM_Date/Rep/Territory), then core measures (Total Revenue, Revenue PY via SAMEPERIODLASTYEAR, YoY % via DIVIDE), then visual selection (line chart for trend, KPI card for headline number), then RLS if multiple stakeholders need restricted views."],
+    ["Why is understanding DAX's evaluation context model valuable even for someone who mostly builds simpler dashboards?","Even simple-looking dashboard requirements ('show this rep's rank within their territory,' 'compare to last year') require exactly this context-model understanding to build correctly — it's not an advanced-only concern, it's foundational to correct DAX at any complexity level."],
+    ["What's the single most important habit for building a maintainable Power BI model?","Getting the star schema data model right first — clean fact/dimension separation, correct relationship cardinality/direction — since every DAX measure and visual built afterward inherits whatever structure (or structural problems) the underlying model has."]
+  ];
+
+  var qasExcel = [
+    ["What's the main weakness of VLOOKUP compared to INDEX-MATCH or XLOOKUP?","VLOOKUP only looks rightward from its lookup column and breaks (returns wrong values) if columns are inserted or reordered, since it references the target column by a fixed offset count."],
+    ["Why does INDEX-MATCH survive column reordering when VLOOKUP doesn't?","INDEX-MATCH separates the lookup logic (MATCH finds the row position) from the return-value logic (INDEX pulls from a specifically-referenced column), rather than counting a fixed number of columns over from the lookup column."],
+    ["What advantages does XLOOKUP have over INDEX-MATCH?","Simpler, more readable single-function syntax, built-in 'not found' error handling without needing IFERROR wrapping, and the ability to return multiple columns/an entire row at once."],
+    ["What does SUMIFS do that SUMIF cannot?","SUMIFS aggregates based on multiple simultaneous conditions; SUMIF only supports a single condition."],
+    ["Write the general syntax pattern for a SUMIFS formula with two conditions.","=SUMIFS(sum_range, criteria_range1, criteria1, criteria_range2, criteria2)"],
+    ["What is a dynamic array formula, and how does it differ from a classic Excel formula?","A formula that can return multiple values that automatically 'spill' into adjacent cells from a single formula entry, rather than needing to be manually copied down or across — e.g. FILTER, UNIQUE, SORT."],
+    ["What does the UNIQUE function do?","Returns a list of distinct values from a range, automatically spilling as a dynamic array without needing manual deduplication steps."],
+    ["What does the FILTER function do, and how might you combine it with SORT?","FILTER returns only the rows of a range meeting a specified condition; combined with SORT, you can return a filtered AND sorted dynamic array from data that meets a criterion, ordered as needed, in one formula."],
+    ["What's the difference between a calculated field in a pivot table and a helper column in the source data?","A calculated field computes within the pivot table itself, using the pivot's already-aggregated values; a helper column computes at the raw row level before aggregation — they can produce different results for non-additive calculations like ratios or percentages."],
+    ["Why might a pivot table's calculated field give a misleading result for a ratio like conversion rate?","If built naively as SUM(numerator)/SUM(denominator) at the wrong aggregation level, or if the pivot table sums a pre-calculated per-row ratio instead of properly re-deriving it from the aggregated totals, the result can be mathematically wrong — ratios generally shouldn't be averaged or summed directly across rows."],
+    ["What is GETPIVOTDATA used for?","Reliably referencing a specific value in a pivot table by its row/column labels rather than a fixed cell reference, so the formula still points to the correct value even if the pivot table's layout, sort order, or filters change."],
+    ["What is Power Query, in one sentence?","Excel and Power BI's built-in ETL (Extract, Transform, Load) tool for cleaning, reshaping, and combining data through a recorded, repeatable sequence of transformation steps."],
+    ["Why is Power Query's 'Applied Steps' pane valuable beyond just performing a transformation once?","It records the transformation sequence as a repeatable recipe — when new/refreshed data arrives, the exact same sequence of steps reapplies automatically, without manual rework."],
+    ["What does 'unpivoting' data mean, and when would you need it?","Converting wide-format data (one column per category, like one column per month) into tidy/long format (one row per category-value combination) — needed to properly analyze or model data in tools (like Power BI's DAX time intelligence) that expect a tidy structure."],
+    ["When merging two Power Query tables, what's the difference between a Left Outer join and an Inner join, and why does the choice matter for row counts?","Left Outer keeps every row from the primary table and attaches matches from the secondary table (nulls where none exist), so row count never shrinks; Inner keeps only rows with a match in both tables, so row count can drop — picking the wrong one silently loses or inflates rows without any error being raised."],
+    ["What's the difference between merging and appending queries in Power Query?","Merging combines queries side-by-side based on a matching key (like a SQL join); appending stacks queries on top of each other (like a SQL union), combining rows from tables with the same structure."],
+    ["Why would you use Power Query instead of manually cleaning a spreadsheet each time new data arrives?","Manual cleanup must be redone from scratch every time (and risks inconsistent mistakes); Power Query's recorded steps reapply identically and automatically on every refresh, making the process both faster and more reliable over time."],
+    ["What's a well-designed financial model's typical tab/section structure?","Separate INPUTS/assumptions (clearly labeled, editable), CALCULATIONS (formulas referencing only the inputs, never hardcoded numbers), and OUTPUTS (summary/presentation view) — kept distinct for auditability and easy sensitivity testing."],
+    ["Why is hardcoding a number directly inside a formula (rather than referencing a labeled input cell) considered a red flag in financial modeling?","It makes the model fragile and hard to audit — finding and updating every place that hardcoded number appears is slow and error-prone, versus updating one clearly-labeled input cell that flows through automatically."],
+    ["What is a two-variable data table used for in Excel?","Sensitivity analysis — showing how an output formula's value changes across a grid of two different varying input assumptions simultaneously (e.g. profit across a grid of growth-rate and conversion-rate scenarios)."],
+    ["What does Excel Solver do?","Finds the input cell values that optimize (maximize or minimize) a specified target/objective cell, subject to a set of constraints — a spreadsheet-native linear/nonlinear optimization tool."],
+    ["How does Excel Solver relate to the linear programming material from Stage 10?","It's structurally the same problem (objective function, decision variables/changing cells, constraints) solved inside a spreadsheet using Solver's built-in algorithms, rather than with a Python library like scipy/PuLP — appropriate for smaller, self-contained problems."],
+    ["When would you choose Excel Solver over a Python-based LP solver?","When the problem is smaller/self-contained, already lives in a spreadsheet, and the audience needs to directly interact with and understand the model in Excel — Python scales better for larger, more complex, or production-embedded optimization needs."],
+    ["What's the difference between absolute and relative cell references, and why does it matter for formula reliability?","Relative references (A1) shift automatically when a formula is copied to a new cell; absolute references ($A$1) stay fixed — using the wrong type is a very common source of formulas silently referencing the wrong cell after being copied or dragged."],
+    ["What does IFERROR do, and why is it commonly paired with lookup formulas?","Returns a specified fallback value if the wrapped formula would otherwise produce an error — commonly paired with VLOOKUP/INDEX-MATCH so a 'not found' lookup shows a clean message instead of a raw #N/A error."],
+    ["What is conditional formatting, and give one genuinely useful business application.","Automatically formatting cells based on their value or a rule (e.g. highlighting cells red if below target) — useful for quickly flagging underperforming territories or reps in a KPI report without needing a separate chart."],
+    ["Why might array formulas (like SUMPRODUCT) be useful before dynamic arrays were introduced in modern Excel?","SUMPRODUCT can perform element-wise multiplication and summation across arrays/ranges in a single formula (similar to a manual SUMX-style calculation), which was a common workaround for multi-condition, per-row calculations in older Excel versions."],
+    ["What is data validation in Excel, and why is it useful in a shared, stakeholder-facing spreadsheet?","Restricts what values can be entered into a cell (e.g. a dropdown list, a numeric range) — reduces user input errors in shared models, especially input cells that feed into downstream calculations."],
+    ["What is the purpose of named ranges in Excel?","Giving a cell or range a readable name (e.g. 'GrowthRate' instead of 'Inputs!$B$4') to make formulas more readable and less error-prone to write and audit, especially in larger models."],
+    ["What's a common mistake when building a spreadsheet meant to be handed off to someone else?","Leaving hardcoded numbers scattered in formulas, unclear or undocumented assumptions, and no separation between inputs and calculations — making the model hard for anyone else (including your future self) to understand or safely modify."],
+    ["Why might you use Power Query rather than formulas to combine data from five different regional Excel files?","Power Query can programmatically pull from multiple files/folders and combine them via a repeatable transformation, refreshing automatically as new files are added — far more scalable and less error-prone than manually copy-pasting or writing cross-file formulas for each file."],
+    ["What is a common Excel performance issue in very large workbooks, and how would you address it?","Excessive volatile functions (like OFFSET, INDIRECT, NOW) or excessive full-column references in formulas can dramatically slow recalculation — replacing them with more targeted ranges and non-volatile alternatives (like INDEX instead of OFFSET) improves performance."],
+    ["What's the difference between INDEX-MATCH's single-match behavior and using SUMIFS/COUNTIFS for multi-row aggregation?","INDEX-MATCH returns a single matching value (typically the first match found); SUMIFS/COUNTIFS aggregate across ALL rows meeting the specified conditions — different tools for 'find one specific record' versus 'summarize many matching records.'"],
+    ["Why would a well-built Excel model use a 'Scenario Manager' or a dedicated scenario-toggle input cell?","To let a stakeholder switch between predefined sets of assumptions (e.g. 'Conservative,' 'Base Case,' 'Aggressive') with a single input change, rather than manually editing multiple individual assumption cells each time a different scenario needs to be reviewed."],
+    ["What's the honest, defensible answer if asked to build a live financial model on the spot in an interview?","Structuring it clearly with separated inputs/calculations/outputs from the start, using named ranges and clean formulas (XLOOKUP/SUMIFS as appropriate), and narrating the structure choices out loud — demonstrating the underlying discipline, not just producing a correct final number."],
+    ["Why is PowerPoint listed alongside Power BI and Excel as a CV skill, and how do the three typically connect in real work?","PowerPoint is usually where Power BI/Excel analysis gets synthesized into a stakeholder-facing narrative (key findings, recommendations) — the three tools commonly form a pipeline: analyze in Excel/Power BI, then communicate the story in PowerPoint."],
+    ["What's a genuine limitation of Excel worth naming proactively if asked to compare it to Power BI for a recurring reporting need?","Excel doesn't scale well to large datasets or many concurrent users, lacks built-in row-level security, and requires manual refresh/redistribution — Power BI's shared, governed, interactive model is the better fit once a report becomes recurring and multi-stakeholder."],
+    ["How would you explain the value of 'Advanced Excel' skills to someone who assumes Excel is a basic, easy tool?","Distinguish between everyday spreadsheet use (basic formulas, manual formatting) and the deeper skill set this stage covers — robust lookups, multi-condition aggregation, repeatable ETL via Power Query, and disciplined financial-model structure — genuine technical depth that a casual user wouldn't have."],
+    ["What would a complete answer to 'walk me through a KPI report you built' include?","The data source and cleanup approach (Power Query/Excel), the modeling choice (star schema or flat, and why), the key formulas/measures (SUMIFS/DAX), the visual/design choices made for the audience, and the business decision or insight the report actually supported."],
+    ["What's the single most important discipline distinguishing genuinely 'Advanced Excel' skills from basic spreadsheet use?","Building formulas and models that are robust, auditable, and maintainable — not hardcoded, not fragile to structural changes, and clearly separating inputs from calculations — rather than just knowing more individual formula names."]
+  ];
+
+  function esc(s){ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+  var probGrid = document.getElementById('probgrid');
+  problems.forEach(function(p, i){
+    var diff = p[0], q = p[1], code = p[2];
+    var det = document.createElement('details');
+    det.className = 'prob';
+    det.setAttribute('data-diff', diff);
+    det.innerHTML = '<summary><span class="pnum">P' + (i+1) + '</span><span class="pdiff ' + diff + '">' + diff + '</span><span>' + esc(q) + '</span></summary>' +
+      '<div class="prob-body"><div class="codeblock">' + code.replace(/\n/g,'<br>') + '</div></div>';
+    probGrid.appendChild(det);
+  });
+  document.getElementById('probfilter').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if (!btn) return;
+    document.querySelectorAll('#probfilter button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var f = btn.getAttribute('data-f');
+    document.querySelectorAll('#probgrid details.prob').forEach(function(d){
+      d.style.display = (f === 'all' || d.getAttribute('data-diff') === f) ? '' : 'none';
+    });
+  });
+
+  function renderQA(containerId, bank){
+    var box = document.getElementById(containerId);
+    bank.forEach(function(qa){
+      var det = document.createElement('details');
+      det.className = 'qa';
+      det.innerHTML = '<summary>' + esc(qa[0]) + '</summary><div class="qa-a"><b>A:</b> ' + esc(qa[1]) + '</div>';
+      box.appendChild(det);
+    });
+  }
+  renderQA('qbankPowerBI', qasPowerBI);
+  renderQA('qbankExcel', qasExcel);
+
+  var masteryItems = [
+    "Explain star schema vs. flat table, with a real redundancy example",
+    "Explain relationship cardinality and why single-direction is the safer default",
+    "Explain calculated columns vs. measures with a concrete broken-vs-fixed example",
+    "Explain CALCULATE and build a real YoY growth measure",
+    "Explain row context, filter context, and context transition correctly (not just by name)",
+    "Explain SUMX and why naive SUM*SUM is often wrong",
+    "Explain chart-choice judgment (why not a 14-slice pie chart)",
+    "Explain Row-Level Security and Import vs. DirectQuery",
+    "Write a real XLOOKUP/INDEX-MATCH formula and explain VLOOKUP's fragility",
+    "Write a real multi-condition SUMIFS/COUNTIFS formula",
+    "Explain Power Query's role and why recorded steps beat manual cleanup",
+    "Explain a well-structured financial model's inputs/calculations/outputs separation",
+    "Explain Excel Solver and connect it to Stage 10's LP material",
+    "Give the full 'why this, why not that' comparison across Power BI/Excel/Tableau/Looker/Python",
+    "Answer all 5 Red Flags correctly without hesitation",
+    "Give the honest Level A/B/C answer for Power BI/Excel on the CV without overclaiming platform admin experience"
+  ];
+  var mBox = document.getElementById('masteryBox');
+  var STORE_KEY = 'masterbook-s12-mastery';
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(STORE_KEY) || '{}'); } catch(e) { saved = {}; }
+  masteryItems.forEach(function(txt, i){
+    var row = document.createElement('div');
+    row.className = 'cl-item' + (saved[i] ? ' checked' : '');
+    row.innerHTML = '<div class="box' + (saved[i] ? ' done' : '') + '" data-i="' + i + '"></div><span class="txt">' + esc(txt) + '</span>';
+    mBox.appendChild(row);
+  });
+  mBox.addEventListener('click', function(e){
+    var box = e.target.closest('.box');
+    if (!box) return;
+    var i = box.getAttribute('data-i');
+    var isDone = box.classList.toggle('done');
+    box.closest('.cl-item').classList.toggle('checked', isDone);
+    saved[i] = isDone;
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(saved)); } catch(e) {}
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    backtop.classList.toggle('show', window.scrollY > 500);
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 12 loaded — problems:', problems.length, 'PowerBI Qs:', qasPowerBI.length, 'Excel Qs:', qasExcel.length);
+} catch (err) {
+  console.error('Stage 12 script error:', err);
+}
+</script>

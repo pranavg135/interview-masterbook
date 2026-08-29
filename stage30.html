@@ -1,0 +1,641 @@
+<meta name="robots" content="noindex, nofollow">
+<title>Hero Electronics + Projects Deep Dive</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+
+  .case-sec{ margin-top:20px; }
+  .case-sec h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .case-sec h5::before{ content:""; width:14px; height:2px; background:var(--accent); display:inline-block; }
+  .case-sec p, .case-sec li{ font-size:.9rem; color:var(--ink-soft); margin:0 0 6px; }
+  .qa-pair{ margin-bottom:10px; padding:10px 14px; background:var(--paper-sunken); border-radius:8px; }
+  .qa-pair .q{ font-size:.88rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .qa-pair .a{ font-size:.87rem; color:var(--ink-soft); }
+  .case-sec ul{ margin:0; padding-left:20px; }
+  .synth-box{ margin-top:20px; padding:15px 18px; background:var(--accent-soft); border-radius:8px; border-left:4px solid var(--accent); }
+  .synth-box h5{ color:var(--accent-ink); }
+  .synth-box p{ color:var(--ink); font-weight:500; }
+
+  .cv-role-meta{ font-size:.85rem; color:var(--ink-faint); margin:2px 0 10px; }
+  .cv-role-meta .co{ color:var(--ink); font-weight:600; }
+
+  .draftflag{ display:inline-flex; align-items:center; gap:5px; font-size:.68rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; background:var(--lvlB-soft); color:var(--lvlB); text-transform:uppercase; letter-spacing:.03em; }
+  .okflag{ display:inline-flex; align-items:center; gap:5px; font-size:.68rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; background:var(--data-soft); color:var(--data); text-transform:uppercase; letter-spacing:.03em; }
+
+  .ladder{ display:flex; flex-direction:column; gap:12px; margin-top:6px; }
+  .ladder-tier{ padding:15px 18px; border-radius:10px; background:var(--paper-sunken); border-left:4px solid var(--data); }
+  .ladder-tier .tier-label{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--data); margin-bottom:8px; display:block; }
+  .ladder-tier p{ margin:0; font-size:.91rem; color:var(--ink); }
+
+  .verb-row{ display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+  .verb-chip{ font-size:.8rem; padding:5px 12px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); }
+  .verb-chip .src{ font-size:.68rem; color:var(--ink-faint); margin-left:5px; }
+  .verb-chip.chosen{ background:var(--accent-soft); color:var(--accent-ink); border-color:var(--accent); font-weight:700; }
+
+  .star-card{ border:1px solid var(--line); border-radius:12px; padding:20px 22px; background:var(--paper-raised); box-shadow:var(--shadow); margin-bottom:16px; }
+  .star-card h4{ font-size:1.02rem; margin-bottom:12px; }
+  .star-row{ margin-bottom:9px; font-size:.9rem; color:var(--ink-soft); }
+  .star-row b{ color:var(--accent-ink); font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; margin-right:8px; display:inline-block; min-width:70px; }
+
+  .claimcard{ border:1px solid var(--line); border-radius:14px; background:var(--paper-raised); box-shadow:var(--shadow); padding:26px 28px; margin-bottom:20px; }
+  .claimcard .chead{ display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:10px; }
+  .claimcard .chead h3{ font-size:1.22rem; flex:1; min-width:200px; }
+  .bulletquote{ margin:14px 0; padding:14px 18px; background:var(--paper-sunken); border-left:4px solid var(--ink-faint); border-radius:0 8px 8px 0; font-style:italic; font-size:.92rem; color:var(--ink-soft); }
+  .scopebox{ margin:14px 0; padding:14px 18px; background:var(--data-soft); border-radius:8px; border-left:4px solid var(--data); }
+  .scopebox h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--data); margin-bottom:6px; }
+  .scopebox p{ margin:0; color:var(--ink); font-size:.9rem; }
+
+  .partlabel{ display:inline-flex; align-items:center; gap:8px; font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; font-weight:700; color:var(--accent-ink); background:var(--accent-soft); padding:6px 14px; border-radius:100px; margin-bottom:14px; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <a class="backlink" href="stage14.html">← Stage 14 · Product Management</a>
+    <a class="backlink" href="stage15.html">← Stage 15 · Structured Problem Solving &amp; Frameworks</a>
+    <a class="backlink" href="stage16.html">← Stage 16 · Profitability Case Bank</a>
+    <a class="backlink" href="stage17.html">← Stage 17 · Market Entry Case Bank</a>
+    <a class="backlink" href="stage18.html">← Stage 18 · Growth Case Bank</a>
+    <a class="backlink" href="stage19.html">← Stage 19 · Pricing Case Bank</a>
+    <a class="backlink" href="stage20.html">← Stage 20 · Market Sizing Case Bank</a>
+    <a class="backlink" href="stage21.html">← Stage 21 · Operations Case Bank</a>
+    <a class="backlink" href="stage22.html">← Stage 22 · Product Case Bank</a>
+    <a class="backlink" href="stage23.html">← Stage 23 · Analytics Case Bank</a>
+    <a class="backlink" href="stage24.html">← Stage 24 · AI/GenAI Case Bank</a>
+    <a class="backlink" href="stage25.html">← Stage 25 · FinTech Case Bank</a>
+    <a class="backlink" href="stage26.html">← Stage 26 · Pharma Case Bank</a>
+    <a class="backlink" href="stage27.html">← Stage 27 · Axtria Deep Dive</a>
+    <a class="backlink" href="stage28.html">← Stage 28 · NanoCloud Deep Dive</a>
+    <a class="backlink" href="stage29.html">← Stage 29 · Capgemini Deep Dive</a>
+    <div class="stage-pill">● Stage 30 of 33</div>
+    <div class="navgroup-label">This page — Part A</div>
+    <ul>
+      <li><a href="#overview">Role Overview — Hero Electronics</a></li>
+      <li><a href="#claim-chatbot">Chatbot, 20% Cost Reduction</a></li>
+      <li><a href="#claim-interviews">100+ User Interviews</a></li>
+      <li><a href="#claim-flows">Structured Flows, 80% Coverage</a></li>
+      <li><a href="#claim-theme">Thematic Issue Framework</a></li>
+      <li><a href="#star-hero">STAR Story Bank — Hero</a></li>
+    </ul>
+    <div class="navgroup-label">This page — Part B</div>
+    <ul>
+      <li><a href="#proj-overview">Projects Overview</a></li>
+      <li><a href="#proj-caretail">CareTail — GTM Strategy</a></li>
+      <li><a href="#proj-mmt">MakeMyTrip Case Comp</a></li>
+      <li><a href="#proj-fdm">FDM Digital — Wording Fix</a></li>
+      <li><a href="#proj-mile">MILE — Startup Events</a></li>
+      <li><a href="#star-proj">STAR Story Bank — Projects</a></li>
+    </ul>
+    <ul>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+      <li><a href="#bridge">How This Connects</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 31 (Portfolio — 14 projects, incl. 6 deployed industry ML/AI flagships) is live, closing Part XII. Stage 32 (Interview Question Bank) is next.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part XI · Stage 30 of 33</div>
+      <h1>Hero Electronics + Projects Deep Dive</h1>
+      <p class="lede">The fourth and final Work Experience Deep Dive, split into two parts. Part A covers your two-month Product Strategy internship at Hero Electronics — the CV's single highest-odds claim (a Level A, "Very High" odds chatbot product story) sitting inside the shortest tenure of any role on the CV, which makes honest ownership-scoping the central task. Part B covers the four Projects &amp; Case Competitions entries — extracurricular and academic work that rounds out the CV outside of formal employment, including the one open CV-wording flag left in the whole document (FDM Digital, Risk Matrix #4).</p>
+      <div class="statusbar">
+        <div class="statuschip">💼 <b>4</b> Hero Electronics CV bullets, fully deep-dived</div>
+        <div class="statuschip">🧩 <b>4</b> Projects &amp; Case Competitions entries, fully deep-dived</div>
+        <div class="statuschip">🎯 <b>1</b> Level-A claim — "Very High" odds, highest on the entire CV</div>
+        <div class="statuschip">⚑ <b>1</b> open wording flag remaining — FDM Digital (Risk Matrix #4)</div>
+      </div>
+    </header>
+
+    <div class="partlabel">Part A · Hero Electronics — Product Strategy Intern</div>
+
+    <section id="overview">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Role Overview</h2>
+        <p>The factual anchor everything below builds on — pulled directly from your Consolidated CV (Stage 1) with nothing added or reworded.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <h3 style="font-size:1.1rem">Product Strategy Intern — Summer Internship</h3>
+        <p class="cv-role-meta"><span class="co">Hero Electronics</span> · Gurgaon · Apr 2024 – May 2024 (2 mo)</p>
+        <p style="margin:10px 0 16px;font-size:.93rem;color:var(--ink-soft)">Hero Electronics is a consumer electronics/appliances company; this internship sat inside their customer-service organization, scoping a chatbot product to reduce service costs and improve query resolution. It's your shortest role by tenure (two months) but carries the single highest interview-odds claim on the entire CV, per Stage 1's Interview Priority Matrix (rank #05 overall, "Very High" odds) — which makes this the role where honest scoping matters most: a two-month internship claiming "owned end-to-end" needs a precise account of what you personally did versus what the technical team handled, or it becomes the first thing a sharp interviewer probes.</p>
+        <div class="case-sec" style="margin-top:4px">
+          <h5>The Four CV Bullets, Classified</h5>
+          <ul style="margin-top:6px">
+            <li><span class="lvl lvl-A" style="margin-right:8px">A</span> Owned end-to-end design and limited rollout of a chatbot product during a two-month internship, partnering with the technical team on build and validation; full-scale post-internship implementation achieved a confirmed 20% cost reduction (~₹5L/month). <a href="#claim-chatbot" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-B" style="margin-right:8px">B</span> Conducted 100+ one-on-one user interviews over the engagement to surface recurring issues and inform service-resolution/feature-prioritization decisions. <a href="#claim-interviews" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-B" style="margin-right:8px">B</span> Designed structured interaction flows, prioritized from interview findings, covering 80% of customer queries to streamline service journeys. <a href="#claim-flows" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-C" style="margin-right:8px">C</span> Structured customer feedback into a thematic issue framework, enabling prioritization of the highest-impact investments. <a href="#claim-theme" style="font-size:.82rem">↓ deep dive</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-chatbot">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>Claim 1 — Chatbot Product, 20% Cost Reduction</h2>
+        <p>Priority Matrix rank #05, Level A, "Very High" interview odds, "High" risk — the highest risk rating of any claim in Part XI, precisely because "owned end-to-end" during a two-month internship is the exact shape of claim a sharp interviewer probes hardest.</p>
+      </div>
+
+      <div class="claimcard">
+        <div class="bulletquote">"Owned end-to-end design and limited rollout of a chatbot product during a two-month internship, partnering with the technical team on build and validation; full-scale implementation post-internship achieved a confirmed 20% cost reduction (~₹5L/month)."</div>
+
+        <div class="scopebox">
+          <h5>Honest Scope — the Single Most Important Paragraph in Part XI</h5>
+          <p>Two clauses in this bullet do real work and must stay in the spoken answer, not just the CV text: "partnering with the technical team on build and validation" (you were not coding the bot yourself), and "full-scale implementation <i>post-internship</i>" (the confirmed 20% cost reduction happened after you'd left, once the limited-rollout version you designed was taken to full scale by whoever owned it next). The honest claim is: you owned the <i>product design</i> — the conversation flows, the query-coverage scoping, the prioritization of what the bot should handle first — for a limited rollout within a two-month window, and that design work is what the later full-scale version was built on. Claiming you personally delivered the 20% figure would overstate a two-month internship; claiming you designed the product that made it possible is both true and still a strong claim. <span class="okflag">This distinction is confirmed by the CV's own wording — not a gap to fix, a distinction to keep saying out loud</span></p>
+        </div>
+
+        <div class="case-sec">
+          <h5>The Mechanism — What "Owning Product Design" Meant in Two Months</h5>
+          <p>The most defensible honest sequence, consistent with the other three CV bullets on this role: (1) research — 100+ one-on-one user interviews (Claim 2) surfaced the recurring service issues customers actually hit; (2) scoping — those findings got prioritized into which query types the chatbot should handle first, rather than attempting full coverage from day one; (3) flow design — structured interaction flows (Claim 3) were designed to cover 80% of customer queries, the specific conversational paths and decision points the bot would need; (4) partnership with the technical team — you handed off/co-validated the flow design against what the engineering team could actually build and test within the internship window, rather than building the bot yourself. <span class="draftflag">Draft — confirm whether the chatbot was rule-based (a decision-tree/scripted flow engine) or used any LLM/GenAI component; Stage 13 covers both architectures and this deep dive should state which one honestly, since "GenAI/chatbot product design" is how Stage 1's Claim Matrix labels this topic</span></p>
+        </div>
+
+        <div class="case-sec">
+          <h5>Why the Post-Internship Timing Matters, Not Just the Number</h5>
+          <p>"Full-scale implementation post-internship achieved a confirmed 20% cost reduction" is careful CV wording — it attributes the 20% figure to the full-scale rollout, not to your two-month internship output directly. That's the honest and defensible framing: your work established the design and validated it at limited scale; the confirmed business outcome came from a later, larger rollout built on that design. Conflating the two in an interview (implying you personally delivered ~₹5L/month in savings during a two-month internship) is the single easiest way to lose credibility on this claim — and unnecessary, since "I designed the product that the company later scaled to a confirmed 20% cost reduction" is already a strong, honest story.</p>
+        </div>
+
+        <div class="case-sec">
+          <h5>Answer Ladder — "Walk me through the chatbot project"</h5>
+          <div class="ladder">
+            <div class="ladder-tier">
+              <span class="tier-label">30 seconds</span>
+              <p>"During a two-month Product Strategy internship at Hero Electronics, I owned the design of a customer-service chatbot — running 100+ user interviews to find the highest-impact issues, then designing conversation flows covering 80% of customer queries, partnering with the technical team on build and validation. The full-scale version, rolled out after my internship ended, achieved a confirmed 20% cost reduction — about ₹5 lakh a month."</p>
+            </div>
+            <div class="ladder-tier">
+              <span class="tier-label">2 minutes</span>
+              <p>Adds: the research-to-design pipeline (why 100+ interviews came first, how findings turned into flow-coverage priorities rather than trying to cover every query type at once); the honest division of labor with the technical team (you owned the product/conversation design, they owned build and technical validation); and the explicit post-internship framing for the 20% figure — naming that clearly, rather than letting it sound like a two-month-internship outcome, is itself part of a strong answer because it shows precision under pressure.</p>
+            </div>
+            <div class="ladder-tier">
+              <span class="tier-label">5 minutes</span>
+              <p>Full walkthrough: (1) context — Hero Electronics' customer-service organization wanted to reduce cost-per-resolution and improve query-handling speed; (2) research — 100+ one-on-one interviews surfaced recurring issues, the same findings that seeded Claim 4's thematic issue framework; (3) scoping — rather than a full-coverage bot, findings were prioritized so the highest-frequency 80% of query types got flow-designed first, a deliberate scope decision under a two-month timeline; (4) flow design — structured interaction flows for each prioritized query type <span class="draftflag">Draft — confirm rule-based vs. LLM-based, and what specifically defined the 80% coverage boundary</span>; (5) partnership with engineering — flows validated against what could actually be built and tested for a limited rollout within the internship window; (6) handoff and scale — the limited rollout you designed was taken to full scale after the internship, and that full-scale version is what achieved the confirmed 20% cost reduction; (7) what this demonstrates — product-design ownership and research-driven prioritization under a hard time constraint, with an honest, precise account of where your personal contribution ends and the team's/successor's work begins.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: You were there two months — how much of the 20% cost reduction is actually yours?</div><div class="a">A: Precisely: the 20% figure is from the full-scale rollout after my internship ended, built on the product design and limited-rollout validation I owned during my two months. I designed the thing that made that outcome possible; I wasn't there to see the full-scale number land, and I'm careful not to claim otherwise.</div></div>
+          <div class="qa-pair"><div class="q">Q: Was this a rule-based chatbot or did it use any LLM/GenAI component?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — until confirmed, the honest answer is: "I'd want to confirm the exact architecture before describing it technically; the design work I owned was the conversation flows and query-coverage scoping, which applies whichever engine the technical team implemented it on."</div></div>
+          <div class="qa-pair"><div class="q">Q: What exactly did "partnering with the technical team on build and validation" mean day to day?</div><div class="a">A: <span class="draftflag">Needs confirmation — real detail on the collaboration cadence and what validation looked like</span> — draft shape: reviewing flow designs together, walking through edge cases the engineering team flagged, and checking that the built version matched the intended conversation logic before limited rollout.</div></div>
+        </div>
+
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>The highest-odds claim on the entire CV, and correctly so — but also the one where imprecise phrasing does the most damage. The winning move in any interview is repeating, not hiding, the CV's own careful distinction: design ownership during the internship, confirmed outcome after it, built by a team you partnered with rather than worked alone.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-interviews">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>Claim 2 — 100+ One-on-One User Interviews</h2>
+        <p>Level B, "Medium" interview odds, "Low" risk. The research foundation the chatbot design (Claim 1) and thematic framework (Claim 4) both sit on top of.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Conducted 100+ one-on-one user interviews over a two-month engagement to surface recurring issues and inform service-resolution / feature-prioritization decisions."</div>
+        <div class="scopebox">
+          <h5>Honest Scope</h5>
+          <p>100+ interviews in roughly two months is a real, demanding research pace — averaging more than one interview per working day. The honest framing is straightforward: you personally conducted the interviews (a first-person research claim, not a delegated one), and the findings directly fed two other bullets on this role, which is worth stating explicitly since it shows the research wasn't a standalone exercise.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: What did a typical interview cover, and how did you synthesize 100+ of them?</div><div class="a">A: <span class="draftflag">Needs confirmation — actual interview structure/questions and synthesis method (affinity mapping, tagging by issue type, etc.)</span> — honest framing until confirmed: interviews focused on recurring service pain points, synthesized into the recurring-issue patterns that shaped both the chatbot's query-coverage priorities and the thematic issue framework.</div></div>
+          <div class="qa-pair"><div class="q">Q: Give one example of a decision that changed because of something you heard in an interview.</div><div class="a">A: <span class="draftflag">Needs confirmation — real example</span> — this is the most likely follow-up on this claim; a specific instance should be pinned down before relying on this bullet in an interview.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Low-risk, high-value supporting claim — its strength is in being the evidence base for Claims 1 and 4, worth naming that connection rather than presenting it as an isolated research exercise.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-flows">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>Claim 3 — Structured Interaction Flows, 80% Query Coverage</h2>
+        <p>Level B, "Medium" interview odds, "Medium" risk. The design artifact the chatbot (Claim 1) was actually built from.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Designed structured interaction flows, prioritized from interview findings, covering 80% of customer queries to streamline service journeys."</div>
+        <div class="scopebox">
+          <h5>Honest Scope</h5>
+          <p>This bullet is effectively the design specification behind Claim 1's chatbot — the interaction flows are the concrete artifact, prioritized directly from the 100+ interviews (Claim 2). "Covering 80% of customer queries" is a scope decision, not a completeness claim: it means the highest-frequency query types were flow-designed first, an explicit and defensible prioritization choice under a two-month timeline.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: How was the 80% coverage figure measured?</div><div class="a">A: <span class="draftflag">Needs confirmation — likely a share of query volume/type from the interview or historical service-ticket data, but the exact measurement basis needs confirming</span> — honest framing until confirmed: "measured against customer query volume or type frequency from the research, not a guess."</div></div>
+          <div class="qa-pair"><div class="q">Q: What happened to the other 20% of queries?</div><div class="a">A: The scope decision explicitly excluded the long tail of lower-frequency query types from the initial flow design — consistent with prioritizing highest-impact coverage first under a two-month timeline, with the remainder presumably still handled through existing (non-chatbot) service channels. <span class="draftflag">Draft — confirm this framing is accurate</span></div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>A concrete, defensible design claim — its strongest framing links it explicitly back to Claim 2 (the research it was prioritized from) and forward to Claim 1 (the product it became).</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="claim-theme">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Claim 4 — Thematic Issue Framework</h2>
+        <p>Level C, "Low" interview odds, "Low" risk. A qualitative-synthesis claim, unlikely to be probed deeply.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Structured customer feedback into a thematic issue framework, enabling prioritization of the highest-impact investments."</div>
+        <div class="scopebox">
+          <h5>Honest Scope — Level C</h5>
+          <p>This is a lightweight qualitative-synthesis claim, kept honestly at conceptual/awareness depth rather than inflated into a formal analytical framework — the CV itself frames it modestly ("enabling prioritization"), and that's the right level to answer it at.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: What were the actual themes you identified?</div><div class="a">A: <span class="draftflag">Needs confirmation — real theme categories, if worth recalling specifically</span> — honest answer without confirmed specifics: recurring service pain points grouped by type, used to help prioritize which investments (like the chatbot itself) would address the highest-impact issues first.</div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Low-stakes claim, best treated as a brief supporting mention rather than a standalone deep-dive topic.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="star-hero">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>STAR Story Bank — Hero Electronics</h2>
+        <p>Structured behavioral stories from the internship, skewed toward research-driven product scoping under a hard time constraint.</p>
+      </div>
+      <div class="star-card">
+        <h4>Scoping a Chatbot Under a Two-Month Deadline</h4>
+        <div class="star-row"><b>Situation</b>A customer-service chatbot needed to be designed and validated within a two-month internship, with no realistic path to full query coverage in that window.</div>
+        <div class="star-row"><b>Task</b>Prioritize which query types to design for first, rather than attempting incomplete coverage everywhere.</div>
+        <div class="star-row"><b>Action</b>Ran 100+ user interviews to find the highest-frequency issues, then designed structured flows covering the top 80% of query volume, partnering with the technical team to validate feasibility within the timeline.</div>
+        <div class="star-row"><b>Result</b>A limited rollout validated within the internship, later taken to full scale and achieving a confirmed 20% cost reduction.</div>
+      </div>
+      <div class="star-card">
+        <h4>Turning 100+ Interviews Into a Design Decision</h4>
+        <div class="star-row"><b>Situation</b>A large volume of qualitative interview data needed to translate into a concrete product-design artifact, not just a research summary.</div>
+        <div class="star-row"><b>Task</b>Synthesize recurring issues into something engineering could actually build against.</div>
+        <div class="star-row"><b>Action</b>Structured findings into a thematic issue framework, then used that prioritization to scope the 80%-coverage interaction flows. <span class="draftflag">Needs confirmation — real synthesis method</span></div>
+        <div class="star-row"><b>Result</b>A design handoff the technical team could validate and build against within the remaining internship time.</div>
+      </div>
+      <div class="star-card">
+        <h4>Being Precise About What "Owned End-to-End" Actually Meant</h4>
+        <div class="star-row"><b>Situation</b>A two-month internship claim ("owned end-to-end design") risked sounding like solo, unsupervised delivery of a shipped product.</div>
+        <div class="star-row"><b>Task</b>Represent the work honestly — real design ownership, real partnership with engineering, real outcome that happened after the internship ended.</div>
+        <div class="star-row"><b>Action</b>Kept the CV wording itself precise ("partnering with the technical team," "full-scale implementation post-internship") rather than letting the headline number imply more.</div>
+        <div class="star-row"><b>Result</b>A claim that survives scrutiny because the precision is built into the story, not bolted on defensively when challenged.</div>
+      </div>
+    </section>
+
+    <div class="partlabel">Part B · Projects &amp; Case Competitions</div>
+
+    <section id="proj-overview">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>Projects Overview</h2>
+        <p>Four extracurricular and academic entries, none tied to formal employment — the honest-scope treatment applies here too, since these are still claims on the CV that can be probed.</p>
+      </div>
+      <div class="card" style="padding:24px 28px">
+        <p style="margin:0 0 12px;font-size:.93rem;color:var(--ink-soft)">These four items round out the CV outside Axtria, NanoCloud, Capgemini, and Hero Electronics — team-based product work, a case competition, a live client-facing project, and entrepreneurship-ecosystem coordination. They carry lower interview odds individually than the four employer roles, but one of them (FDM Digital) carries the CV's one remaining open wording flag.</p>
+        <div class="case-sec" style="margin-top:4px">
+          <h5>The Four Entries, Classified</h5>
+          <ul style="margin-top:6px">
+            <li><span class="lvl lvl-B" style="margin-right:8px">B</span> Virtual Companion (CareTail) · Oct 2024 – Mar 2025 — Led a 4-member team in product planning and GTM strategy for an AI-enabled elderly-care product. <a href="#proj-caretail" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-C" style="margin-right:8px">C</span> MakeMyTrip Case Competition · Jul 2024 – Aug 2024 — Advanced to semi-finals (top 10 universities), proposing GenAI-driven travel-bundling recommendations. <a href="#proj-mmt" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-C" style="margin-right:8px">C</span> FDM Digital (Live Project) · Nov 2023 – Dec 2023 — Designed operational workflows for real-time item tracking, adopted by all internal sales employees. <span class="draftflag">⚑ open wording flag</span> <a href="#proj-fdm" style="font-size:.82rem">↓ deep dive</a></li>
+            <li><span class="lvl lvl-C" style="margin-right:8px">C</span> MILE — MDI Incubation Lab for Entrepreneurship · Jun 2023 – Mar 2025 — Coordinated pitching and startup events, connecting founders with mentors. <a href="#proj-mile" style="font-size:.82rem">↓ deep dive</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="proj-caretail">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Project 1 — CareTail: Led a 4-Member Team, GTM Strategy</h2>
+        <p>Level B, "Medium" interview odds, "Low" risk. The one Projects entry with an explicit leadership claim.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Led a 4-member team in product planning and GTM strategy for CareTail, an AI-enabled elderly-care product."</div>
+        <div class="scopebox">
+          <h5>Honest Scope</h5>
+          <p>"Led" is an explicit team-leadership claim over a 4-member group across a roughly 5-month engagement (Oct 2024 – Mar 2025) — the longest-running of the four Projects entries. The honest scope: product planning and go-to-market strategy for a conceptual AI-enabled elderly-care product, most likely an academic or extracurricular team project rather than a funded startup with real customers. <span class="draftflag">Needs confirmation — the actual context (course project, student club initiative, or something more formal) and what "AI-enabled" specifically meant for this product concept</span></p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: What was your specific role versus the rest of the team?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — draft shape: leading product-planning and GTM-strategy discussions and decisions, with teammates likely covering other functional pieces (design, technical feasibility, or market research) — worth having the actual division of labor ready.</div></div>
+          <div class="qa-pair"><div class="q">Q: What did the GTM strategy actually recommend?</div><div class="a">A: <span class="draftflag">Needs confirmation — real GTM plan specifics</span></div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>A genuine leadership claim worth having ready with real specifics — it's the only Projects entry that explicitly claims leading others, which makes it the most likely of the four to get a "tell me about a time you led a team" follow-up.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="proj-mmt">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>Project 2 — MakeMyTrip Case Competition, Semi-Finals</h2>
+        <p>Level C, "Low-Medium" interview odds, "Low" risk. A GenAI-ideation case competition claim.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Advanced to semi-finals (top 10 universities), proposing GenAI-driven travel-bundling recommendations from market research."</div>
+        <div class="scopebox">
+          <h5>Honest Scope — Level C</h5>
+          <p>A competitive-result claim (verifiable: semi-finals, top 10 universities) attached to a conceptual GenAI-ideation proposal rather than a built product — honest to describe as "proposed" and "from market research," exactly as worded, without implying a working recommender was actually built or shipped.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: How would the GenAI travel-bundling recommender actually work?</div><div class="a">A: Conceptually: using traveler intent and preference signals (from market research/survey data rather than live behavioral data at competition stage) to generate bundled itinerary or offer recommendations via a GenAI model — this connects directly to Stage 13's RAG/recommendation concepts if asked to go deeper technically. <span class="draftflag">Draft — confirm the actual proposal's specifics before claiming this framing as accurate</span></div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Low-stakes, competition-result-driven claim — a good bridge to GenAI/product-ideation conversations (linking to Stage 13) if an interviewer wants to go there, but doesn't need heavy independent prep beyond that link.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="proj-fdm">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>Project 3 — FDM Digital: Operational Workflows for Real-Time Item Tracking</h2>
+        <p>Level C, "Low" interview odds, "Low" risk — but the one Projects entry with an open CV-wording flag (Risk Matrix #4), so it gets a dedicated resolution note.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Designed operational workflows for real-time item tracking, approved by seniors and adopted by all internal sales employees." <span class="draftflag">⚑ variant — see Risk Matrix #4</span></div>
+        <div class="scopebox">
+          <h5>Honest Scope — Resolving the Wording Variant</h5>
+          <p>Stage 1's Risk Matrix flags this as the CV's last remaining open wording inconsistency: four CV versions say "designed operational workflows," while the Product Management version says "designed and delivered a workflow product." The gap matters because "product" implies a shipped, owned artifact, while "workflows" implies a process/documentation change. Per Risk Matrix #4's own guidance, this is low-priority relative to Axtria's or NanoCloud's wording risks — but Part XI is the honest place to settle it rather than leaving it open indefinitely: the safest, most defensible framing is "designed a workflow — whether that shipped as a standalone tool, a documented process change, or a lightweight internal utility is a detail worth confirming before using the 'product' wording in a PM-track interview specifically, since that's the one CV version making the stronger claim." <span class="draftflag">Needs confirmation — was there an actual tool/artifact, or was this purely a process/documentation redesign?</span></p>
+        </div>
+        <div class="case-sec">
+          <h5>What Is Confirmed Regardless of Wording</h5>
+          <p>Both versions agree on the parts that matter most for an interview: the workflow was for real-time item tracking, it was approved by seniors, and — notably — adopted by <i>all</i> internal sales employees, which is itself a meaningful adoption/impact claim independent of whether the underlying artifact is best called a "workflow" or a "product."</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: Was this a tool you built, or a process change you designed?</div><div class="a">A: <span class="draftflag">Needs confirmation</span> — until confirmed, the safe answer is: "I designed the workflow for real-time item tracking; I'd want to confirm whether the delivered form was a standalone tool or a documented process change before calling it either one specifically."</div></div>
+          <div class="qa-pair"><div class="q">Q: How was full adoption by all internal sales employees achieved?</div><div class="a">A: <span class="draftflag">Needs confirmation — real rollout/adoption mechanism</span></div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Low-priority per Stage 1's own risk assessment, but now explicitly resolved with a safe, honest default framing — the last open wording question on the entire CV, closed out here rather than left dangling into an interview.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="proj-mile">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2>Project 4 — MILE: Startup Event Coordination</h2>
+        <p>Level C, "Low" interview odds, "Low" risk. Factual-recall only, per Stage 1's Claim Matrix.</p>
+      </div>
+      <div class="claimcard">
+        <div class="bulletquote">"Coordinated pitching and startup events, connecting founders with mentors and guiding early-stage market research."</div>
+        <div class="scopebox">
+          <h5>Honest Scope — Level C</h5>
+          <p>The longest-running of the four Projects entries by calendar span (Jun 2023 – Mar 2025, nearly two years, likely a part-time/ongoing involvement rather than continuous full-time work) but the lightest in required interview depth — an event-coordination and connector role within MDI's entrepreneurship incubation lab, not a hands-on building claim.</p>
+        </div>
+        <div class="case-sec">
+          <h5>Interviewer Cross-Questions</h5>
+          <div class="qa-pair"><div class="q">Q: What's an example of a founder-mentor connection you facilitated?</div><div class="a">A: <span class="draftflag">Needs confirmation — real example, if worth having ready</span></div></div>
+        </div>
+        <div class="synth-box">
+          <h5>Synthesis</h5>
+          <p>Lowest-stakes entry in Part XI — a brief, confident factual mention is sufficient; no deep preparation needed beyond that.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="star-proj">
+      <div class="sec-head">
+        <div class="num">12</div>
+        <h2>STAR Story Bank — Projects &amp; Case Competitions</h2>
+        <p>Two structured stories drawn from the Projects entries, covering leadership and honest scope-resolution.</p>
+      </div>
+      <div class="star-card">
+        <h4>Leading a Small Team Through Product Planning and GTM</h4>
+        <div class="star-row"><b>Situation</b>A 4-member team needed to take an AI-enabled elderly-care product concept (CareTail) from idea to a coherent product-and-GTM plan.</div>
+        <div class="star-row"><b>Task</b>Lead the team's product-planning and go-to-market strategy work.</div>
+        <div class="star-row"><b>Action</b>Directed product-planning and GTM-strategy decisions across the team over roughly five months. <span class="draftflag">Needs confirmation — real decisions/division of labor</span></div>
+        <div class="star-row"><b>Result</b>A completed product-and-GTM plan for the CareTail concept.</div>
+      </div>
+      <div class="star-card">
+        <h4>Resolving an Ambiguous Wording Claim Honestly</h4>
+        <div class="star-row"><b>Situation</b>Two CV versions described the same FDM Digital work differently — "operational workflows" versus "a workflow product" — the last open wording inconsistency on the CV.</div>
+        <div class="star-row"><b>Task</b>Settle on one honest, defensible framing rather than letting the discrepancy surface unprepared in an interview.</div>
+        <div class="star-row"><b>Action</b>Anchored the answer to what both versions agree on (real-time item tracking, senior approval, full sales-team adoption) and flagged the unresolved tool-vs-process detail explicitly rather than guessing.</div>
+        <div class="star-row"><b>Result</b>A ready, honest answer for either version of the CV, with the remaining uncertainty clearly named rather than hidden.</div>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">13</div>
+        <h2>Mastery Checklist</h2>
+        <p>Check off once you can deliver each item cold, without re-reading this page.</p>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">14</div>
+        <h2>How This Connects to the Rest of the Masterbook</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <div class="bridge-flow">
+          <span class="node">Stage 13 · GenAI/LLMs — chatbot architecture</span><span class="arrow">→</span>
+          <span class="node">Stage 14 · Product Management</span><span class="arrow">→</span>
+          <span class="node">Stage 15 · MECE/structured scoping</span><span class="arrow">→</span>
+          <span class="node">Stage 31 · Chatbot &amp; portfolio projects</span><span class="arrow">→</span>
+          <span class="node">Stages 27–29 · contrast across four roles</span>
+        </div>
+        <p style="margin:14px 0 0">Stage 30 completes Part XI's four-role comparison: Axtria (from-scratch technical build, open verb-drift risk), NanoCloud (client-facing ownership, confirmed framing upgrade), Capgemini (no CV-wording risk at all, audience-tailoring instead), and now Hero Electronics (the CV's single highest-odds claim, inside its shortest tenure, where precise ownership-scoping — not fabricated depth — is the entire job) plus the four Projects &amp; Case Competitions entries, which close out the CV's last open wording flag (FDM Digital). With Part XI complete, Stage 31 (hands-on Portfolio projects) is next — building the self-owned artifacts (the chatbot/conversational prototype, the Salesforce walkthrough, the LP/heuristics allocation model, and the rest of Stage 1's Hands-On Project Requirements list) that let every claim across Stages 27–30 be defended at unlimited depth, independent of what could or couldn't be confirmed here.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  var masteryItems = [
+    'I can deliver the chatbot claim’s 30-sec, 2-min, and 5-min answers cold, in order.',
+    'I can state precisely what I owned (product/flow design) versus what the technical team owned (build/validation) on the chatbot project, without hedging.',
+    'I can explain why the confirmed 20% cost reduction is attributed to the post-internship full-scale rollout, not to my two-month internship directly — and say this proactively, not defensively.',
+    'I can explain how the 100+ interviews, the thematic issue framework, and the 80%-coverage flows connect into one research-to-design pipeline.',
+    'I know which specifics (chatbot architecture, coverage measurement, interview synthesis method) still need Pranav’s confirmation.',
+    'I can describe all four Projects &amp; Case Competitions entries and correctly rank their interview odds (CareTail highest, MILE lowest).',
+    'I can give the resolved, honest framing for the FDM Digital wording variant (Risk Matrix #4) without needing to check the CV first.',
+    'I have all five STAR stories (3 Hero, 2 Projects) ready, including which details still need confirmation.',
+    'I can contrast Hero Electronics against Axtria, NanoCloud, and Capgemini in one sentence when asked to compare my experience.',
+    'I can explain how Stage 31’s planned portfolio projects will close the remaining gaps flagged across all four Part XI roles.'
+  ];
+  var STORE = 'masterbook-s30-mastery';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var mBox = document.getElementById('masteryBox');
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  mBox.innerHTML = masteryItems.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+esc(t)+'</span></div>';
+  }).join('');
+  mBox.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 500){ backtop.classList.add('show'); } else { backtop.classList.remove('show'); }
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 30 loaded — mastery items:', masteryItems.length);
+} catch (err) { console.error('Stage 30 render error:', err); }
+</script>

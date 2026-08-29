@@ -1,0 +1,795 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>Product Case Bank</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.81rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+  .out{ color:#8FB4DC; }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+
+  :target{ animation:flash 1.4s ease; }
+  @keyframes flash{ 0%{ background:var(--accent-soft); } 100%{ background:transparent; } }
+  .cmp-table{ width:100%; border-collapse:collapse; font-size:.85rem; }
+  .cmp-table th, .cmp-table td{ text-align:left; padding:10px 14px; border-bottom:1px solid var(--line); vertical-align:top; }
+  .cmp-table th{ font-family:"IBM Plex Mono"; font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; color:var(--data); background:var(--paper-sunken); }
+  .cmp-wrap{ overflow-x:auto; }
+
+  .caselist{ display:flex; flex-direction:column; gap:14px; }
+  details.case{ border:1px solid var(--line); border-radius:12px; background:var(--paper-raised); box-shadow:var(--shadow); overflow:hidden; }
+  details.case summary{ padding:16px 22px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.98rem; font-weight:600; }
+  details.case summary::-webkit-details-marker{ display:none; }
+  details.case summary .cnum{ font-family:"IBM Plex Mono"; font-size:.72rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:3px 9px; border-radius:6px; flex:0 0 auto; }
+  details.case summary .cdiff{ font-size:.66rem; font-weight:700; padding:3px 9px; border-radius:6px; flex:0 0 auto; text-transform:uppercase; letter-spacing:.03em; }
+  .cdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .cdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .cdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .cdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  details.case summary .cind{ font-size:.72rem; font-weight:500; color:var(--ink-faint); flex:0 0 auto; }
+  details.case summary .ctitle{ flex:1; }
+  .case-body{ padding:0 22px 24px; border-top:1px solid var(--line); }
+  .case-prompt{ margin:18px 0; padding:15px 18px; background:var(--paper-sunken); border-left:4px solid var(--ink-faint); border-radius:0 8px 8px 0; font-style:italic; font-size:.93rem; }
+  .case-sec{ margin-top:20px; }
+  .case-sec h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .case-sec h5::before{ content:""; width:14px; height:2px; background:var(--accent); display:inline-block; }
+  .case-sec p, .case-sec li{ font-size:.9rem; color:var(--ink-soft); margin:0 0 6px; }
+  .qa-pair{ margin-bottom:10px; padding:10px 14px; background:var(--paper-sunken); border-radius:8px; }
+  .qa-pair .q{ font-size:.88rem; font-weight:600; color:var(--ink); margin-bottom:4px; }
+  .qa-pair .a{ font-size:.87rem; color:var(--ink-soft); }
+  .case-sec ul{ margin:0; padding-left:20px; }
+  .case-sec .calc-block{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:14px 16px; font-family:"IBM Plex Mono"; font-size:.79rem; overflow-x:auto; line-height:1.65; white-space:pre; margin-top:4px; }
+  .case-sec .result-tag{ display:inline-block; margin-top:8px; font-family:"IBM Plex Mono"; font-size:.8rem; font-weight:700; color:var(--data); background:var(--data-soft); padding:5px 11px; border-radius:6px; }
+  .synth-box{ margin-top:20px; padding:15px 18px; background:var(--accent-soft); border-radius:8px; border-left:4px solid var(--accent); }
+  .synth-box h5{ color:var(--accent-ink); }
+  .synth-box p{ color:var(--ink); font-weight:500; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <a class="backlink" href="stage03.html">← Stage 3 · SQL</a>
+    <a class="backlink" href="stage04.html">← Stage 4 · Python + Pandas</a>
+    <a class="backlink" href="stage05.html">← Stage 5 · PySpark + Databricks</a>
+    <a class="backlink" href="stage06.html">← Stage 6 · ML Fundamentals</a>
+    <a class="backlink" href="stage07.html">← Stage 7 · Regression + Logistic Regression</a>
+    <a class="backlink" href="stage08.html">← Stage 8 · Other Classical ML Models</a>
+    <a class="backlink" href="stage09.html">← Stage 9 · Trees, Random Forest &amp; XGBoost</a>
+    <a class="backlink" href="stage10.html">← Stage 10 · Forecasting &amp; Optimization</a>
+    <a class="backlink" href="stage11.html">← Stage 11 · A/B Testing &amp; Experimentation</a>
+    <a class="backlink" href="stage12.html">← Stage 12 · Power BI &amp; Advanced Excel</a>
+    <a class="backlink" href="stage13.html">← Stage 13 · GenAI, LLMs, RAG &amp; Agents</a>
+    <a class="backlink" href="stage14.html">← Stage 14 · Product Management</a>
+    <a class="backlink" href="stage15.html">← Stage 15 · Structured Problem Solving &amp; Frameworks</a>
+    <a class="backlink" href="stage16.html">← Stage 16 · Profitability Case Bank</a>
+    <a class="backlink" href="stage17.html">← Stage 17 · Market Entry Case Bank</a>
+    <a class="backlink" href="stage18.html">← Stage 18 · Growth Case Bank</a>
+    <a class="backlink" href="stage19.html">← Stage 19 · Pricing Case Bank</a>
+    <a class="backlink" href="stage20.html">← Stage 20 · Market Sizing Case Bank</a>
+    <a class="backlink" href="stage21.html">← Stage 21 · Operations Case Bank</a>
+    <div class="stage-pill">● Stage 22 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#howtouse">How to Use This Case Bank</a></li>
+      <li><a href="#cases">The 10 Product Cases</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+    <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 24 (AI/GenAI) is next, followed by FinTech and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part X · Stage 22 of 33</div>
+      <h1>Product Case Bank</h1>
+      <p class="lede">10 full product-management cases at full interview depth: feature prioritization, DAU-drop diagnosis, 0-to-1 launch economics, retention/churn root-causing, build-vs-partner-vs-acquire decisions, cannibalization risk, and product-sunset trade-offs — each solved with a genuine structural approach, worked math, and a real recommendation, walked through exactly as a real case interview runs, including interviewer pushback and model answers.</p>
+      <div class="statusbar">
+        <div class="statuschip">🧩 <b>10</b> full product-management cases, zero compressed</div>
+        <div class="statuschip">🧮 Every case has a genuine worked product/business calculation</div>
+        <div class="statuschip">🗣️ Every case includes interviewer cross-questions with model answers</div>
+        <div class="statuschip">🔀 Spans e-commerce, fitness, SaaS, food delivery, subscription boxes, marketplaces, and support tech</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">Product cases are the broadest case type in the whole Masterbook, because "product sense" isn't one skill — it's prioritization judgment, metrics diagnosis, launch economics, retention root-causing, and build-vs-buy-vs-partner strategy all shown up disguised as a single conversational question. The discipline that separates a strong answer from a weak one is recognizing which of these sub-skills a given prompt is actually testing, structuring the specific lens that skill requires (an impact-vs-effort frame for prioritization, a funnel/segment breakdown for a metrics drop, a unit-economics model for a launch, a timing-of-churn clue for a retention problem), and backing the recommendation with real numbers rather than opinion. This stage applies that discipline to 10 genuinely distinct product situations, from a straightforward feature-prioritization call to an expert-level build-vs-partner-vs-acquire decision under real technology uncertainty, so the underlying product-judgment reasoning becomes second nature.</p>
+      </div>
+    </section>
+
+    <section id="howtouse">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>How to Use This Case Bank</h2>
+        <p>Every case follows the exact same 10-part structure, so you can drill any single part in isolation or run the whole case end to end.</p>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <div class="bridge-flow">
+          <span class="node">Prompt</span><span class="arrow">→</span>
+          <span class="node">Clarifying Qs</span><span class="arrow">→</span>
+          <span class="node">MECE Structure</span><span class="arrow">→</span>
+          <span class="node">Hypothesis</span><span class="arrow">→</span>
+          <span class="node">Data</span><span class="arrow">→</span>
+          <span class="node">Calculation</span><span class="arrow">→</span>
+          <span class="node">Insight</span><span class="arrow">→</span>
+          <span class="node">Recommendation</span><span class="arrow">→</span>
+          <span class="node">Risks</span><span class="arrow">→</span>
+          <span class="node">Cross-Qs</span><span class="arrow">→</span>
+          <span class="node">Synthesis</span>
+        </div>
+        <p style="margin:14px 0 0">Recommended drill: read only the <b>prompt</b>, pause the page, and first name which sub-skill the question is actually testing (prioritization, diagnosis, launch economics, retention, or strategic build-vs-buy) before reaching for a generic framework — the right structure follows directly from that classification. Product cases especially reward grounding a recommendation in a real number (a break-even calculation, a segmented impact estimate, a cost-benefit comparison) rather than a qualitative opinion, since "good product sense" in an interview is judged on rigor, not on having strong instincts alone. The 10 cases are tagged by difficulty (easier / medium / hard / expert) and filterable below the case list heading.</p>
+      </div>
+    </section>
+
+    <section id="cases">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>The 10 Product Cases</h2>
+        <p>Full quota, full depth — every case fully interactive, none compressed to structure-plus-answer-only.</p>
+      </div>
+      <div class="filterbar" id="casefilter">
+        <button class="active" data-diff="all">All (10)</button>
+        <button data-diff="easy">Easier</button>
+        <button data-diff="med">Medium</button>
+        <button data-diff="hard">Hard</button>
+        <button data-diff="expert">Expert</button>
+      </div>
+      <div class="caselist" id="caselist"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">None of these 10 companies or product situations are Pranav's own work experience, and none should ever be presented as such — they're deliberate practice cases. The honest bridge is the METHOD: classifying what a metrics or feature question is really asking, building a defensible model (impact-vs-effort, unit economics, segmented diagnosis) rather than reaching for intuition, and stress-testing a recommendation against a skeptical follow-up is the same structured, evidence-first discipline behind the analytics and SQL/Python diagnostic work in Stages 2-4, and the case-interview habits drilled across every other stage in this bank. If an interviewer asks "have you made a product decision before," the honest and strong answer is: "Not as a standalone product-management role, but I've built the underlying habits — structuring a prioritization or diagnosis rigorously, grounding a recommendation in real numbers rather than opinion, and defending it under pushback — through real analytical work, and I've drilled a full bank of product cases spanning prioritization, growth, retention, and strategy to build product judgment on top of that foundation."</p>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Mastery Checklist</h2>
+        <p>One item per case — check off once you can walk through that case's full structure, calculation, and synthesis cold, without re-reading it.</p>
+      </div>
+      <div class="card checklist" id="masteryBox"></div>
+    </section>
+  </main>
+</div>
+
+<div class="backtop" id="backtop">↑</div>
+
+<script>
+try {
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  var cases = [
+  {
+    "diff": "easy",
+    "industry": "E-Commerce — Product Discovery Feature",
+    "title": "Should an E-Commerce App Build Advanced Search Filters?",
+    "prompt": "A mid-sized e-commerce app's product team is deciding whether to invest a full quarter of engineering time into building advanced search filters (price range, brand, rating, size, color — applied simultaneously). Should they build it?",
+    "clarify": [
+      {
+        "q": "Do we have any data on current search behavior — like how many users search at all, or complaints about not being able to narrow results?",
+        "a": "Yes — roughly 40% of sessions include a search, and customer support tickets mentioning 'can't find what I'm looking for' or 'too many irrelevant results' are the #3 most common complaint category."
+      },
+      {
+        "q": "Does the app have any filtering today, even basic (like sort by price), or is this entirely new?",
+        "a": "Basic sort-by-price and sort-by-newest exist, but no ability to filter by multiple attributes at once — that's the gap."
+      },
+      {
+        "q": "Is there a specific business metric this is meant to move — conversion rate, session length, something else?",
+        "a": "Primarily conversion rate on search sessions, which is currently well below the app's overall conversion rate."
+      }
+    ],
+    "mece": "I'll evaluate this as a standard feature-prioritization decision using an impact-vs-effort lens, broken into: (1) problem validation — is there real evidence users are struggling without this feature, (2) expected impact — how much would filters plausibly move the target metric (search-session conversion), (3) cost — the quarter of engineering time, and what else that time could build (opportunity cost), to reach a build/don't-build recommendation.\n\nL1 — Problem validation: search-usage rate and complaint data as evidence the pain point is real and sizeable, not anecdotal.\nL1 — Expected impact: estimate the conversion-rate lift filters could plausibly deliver on search sessions specifically, and translate that into incremental revenue.\nL1 — Cost and opportunity cost: a full quarter of engineering time has a real cost — both the direct cost and what else could have been prioritized instead — so the expected impact needs to clear that bar.",
+    "hypothesis": "I expect this to be a clear build decision — the combination of high search-usage (40% of sessions) and a top-3 complaint category pointing directly at this exact gap is strong problem validation, and search-conversion features like filtering are well-established as high-impact in e-commerce, so I'd expect the revenue case to comfortably clear a quarter of engineering investment.",
+    "data": "40% of sessions include a search (call it 400,000 search sessions/month on a 1M monthly session base). Current search-session conversion rate: 2.1%, versus 3.4% for non-search (browse/category) sessions — search sessions convert worse, consistent with users not finding what they want. Average order value: ₹1,800. Industry benchmarks for e-commerce apps adding multi-attribute filtering typically see search-conversion lift in the 15-30% relative range (i.e., moving a 2.1% rate up by 15-30% of itself, not 15-30 percentage points). Engineering cost: 1 quarter = roughly 4 engineers × 3 months, an estimated fully-loaded cost of ~₹60L for the quarter.",
+    "calc": "Conservative case: 15% relative lift on 2.1% conversion → new rate ≈ 2.1% × 1.15 ≈ 2.415%, a lift of 0.315 percentage points.\nIncremental monthly converting sessions = 400,000 × 0.315% ≈ 1,260 additional orders/month.\nIncremental monthly revenue = 1,260 × ₹1,800 ≈ ₹22.68L/month.\nAnnualized ≈ ₹2.72Cr/year, against a one-time ₹60L build cost — payback in well under 3 months even at the conservative end of the benchmark range, and this doesn't include the higher end of the benchmark (30% relative lift, which would roughly double this impact) or any benefit to customer satisfaction/retention from resolving a top-3 complaint category.",
+    "insight": "Even using the conservative end of an industry benchmark range, and even before counting any retention or satisfaction benefit from resolving a top-3 named complaint, the revenue case for building filters clears the engineering cost within a single quarter of impact — this is a rare case where problem validation, expected impact, and cost all point unambiguously in the same direction, making it a low-risk, high-confidence build decision rather than one requiring extensive further debate.",
+    "recommendation": "Build it — greenlight the quarter of engineering investment, but scope the initial release to the highest-value filter combinations first (price range, brand, and rating are typically the highest-usage filters in e-commerce, per industry patterns) rather than building all attribute filters simultaneously, so the team can validate the actual conversion lift against this estimate with real data before committing to the full attribute set.",
+    "risks": [
+      "The 15-30% relative conversion lift is an industry benchmark, not validated for this specific app's product catalog and user base — the actual lift could be lower if, for example, the catalog is small enough that users rarely have too many results to sort through even without filters, and this should be tracked closely post-launch against the estimate.",
+      "This estimate isolates search-session conversion as the only benefit, but if filtering cannibalizes browse/category-session traffic (users who would have browsed now search-and-filter instead, at a similar underlying conversion rate), the true incremental impact could be smaller than a naive before/after comparison would suggest — a proper A/B test rather than a before/after rollout comparison would isolate this correctly.",
+      "A full quarter of engineering time has real opportunity cost beyond the ₹60L figure — if there's a competing roadmap item with an even higher expected return, this recommendation could still be wrong on a relative basis even though it clears an absolute payback bar; this analysis only checked absolute ROI, not relative priority against other roadmap options."
+    ],
+    "cross": [
+      {
+        "q": "You made a strong case using a conservative estimate — why not just present the higher, more exciting number to get this greenlit faster?",
+        "a": "Because presenting only the optimistic case would set an implicit target the team might not hit, and even the conservative estimate clears the investment bar comfortably — using the conservative number is actually the stronger pitch here, since it shows the decision is robust even under a pessimistic assumption, which is more convincing to a skeptical stakeholder than a rosy number that might not hold up."
+      },
+      {
+        "q": "How would you actually measure whether this worked after launch, given your own concern about cannibalization from browse sessions?",
+        "a": "I'd run this as a proper randomized A/B test — holding back filters from a control group of users for the first few weeks post-launch — rather than a simple before/after comparison, specifically because a before/after comparison can't distinguish real incremental conversion from cannibalized browse-session conversion or from any other concurrent change happening in the same period; an A/B test isolates the causal effect cleanly, which is exactly what my before/after-based revenue estimate above can't fully guarantee on its own."
+      }
+    ],
+    "synthesis": "This case is a clean template for a feature-prioritization decision: validate the problem is real with usage and complaint data, size the expected impact conservatively against a credible benchmark, and check it against the real cost including opportunity cost — when all three line up this clearly, the recommendation should be confident and fast, reserving deeper debate for cases where the evidence is more ambiguous."
+  },
+  {
+    "diff": "easy",
+    "industry": "Consumer App — Fitness Tracking, DAU Decline",
+    "title": "A Fitness App's Daily Active Users Dropped 15% — Diagnose the Cause",
+    "prompt": "A fitness-tracking app has seen daily active users (DAU) drop 15% over the past 6 weeks, with no obvious external cause (no major competitor launch, no negative press). The product team wants a diagnosis before deciding what to fix.",
+    "clarify": [
+      {
+        "q": "Is the DAU drop coming from existing long-term users churning, or from a drop in new-user acquisition/activation?",
+        "a": "Good distinction to make — let's say you don't know yet, and that's part of what needs diagnosing using whatever data you'd want to pull."
+      },
+      {
+        "q": "Did anything change in the app around 6 weeks ago — a new release, an app-store update, anything operational?",
+        "a": "Yes — there was an app update 6 weeks ago that included a redesigned onboarding flow, intended to improve new-user activation."
+      },
+      {
+        "q": "Is the drop uniform across platforms (iOS/Android) or concentrated on one?",
+        "a": "It's concentrated on iOS — Android DAU has stayed roughly flat over the same period."
+      }
+    ],
+    "mece": "Since the timing lines up closely with a specific app update and the drop is platform-concentrated, I'll frame this as a change-attribution diagnosis: (1) new-vs-existing user split — whether the drop is from reduced new-user activation or existing-user retention, since the update targeted onboarding specifically, (2) platform-specific investigation — since Android is unaffected but iOS isn't, the cause is likely specific to the iOS release of this update (a platform-specific bug or design issue) rather than the underlying onboarding concept itself, (3) funnel-stage isolation — pinpointing exactly which step of the new onboarding flow is underperforming on iOS.\n\nL1 — New vs. existing users: check whether DAU decline is driven by falling new-user activation (Day-1/Day-7 retention of new cohorts since the update) versus churn among existing users (who shouldn't have been affected by an onboarding-flow change at all, since they don't go through onboarding again).\nL1 — Platform isolation: since only iOS is affected, treat this as strong evidence the root cause is iOS-specific, not a general onboarding-design flaw.\nL1 — Funnel-stage diagnosis: break the new onboarding flow into its steps and check completion rate at each step on iOS specifically, to find exactly where users are dropping off.",
+    "hypothesis": "Given the update specifically touched onboarding and the drop is iOS-only, I expect this to be a new-user-activation problem specific to the iOS onboarding flow — most likely a bug or usability issue introduced in the iOS-specific implementation of the redesign (since the same conceptual redesign works fine on Android) — rather than a broader retention or product-quality issue affecting existing users.",
+    "data": "New-user Day-1 retention: dropped from 68% (pre-update, both platforms blended) to 71% on Android (slightly improved, as intended) but only 41% on iOS post-update — a sharp iOS-specific decline. Existing-user (pre-update cohort) DAU: essentially flat on both platforms, confirming existing users are not driving the decline. Onboarding funnel step completion on iOS: Step 1 (account creation) 94% complete (normal), Step 2 (goal selection) 89% complete (normal), Step 3 (permissions — health data access) only 52% complete, down from 84% in the old flow's equivalent step; Step 4 (first workout log prompt) — of those who reach it, completion is normal (91%).",
+    "calc": "The data isolates the problem precisely: Step 3 (health-data permissions) on iOS dropped from 84% to 52% completion, a 32-percentage-point decline concentrated in exactly one step, on exactly one platform, exactly matching the update timing.\nEstimate of DAU impact: if new-user volume is roughly 15,000/day and previously ~84% × (downstream completion rate) went on to become active users, versus now only 52% clear this step, the gap (84% − 52% = 32 points) applied to the relevant new-user volume accounts for a meaningful share of the ~15% DAU decline — consistent in magnitude with the observed drop once new-user volume as a share of total DAU is factored in, though I'd want the exact new-vs-existing DAU mix to fully reconcile the number precisely.",
+    "insight": "This isn't a general product-quality or competitive problem at all — it's a specific, iOS-only permissions-request step in the new onboarding flow that's failing at more than double the rate it used to, almost certainly because of either a confusing new permissions-request UI/copy change or an iOS-specific technical issue (e.g., a broken permissions-prompt trigger, or a copy change that now sounds more invasive and causes users to decline and abandon) introduced in this specific release.",
+    "recommendation": "Immediately pull the iOS product/engineering team to audit exactly what changed in the Step 3 permissions-request implementation between the old and new onboarding flow (UI copy, timing of the prompt, whether it's a native iOS permission dialog behaving differently than before) — this is a targeted, fast-to-fix bug/UX issue, not a strategic product problem, and given the size and precision of the signal, a fix should be prioritized as urgent rather than queued as normal roadmap work.",
+    "risks": [
+      "This diagnosis is based on funnel-step completion data that, while compelling, should be confirmed with direct qualitative evidence (session recordings, or a quick round of user testing on the iOS permissions step specifically) before assuming the exact mechanism (confusing copy vs. technical bug) without seeing it firsthand.",
+      "The DAU-impact reconciliation in the calc section is approximate — a precise accounting would need the exact new-user-to-existing-user DAU ratio and cohort sizes to confirm the Step 3 drop-off fully explains the observed 15% decline, rather than being a large but partial contributor with some other smaller factor also present.",
+      "Even after fixing Step 3, some of the new users lost during these 6 weeks may not return organically — depending on the app's re-engagement capability (push notifications, email win-back), a portion of this cohort may be a permanent loss rather than one that self-corrects once the bug is fixed, which should factor into how urgently a win-back campaign is also considered."
+    ],
+    "cross": [
+      {
+        "q": "You've built a strong case that Step 3 is the problem — but how would you rule out that this is a coincidence and the real cause is something else entirely, like a concurrent iOS operating-system update around the same time?",
+        "a": "The funnel-step-level precision is the strongest evidence against coincidence — a general iOS OS-level issue would be far more likely to show up as a broad, diffuse decline across many app functions or even at the account-creation step, not as a sharp, isolated 32-point drop in one specific step that also happens to be exactly the step this release changed; that said, I'd still explicitly check release notes for any concurrent iOS OS update timing as a quick sanity check, since it's a cheap thing to rule out even though the evidence strongly points elsewhere."
+      },
+      {
+        "q": "If the engineering team tells you nothing obviously changed in the Step 3 code and they can't immediately find a bug, what would you do next?",
+        "a": "I'd shift from a technical-bug hypothesis toward a UX/copy hypothesis — pull up the actual before/after screens or copy for the permissions request and get a few users (or even just a handful of colleagues who haven't seen it) to react to it, since permission-request framing is known to be highly sensitive to exact wording and timing even without any technical bug; I'd also check if the new flow asks for permissions earlier or more assertively than the old one, which is a common, non-buggy reason for a permission-decline rate to jump."
+      }
+    ],
+    "synthesis": "This case shows the power of a platform-specific and funnel-stage-specific comparison as a diagnostic tool — rather than treating 'DAU dropped 15%' as one undifferentiated problem, breaking it down by platform (ruling out Android) and by funnel step (isolating exactly Step 3) turns a vague, scary-sounding metric decline into a precise, fast-to-fix, and fully explained root cause."
+  },
+  {
+    "diff": "easy",
+    "industry": "Productivity SaaS — Note-Taking App Feature Bet",
+    "title": "A Note-Taking App Must Choose Between Building Dark Mode or Real-Time Collaboration — Which First?",
+    "prompt": "A note-taking app's product team has limited engineering capacity for the next release cycle and must choose between two requested features: dark mode (frequently requested, relatively simple to build) and real-time collaboration/co-editing (also requested, but a much bigger technical undertaking). Which should they prioritize?",
+    "clarify": [
+      {
+        "q": "Do we have relative demand signal for each — like request volume or upvotes on a feature-request board?",
+        "a": "Yes — dark mode has about 3,200 upvotes on the feedback board; collaboration has about 1,800 upvotes, but collaboration requests tend to come with longer, more detailed comments about specific use cases (teams, shared docs)."
+      },
+      {
+        "q": "Do we have rough effort estimates for each?",
+        "a": "Dark mode: roughly 2-3 engineer-weeks. Real-time collaboration: roughly 12-16 engineer-weeks, given the complexity of conflict resolution and sync infrastructure."
+      },
+      {
+        "q": "Is there a strategic angle here — like whether the company is trying to move upmarket into team/business plans, where collaboration might matter more than raw feature-request volume suggests?",
+        "a": "Yes, that's relevant — the company has stated a goal of growing its team/business-tier revenue over the next year, which is currently a small fraction of total revenue."
+      }
+    ],
+    "mece": "I'll evaluate this as a prioritization decision across three lenses: (1) raw demand signal — upvotes as a proxy for how many existing users want each feature, (2) effort and speed — since dark mode is far cheaper and faster to ship, which matters for near-term momentum and satisfying a vocal, differentiated request, (3) strategic fit — how each feature serves the company's stated goal of growing team/business revenue, which upvote count alone doesn't capture since it reflects the current (mostly individual-user) base, not the target future segment.\n\nL1 — Demand signal: raw upvote comparison, understanding what population it represents (largely existing individual users, who may not represent the target growth segment).\nL1 — Effort/speed: cost-per-feature and what else could be shipped with the freed-up capacity if the cheaper option is chosen first.\nL1 — Strategic fit: whether either feature disproportionately serves the stated team/business growth goal — collaboration is almost definitionally more relevant to team use cases than dark mode is.",
+    "hypothesis": "I expect this to not be a simple 'higher upvotes wins' decision — even though dark mode has more raw votes, the strategic context (growing team/business revenue) and the qualitative signal (collaboration requests come from what sounds like exactly the team-use-case segment the company wants to grow) suggest collaboration is more strategically important despite being both lower-voted and far more expensive to build, and the real recommendation should weigh sequencing rather than picking one exclusively.",
+    "data": "Dark mode: 3,200 upvotes, 2-3 engineer-weeks, broadly requested across the whole user base (no clear segment skew mentioned). Collaboration: 1,800 upvotes but with qualitatively richer, use-case-specific comments referencing teams and shared documents — suggesting the requesting population, while smaller in raw count, skews toward exactly the team/business users the company wants to grow. Team/business tier currently a small fraction of revenue, explicitly targeted for growth. Engineering capacity for the cycle: assume roughly 12-16 engineer-weeks available (enough for collaboration alone, or dark mode plus meaningful capacity left over for other work).",
+    "calc": "If the team builds dark mode (2-3 weeks) first, they'd have roughly 9-14 engineer-weeks of remaining capacity in the cycle — not quite enough to fully build collaboration (12-16 weeks) in the same cycle, meaning collaboration would likely slip to the following cycle regardless of sequencing choice within a single cycle's capacity.\nIf the team builds collaboration first (12-16 weeks), it likely consumes the full cycle's capacity, meaning dark mode would slip to the following cycle instead.\nEither way, only one of the two big-picture priorities fits in a single cycle at full capacity — this is fundamentally a sequencing decision (which comes first, not which happens exclusively), and the real question is which feature should occupy the current cycle given near-term strategic priorities.",
+    "insight": "Since only one feature realistically fits in this cycle at full engineering capacity, the decision isn't 'is dark mode popular' (it clearly is) — it's 'does the company's stated strategic priority (growing team/business revenue) justify spending an entire cycle on the lower-upvote-but-strategically-aligned feature now, versus shipping the faster, broadly-popular feature first and deferring the strategic bet by one cycle,' and the stated company goal is a strong enough signal to prioritize collaboration now despite lower raw votes.",
+    "recommendation": "Prioritize real-time collaboration for this cycle, explicitly because it directly serves the stated team/business revenue growth goal and the qualitative signal suggests the requesting population is close to that target segment — but communicate clearly to the broader user base that dark mode is next in line for the following cycle (a fast, cheap win that shouldn't be delayed indefinitely just because a bigger strategic bet came first), rather than framing this as picking one over the other permanently.",
+    "risks": [
+      "The qualitative read that collaboration-requesters 'sound like' the team/business target segment is inferential, not confirmed — before committing 12-16 weeks, it would be worth a quick, cheap validation step (a short survey or sampling a handful of these upvoters to confirm they're actually evaluating or would purchase a team plan) to de-risk the assumption before the full build.",
+      "A 12-16 week single-feature bet is a large, concentrated investment with real execution risk (the estimate mentions this is technically complex, with conflict-resolution and sync infrastructure) — if the build runs over budget, it could delay dark mode even further than one cycle and create user frustration from the highly-requested, cheap feature being repeatedly deprioritized.",
+      "This decision assumes dark mode and collaboration are the only two options — a full prioritization exercise should check whether there's an even higher-leverage option not presented in this framing (e.g., a smaller, faster feature that also serves the team/business goal) before committing the entire cycle to collaboration specifically."
+    ],
+    "cross": [
+      {
+        "q": "You're recommending the lower-upvote feature — how would you justify that to the 3,200 users who upvoted dark mode and might feel deprioritized?",
+        "a": "I'd be transparent rather than silent about it — communicate that dark mode is confirmed as next in line for the following cycle (not cancelled or indefinitely deferred), which turns a potentially frustrating 'we're ignoring your request' message into a 'we heard you, and here's when it's coming' message; delaying a well-liked, cheap feature by one cycle in service of a clear strategic goal is a reasonable trade-off as long as it's communicated honestly and the commitment is kept."
+      },
+      {
+        "q": "Is there a way to get some of the value of both without fully committing 12-16 weeks to collaboration this cycle?",
+        "a": "Possibly — a phased approach could ship a minimal viable version of collaboration (e.g., basic shared-document viewing without full real-time co-editing/conflict-resolution, which is likely the most technically expensive part) for a fraction of the 12-16 weeks, validate demand and usage with real team/business prospects, and reserve full real-time co-editing for a later phase once validated; I'd raise this as an alternative to pitch to engineering leadership if a full 12-16 week commitment feels too risky before validating the underlying demand-segment assumption."
+      }
+    ],
+    "synthesis": "This case illustrates that a simple popularity metric (upvotes) is not the same as a good prioritization signal on its own — it has to be weighed against strategic context (what segment and goal the company actually cares about right now) and effort/capacity constraints, and a good candidate should recognize when a 'pick one' framing is really a sequencing question, not a permanent exclusion."
+  },
+  {
+    "diff": "med",
+    "industry": "Food Delivery — Subscription Product Launch (0-to-1)",
+    "title": "Should a Food Delivery App Launch a Subscription Plan (Free Delivery for a Flat Monthly Fee)?",
+    "prompt": "A food delivery app is considering launching a subscription product — customers pay a flat monthly fee for free delivery on all orders above a minimum value, similar to Amazon Prime-style models used by competitors. Should they launch it, and if so, how should it be structured?",
+    "clarify": [
+      {
+        "q": "What does the app currently charge for delivery, and how price-sensitive does delivery fee seem to be based on any existing data (like cart abandonment at the delivery-fee step)?",
+        "a": "Currently a flat ₹40 delivery fee per order regardless of order size. Cart abandonment specifically at the point where delivery fee is shown is a known issue — about 18% of carts are abandoned after the fee is displayed, per existing funnel data."
+      },
+      {
+        "q": "Do we know the average order frequency and value for the app's user base, since that determines whether a subscription is a good deal for typical users (and therefore attractive) versus a bad deal (and therefore unattractive)?",
+        "a": "Average user orders about 2.5 times/month, average order value ₹450."
+      },
+      {
+        "q": "Is the goal primarily to increase order frequency (get subscribers to order more, since delivery feels 'free'), reduce cart abandonment, or something else — like matching a competitor who already offers this?",
+        "a": "All three matter, but if you had to rank them, increasing order frequency among existing users is the primary strategic goal — subscription models are known to increase usage frequency by removing the per-order friction of a delivery fee."
+      }
+    ],
+    "mece": "This is a 0-to-1 product launch decision, so I'll evaluate it across: (1) unit economics — whether a subscription price point makes sense given current delivery-fee revenue and expected behavior change, (2) the frequency-increase mechanism — whether removing per-order delivery friction plausibly increases order frequency enough to make the subscription net-positive even though the company gives up the ₹40/order fee from subscribers, (3) risk of adverse selection — whether only the heaviest existing users (who'd have ordered frequently anyway) subscribe, meaning the company gives up fee revenue without gaining much behavior change from that group specifically.\n\nL1 — Unit economics: model the break-even subscription price and behavior-change threshold needed to make a subscriber net-positive to the business versus their non-subscriber baseline.\nL1 — Frequency mechanism: use behavioral evidence (the cart-abandonment-at-delivery-fee data point) as direct evidence that removing the fee should plausibly increase completed orders, not just theoretical assumption.\nL1 — Adverse selection risk: consider that the users most likely to subscribe are probably already the app's heaviest users, which could mean the company loses ₹40/order fee revenue from users who would have ordered at similar frequency anyway, without a comparably large frequency lift to offset it.",
+    "hypothesis": "I expect a subscription to be net-positive specifically because there's already direct behavioral evidence (18% cart abandonment specifically at the delivery-fee step) that removing this friction should meaningfully increase completed-order frequency, not just a theoretical assumption — but I expect adverse selection to be a real, quantifiable risk that requires the subscription price to be set carefully rather than being a straightforward 'just launch it' decision.",
+    "data": "Current average user: 2.5 orders/month × ₹40 delivery fee = ₹100/month in delivery-fee revenue per average user today. Cart abandonment at delivery-fee display: 18% — implying that for every 100 initiated orders, roughly 18 don't complete specifically because of the fee (a reasonable, if imperfect, proxy for suppressed demand). If those abandoned carts represent real suppressed order frequency, removing the fee could plausibly recover a meaningful share of that 18% as incremental completed orders for subscribers. Proposed subscription price under consideration: ₹129/month (a price point management is evaluating, positioned to feel like a clear discount versus 2.5+ orders' worth of ₹40 fees).",
+    "calc": "BREAK-EVEN FREQUENCY LIFT NEEDED:\nAt ₹129/month subscription price, the company needs subscribers to generate at least ₹129 worth of value to be neutral-or-better versus the ₹100/month baseline fee revenue from an average non-subscriber (2.5 orders × ₹40) — but since subscribers also don't pay per-order fees anymore, the comparison should really be: does subscription revenue (₹129 flat) plus any margin benefit from increased order volume (more orders = more take-rate/commission revenue from restaurants on each order, separate from the delivery fee itself) exceed what that same user would have generated as a non-subscriber.\nAssume the company also earns a ~15% commission from restaurants on order value (₹450 average order × 15% = ₹67.50/order in commission revenue, separate from delivery fee).\nNon-subscriber monthly value: 2.5 orders × (₹40 delivery fee + ₹67.50 commission) = 2.5 × ₹107.50 = ₹268.75/month.\nFor a subscriber to be at least as valuable at ₹129/month subscription fee (replacing the ₹40/order fee entirely) plus commission: needed orders/month such that 129 + (orders × 67.50) ≥ 268.75 → orders × 67.50 ≥ 139.75 → orders ≥ 2.07/month.\nSince the non-subscriber baseline is already 2.5 orders/month, a subscriber needs only a modest additional lift (not even needing to exceed the non-subscriber baseline by much, given the ≥2.07 threshold is actually below the 2.5 baseline) to be break-even — meaning even a fairly modest frequency increase from removing delivery-fee friction (very plausible given the 18% abandonment evidence) would make subscribers net-positive.",
+    "insight": "The unit economics are more favorable than they might first appear, because commission revenue (not just the delivery fee) is part of the value a subscriber generates — the break-even frequency threshold (~2.07 orders/month) is actually below the current non-subscriber baseline (2.5 orders/month), meaning the subscription doesn't even require subscribers to increase their ordering frequency to be net-neutral, and any frequency lift at all (which the cart-abandonment data suggests is plausible) makes it net-positive; the real risk isn't the core unit economics, it's adverse selection concentrating disproportionately among users who were already ordering above this threshold.",
+    "recommendation": "Launch the subscription at the proposed ₹129/month price point, but structure the initial rollout as a limited beta targeting a mix of user segments (not just promoting it to the heaviest existing users, which would maximize adverse selection) — specifically test-market it to medium-frequency users (1.5-2.5 orders/month) where the frequency-lift upside is most likely to be realized, and track actual post-subscription order frequency by pre-subscription cohort to validate the frequency-lift assumption with real data before a full-scale marketing push.",
+    "risks": [
+      "Adverse selection is a real and likely risk — if only users already ordering well above 2.5 times/month subscribe (rationally, since they save the most), the company could see average subscriber value fall short of projections even though the underlying unit economics work at the break-even frequency level, because those users' behavior may not change much from subscribing (they'd have ordered frequently anyway).",
+      "The 18% cart-abandonment-at-delivery-fee figure is a reasonable proxy for suppressed demand but isn't proof that removing the fee converts all of that suppressed demand into completed orders — some of that abandonment could be driven by other factors (price of the order itself, not just the fee) that a subscription wouldn't fix.",
+      "This analysis doesn't account for subscriber cost to serve beyond commission and delivery fee (e.g., customer support costs, or capacity/logistics strain if subscription drives a genuine large increase in order volume) — a fuller model should include these before finalizing the price point."
+    ],
+    "cross": [
+      {
+        "q": "You showed the break-even frequency threshold is actually below the current average — so why not price the subscription even lower to make it a slam-dunk sell, rather than ₹129?",
+        "a": "Pricing lower would make the subscriber value proposition even more obviously attractive to users, which could actually worsen adverse selection (attracting even the lightest, most price-sensitive users at a price where they don't need much behavior change to make it 'worth it' for them, while the company earns less per subscriber) — I'd want to test the current ₹129 price point's actual conversion and behavior-change data first before assuming a lower price is better, since the goal is maximizing net value to the business, not just making the offer maximally appealing to users."
+      },
+      {
+        "q": "How would you specifically design the beta test to actually measure and rule out the adverse-selection risk you flagged, rather than just hoping it doesn't happen?",
+        "a": "I'd track post-subscription order frequency segmented by each subscriber's pre-subscription baseline frequency (comparing light/medium/heavy pre-subscription users' behavior change after subscribing), which would directly reveal whether the frequency lift is concentrated among lower-frequency users (the desired outcome) or whether subscribers are overwhelmingly former heavy users showing little behavior change (the adverse-selection outcome) — that segmented view is much more diagnostic than a single blended average subscriber-frequency number, which could look fine in aggregate while masking a real adverse-selection problem underneath."
+      }
+    ],
+    "synthesis": "This case demonstrates that a 0-to-1 subscription product decision needs a full unit-economics model including all revenue streams affected (not just the fee being replaced), and that even favorable break-even math doesn't eliminate behavioral risks like adverse selection — a good answer builds the model, but also designs the launch (a segmented beta, not a mass rollout) specifically to test the riskiest assumption before betting the whole business on it."
+  },
+  {
+    "diff": "med",
+    "industry": "Subscription Box — Retention & Onboarding Redesign",
+    "title": "A Subscription Box Service Has High Month-2 Churn — Redesign the Onboarding/Engagement Experience",
+    "prompt": "A curated subscription box service (monthly beauty products) has strong month-1 retention (95% of new subscribers stay for their second box) but a sharp drop at month-2-to-month-3 — only 62% of subscribers who received box #2 continue to box #3. The product team wants a redesigned onboarding/engagement experience to fix this specific drop-off point.",
+    "clarify": [
+      {
+        "q": "Do we have any qualitative signal on why people cancel at this specific point — exit surveys, cancellation reasons?",
+        "a": "Yes — the top two cited cancellation reasons at this stage are 'received duplicate/similar products to what I already had' and 'not sure the box is worth the price anymore, initial excitement wore off.'"
+      },
+      {
+        "q": "Is there a personalization quiz or preference-setting step during signup, and if so, how much does it actually drive what's included in each box?",
+        "a": "There is a preference quiz at signup, but it's fairly basic (a few broad category preferences) and the box curation algorithm only weakly incorporates it — most of the curation is still based on a general 'trending products' logic applied to all subscribers similarly."
+      },
+      {
+        "q": "Is there any existing engagement mechanism between boxes (app, email, community) or is the subscriber relationship purely 'box arrives once a month' with no touchpoints in between?",
+        "a": "Almost no touchpoints between boxes today beyond a shipping-confirmation email — this is a real gap the team is aware of."
+      }
+    ],
+    "mece": "I'll frame this using a value-perception-over-time lens specific to subscription retention: (1) product relevance — whether the actual box contents feel personalized and non-redundant to each subscriber, which the cited 'duplicate products' complaint points to directly, (2) perceived value/excitement decay — the natural psychological pattern where the novelty of a subscription box wears off after the first couple of boxes unless something actively sustains engagement, (3) between-box engagement — whether there's any relationship-building touchpoint between deliveries that could re-anchor value before the cancellation-decision moment.\n\nL1 — Product relevance/personalization: is the weak preference-quiz-to-curation link causing genuinely repetitive or mismatched product selection by box #2-3, directly driving the 'duplicate products' complaint.\nL1 — Value-perception decay: even with perfect personalization, subscription box novelty naturally fades — this requires an active intervention (progress, education, community) rather than assuming month-1 excitement sustains itself.\nL1 — Between-box touchpoints: the near-total absence of engagement between deliveries means there's no opportunity to re-anchor value or catch a dissatisfied subscriber before they reach the cancellation decision at month-2-3.",
+    "hypothesis": "I expect this to require a combined product and engagement fix, not a single lever: the personalization/curation weakness is likely the primary driver of the specific 'duplicate products' complaint and should be fixed at the algorithm level (not just onboarding), while the general value-decay pattern needs an active between-box engagement layer (education, usage tips, community) that doesn't currently exist at all, to sustain perceived value through the specific month-2-3 window where the drop happens.",
+    "data": "Preference quiz completion rate at signup: 88% (most subscribers do complete it), but curation-algorithm weighting analysis shows quiz-stated preferences account for only an estimated 20-25% of what determines box contents, with the remainder driven by general trending-product logic applied broadly. Product-repeat rate (same or very similar product category/brand appearing in both box #1 and box #2 for the same subscriber): estimated at 35% based on a sample audit, which is high enough to plausibly explain a meaningful share of the 'duplicate products' complaint. Month-2-3 cancellation timing data: most cancellations at this stage happen within the first week after receiving box #2 (i.e., subscribers decide quickly after seeing box #2's contents, not gradually over the following weeks) — this timing detail is important since it points specifically to box #2's content quality/relevance as the triggering moment, not a slow general fade.",
+    "calc": "The timing data is the key diagnostic clue: if cancellation were purely driven by generic novelty-decay (a slow psychological fade), we'd expect cancellations to be spread more evenly across the weeks between box #2 and box #3, not clustered right after box #2 arrives — the fact that most cancellations happen within a week of receiving box #2 specifically strongly implicates box #2's actual content (the 35% repeat-product rate) as the acute trigger, not a diffuse motivation decay.\nEstimating the addressable impact: if the 35% product-repeat rate could be cut to a target of under 10% (a reasonable goal with better curation-algorithm weighting toward the already-collected 88%-completion preference data), and if repeat-product perception is a primary driver of the cancellation decision for a meaningful share of the 38% who currently churn at this point (62% retain, 38% churn), even a partial reduction in repeat-driven churn — say, recovering half of the current 38% churn rate that's attributable to this specific cause — would be a substantial retention improvement worth pursuing as the primary near-term fix, ahead of or alongside the slower-to-build engagement-touchpoint layer.",
+    "insight": "The specific timing of cancellations (clustered right after box #2 arrives, not gradually decaying) is strong evidence that box #2's actual content quality — specifically the high product-repeat rate stemming from underused preference data — is the acute trigger for most of this churn, meaning the fix with the highest near-term leverage is a curation-algorithm change to weight the already-collected preference data much more heavily, rather than jumping straight to building new engagement touchpoints (valuable, but a slower, more diffuse fix for a problem that has a sharper, more immediate root cause).",
+    "recommendation": "Prioritize a near-term curation-algorithm fix that meaningfully increases the weight given to stated preferences (moving well beyond the current 20-25% influence) specifically to reduce the product-repeat rate for box #2 and beyond, and pair it with a lighter-weight, faster-to-ship between-box touchpoint (e.g., a simple usage-tips email or in-app content a week or two after each box ships) as a complementary but secondary fix — track the product-repeat rate and month-2-3 retention rate together after the curation change to confirm the causal link before investing further in the slower-to-build community/engagement layer.",
+    "risks": [
+      "The 35% product-repeat rate is based on a sample audit, not full-population data — before committing significant engineering resources to a curation-algorithm overhaul, the team should validate this rate holds across the broader subscriber base and isn't an artifact of the specific sample audited.",
+      "Cancellation-timing clustering right after box #2 is suggestive but not proof that content repetition specifically (versus, say, box #2 simply containing lower-quality or less-exciting products for unrelated reasons) is the exact mechanism — pairing this quantitative signal with direct qualitative research (a few user interviews with recent cancellers) would strengthen confidence in the diagnosis before a major algorithm rebuild.",
+      "Improving personalization weighting could have secondary effects on the business's ability to move inventory strategically (the current 'trending products' logic may exist partly to help clear specific inventory) — a curation-algorithm change should be evaluated for its impact on inventory/business-side constraints, not purely from a subscriber-retention lens."
+    ],
+    "cross": [
+      {
+        "q": "You prioritized the curation-algorithm fix over building engagement touchpoints — but isn't a general engagement layer valuable regardless of what's driving this specific churn spike, and shouldn't the team just build both simultaneously?",
+        "a": "Building both simultaneously would be ideal in an unconstrained world, but given they're described as having limited near-term capacity for a 'redesign,' I'd sequence based on which fix addresses the sharper, better-evidenced root cause first — the curation fix has a much more precise causal story (specific complaint, specific timing pattern, specific measurable repeat-rate) while the engagement-touchpoint idea is a good general retention practice but isn't as directly tied to the diagnosed root cause of this specific month-2-3 spike; I'd recommend the curation fix as the primary, faster-validated bet, with engagement touchpoints as a valuable parallel-track investment rather than the headline fix for this specific problem."
+      },
+      {
+        "q": "If after fixing the curation algorithm the month-2-3 retention rate doesn't improve much, what would that tell you, and what would you investigate next?",
+        "a": "That would be a strong signal that my diagnosis was wrong or incomplete — that the 'duplicate products' complaint, while real, isn't actually the primary driver of the cancellation decision, and I'd go back to the second cited reason ('not sure the box is worth the price anymore') as the more likely dominant driver, which points toward a genuine price-value perception problem rather than a content-relevance problem; that would shift the investigation toward pricing, box value communication, or a fundamental reassessment of what's included, rather than further curation-algorithm tuning."
+      }
+    ],
+    "synthesis": "This case rewards using a specific, easy-to-overlook data point — the exact timing of when cancellations happen relative to the triggering event — as a diagnostic tool to distinguish between a sharp, specific root cause (bad box #2 content) and a diffuse, harder-to-fix one (general novelty decay), and a strong answer sequences the fix toward whichever explanation the evidence most precisely supports, rather than defaulting to the more expensive, broader initiative first."
+  },
+  {
+    "diff": "med",
+    "industry": "Language-Learning App — Social/Competitive Retention Feature",
+    "title": "Should a Language-Learning App Add a Leaderboard/Streak-Competition Feature to Improve Retention?",
+    "prompt": "A language-learning app has strong new-user acquisition but weak long-term retention — most users stop practicing within a few weeks. The product team is considering adding a social leaderboard feature (weekly XP leaderboards among friends and similar-level strangers) to boost engagement and retention. Should they build it, and how should they validate it?",
+    "clarify": [
+      {
+        "q": "Do we have any data on why users currently stop practicing — is it boredom/lack of motivation, difficulty, or something else?",
+        "a": "Exit surveys and a churned-user study point mostly to motivation, not difficulty — the most common phrasing is some version of 'I just stopped finding time' or 'lost momentum,' not 'it got too hard.'"
+      },
+      {
+        "q": "Does the app already have any social or gamification elements, like streaks or achievement badges, or would leaderboards be the first social feature entirely?",
+        "a": "There's a daily streak counter already, which internal data shows is one of the strongest predictors of retention — users who maintain a 7-day+ streak retain far better than those who don't. No social/friend-comparison features exist yet."
+      },
+      {
+        "q": "Is there any concern about how a competitive feature might land with different user segments — for example, could it demotivate rather than motivate some users?",
+        "a": "That's a fair concern to raise and explore — we don't have data on this yet, which is part of why we're asking you to think through the validation approach, not just whether to build it."
+      }
+    ],
+    "mece": "I'll evaluate this as an engagement-feature bet with a specific behavioral risk to manage, structured around: (1) mechanism plausibility — whether competition/social comparison is a credible lever for the diagnosed problem (motivation/momentum loss, not difficulty), given the existing streak-feature evidence that motivation-oriented mechanics already work here, (2) segment risk — since competition can motivate some users and demotivate others (a well-known dynamic in gamification), the feature needs a validation plan that can detect a negative effect on any segment, not just measure an average lift, (3) validation design — given this risk, a randomized experiment with segment-level analysis is essential before a full rollout, more so than for a lower-risk feature.\n\nL1 — Mechanism plausibility: motivation/momentum-loss as the diagnosed churn driver, and the existing streak-feature's proven retention lift as evidence that social/gamified motivation mechanics are already a validated lever in this specific app, not just a generic industry assumption.\nL1 — Segment risk: competitive features are known in gamification literature to have heterogeneous effects — strong performers may be motivated by visibility, weaker or newer performers may feel discouraged and disengage faster, so an average treatment effect could mask an important negative effect on a specific segment.\nL1 — Validation design: given the segment-risk concern, the launch plan itself needs to be built to detect this specific risk (segmented analysis, not just topline retention), not just to measure whether the feature works on average.",
+    "hypothesis": "I expect leaderboards to be a plausible retention lever given the existing evidence that the app's own streak mechanic (a related motivation/momentum-reinforcement feature) already drives strong retention, suggesting users here do respond to this class of mechanic — but I expect a real risk of a negative effect specifically among newer or lower-skill users who might feel discouraged by being visibly outranked, and I'd want the validation plan to explicitly test for this segment-level risk before treating a positive average effect as sufficient evidence to roll out broadly.",
+    "data": "Streak feature retention lift: users with a 7-day+ streak show roughly 2.3x higher 90-day retention than users without one (correlational, though directionally consistent with motivation-mechanics working in this app). Overall 4-week retention today: about 22% of new users are still practicing at all after 4 weeks. Proposed leaderboard design under consideration: weekly XP leaderboards grouped by similar skill-level/tenure cohorts (not one global leaderboard, to avoid brand-new users being ranked against long-tenured power users), visible to friends plus an anonymized 'similar learners' pool for users without friends on the app.",
+    "calc": "Given no experimental data yet exists for leaderboards specifically, this case can't produce a precise revenue/retention-lift number the way a data-rich case would — the calculation that matters here is designing the RIGHT EXPERIMENT rather than modeling a hypothetical lift: a randomized control trial (leaderboard-on vs. leaderboard-off) run for at least 4-8 weeks (long enough to observe the actual churn window where most users currently drop off), with the primary metric being 4-week retention, but critically pre-registering a segment cut by pre-existing engagement level (e.g., new users in their first week vs. users already past the 7-day streak mark) BEFORE launch, so that a negative effect on any one segment can be detected and isn't discovered only after a full rollout when it's harder to reverse via reputational/user-trust cost.",
+    "insight": "The existing streak-mechanic evidence makes leaderboards a well-motivated hypothesis worth testing, but 'worth testing' is a different conclusion from 'worth shipping broadly' — because this specific feature class (visible social ranking) carries a known, plausible mechanism for a negative effect on exactly the segment (newer, lower-streak users) that the app most needs to retain, the validation plan itself is the deliverable that matters most here, not a premature build/don't-build verdict based on the streak-mechanic analogy alone.",
+    "recommendation": "Build a scoped version of the leaderboard feature (skill/tenure-cohorted, not global) and launch it as a randomized controlled experiment to a subset of new users, with a pre-registered segment analysis comparing retention effects for first-week users versus more-established users — only proceed to a full rollout if the segmented results show a positive or neutral effect across segments; if newer users show a negative effect even while more-established users show a positive one, redesign the feature (e.g., delay leaderboard exposure until a user's second week, or make it opt-in rather than default-on for new users) before considering a broader launch, rather than shipping broadly on the strength of a positive average effect alone.",
+    "risks": [
+      "The streak-feature retention correlation, while suggestive, is not causal evidence that social/competitive mechanics specifically will work — streaks are a personal-progress mechanic (competing against your own past behavior), while leaderboards are an interpersonal-comparison mechanic, and these can have meaningfully different psychological effects even though both fall under 'gamification' broadly, so the analogy should inform the hypothesis but not substitute for a real experiment.",
+      "A skill/tenure-cohorted leaderboard design reduces but doesn't eliminate the risk of demotivating lower-performing users within their own cohort — even a well-designed cohort will still have a 'bottom' each week, and the experiment's segment analysis should ideally go one level deeper (bottom-quartile-within-cohort performance) rather than stopping at a coarse new-vs-established split.",
+      "If the experiment does show a negative effect on new users specifically, there's a risk of concluding 'leaderboards don't work' too broadly, when a more nuanced fix (delayed exposure, opt-in design, different cohort grouping) might resolve the issue — the recommendation should be read as 'redesign and re-test,' not 'abandon the concept entirely,' if the first experimental cut shows a mixed result."
+    ],
+    "cross": [
+      {
+        "q": "Running a proper segmented experiment takes real time — given the team already believes competition drives engagement in other apps they've seen, why not just ship it to everyone and iterate based on aggregate retention data, which would be faster?",
+        "a": "Because the specific risk here isn't hypothetical or generic — it's a well-documented dynamic in gamification design that competitive visibility can discourage exactly the users who are already least engaged, and this app's core problem is retaining exactly that group (new, not-yet-committed users); shipping broadly and watching only an aggregate retention number could mask a real negative effect on new users behind a positive effect on already-engaged users, and by the time that's diagnosed from aggregate data alone, the app may have already accelerated churn among the highest-risk segment for weeks — the extra time to pre-register and run a segmented experiment is a small cost relative to that risk, especially for a company whose core stated problem is early-stage retention specifically."
+      },
+      {
+        "q": "Suppose the segmented experiment shows a clearly positive effect for both new and established users — would you still want a full global rollout right away, or is there anything else you'd want to check first?",
+        "a": "Even with a clean positive result across both segments, I'd want to check for effects the segment cut might still miss — specifically, whether the 'similar learners' anonymized pool (for users without friends on the app) performs as well as the friends-based leaderboard, since social comparison with strangers can behave differently than comparison with people you know; if the anonymized-pool version underperforms or shows its own segment risk, I'd want that flagged before a full rollout, given a meaningful share of new users likely have no friends yet on the app and would default into exactly that experience."
+      }
+    ],
+    "synthesis": "This case tests whether a candidate defaults to a premature build/don't-build verdict based on a plausible-sounding analogy (the existing streak-feature success), or recognizes that a feature with a specific, well-known behavioral risk profile (competitive visibility potentially discouraging the exact segment the business most needs to retain) demands the experiment design itself to be the primary work product — a strong answer treats 'how do we validate this safely' as inseparable from 'should we build this' when the risk is this well-understood and this directly opposed to the company's core problem."
+  },
+  {
+    "diff": "hard",
+    "industry": "Freelance Marketplace — In-House Payments/Escrow Feature",
+    "title": "Should a Freelance Marketplace Build Its Own Payments/Escrow System In-House?",
+    "prompt": "A freelance marketplace (connecting clients with freelancers for project work) currently relies on freelancers and clients arranging payment themselves outside the platform, which has caused trust issues (freelancers not getting paid, clients disputing work quality after paying). The product team is considering building an in-house escrow/payments system where the platform holds funds until work is approved. Should they build this, and what should the product prioritize?",
+    "clarify": [
+      {
+        "q": "Do we have data on how big a problem this actually is — like the share of transactions with payment disputes, or is this based on anecdotal complaints?",
+        "a": "We have some data — in a recent survey, roughly 22% of freelancers reported at least one instance of non-payment or partial payment in the past 6 months, and this is cited as the #1 reason freelancers give for leaving the platform in exit surveys."
+      },
+      {
+        "q": "Is 'build in-house' the only option being considered, or could the platform integrate a third-party escrow/payments provider instead of building the infrastructure themselves?",
+        "a": "Good question to raise — both are genuinely on the table; I want you to weigh build vs. integrate-a-third-party as part of your recommendation, not just assume in-house is the only path."
+      },
+      {
+        "q": "What's the platform's current revenue model — do they take a commission on transactions today, and if so, how, given payment currently happens off-platform?",
+        "a": "The platform currently charges a flat monthly listing/membership fee to freelancers, not a transaction commission, precisely because payment happens off-platform and isn't trackable — this is actually a second reason escrow might be strategically attractive, since it would enable a transaction-based commission model."
+      }
+    ],
+    "mece": "This is a build-vs-buy-vs-integrate decision layered on top of a genuine product/trust problem, so I'll structure it as: (1) problem sizing — how large and costly the trust/payment problem actually is (freelancer churn, platform reputation), (2) solution options — in-house build vs. third-party escrow/payments integration, compared on cost, speed, control, and strategic fit, (3) business-model upside — the secondary opportunity to shift from flat-fee to transaction-commission revenue, which depends on solving the payment-visibility problem regardless of which solution path is chosen.\n\nL1 — Problem sizing: freelancer churn attributable to payment trust issues, translated into a retention/revenue impact to establish how much this problem is worth solving.\nL1 — Solution comparison: in-house build (full control, higher cost/time, ongoing compliance burden as a payments processor) versus third-party escrow integration (faster, lower build cost, but less control and ongoing revenue-share cost to the provider) — evaluated on speed-to-market, cost, and strategic control.\nL1 — Business-model upside: since solving payment trust also enables transaction visibility (and therefore commission-based revenue), this isn't purely a defensive/retention fix — it has a monetization upside that should factor into the build-vs-buy cost-benefit case.",
+    "hypothesis": "Given that payment trust is the #1 stated reason for freelancer churn (a serious, well-evidenced problem) and that solving it also unlocks a strategic business-model shift (commission revenue), I expect this to be a clear 'yes, solve this problem' decision — but I expect the build-vs-integrate choice to favor starting with a third-party integration rather than a full in-house build, given payments/escrow is a highly regulated, complex domain where a specialized provider likely offers faster time-to-market and lower risk than building compliance-heavy payment infrastructure from scratch.",
+    "data": "Freelancer base: ~80,000 active freelancers. 22% report a payment-trust incident in 6 months; of freelancers who cite payment issues as their reason for leaving, this represents roughly 8% of the total freelancer base churning annually specifically for this reason (based on exit-survey attribution). Average freelancer lifetime value (current flat-fee model): ₹18,000/year in membership fees, retained for an average of 2.3 years before typical churn. Third-party escrow/payments provider cost: typically 1.5-2.5% transaction fee, shared between platform and provider depending on commercial terms — versus an in-house build estimated at 9-12 months of a dedicated engineering team plus ongoing compliance/licensing costs (payment processing often requires specific regulatory registration) that a specialized third-party provider already holds.",
+    "calc": "CHURN-PREVENTION VALUE:\nFreelancers churning specifically due to payment issues ≈ 8% of 80,000 = 6,400 freelancers/year.\nEach represents ₹18,000/year × remaining expected tenure — if payment-trust issues are truly the trigger (not a symptom of a freelancer who was leaving anyway for other reasons), retaining even half of these (3,200 freelancers) for one additional average tenure cycle (2.3 years) represents 3,200 × ₹18,000 × 2.3 ≈ ₹13.25Cr in retained lifetime membership revenue — a substantial number that alone likely justifies solving the underlying problem.\n\nBUILD VS. INTEGRATE COMPARISON:\nIn-house build: 9-12 months before any launch, plus ongoing compliance/licensing burden and the ongoing cost of maintaining payments infrastructure (a genuinely different competency than the platform's core matching/marketplace product) — high time-to-value delay relative to the urgency of an 8%-of-base annual churn problem.\nThird-party integration: could plausibly launch in 2-4 months, at an ongoing 1.5-2.5% transaction-fee cost — meaningfully faster time-to-value, and importantly, ALSO unlocks the transaction-visibility needed for the commission-model upside just as effectively as an in-house build would, since the strategic value driver (visibility into transactions) doesn't require owning the payments infrastructure itself, just integrating with a system that provides it.",
+    "insight": "The urgency of the churn problem (8% of the freelancer base annually, ~₹13Cr+ in retained-revenue upside) argues strongly for speed, and the strategic upside (commission-model enablement) is achievable through either path — meaning the choice isn't really about which path unlocks more value, it's about which path gets that value faster and with less risk, and a third-party escrow integration wins decisively on both dimensions versus a 9-12 month in-house build in a highly regulated domain the company has no existing competency in.",
+    "recommendation": "Integrate a third-party escrow/payments provider rather than building in-house, prioritizing speed to address the acute, well-evidenced churn problem — launch within the 2-4 month integration timeline, and use the resulting transaction visibility to pilot a shift toward a transaction-commission revenue model alongside or in place of the current flat membership fee; revisit an in-house build only later, if transaction volume grows large enough that the ongoing third-party fee percentage becomes a larger absolute cost than building and maintaining in-house infrastructure would be — a classic 'buy first, build later once scale justifies it' sequencing.",
+    "risks": [
+      "The 8%-of-base churn-attribution figure comes from exit-survey self-reporting, which can overstate a single cited reason relative to the true underlying cause (freelancers may cite payment issues as a more socially acceptable reason than others) — this should be treated as a reasonable but not perfectly precise estimate of the retention upside.",
+      "A third-party provider introduces dependency risk (pricing changes, service reliability, potential future misalignment of incentives) that an in-house system wouldn't have — the commercial terms and service-level agreements with any chosen provider should be scrutinized carefully, and the platform should retain the technical flexibility to switch providers or migrate in-house later without excessive lock-in.",
+      "Shifting toward a transaction-commission model is a significant business-model change beyond the payments feature itself — it affects freelancer and client pricing expectations and would need its own careful rollout plan (potentially a gradual transition or hybrid model) rather than being treated as a simple, automatic byproduct of solving the payments-trust problem."
+    ],
+    "cross": [
+      {
+        "q": "You recommended integrating rather than building — but doesn't that mean the company is dependent on a third party for something as core as how money moves through the platform, which seems risky for a marketplace business?",
+        "a": "It's a real trade-off, and I don't think it's risk-free — but I'd weigh it against the much larger, more immediate risk of NOT solving an 8%-of-base annual churn problem for 9-12+ months while building in-house, in a domain (payments compliance/licensing) the company doesn't currently have expertise in; many successful marketplaces (including some very large ones) run on third-party payments infrastructure for exactly this reason — payments/compliance is a specialized competency, and 'core to the business' doesn't necessarily mean 'must be built in-house,' especially when speed matters this much and the strategic upside (commission visibility) doesn't require in-house ownership to capture."
+      },
+      {
+        "q": "How would you decide, concretely, when it's the right time to reconsider building this in-house instead of continuing with a third-party provider indefinitely?",
+        "a": "I'd set this up as a periodic (e.g., annual) cost-crossover analysis: track total transaction volume flowing through the platform and compare the ongoing third-party fee cost (1.5-2.5% of that volume) against a refreshed estimate of what an in-house build-and-maintain cost would be at that volume — once the third-party fee's absolute cost clearly and sustainably exceeds what in-house infrastructure would cost to build and run (accounting for the compliance/licensing burden), that's the signal to seriously evaluate a transition, rather than making that decision on a fixed calendar timeline unrelated to actual scale."
+      }
+    ],
+    "synthesis": "This case is a strong build-vs-buy template: a well-evidenced, urgent problem doesn't automatically justify the most controlled (in-house) solution if a faster, lower-risk path (third-party integration) captures the same strategic upside — the discipline is separating 'how important is solving this problem' from 'which implementation path solves it fastest and with the least risk,' since those are genuinely different questions that can point to different answers."
+  },
+  {
+    "diff": "hard",
+    "industry": "Productivity SaaS — Free Tier Cannibalization Risk",
+    "title": "Should a Premium Note-Taking App Launch a Free Tier, Risking Cannibalization of Paid Subscribers?",
+    "prompt": "A note-taking app currently operates on a paid-only model (₹299/month, no free tier) with 150,000 paying subscribers. Growth has slowed, and the product team is considering launching a free tier (limited features/storage) to drive top-of-funnel growth and eventual conversion to paid. The CFO is worried this could cannibalize existing paying subscribers who'd happily downgrade to free. Should they launch a free tier?",
+    "clarify": [
+      {
+        "q": "Do we have any data on how many current paying subscribers use only the features that would be included in a proposed free tier — i.e., how many are 'over-served' by paying for features they don't actually use?",
+        "a": "Yes — usage data shows roughly 30% of current paying subscribers only use basic note-taking and light organization features, never touching the advanced features (cross-device sync limits beyond 2 devices, advanced search, collaboration, extended version history) that would differentiate the paid tier from a proposed free tier."
+      },
+      {
+        "q": "What's driving slowed growth — is it a lack of new user awareness/acquisition, or high abandonment during a free-trial-to-paid conversion funnel today?",
+        "a": "The app currently offers a 14-day free trial, not a free tier — trial-to-paid conversion is healthy (around 18%, above industry average), but overall new-trial signups have been flat, suggesting an awareness/top-of-funnel problem rather than a conversion problem."
+      },
+      {
+        "q": "Is there a specific free-tier feature set being proposed, or is that part of what I should recommend?",
+        "a": "Feel free to propose what should and shouldn't be included, based on your analysis of the cannibalization risk."
+      }
+    ],
+    "mece": "I'll frame this as a cannibalization-risk-vs-growth-upside trade-off, structured around: (1) cannibalization exposure — quantifying how many current paying subscribers could plausibly downgrade to a free tier without losing meaningful functionality for their actual usage pattern, (2) growth upside — whether a free tier would actually address the diagnosed top-of-funnel/awareness problem (versus the trial-to-paid conversion problem, which is already healthy), (3) free-tier design — since the cannibalization risk is really a function of exactly which features are gated, the feature-set decision itself is the primary lever to manage the trade-off, not just a binary launch/don't-launch choice.\n\nL1 — Cannibalization exposure: the 30% of subscribers who only use basic features are the clearest downgrade risk — quantify the revenue at stake if a meaningful share of them switch to free.\nL1 — Growth upside: since the diagnosed problem is top-of-funnel awareness (not conversion), assess whether a free tier is actually the right lever for that specific problem, versus, say, a marketing/acquisition investment that doesn't carry cannibalization risk at all.\nL1 — Feature-gate design: the free-tier feature set should be deliberately designed to preserve value for the specific features the 'basic-only' 30% segment might still want (making free version-history or basic sync genuinely limited enough that even basic users see real value in paid), rather than accidentally replicating everything that segment currently uses for free.",
+    "hypothesis": "I expect real cannibalization risk to exist (the 30% basic-only segment is a clear exposure), but I expect it to be manageable and worth the growth upside IF the free tier is deliberately designed to gate at least one dimension of value that even basic users care about (like device count, storage limits, or version history length) rather than being a feature-based gate alone — and I'm skeptical that a free tier is actually the right fix for the diagnosed problem (top-of-funnel awareness), since a free tier primarily helps trial-to-paid-style conversion friction, which isn't the stated bottleneck here; a marketing-acquisition investment might address the actual diagnosed problem more directly, and I'd want to make sure a free tier isn't being reached for as an assumed universal growth lever without fitting the real problem.",
+    "data": "Current paying subscribers: 150,000 × ₹299/month = ₹4.485Cr/month current revenue. Of these, 30% (45,000) use only basic features. Assume, if a free tier launches with basic-feature access, a meaningful share of this 45,000 downgrade — industry patterns for freemium transitions suggest cannibalization in the 15-30% range of the exposed segment is plausible without strong non-feature gating (like storage/device limits). Proposed free-tier gating options: (a) feature-only gating (no collaboration, no advanced search) — high cannibalization risk for the basic-only segment, since they don't use these anyway; (b) usage-limit gating (2-device sync max, 500MB storage cap, 7-day version history) — lower cannibalization risk even for basic users, since heavier basic users would still hit these limits over time even without touching 'advanced' features.",
+    "calc": "CANNIBALIZATION EXPOSURE UNDER FEATURE-ONLY GATING (higher-risk scenario):\nIf 25% (mid-point of 15-30% range) of the 45,000 basic-only segment downgrades to free: 11,250 subscribers × ₹299/month = ₹33.6L/month in lost recurring revenue (₹4.04Cr/year) — a meaningful, real cost.\n\nCANNIBALIZATION EXPOSURE UNDER USAGE-LIMIT GATING (lower-risk scenario):\nIf usage limits (device count, storage, version history) are set based on actual observed usage patterns of the basic-only segment specifically (e.g., set the free storage cap below the median storage usage of even 'basic' subscribers, and device limit below typical basic-subscriber device count), the effective cannibalization-eligible population shrinks — assume this design choice cuts the exposed, willing-to-downgrade share to roughly 8-10% of the 45,000 segment instead of 25%: ~4,000 subscribers × ₹299 ≈ ₹12L/month (₹1.44Cr/year) — a meaningfully smaller, more acceptable cost.\n\nGROWTH-UPSIDE CHECK: since the diagnosed problem is top-of-funnel awareness (flat new-trial signups) rather than trial-to-paid conversion (already healthy at 18%), a free tier's main growth benefit would be attracting a different population — people unwilling to start even a free trial due to the perceived commitment — who might try a genuinely free tier instead; this is a plausible but different growth mechanism than fixing the diagnosed awareness problem directly, and the two should be pursued as complementary, not substitute, initiatives.",
+    "insight": "The cannibalization risk is real but highly controllable through free-tier design — usage-limit gating calibrated to actual basic-subscriber behavior can cut the exposed revenue risk by roughly 65-70% (from ~₹4.04Cr/year down to ~₹1.44Cr/year) compared to naive feature-only gating — but the deeper strategic question is whether a free tier is actually the right tool for the diagnosed growth problem at all, since it primarily helps convert commitment-averse non-trial-starters rather than directly fixing the stated top-of-funnel awareness gap, meaning it should be pursued alongside (not instead of) a direct marketing/awareness investment.",
+    "recommendation": "Launch the free tier, but with usage-limit gating (storage cap, device-count limit, shortened version history) calibrated against actual basic-subscriber usage data rather than simple feature gating, to minimize the cannibalization exposure — and explicitly do NOT treat this as the fix for the diagnosed top-of-funnel awareness problem; pursue a separate, direct marketing/acquisition investment in parallel to address that specific bottleneck, treating the free tier as a complementary funnel-widening move rather than a silver-bullet growth fix.",
+    "risks": [
+      "The 8-10% reduced cannibalization estimate under usage-limit gating is a projection based on general freemium industry patterns, not this app's specific data — actual cannibalization should be tracked closely in a phased/limited rollout before fully committing, since basic users' willingness to accept usage limits versus simply downgrading anyway is genuinely uncertain until tested.",
+      "A free tier changes the app's cost structure (more total users to support/host even if unpaid, customer support burden from a larger free user base) — this analysis focused on subscription-revenue cannibalization but didn't fully account for the incremental infrastructure and support cost of serving a larger free-tier population, which should be modeled separately.",
+      "If the real growth problem is genuinely awareness/marketing rather than product-funnel-related, launching a free tier without also fixing awareness could result in disappointing growth results that get unfairly blamed on the free-tier decision itself, when the actual root cause (low awareness) was never addressed — expectations should be set clearly that the free tier and the marketing investment are two separate initiatives addressing two different things."
+    ],
+    "cross": [
+      {
+        "q": "The CFO is worried specifically about cannibalization — your usage-limit-gating approach reduces but doesn't eliminate it. How would you make the business case to a skeptical CFO who might still say the remaining ₹1.44Cr/year risk isn't worth it?",
+        "a": "I'd frame the ₹1.44Cr/year cannibalization cost against the new-user acquisition value a free tier could plausibly generate — even a conservative estimate of new free-tier signups converting to paid at some rate over time, multiplied by paid-subscriber lifetime value, would need to be sized and compared directly; if that upside isn't credibly larger than ₹1.44Cr/year, I'd agree with the CFO's skepticism and recommend against launching until the growth-upside case is better substantiated — I wouldn't want to advocate for this without that direct comparison, since 'reduces cannibalization' isn't the same as 'proven to be worth it.'"
+      },
+      {
+        "q": "You said the free tier doesn't directly address the diagnosed top-of-funnel awareness problem — so why recommend launching it at all rather than telling the team to focus entirely on marketing instead?",
+        "a": "Because they're not mutually exclusive, and a free tier still has standalone value — even if it's not the fix for the specific diagnosed awareness bottleneck, it removes a real barrier (commitment-aversion to starting a trial) for people who do become aware of the product through other means, including whatever the marketing investment eventually drives; I'd position it as 'necessary but not sufficient' — worth doing on its own modest merits with controlled risk, while being explicit that it shouldn't be relied upon as the primary answer to the stated growth-slowdown problem, which needs its own dedicated fix."
+      }
+    ],
+    "synthesis": "This case tests whether a candidate can hold two ideas at once: a real risk (cannibalization) can be meaningfully mitigated through careful design rather than treated as a binary go/no-go blocker, while simultaneously recognizing that a popular, intuitively appealing lever (launch a free tier) might not actually be the right tool for the specific diagnosed problem — good product judgment means evaluating a proposed solution against the actual root cause, not just against whether it sounds like a reasonable idea in general."
+  },
+  {
+    "diff": "hard",
+    "industry": "B2B SaaS — Sunsetting an Underperforming Product Line",
+    "title": "Should a Project Management SaaS Sunset Its Underperforming Time-Tracking Module?",
+    "prompt": "A project management SaaS company launched a standalone time-tracking module 2 years ago, hoping to expand revenue per customer. It has underperformed — low adoption, negative customer feedback, and it consumes meaningful engineering maintenance capacity. Leadership is debating whether to sunset (shut down) the module entirely. Should they?",
+    "clarify": [
+      {
+        "q": "How is 'underperforming' being measured — adoption rate among existing customers, standalone revenue, both?",
+        "a": "Both — only about 8% of the customer base has ever activated the time-tracking module (well below the 25% target set at launch), and of those, only about a third are still actively using it a year after activation."
+      },
+      {
+        "q": "Does the module have any customers who depend on it heavily, or is usage uniformly light across the small adopter base?",
+        "a": "There's a meaningful skew — of the roughly 3% of the total customer base still actively using it, a small subset (maybe 15-20% of active users, so under 1% of total customers) use it very heavily and have specifically cited it as a reason they chose this platform over competitors."
+      },
+      {
+        "q": "What's the engineering maintenance cost of keeping the module running, even without new investment — is it a small ongoing tax or a significant drag?",
+        "a": "Roughly 1.5 engineers' worth of ongoing maintenance capacity (bug fixes, keeping it compatible with platform updates) — not the largest cost, but not trivial either, especially given the company's broader engineering roadmap is resource-constrained."
+      }
+    ],
+    "mece": "This is a product-sunset decision, which needs to weigh: (1) the cost of keeping it — engineering maintenance capacity that could be redirected, plus the ongoing product-quality drag of maintaining something with negative feedback, (2) the cost of sunsetting it — specifically the risk of losing the small but real segment of heavy users who chose the platform partly because of this feature, since churn from that segment could be disproportionately costly even though it's numerically small, (3) alternative paths beyond a binary keep-fully-invested-or-shut-down-entirely choice, like a maintenance-mode middle path that preserves the heavy-user segment's functionality without full ongoing investment.\n\nL1 — Cost of keeping: 1.5 engineers of ongoing maintenance capacity, opportunity cost of what else that capacity could build, and the negative-feedback drag on overall product perception.\nL1 — Cost of sunsetting: churn risk specifically from the small, heavy-usage, platform-choice-influencing segment (under 1% of total customers, but potentially high-value/high-retention-risk individually) — plus any broader signal a sunset sends about the company's product-investment reliability to prospective customers evaluating the platform.\nL1 — Alternative paths: rather than framing this as full-investment-vs-full-shutdown, consider a 'maintenance mode' (keep it running and bug-free for existing heavy users, but stop any new feature investment and don't market it to new customers) as a third option that might resolve both concerns better than either extreme.",
+    "hypothesis": "I expect a full shutdown to be too risky given the disproportionate importance of the module to a small but real segment of customers who specifically chose the platform for it (a segment likely worth protecting even at a small numeric size, if those customers are otherwise valuable/retained), while full continued investment is clearly not justified given the broad underperformance against the original 25% adoption target — I expect the right answer to be a maintenance-mode middle path, not either binary extreme.",
+    "data": "Total customer base: assume 20,000 customers for this analysis. Under 1% actively heavy-using and citing time-tracking as a reason for choosing the platform ≈ ~180-200 customers. If this specific segment's customers are, on average, higher-value accounts (a common pattern — customers with more sophisticated needs like time-tracking tend to be larger/more complex organizations paying more), assume their average revenue is meaningfully above the company average — say 2.5x the average customer's annual contract value, reflecting a more sophisticated, larger-organization profile. Average customer ACV (annual contract value) company-wide: ₹1.8L/year, so this segment's ACV ≈ ₹4.5L/year. Full shutdown risk: if even 30-40% of this ~190-customer segment churns specifically due to losing this feature (a plausible range for customers who explicitly cited it as a selection factor), that's roughly 57-76 customers × ₹4.5L ≈ ₹2.57-3.42Cr/year in at-risk revenue — a meaningful sum relative to the 1.5-engineer maintenance cost being saved (roughly ₹45-60L/year in fully-loaded engineering cost, a much smaller number).",
+    "calc": "COST-BENEFIT OF FULL SHUTDOWN:\nEngineering capacity saved: ~₹50L/year (mid-point estimate).\nRevenue at risk from heavy-user churn: ~₹3Cr/year (mid-point of the 2.57-3.42Cr range) — the revenue risk is roughly 5-6x larger than the engineering-cost savings, meaning a full shutdown is very likely value-destructive on a pure financial basis, even before considering the reputational/trust cost of shutting down a feature customers specifically chose the platform for.\n\nMAINTENANCE-MODE ALTERNATIVE:\nUnder a maintenance-mode approach (keep the module running and bug-free for the existing ~190 heavy-user accounts, stop new-feature investment, remove it from new-customer marketing/onboarding so the company stops trying to grow adoption of something that clearly isn't resonating broadly), the ongoing cost likely drops from the full 1.5 engineers to something smaller — perhaps 0.5-0.75 engineers dedicated to reactive bug-fixing/compatibility maintenance only, saving roughly half to two-thirds of the original maintenance cost (₹25-35L/year in savings) while fully preserving the ~₹3Cr/year revenue-at-risk protection, since the heavy-user segment's actual usage isn't disrupted at all.",
+    "insight": "A full shutdown fails a basic cost-benefit test — the revenue at risk from the small but valuable heavy-user segment (~₹3Cr/year) is several times larger than the engineering-maintenance savings (~₹50L/year), meaning the 'underperformance' framing (low broad adoption against an ambitious 25% target) was measuring the wrong thing for the sunset decision — the real question isn't 'did this hit its growth target' (clearly no), it's 'does keeping a lightweight version of this running protect more value than it costs' (clearly yes, once the concentrated value of the heavy-user segment is properly weighted rather than treated as numerically insignificant because it's a small percentage of the total base).",
+    "recommendation": "Move the time-tracking module to maintenance mode rather than a full shutdown or continued full investment: stop new-feature development and remove it from new-customer marketing and default onboarding (since broad adoption clearly isn't materializing and continuing to push it isn't productive), but keep it running, bug-fixed, and fully functional for the existing ~190 heavy-user accounts who specifically value it — this redirects the majority of the previously-allocated engineering capacity to higher-leverage roadmap work while protecting the disproportionately valuable, at-risk revenue segment, and should be communicated honestly to the heavy-user segment as a stability commitment (still supported, just not actively expanding) rather than silently deprioritized.",
+    "risks": [
+      "The 2.5x ACV multiplier and 30-40% churn-risk estimate for the heavy-user segment are informed assumptions, not confirmed data — before finalizing this recommendation, the actual revenue and account profile of these ~190 customers should be pulled directly (not estimated) to confirm the financial stakes are as large as this analysis assumes.",
+      "A 'maintenance mode' framing still requires clear internal ownership and a defined bug-fix SLA — without that, maintenance mode can silently decay into de facto abandonment anyway (bugs pile up, heavy users get frustrated regardless of the official framing), which would produce the worst of both outcomes: continued cost with eroding goodwill rather than a clean choice in either direction.",
+      "This analysis doesn't account for the possibility that the heavy-user segment's stated reason for choosing the platform ('time-tracking') might be somewhat overstated in exit-survey-style attribution, similar to the general risk of self-reported reasons — some of that ~190-customer segment might churn for other underlying reasons even if time-tracking is preserved, meaning the full ₹3Cr/year 'protected' figure may be a modest overstatement of the true retention benefit."
+    ],
+    "cross": [
+      {
+        "q": "Your recommendation essentially says 'don't shut it down because a few valuable customers like it' — isn't that just letting a small vocal minority hold the product roadmap hostage against what the broader data (8% adoption, well below target) is telling you?",
+        "a": "I don't think it's about being held hostage — it's about correctly weighing value, not just headcount; the original 25% adoption target was a growth goal, and missing it is a real signal that this shouldn't be a broad platform bet going forward, which is exactly why I'm not recommending continued full investment or renewed marketing push — but 'this isn't a good broad growth bet' and 'this has zero remaining value and should be deleted entirely' are different conclusions, and the concentrated revenue math shows the second conclusion doesn't hold up financially once you look past the headline adoption percentage."
+      },
+      {
+        "q": "How would you decide, a year from now, whether maintenance mode was the right call versus revisiting a full shutdown?",
+        "a": "I'd track two things specifically: the actual maintenance cost versus the ~₹25-35L/year estimate (confirming it doesn't creep back up toward full investment without anyone noticing), and the retention rate of the ~190 heavy-user accounts specifically compared to the broader customer base's retention rate — if that segment's retention stays meaningfully above baseline (validating the protective value of keeping the feature alive for them), maintenance mode is working as intended; if their retention converges to the general baseline anyway despite keeping the feature, that would undermine the core assumption behind this recommendation and would be a legitimate trigger to revisit full sunset at that point, once real data replaces the estimates this analysis is currently built on."
+      }
+    ],
+    "synthesis": "This case is a strong example of why a sunset decision needs a value-weighted lens, not just a headcount-weighted one — a feature can fail decisively against a broad growth target while still protecting a small, concentrated pool of disproportionate value, and the discipline is running the real cost-benefit math on the concentrated segment specifically rather than letting an aggregate 'low adoption' framing drive an all-or-nothing decision that the numbers don't actually support."
+  },
+  {
+    "diff": "expert",
+    "industry": "Customer Support SaaS — Build vs. Partner vs. Buy for an AI Chatbot Feature",
+    "title": "Should a Customer Support SaaS Build Its Own LLM-Powered Chatbot, Partner With an AI Vendor, or Acquire a Startup?",
+    "prompt": "A mid-sized customer support SaaS platform (helps businesses manage support tickets, live chat, and knowledge bases) is under competitive pressure as several competitors have launched AI-powered chatbot features that auto-resolve common customer queries. Leadership wants a recommendation: build an in-house LLM-based chatbot feature, partner with an existing AI vendor (white-label their chatbot technology), or acquire a small AI chatbot startup — and how to think about the decision given the fast-moving, uncertain nature of AI capability and cost curves.",
+    "clarify": [
+      {
+        "q": "What's driving the urgency — is this purely competitive (losing deals to competitors with this feature) or is there a specific customer demand signal too?",
+        "a": "Both — sales has flagged losing an estimated 12-15% of competitive deals specifically citing lack of AI auto-resolution as a factor, and it's become a top-3 requested feature in customer advisory board sessions."
+      },
+      {
+        "q": "Does the company have any existing in-house AI/ML capability, or would building in-house mean hiring a new team from scratch?",
+        "a": "Minimal existing capability — a small data science team of 4 people focused on support-ticket analytics/routing, not LLM/generative-AI expertise specifically; building in-house would require significant new hiring."
+      },
+      {
+        "q": "Is there a specific budget or timeline constraint from leadership, or should I reason about the trade-offs and let that inform the recommended timeline?",
+        "a": "No hard constraint stated — reason about the trade-offs and let your analysis drive the recommended approach and timeline, including how time-sensitive you think this decision actually is given the competitive dynamics."
+      }
+    ],
+    "mece": "I'll evaluate this as a build-vs-partner-vs-buy decision under genuine technology and market uncertainty, across four dimensions: (1) speed to competitive parity — how fast each path gets a shippable feature to market, given the stated urgency (active deal losses), (2) differentiation and control — how much strategic control and product differentiation each path allows, since white-labeling a vendor's chatbot risks looking identical to what competitors using the same vendor also offer, (3) cost and risk profile — comparing upfront and ongoing costs, and the risk of committing to a specific approach in a fast-moving technology space where today's best option could be outdated in 12-18 months, (4) strategic fit — whether AI-support-automation is a core enough competency for this company to own long-term, or a commoditizing capability better sourced externally.\n\nL1 — Speed: partner/white-label is almost always fastest (weeks to a few months), acquisition is fast-ish but has real integration risk and time, in-house build is slowest (6-12+ months to a genuinely competitive feature given the stated lack of existing LLM expertise).\nL1 — Differentiation/control: in-house build offers the most differentiation potential long-term but takes longest to realize it; partnering risks commoditization if competitors use the same or similar vendors; acquisition is a middle path — buys a team/technology base that can then be customized.\nL1 — Cost/risk under technology uncertainty: given how fast underlying LLM capability and cost is evolving, a large upfront commitment to any single approach carries real technology-obsolescence risk — this argues for optionality and staged commitment over a single big bet, regardless of which path is chosen.\nL1 — Strategic fit: is deep AI/LLM expertise something this company needs to own for its long-term competitive position (given AI-driven support automation could become the core value proposition of the entire category), or is it more like a commoditizing utility capability (similar to, say, payment processing) better sourced from specialists.",
+    "hypothesis": "Given the stated urgency (active competitive deal losses right now) and the company's minimal existing LLM-specific capability, I expect the right near-term answer to be partnering/white-labeling to close the competitive gap quickly and stop the deal losses, while treating this as explicitly staged rather than a permanent strategic commitment — deferring the harder question of whether to eventually build in-house or acquire until there's real usage data and clearer visibility into whether AI-support-automation becomes a genuine long-term differentiator for this company or converges toward a commoditized, vendor-sourced utility across the whole category.",
+    "data": "Estimated deal-loss impact: 12-15% of competitive deals cite this gap; if the company competes for roughly 400 competitive deals/year at an average ACV of ₹6L, and closes roughly 35% of contested deals currently, losing deals specifically due to this feature gap represents a meaningful and growing revenue risk that compounds as competitors' AI features mature and the gap widens. In-house build estimate: 6-12 months to reach competitive parity, requiring hiring roughly 6-8 new AI/ML engineers (the existing 4-person team is analytics-focused, not generative-AI/LLM-focused) — significant new fully-loaded cost (~₹3-4Cr/year for a build-and-run team at this scale) plus the multi-quarter revenue-risk exposure during the build period. Partner/white-label estimate: multiple credible AI-chatbot vendors exist with support-specific products; typical integration timeline 6-10 weeks, typical commercial terms in the range of a per-resolution or per-seat fee, translating to an estimated ongoing cost of roughly ₹40-70L/year at the company's current support-ticket volume — far lower ongoing cost than in-house, though with less differentiation control. Acquisition estimate: a small chatbot-AI startup acquisition might cost in the ₹15-40Cr range depending on team/technology maturity, plus 6-12 months of post-acquisition integration risk — a large capital commitment with meaningfully more execution risk than partnering, though it could convert into an in-house capability faster than building from zero.",
+    "calc": "STAGED APPROACH FINANCIAL LOGIC:\nPartner path near-term cost: ~₹55L/year (mid-point) ongoing, deployable within 6-10 weeks — this directly and quickly addresses the active deal-loss problem (worth protecting a meaningful share of the estimated revenue at risk from the 12-15% deal-loss-attribution figure) at a cost far below either build (₹3-4Cr/year) or acquisition (₹15-40Cr upfront) alternatives.\nIf partnering closes even half of the currently-lost competitive deals attributable to this gap, and using the 400 competitive deals/year × 35% close rate × ~13.5% (mid-point of 12-15%) attribution figure as a rough proxy for at-risk deal volume ≈ 400 × 0.135 ≈ 54 deals/year currently lost partly due to this gap; recovering half (27 deals) × ₹6L ACV ≈ ₹1.62Cr/year in recovered revenue — comfortably justifying the ~₹55L/year partner cost with a wide margin, making the partner path a clear, fast, low-risk near-term decision on its own economic merits alone, independent of the longer-term build-vs-buy-vs-partner strategic question.\n\nDEFERRED STRATEGIC DECISION: the build vs. acquire vs. continue-partnering question for the LONGER term should explicitly be revisited in 12-18 months, informed by: (a) real usage and differentiation data from the partner deployment (does the white-labeled solution actually satisfy the market, or do customers still perceive a gap versus more sophisticated competitor offerings), (b) how the underlying AI/LLM cost and capability curve has moved (a build-from-scratch decision made today could be technologically stale or unnecessarily expensive relative to what's achievable in 12-18 months, given how fast this space is moving), and (c) whether AI-driven support automation has become clearly central enough to this company's competitive positioning to justify the much larger in-house or acquisition investment.",
+    "insight": "The urgency of the competitive problem and the size of the strategic uncertainty point toward two different timeframes requiring two different decisions — the near-term decision (partner, to stop active deal losses fast and cheaply) is actually the easy, high-confidence call once framed as a staged first step rather than a permanent commitment, while the harder, genuinely uncertain decision (whether to eventually build or acquire deep AI capability in-house) is exactly the kind of decision that benefits from being deliberately deferred until more information exists, rather than being forced prematurely under the pressure of the urgent near-term problem.",
+    "recommendation": "Partner with an established AI-chatbot vendor now, prioritizing fast integration (targeting the 6-10 week timeline) to stop the active competitive deal losses at a cost that's easily justified by the recovered-revenue math alone — explicitly frame this internally and to the board as a staged first step, not a permanent strategic answer, and set an explicit 12-18 month checkpoint to revisit whether to continue partnering, acquire, or build in-house, informed by real usage data, the evolved AI cost/capability landscape, and how central AI automation turns out to be to the company's long-term differentiation strategy.",
+    "risks": [
+      "Partnering risks producing a feature that's functionally similar to what competitors using the same or similar vendors already offer, meaning it may close the competitive-parity gap (stop losing deals for lacking any AI feature at all) without creating genuine differentiation — this is an acceptable trade-off for the urgent near-term problem, but shouldn't be mistaken for a long-term competitive strategy.",
+      "The 12-18 month deferred-decision checkpoint requires real discipline to actually revisit rather than letting the partner relationship become a permanent default by inertia — leadership should set this checkpoint explicitly on the roadmap now, not as an informal 'we'll get to it' intention that's easy to deprioritize once the urgent pressure is relieved.",
+      "The deal-loss revenue-recovery estimate (₹1.62Cr/year from recovering half of attributed lost deals) assumes the partner solution genuinely closes the competitive gap in customers' eyes — if the white-labeled solution is perceived as noticeably inferior to what competitors offer (a real risk if competitors have more mature or more differentiated AI implementations), the actual deal-recovery rate could be lower than the 50% assumption used here, and this should be tracked against real win/loss data post-launch."
+    ],
+    "cross": [
+      {
+        "q": "You're recommending partnering now but explicitly deferring the bigger strategic question — isn't that just avoiding a hard decision rather than actually making one?",
+        "a": "I'd push back on that characterization — deliberately staging a decision under genuine uncertainty is itself a decision, and often the correct one, rather than avoidance; the alternative would be committing ₹3-4Cr/year and 6-12 months to an in-house build, or ₹15-40Cr to an acquisition, based on today's information in a technology space that's changing quickly enough that either bet could look wrong within 18 months — deferring the large, hard-to-reverse commitment while taking the fast, cheap, easily-justified action (partnering) to solve the urgent problem is a genuine strategic choice, not the absence of one, and I'd defend it explicitly on those grounds to a skeptical leadership team."
+      },
+      {
+        "q": "If, 12-18 months from now, the partner solution is working well and customers seem satisfied, why would the company ever need to revisit building in-house at all — couldn't 'just keep partnering forever' be the actual right long-term answer?",
+        "a": "It genuinely could be, and I wouldn't want to presuppose that building in-house is definitely the right eventual answer — the 12-18 month checkpoint isn't designed to force a build decision, it's designed to force an explicit, evidence-based decision of SOME kind (continue partnering, switch vendors, acquire, or build) rather than let the original urgent-problem-driven choice silently calcify into a permanent strategy by default; if the evidence at that checkpoint says continued partnering is still the best option, that's a perfectly valid outcome of the review — the point is doing the review deliberately with real data, not defaulting to inertia in either direction."
+      }
+    ],
+    "synthesis": "This expert-level case tests whether a candidate can separate an urgent, high-confidence near-term decision from a genuinely uncertain, high-stakes long-term one, and resist the pressure to force a single permanent answer to both simultaneously — staging a decision explicitly, with a real evidence-based checkpoint rather than an open-ended 'we'll figure it out later,' is a sophisticated response to technology-uncertainty that a strong candidate should be comfortable proposing and defending rather than feeling obligated to pick one build-vs-buy answer and commit to it fully upfront."
+  }
+];
+} catch (err) { console.error('Stage 22 data error:', err); }
+</script>
+<script>
+try {
+  var diffLabel = {easy:"Easier", med:"Medium", hard:"Hard", expert:"Expert"};
+
+  function renderCases(list){
+    var wrap = document.getElementById('caselist');
+    wrap.innerHTML = '';
+    list.forEach(function(c, i){
+      var det = document.createElement('details');
+      det.className = 'case';
+      det.id = 'case-' + (i+1);
+
+      var clarifyHtml = c.clarify.map(function(qa){
+        return '<div class="qa-pair"><div class="q">Q: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
+      }).join('');
+
+      var risksHtml = '<ul>' + c.risks.map(function(r){ return '<li>' + esc(r) + '</li>'; }).join('') + '</ul>';
+
+      var crossHtml = c.cross.map(function(qa){
+        return '<div class="qa-pair"><div class="q">Interviewer: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
+      }).join('');
+
+      det.innerHTML =
+        '<summary><span class="cnum">Case ' + (i+1) + '</span>' +
+        '<span class="cdiff ' + c.diff + '">' + diffLabel[c.diff] + '</span>' +
+        '<span class="cind">' + esc(c.industry) + '</span>' +
+        '<span class="ctitle">' + esc(c.title) + '</span></summary>' +
+        '<div class="case-body">' +
+          '<div class="case-prompt">"' + esc(c.prompt) + '"</div>' +
+          '<div class="case-sec"><h5>Clarifying Questions &amp; Answers</h5>' + clarifyHtml + '</div>' +
+          '<div class="case-sec"><h5>MECE Structure</h5><div class="calc-block">' + esc(c.mece) + '</div></div>' +
+          '<div class="case-sec"><h5>Hypothesis</h5><p>' + esc(c.hypothesis) + '</p></div>' +
+          '<div class="case-sec"><h5>Data &amp; Exhibits</h5><div class="calc-block">' + esc(c.data) + '</div></div>' +
+          '<div class="case-sec"><h5>Calculation</h5><div class="calc-block">' + esc(c.calc) + '</div></div>' +
+          '<div class="case-sec"><h5>Insight</h5><p>' + esc(c.insight) + '</p></div>' +
+          '<div class="case-sec"><h5>Recommendation</h5><p>' + esc(c.recommendation) + '</p></div>' +
+          '<div class="case-sec"><h5>Risks &amp; Caveats</h5>' + risksHtml + '</div>' +
+          '<div class="case-sec"><h5>Interviewer Cross-Questions</h5>' + crossHtml + '</div>' +
+          '<div class="synth-box"><h5>Synthesis</h5><p>' + esc(c.synthesis) + '</p></div>' +
+        '</div>';
+      wrap.appendChild(det);
+    });
+  }
+
+  renderCases(cases);
+
+  document.getElementById('casefilter').addEventListener('click', function(e){
+    var btn = e.target.closest('button');
+    if(!btn) return;
+    document.querySelectorAll('#casefilter button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var diff = btn.getAttribute('data-diff');
+    var filtered = diff === 'all' ? cases : cases.filter(function(c){ return c.diff === diff; });
+    renderCases(filtered);
+  });
+
+  var masteryItems = cases.map(function(c, i){ return 'Case ' + (i+1) + ' — ' + c.title + ': I can walk through the full structure, calculation, and synthesis cold.'; });
+  var STORE = 'masterbook-s22-mastery';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var mBox = document.getElementById('masteryBox');
+  mBox.innerHTML = masteryItems.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+esc(t)+'</span></div>';
+  }).join('');
+  mBox.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+
+  var backtop = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 500){ backtop.classList.add('show'); } else { backtop.classList.remove('show'); }
+  });
+  backtop.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  console.log('Stage 22 loaded — cases:', cases.length);
+} catch (err) { console.error('Stage 22 render error:', err); }
+</script>

@@ -1,0 +1,1020 @@
+<meta name="robots" content="noindex, nofollow">
+
+<title>SQL</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ink:#1C2333; --ink-soft:#4E566B; --ink-faint:#7C8399;
+    --paper:#F5F4EF; --paper-raised:#FFFFFF; --paper-sunken:#ECEAE2;
+    --line:#DEDACD; --line-strong:#C7C2B0;
+    --accent:#A2701F; --accent-ink:#6E4B12; --accent-soft:#F0E1C2;
+    --data:#1E6E68; --data-soft:#DCEEEA;
+    --lvlA:#B03A3A; --lvlA-soft:#F6DEDE;
+    --lvlB:#B67420; --lvlB-soft:#F5E3CA;
+    --lvlC:#33689C; --lvlC-soft:#DCE7F2;
+    --lvlD:#69538F; --lvlD-soft:#E5DEEE;
+    --shadow: 0 1px 2px rgba(28,35,51,0.06), 0 6px 20px -8px rgba(28,35,51,0.12);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+      --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+      --line:#34353A; --line-strong:#454650;
+      --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+      --data:#5FC1B6; --data-soft:#173330;
+      --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+      --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+      --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+      --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#EDEAE0; --ink-soft:#B9B6AC; --ink-faint:#8A8779;
+    --paper:#181A1E; --paper-raised:#212328; --paper-sunken:#141518;
+    --line:#34353A; --line-strong:#454650;
+    --accent:#D6A24F; --accent-ink:#F0C784; --accent-soft:#3A2E17;
+    --data:#5FC1B6; --data-soft:#173330;
+    --lvlA:#E28080; --lvlA-soft:#3A1E1E;
+    --lvlB:#E0AC63; --lvlB-soft:#3A2C15;
+    --lvlC:#8FB4DC; --lvlC-soft:#1D2C3C;
+    --lvlD:#B7A2D9; --lvlD-soft:#2A2338;
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 6px 24px -8px rgba(0,0,0,0.5);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"IBM Plex Sans",system-ui,sans-serif; font-size:16px; line-height:1.65; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+  a{ color:var(--data); }
+  h1,h2,h3,h4{ font-family:"Fraunces",Georgia,serif; text-wrap:balance; color:var(--ink); margin:0; }
+  code,.mono,.num{ font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; }
+  p{ max-width:70ch; }
+
+  .shell{ display:flex; min-height:100vh; max-width:1400px; margin:0 auto; }
+  nav.side{ position:sticky; top:0; align-self:flex-start; height:100vh; overflow-y:auto; width:272px; flex:0 0 272px; padding:28px 20px 40px; border-right:1px solid var(--line); background:var(--paper-sunken); }
+  nav.side .brand{ font-family:"Fraunces"; font-weight:700; font-size:1.05rem; margin-bottom:2px; }
+  nav.side .brand-sub{ font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:16px; }
+  .backlink{ display:inline-flex; align-items:center; gap:5px; font-size:.78rem; color:var(--ink-faint); text-decoration:none; margin-bottom:6px; }
+  .backlink:hover{ color:var(--data); }
+  .stage-pill{ display:inline-flex; align-items:center; gap:6px; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; background:var(--data-soft); color:var(--data); padding:4px 10px; border-radius:100px; margin:10px 0 22px; font-weight:600; }
+  nav.side ul{ list-style:none; margin:0 0 18px; padding:0; }
+  nav.side li a{ display:block; padding:6px 10px; border-radius:6px; color:var(--ink-soft); text-decoration:none; font-size:.85rem; }
+  nav.side li a:hover{ background:var(--paper-raised); color:var(--ink); }
+  nav.side .navgroup-label{ font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:14px 0 6px 10px; }
+  nav.side .roadmap{ font-size:.78rem; color:var(--ink-faint); border-top:1px solid var(--line); padding-top:16px; margin-top:6px; }
+
+  main{ flex:1; min-width:0; padding:48px 56px 120px; max-width:980px; }
+  @media (max-width:880px){ nav.side{ display:none; } main{ padding:32px 20px 100px; } }
+
+  header.hero{ margin-bottom:52px; }
+  header.hero .eyebrow{ font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--data); font-weight:600; margin-bottom:10px; }
+  header.hero h1{ font-size:2.4rem; font-weight:700; line-height:1.08; margin-bottom:14px; }
+  header.hero p.lede{ font-size:1.06rem; color:var(--ink-soft); max-width:64ch; margin-bottom:20px; }
+  .statusbar{ display:flex; flex-wrap:wrap; gap:10px; }
+  .statuschip{ display:flex; align-items:center; gap:7px; background:var(--paper-raised); border:1px solid var(--line); border-radius:9px; padding:9px 14px; font-size:.82rem; color:var(--ink-soft); box-shadow:var(--shadow); }
+  .statuschip b{ color:var(--ink); font-family:"IBM Plex Mono"; }
+
+  section{ margin-bottom:60px; scroll-margin-top:24px; }
+  section > .sec-head{ margin-bottom:18px; }
+  section > .sec-head .num{ color:var(--data); font-size:.85rem; font-weight:600; }
+  section > .sec-head h2{ font-size:1.5rem; margin-top:4px; }
+  section > .sec-head p{ color:var(--ink-soft); max-width:66ch; margin-top:8px; font-size:.94rem; }
+  .card{ background:var(--paper-raised); border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow); }
+
+  .lvl{ display:inline-flex; align-items:center; gap:5px; font-size:.7rem; font-weight:700; padding:3px 9px; border-radius:6px; white-space:nowrap; }
+  .lvl-A{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .lvl-B{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .lvl-C{ background:var(--lvlC-soft); color:var(--lvlC); }
+  .lvl-D{ background:var(--lvlD-soft); color:var(--lvlD); }
+
+  .concept-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; }
+  .concept{ padding:20px 22px; }
+  .concept h4{ font-size:1rem; margin-bottom:8px; }
+  .concept p{ font-size:.88rem; color:var(--ink-soft); margin:0 0 8px; }
+
+  .codeblock{ background:#1B1D22; color:#DCE3E8; border-radius:10px; padding:16px 18px; font-family:"IBM Plex Mono"; font-size:.82rem; overflow-x:auto; line-height:1.6; white-space:pre; }
+  .cmt{ color:#7A8590; }
+
+  .resulttable{ overflow-x:auto; margin-top:10px; }
+  .resulttable table{ border-collapse:collapse; font-family:"IBM Plex Mono"; font-size:.78rem; width:100%; }
+  .resulttable th{ background:var(--paper-sunken); text-align:left; padding:5px 10px; border:1px solid var(--line); color:var(--ink-faint); font-weight:600; }
+  .resulttable td{ padding:5px 10px; border:1px solid var(--line); color:var(--ink-soft); }
+
+  .worked{ margin-top:14px; border:1px dashed var(--line-strong); border-radius:10px; padding:16px 18px; background:var(--paper-sunken); }
+  .worked .wk-label{ font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--accent-ink); margin-bottom:8px; }
+  .worked .wk-result{ margin-top:8px; font-size:.85rem; color:var(--ink-soft); }
+
+  .exstrip{ margin-top:12px; display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:8px 16px; border-top:1px solid var(--line); padding-top:12px; }
+  .exstrip .ex{ font-size:.8rem; }
+  .exstrip .ex b{ display:block; font-size:.64rem; text-transform:uppercase; letter-spacing:.05em; color:var(--data); margin-bottom:2px; font-weight:700; }
+  .exstrip .ex span{ color:var(--ink-soft); }
+
+  .testcards{ display:flex; flex-direction:column; gap:12px; }
+  details.testcard{ border:1px solid var(--line); border-radius:12px; background:var(--paper-raised); box-shadow:var(--shadow); overflow:hidden; }
+  details.testcard summary{ padding:15px 20px; cursor:pointer; list-style:none; display:flex; align-items:center; gap:12px; justify-content:space-between; }
+  details.testcard summary::-webkit-details-marker{ display:none; }
+  details.testcard summary .st-name{ font-family:"Fraunces"; font-weight:600; font-size:1rem; }
+  details.testcard summary .st-when{ font-size:.8rem; color:var(--ink-faint); flex:1; margin-left:14px; }
+  details.testcard summary::after{ content:"+"; font-size:1.3rem; color:var(--data); font-weight:400; }
+  details.testcard[open] summary::after{ content:"–"; }
+  .testcard-body{ padding:0 20px 20px; border-top:1px solid var(--line); padding-top:16px; margin-top:2px; }
+  .testcard-body p{ font-size:.87rem; color:var(--ink-soft); margin:0 0 10px; }
+
+  .probgrid{ display:flex; flex-direction:column; gap:10px; }
+  details.prob{ border:1px solid var(--line); border-radius:10px; background:var(--paper-raised); }
+  details.prob summary{ padding:12px 18px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; font-size:.9rem; }
+  details.prob summary::-webkit-details-marker{ display:none; }
+  details.prob summary .pnum{ font-family:"IBM Plex Mono"; font-size:.75rem; color:var(--data); background:var(--data-soft); padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  details.prob summary .pdiff{ font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:5px; flex:0 0 auto; }
+  .pdiff.easy{ background:var(--data-soft); color:var(--data); }
+  .pdiff.med{ background:var(--lvlB-soft); color:var(--lvlB); }
+  .pdiff.hard{ background:var(--lvlA-soft); color:var(--lvlA); }
+  .pdiff.expert{ background:var(--lvlD-soft); color:var(--lvlD); }
+  .prob-body{ padding:0 18px 16px; }
+  .prob-body p{ font-size:.86rem; color:var(--ink-soft); }
+
+  .qbank{ display:flex; flex-direction:column; gap:0; }
+  details.qa{ border-bottom:1px solid var(--line); }
+  details.qa:last-child{ border-bottom:none; }
+  details.qa summary{ padding:13px 20px; cursor:pointer; list-style:none; font-size:.9rem; font-weight:500; display:flex; gap:12px; align-items:baseline; }
+  details.qa summary::-webkit-details-marker{ display:none; }
+  details.qa summary::before{ content:"Q"; font-family:"IBM Plex Mono"; font-size:.68rem; color:var(--data); background:var(--data-soft); padding:2px 6px; border-radius:5px; flex:0 0 auto; }
+  details.qa .qa-a{ padding:0 20px 16px 58px; font-size:.86rem; color:var(--ink-soft); }
+  details.qa .qa-a b{ color:var(--ink); }
+
+  .redflag{ padding:13px 17px; border-left:4px solid var(--lvlA); background:var(--lvlA-soft); border-radius:0 8px 8px 0; margin-bottom:9px; font-size:.87rem; }
+  .redflag b{ color:var(--lvlA); }
+
+  .bridge-flow{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-size:.86rem; padding:18px 22px; }
+  .bridge-flow .node{ background:var(--data-soft); color:var(--data); padding:6px 13px; border-radius:8px; font-weight:600; }
+  .bridge-flow .arrow{ color:var(--ink-faint); }
+
+  .checklist{ display:flex; flex-direction:column; gap:0; }
+  .cl-item{ display:flex; gap:12px; align-items:flex-start; padding:11px 20px; border-bottom:1px solid var(--line); font-size:.89rem; }
+  .cl-item:last-child{ border-bottom:none; }
+  .cl-item .box{ width:17px; height:17px; border:1.5px solid var(--line-strong); border-radius:5px; flex:0 0 17px; margin-top:2px; cursor:pointer; }
+  .cl-item .box.done{ background:var(--data); border-color:var(--data); position:relative; }
+  .cl-item .box.done::after{ content:"✓"; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:#fff; font-size:.7rem; }
+  .cl-item.checked span.txt{ color:var(--ink-faint); text-decoration:line-through; }
+
+  .schema-card{ padding:20px 24px; }
+  .schema-card table{ width:100%; border-collapse:collapse; font-size:.82rem; margin-top:8px; }
+  .schema-card th{ text-align:left; padding:6px 10px; color:var(--ink-faint); font-size:.7rem; text-transform:uppercase; border-bottom:1px solid var(--line); }
+  .schema-card td{ padding:6px 10px; border-bottom:1px solid var(--line); font-family:"IBM Plex Mono"; font-size:.8rem; }
+  .schema-card .tname{ color:var(--accent-ink); font-weight:700; }
+
+  .filterbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; align-items:center; }
+  .filterbar button{ font-family:"IBM Plex Sans"; font-size:.8rem; font-weight:600; padding:6px 13px; border-radius:100px; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); cursor:pointer; }
+  .filterbar button.active{ background:var(--ink); color:var(--paper); border-color:var(--ink); }
+
+  .backtop{ position:fixed; right:22px; bottom:22px; z-index:40; width:42px; height:42px; border-radius:50%; border:1px solid var(--line-strong); background:var(--paper-raised); color:var(--ink-soft); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; opacity:0; pointer-events:none; transition:opacity .15s ease; }
+  .backtop.show{ opacity:1; pointer-events:auto; }
+  .backtop:hover{ color:var(--ink); border-color:var(--accent); }
+  ::-webkit-scrollbar{ height:10px; width:10px; }
+  ::-webkit-scrollbar-thumb{ background:var(--line-strong); border-radius:6px; }
+</style>
+
+<div class="shell">
+  <nav class="side">
+    <div class="brand">Pranav Gupta</div>
+    <div class="brand-sub">Interview Masterbook</div>
+    <a class="backlink" href="index.html" style="display:block;font-weight:700;color:var(--accent);border-bottom:1px solid var(--accent-soft,rgba(0,0,0,.12));margin-bottom:10px;padding-bottom:10px">↩ All Stages · Contents</a>
+    <a class="backlink" href="stage01.html">← Stage 1 · CV Intelligence</a>
+    <a class="backlink" href="stage02.html">← Stage 2 · Statistics + Math</a>
+    <div class="stage-pill">● Stage 3 of 33</div>
+    <div class="navgroup-label">This page</div>
+    <ul>
+      <li><a href="#why">Why this stage</a></li>
+      <li><a href="#schema">Reference schema</a></li>
+      <li><a href="#fund">SQL Fundamentals</a></li>
+      <li><a href="#joins">Joins</a></li>
+      <li><a href="#cte">CTEs &amp; Subqueries</a></li>
+      <li><a href="#window">Window Functions</a></li>
+      <li><a href="#analytics">Analytics Patterns</a></li>
+      <li><a href="#perf">Execution &amp; Performance</a></li>
+      <li><a href="#redflags">Red Flags</a></li>
+      <li><a href="#problems">50 Progressive Problems</a></li>
+      <li><a href="#questions">100-Question Interview Bank</a></li>
+      <li><a href="#bridge">How This Connects to Your CV</a></li>
+      <li><a href="#mastery">Mastery Checklist</a></li>
+    </ul>
+    <div class="roadmap">Every query in this stage runs against one consistent schema (below) so patterns build on each other instead of resetting each section.</div>
+      <div class="navgroup-label">Coming next (Part X)</div>
+    <p style="font-size:.76rem;color:var(--ink-faint);padding:0 10px;line-height:1.6">Stage 20 (Market Sizing) is next, followed by Operations, Product, Analytics, AI/GenAI, FinTech, and Pharma.</p>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Part III · Stage 3 of 33</div>
+      <h1>SQL</h1>
+      <p class="lede">SQL is on every version of your CV, and it's the single most commonly live-tested skill in analytics interviews — often literally, on a shared screen. This stage builds from SELECT basics through window functions, cohort/funnel analytics, and query performance, with 50 solved problems and a 100-question bank behind it.</p>
+      <div class="statusbar">
+        <div class="statuschip">🗄️ 1 consistent reference schema throughout</div>
+        <div class="statuschip">🪟 Full window-function module (ranking, LAG/LEAD, running totals, percentiles)</div>
+        <div class="statuschip">🧩 <b>50</b> progressively difficult solved problems</div>
+        <div class="statuschip">❓ <b>100</b> interview questions with model answers</div>
+      </div>
+    </header>
+
+    <section id="why">
+      <div class="sec-head">
+        <div class="num">01</div>
+        <h2>Why this stage exists</h2>
+      </div>
+      <div class="card" style="padding:22px 26px">
+        <p style="margin:0">SQL is the one skill on your CV an interviewer can test in real time with zero setup — a shared SQL editor and a schema is the most common technical-round format in analytics, decision science, and even some consulting-analytics interviews. It's also literally the layer underneath your Axtria forecasting model and NanoCloud heatmap analysis — someone had to extract, join, and aggregate that data before any model or recommendation existed.</p>
+      </div>
+    </section>
+
+    <section id="schema" class="card schema-card">
+      <h2 style="font-size:1.3rem;margin-bottom:6px">Reference schema — "NorthStar Retail"</h2>
+      <p style="font-size:.88rem;color:var(--ink-soft);margin:0 0 4px">Every query example and problem in this stage runs against this schema, styled close to what Axtria/NanoCloud-shaped data would actually look like.</p>
+      <table>
+        <tr><th>Table</th><th>Columns</th></tr>
+        <tr><td class="tname">customers</td><td>customer_id, name, signup_date, region, tier</td></tr>
+        <tr><td class="tname">reps</td><td>rep_id, rep_name, region, hire_date</td></tr>
+        <tr><td class="tname">calls</td><td>call_id, rep_id, customer_id, call_date, duration_min, outcome</td></tr>
+        <tr><td class="tname">orders</td><td>order_id, customer_id, rep_id, order_date, status, amount</td></tr>
+        <tr><td class="tname">order_items</td><td>order_item_id, order_id, product_id, quantity, unit_price</td></tr>
+        <tr><td class="tname">products</td><td>product_id, product_name, category</td></tr>
+      </table>
+    </section>
+
+    <section id="fund">
+      <div class="sec-head">
+        <div class="num">02</div>
+        <h2>SQL Fundamentals</h2>
+        <p>SELECT/WHERE/ORDER BY, DISTINCT, GROUP BY/HAVING, CASE WHEN, NULL handling, aggregations, string and date functions — the vocabulary everything else in this stage assumes.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>SELECT, WHERE, ORDER BY <span class="lvl lvl-A">A</span></h4>
+          <p>Filter rows with WHERE before any grouping happens; sort the final result with ORDER BY. WHERE cannot reference an aliased SELECT column, because filtering happens before the SELECT list is evaluated.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">SELECT name, region, signup_date
+FROM customers
+WHERE region = 'West' AND signup_date >= '2025-01-01'
+ORDER BY signup_date DESC
+LIMIT 5;</div>
+            <div class="resulttable"><table><tr><th>name</th><th>region</th><th>signup_date</th></tr>
+            <tr><td>Priya Shah</td><td>West</td><td>2025-08-14</td></tr>
+            <tr><td>Arjun Mehta</td><td>West</td><td>2025-06-02</td></tr></table></div>
+            <div class="wk-result">Returns West-region customers who signed up in 2025 or later, newest first.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Analogy</b><span>Filtering emails by "unread + this week" then sorting by sender.</span></div>
+            <div class="ex"><b>Business</b><span>Pulling this quarter's West-region customer list for a stakeholder review.</span></div>
+            <div class="ex"><b>Interview</b><span>"Why can't WHERE use a column alias?" — WHERE executes before SELECT in logical query order.</span></div>
+            <div class="ex"><b>Your CV</b><span>Exactly the kind of query behind pulling a client-specific slice for a bi-weekly Axtria review.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>DISTINCT <span class="lvl lvl-B">B</span></h4>
+          <p>Removes duplicate rows from the result set, evaluated across all selected columns together, not one at a time.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">SELECT DISTINCT region FROM customers;</div>
+            <div class="wk-result">Returns each unique region once — useful for quickly checking what values actually exist in a column before writing filters against it.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Analogy</b><span>Listing every unique country represented in your contacts, not every contact.</span></div>
+            <div class="ex"><b>Interview</b><span>"DISTINCT on two columns — does it dedupe each column separately?" — no, it dedupes the combination of both columns together.</span></div>
+            <div class="ex"><b>Your CV</b><span>Checking the distinct set of client industries before building a NanoCloud coverage-recommendation template.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>GROUP BY &amp; HAVING <span class="lvl lvl-A">A</span></h4>
+          <p>GROUP BY collapses rows into per-group summaries; aggregate functions (SUM, COUNT, AVG) operate within each group. HAVING filters <i>after</i> aggregation — WHERE can't do this because the aggregate doesn't exist yet when WHERE runs.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">SELECT region, COUNT(*) AS num_customers, AVG(amount) AS avg_order
+FROM orders o JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY region
+HAVING COUNT(*) > 50
+ORDER BY avg_order DESC;</div>
+            <div class="wk-result">Regions with more than 50 orders, ranked by average order value — HAVING filters the groups themselves, not the raw rows.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Analogy</b><span>Grouping receipts by store, then only keeping stores with over 50 receipts.</span></div>
+            <div class="ex"><b>Interview</b><span>"WHERE vs HAVING?" — WHERE filters rows before grouping; HAVING filters groups after aggregation.</span></div>
+            <div class="ex"><b>Your CV</b><span>Aggregating calls per rep with HAVING avg duration &gt; X is exactly rep-efficiency modeling at Axtria.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>CASE WHEN <span class="lvl lvl-A">A</span></h4>
+          <p>Inline conditional logic inside a SELECT — the SQL equivalent of if/elif/else, evaluated top to bottom, stopping at the first matching condition.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">SELECT customer_id,
+  CASE
+    WHEN amount >= 1000 THEN 'Enterprise'
+    WHEN amount >= 200  THEN 'Mid-market'
+    ELSE 'SMB'
+  END AS deal_tier
+FROM orders;</div>
+            <div class="wk-result">Buckets every order into a tier label in one pass — no separate lookup table needed.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Analogy</b><span>Sorting mail into "urgent / normal / junk" bins based on a few quick rules.</span></div>
+            <div class="ex"><b>Interview</b><span>"How is CASE different from a JOIN to a lookup table?" — CASE is inline logic for a few rules; a lookup table is better for many values or values that change often.</span></div>
+            <div class="ex"><b>Your CV</b><span>Bucketing reps into efficiency tiers is a direct analog to the rep-allocation logic at Axtria.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>NULL Handling <span class="lvl lvl-A">A</span></h4>
+          <p>NULL means "unknown," not zero or empty string — any arithmetic or comparison touching a NULL returns NULL, not true or false, which is why <code>= NULL</code> never works and <code>IS NULL</code> is required.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">SELECT customer_id, COALESCE(region, 'Unknown') AS region_filled
+FROM customers
+WHERE region IS NULL;</div>
+            <div class="wk-result">COALESCE substitutes a default when a value is NULL — critical before aggregating or joining on a column that might have gaps.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Analogy</b><span>A survey question left blank isn't the same as answering "zero" — NULL is "unknown," not a value.</span></div>
+            <div class="ex"><b>Interview</b><span>"Does COUNT(*) count NULLs?" — yes. "Does COUNT(column) count NULLs?" — no, it skips them.</span></div>
+            <div class="ex"><b>Your CV</b><span>Missing region/tier data in raw NanoCloud client exports needed exactly this handling before being usable in a recommendation.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Aggregations <span class="lvl lvl-A">A</span></h4>
+          <p>COUNT, SUM, AVG, MIN, MAX — each collapses many rows into one number, and each ignores NULLs except COUNT(*).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">SELECT rep_id, COUNT(*) AS num_calls, AVG(duration_min) AS avg_duration,
+       SUM(CASE WHEN outcome='Converted' THEN 1 ELSE 0 END) AS conversions
+FROM calls
+GROUP BY rep_id;</div>
+            <div class="wk-result">Conditional aggregation inside SUM — counts only the rows matching a condition, a pattern you'll use constantly.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Interview</b><span>"How do you count rows matching a condition without a subquery?" — SUM(CASE WHEN … THEN 1 ELSE 0 END), exactly above.</span></div>
+            <div class="ex"><b>Your CV</b><span>Rep efficiency and cost-per-call at Axtria are aggregation queries at their core.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>String Functions <span class="lvl lvl-B">B</span></h4>
+          <p>UPPER/LOWER, TRIM, SUBSTRING, CONCAT, LIKE/ILIKE for pattern matching, LENGTH — used constantly for data cleaning before analysis.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">SELECT name, LOWER(TRIM(name)) AS clean_name
+FROM customers
+WHERE name LIKE '%Corp%';</div>
+            <div class="wk-result">Finds customers with "Corp" anywhere in the name and normalizes casing/whitespace — a common first pass before deduping.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Interview</b><span>"% vs _ in LIKE?" — % matches any number of characters, _ matches exactly one.</span></div>
+            <div class="ex"><b>Your CV</b><span>Cleaning client-name variants across NanoCloud's 15 clients before any aggregation is exactly this.</span></div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Date Functions <span class="lvl lvl-A">A</span></h4>
+          <p>DATE_TRUNC, EXTRACT, DATEDIFF (syntax varies by engine) — used to bucket by month/week, or compute durations between dates.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">SELECT DATE_TRUNC('month', order_date) AS month, SUM(amount) AS revenue
+FROM orders
+GROUP BY 1
+ORDER BY 1;</div>
+            <div class="wk-result">Monthly revenue rollup — the exact building block behind any trend chart or forecasting model's training data.</div>
+          </div>
+          <div class="exstrip">
+            <div class="ex"><b>Interview</b><span>"How do you get someone's tenure in months?" — DATE_TRUNC or EXTRACT-based difference between hire_date and today, divided appropriately.</span></div>
+            <div class="ex"><b>Your CV</b><span>Building the time series that fed the Axtria forecasting model starts with exactly this kind of date bucketing.</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="joins">
+      <div class="sec-head">
+        <div class="num">03</div>
+        <h2>Joins</h2>
+        <p>The single most-tested SQL topic. Click each to expand — definition, when to use it, a worked query with result, and the interview trap that goes with it.</p>
+      </div>
+      <div class="testcards">
+        <details class="testcard" open>
+          <summary><span class="st-name">INNER JOIN</span><span class="st-when">Only rows matching in both tables</span></summary>
+          <div class="testcard-body">
+            <p>Returns rows where the join condition matches in <i>both</i> tables — non-matching rows on either side are dropped entirely.</p>
+            <div class="codeblock">SELECT c.name, o.order_id, o.amount
+FROM customers c
+INNER JOIN orders o ON c.customer_id = o.customer_id;</div>
+            <div class="exstrip">
+              <div class="ex"><b>Interview trap</b><span>Customers with zero orders vanish entirely — if you need them, this is the wrong join.</span></div>
+              <div class="ex"><b>Your CV</b><span>Matching calls to reps who both exist in the current roster — Axtria efficiency modeling.</span></div>
+            </div>
+          </div>
+        </details>
+        <details class="testcard">
+          <summary><span class="st-name">LEFT JOIN</span><span class="st-when">All rows from the left table, matched or not</span></summary>
+          <div class="testcard-body">
+            <p>Keeps every row from the left table; unmatched right-side columns come back as NULL. The most common join in real analytics work, because you usually don't want to silently drop rows.</p>
+            <div class="codeblock">SELECT c.name, COUNT(o.order_id) AS num_orders
+FROM customers c
+LEFT JOIN orders o ON c.customer_id = o.customer_id
+GROUP BY c.name;</div>
+            <div class="wk-result">Every customer appears, including those with zero orders (COUNT returns 0, not NULL, because COUNT ignores NULLs but still counts the group).</div>
+            <div class="exstrip">
+              <div class="ex"><b>Interview trap</b><span>"Find customers with NO orders" needs a LEFT JOIN + WHERE o.order_id IS NULL — a very common interview puzzle (see Problem #7 below).</span></div>
+              <div class="ex"><b>Your CV</b><span>Finding NanoCloud clients with zero recent recommendations approved uses exactly this pattern.</span></div>
+            </div>
+          </div>
+        </details>
+        <details class="testcard">
+          <summary><span class="st-name">RIGHT JOIN</span><span class="st-when">All rows from the right table — rarely used in practice</span></summary>
+          <div class="testcard-body">
+            <p>Mirror image of LEFT JOIN — keeps every row from the right table. Almost always rewritable as a LEFT JOIN with the table order swapped, which is why most style guides prefer LEFT JOIN for readability/consistency.</p>
+            <div class="codeblock">SELECT c.name, o.order_id
+FROM orders o
+RIGHT JOIN customers c ON o.customer_id = c.customer_id;</div>
+            <div class="exstrip"><div class="ex"><b>Interview</b><span>"When would you actually use RIGHT JOIN?" — almost never by choice; it's equivalent to swapping table order in a LEFT JOIN.</span></div></div>
+          </div>
+        </details>
+        <details class="testcard">
+          <summary><span class="st-name">FULL OUTER JOIN</span><span class="st-when">All rows from both sides, matched or not</span></summary>
+          <div class="testcard-body">
+            <p>Keeps every row from both tables — unmatched rows on either side get NULLs on the other side's columns. Useful for reconciliation: "what's in A but not B, and vice versa."</p>
+            <div class="codeblock">SELECT COALESCE(c.customer_id, o.customer_id) AS id, c.name, o.order_id
+FROM customers c
+FULL OUTER JOIN orders o ON c.customer_id = o.customer_id;</div>
+            <div class="exstrip"><div class="ex"><b>Business example</b><span>Reconciling a CRM export against a billing system export to find records only in one side.</span></div></div>
+          </div>
+        </details>
+        <details class="testcard">
+          <summary><span class="st-name">CROSS JOIN</span><span class="st-when">Every combination of rows — Cartesian product</span></summary>
+          <div class="testcard-body">
+            <p>Pairs every row in table A with every row in table B — no join condition. Deliberately used to generate all combinations (e.g. every product × every region), but an <i>accidental</i> cross join is one of the most common real-world SQL bugs — usually from a forgotten or wrong join condition.</p>
+            <div class="codeblock">SELECT r.region, p.product_name
+FROM (SELECT DISTINCT region FROM customers) r
+CROSS JOIN products p;</div>
+            <div class="wk-result">Generates every region × product combination — useful as a scaffold before LEFT JOINing actual sales data onto it, to reveal which combinations have zero sales.</div>
+            <div class="exstrip"><div class="ex"><b>Interview trap</b><span>A join with no ON clause, or one that matches many-to-many, silently becomes a cross join and inflates row counts — a classic "why did my numbers explode" debugging question.</span></div></div>
+          </div>
+        </details>
+        <details class="testcard">
+          <summary><span class="st-name">SELF JOIN</span><span class="st-when">A table joined to itself — hierarchies, comparisons within the same table</span></summary>
+          <div class="testcard-body">
+            <p>Join a table to itself using aliases, typically to compare rows to other rows in the same table — manager/employee hierarchies, or finding pairs.</p>
+            <div class="codeblock">SELECT a.rep_name, b.rep_name, a.region
+FROM reps a
+JOIN reps b ON a.region = b.region AND a.rep_id < b.rep_id;</div>
+            <div class="wk-result">Every unique pair of reps sharing a region — the rep_id < rep_id condition avoids duplicate pairs and self-pairing.</div>
+            <div class="exstrip"><div class="ex"><b>Your CV</b><span>Comparing a rep's efficiency to peers in the same region/territory at Axtria is a natural self-join.</span></div></div>
+          </div>
+        </details>
+        <details class="testcard">
+          <summary><span class="st-name">Join duplication / one-to-many</span><span class="st-when">Why row counts explode after a join</span></summary>
+          <div class="testcard-body">
+            <p>When one customer has many orders, joining customers to orders multiplies each customer row by their number of orders — any SUM/AVG computed <i>before</i> deduplicating will be wrong (e.g. double-counting a customer-level value across every one of their order rows).</p>
+            <div class="codeblock">-- WRONG: double-counts customer-level 'signup_bonus' once per order row
+SELECT SUM(c.signup_bonus) FROM customers c JOIN orders o ON c.customer_id=o.customer_id;
+
+-- RIGHT: aggregate orders first, then join once per customer
+SELECT c.customer_id, c.signup_bonus, agg.total_orders
+FROM customers c
+JOIN (SELECT customer_id, SUM(amount) AS total_orders FROM orders GROUP BY customer_id) agg
+  ON c.customer_id = agg.customer_id;</div>
+            <div class="exstrip"><div class="ex"><b>Interview trap</b><span>"My revenue total looks 3x too high" is almost always this exact bug — aggregate the many-side first, then join.</span></div></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="cte">
+      <div class="sec-head">
+        <div class="num">04</div>
+        <h2>CTEs &amp; Subqueries</h2>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Common Table Expressions (CTE) <span class="lvl lvl-A">A</span></h4>
+          <p>A named, temporary result set defined with WITH, readable top-to-bottom and reusable within the same query — the modern replacement for deeply nested subqueries.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">WITH monthly_revenue AS (
+  SELECT DATE_TRUNC('month', order_date) AS month, SUM(amount) AS revenue
+  FROM orders GROUP BY 1
+)
+SELECT month, revenue,
+       revenue - LAG(revenue) OVER (ORDER BY month) AS mom_change
+FROM monthly_revenue;</div>
+            <div class="wk-result">Builds the monthly rollup once, then reuses it to compute month-over-month change — far more readable than nesting the same aggregation inside a subquery.</div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Interview</b><span>"CTE vs subquery — any performance difference?" — logically equivalent in most modern engines (some materialize, some inline); the real win is readability and reusability within one query.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>Subqueries <span class="lvl lvl-B">B</span></h4>
+          <p>A query nested inside another — in the SELECT list, FROM clause, or WHERE clause.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">SELECT name FROM customers
+WHERE customer_id IN (
+  SELECT customer_id FROM orders WHERE amount > 5000
+);</div>
+            <div class="wk-result">Customers who have placed at least one order over $5,000.</div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Correlated Subqueries <span class="lvl lvl-A">A</span></h4>
+          <p>A subquery that references a column from the outer query — re-evaluated once per outer row, which can be slow on large tables if not written carefully.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">SELECT c.name,
+  (SELECT MAX(o.order_date) FROM orders o WHERE o.customer_id = c.customer_id) AS last_order
+FROM customers c;</div>
+            <div class="wk-result">Each customer's most recent order date — the inner query runs once per customer row, referencing that row's customer_id.</div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Interview</b><span>"Why might you rewrite this as a window function instead?" — a correlated subquery re-runs per row; MAX(order_date) OVER (PARTITION BY customer_id) computes it once, typically faster at scale.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="window">
+      <div class="sec-head">
+        <div class="num">05</div>
+        <h2>Window Functions</h2>
+        <p>The highest-value SQL topic for analytics interviews — ranking, offsets, running totals, and percentiles, all without collapsing rows the way GROUP BY does.</p>
+      </div>
+      <div class="testcards">
+        <details class="testcard" open>
+          <summary><span class="st-name">ROW_NUMBER, RANK, DENSE_RANK</span><span class="st-when">Ranking rows within groups</span></summary>
+          <div class="testcard-body">
+            <p><b>ROW_NUMBER</b>: unique sequential number, no ties. <b>RANK</b>: ties share a rank, next rank skips (1,1,3). <b>DENSE_RANK</b>: ties share a rank, next rank doesn't skip (1,1,2).</p>
+            <div class="codeblock">SELECT rep_name, region, total_revenue,
+  ROW_NUMBER() OVER (PARTITION BY region ORDER BY total_revenue DESC) AS rn,
+  RANK()       OVER (PARTITION BY region ORDER BY total_revenue DESC) AS rnk,
+  DENSE_RANK() OVER (PARTITION BY region ORDER BY total_revenue DESC) AS drnk
+FROM rep_revenue;</div>
+            <div class="resulttable"><table><tr><th>rep</th><th>revenue</th><th>rn</th><th>rnk</th><th>drnk</th></tr>
+            <tr><td>Meera</td><td>500</td><td>1</td><td>1</td><td>1</td></tr>
+            <tr><td>Karan</td><td>500</td><td>2</td><td>1</td><td>1</td></tr>
+            <tr><td>Divya</td><td>420</td><td>3</td><td>3</td><td>2</td></tr></table></div>
+            <div class="wk-result">Two tied reps at 500: RANK gives both rank 1, next rep jumps to rank 3; DENSE_RANK gives both rank 1, next rep is rank 2.</div>
+            <div class="exstrip"><div class="ex"><b>Interview trap</b><span>"Find the top rep per region" — use ROW_NUMBER()=1 per partition, not just ORDER BY + LIMIT, which only works globally, not per group.</span></div><div class="ex"><b>Your CV</b><span>Identifying the top-~60 reps for allocation at Axtria is exactly a ranking-within-partition problem.</span></div></div>
+          </div>
+        </details>
+        <details class="testcard">
+          <summary><span class="st-name">LAG &amp; LEAD</span><span class="st-when">Comparing a row to the previous/next row</span></summary>
+          <div class="testcard-body">
+            <p>LAG looks backward, LEAD looks forward, within an ordered partition — without a self-join.</p>
+            <div class="codeblock">SELECT month, revenue,
+  LAG(revenue, 1) OVER (ORDER BY month) AS prev_month,
+  revenue - LAG(revenue, 1) OVER (ORDER BY month) AS mom_change
+FROM monthly_revenue;</div>
+            <div class="wk-result">Month-over-month change without a self-join — this is the standard pattern for any period-over-period comparison.</div>
+            <div class="exstrip"><div class="ex"><b>Your CV</b><span>Quarter-over-quarter market-share strategy inputs at Axtria are exactly LAG-based comparisons.</span></div></div>
+          </div>
+        </details>
+        <details class="testcard">
+          <summary><span class="st-name">FIRST_VALUE &amp; LAST_VALUE</span><span class="st-when">First/last row's value within a window</span></summary>
+          <div class="testcard-body">
+            <p>Returns a specific column's value from the first or last row of the window frame — useful for "compare every row to the group's starting/ending value."</p>
+            <div class="codeblock">SELECT customer_id, order_date, amount,
+  FIRST_VALUE(amount) OVER (PARTITION BY customer_id ORDER BY order_date) AS first_order_amount
+FROM orders;</div>
+            <div class="wk-result">Every order row now also shows that customer's very first order amount, for comparison — e.g. "has this customer's spend grown since their first order?"</div>
+            <div class="exstrip"><div class="ex"><b>Interview trap</b><span>LAST_VALUE needs an explicit frame clause (<code>ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code>) or it silently only looks at rows up to the current one, giving wrong results.</span></div></div>
+          </div>
+        </details>
+        <details class="testcard">
+          <summary><span class="st-name">Running Totals &amp; Rolling Averages</span><span class="st-when">Cumulative and moving-window aggregation</span></summary>
+          <div class="testcard-body">
+            <p>SUM/AVG with an OVER clause and an explicit frame — running total accumulates from the start; a rolling average uses a fixed-size trailing window.</p>
+            <div class="codeblock">SELECT month, revenue,
+  SUM(revenue) OVER (ORDER BY month ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total,
+  AVG(revenue) OVER (ORDER BY month ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS rolling_3mo_avg
+FROM monthly_revenue;</div>
+            <div class="wk-result">running_total accumulates every prior month; rolling_3mo_avg smooths out month-to-month noise using only the current and prior 2 months — the exact building block behind the forecasting model's trend features.</div>
+            <div class="exstrip"><div class="ex"><b>Your CV</b><span>A rolling average is very plausibly one of the input features to the Axtria forecasting model — worth being ready to say so.</span></div></div>
+          </div>
+        </details>
+        <details class="testcard">
+          <summary><span class="st-name">Percentiles</span><span class="st-when">NTILE, PERCENT_RANK, CUME_DIST</span></summary>
+          <div class="testcard-body">
+            <p>NTILE(n) splits rows into n roughly-equal buckets (e.g. NTILE(4) = quartiles); PERCENT_RANK/CUME_DIST give a row's relative position as a 0-1 fraction.</p>
+            <div class="codeblock">SELECT rep_name, total_revenue,
+  NTILE(4) OVER (ORDER BY total_revenue DESC) AS revenue_quartile
+FROM rep_revenue;</div>
+            <div class="wk-result">Splits reps into 4 performance quartiles — quartile 1 is the top-performing group, directly useful for a tiered allocation decision.</div>
+            <div class="exstrip"><div class="ex"><b>Your CV</b><span>Tiering reps into quartiles before the ~60-rep allocation decision at Axtria is a direct NTILE use case.</span></div></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section id="analytics">
+      <div class="sec-head">
+        <div class="num">06</div>
+        <h2>Analytics Patterns</h2>
+        <p>Cohort analysis, retention, churn, funnels, conditional aggregation/pivoting, and deduplication — the patterns that turn raw SQL into a business answer.</p>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Cohort Analysis &amp; Retention <span class="lvl lvl-A">A</span></h4>
+          <p>Group users by the period they joined (their "cohort"), then track a metric over time relative to that join date — reveals whether a business is fundamentally getting better at keeping customers, not just growing.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">WITH cohorts AS (
+  SELECT customer_id, DATE_TRUNC('month', signup_date) AS cohort_month FROM customers
+),
+activity AS (
+  SELECT customer_id, DATE_TRUNC('month', order_date) AS active_month FROM orders
+)
+SELECT c.cohort_month,
+  DATE_PART('month', AGE(a.active_month, c.cohort_month)) AS months_since_signup,
+  COUNT(DISTINCT a.customer_id) AS active_customers
+FROM cohorts c JOIN activity a ON c.customer_id = a.customer_id
+GROUP BY 1,2 ORDER BY 1,2;</div>
+            <div class="wk-result">A cohort-by-month-since-signup table — the raw data behind a classic retention curve/triangle.</div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Your CV</b><span>Client retention/reengagement patterns at NanoCloud across the 15-client base are exactly a cohort-style question.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>Churn <span class="lvl lvl-A">A</span></h4>
+          <p>The inverse of retention — typically defined as no activity within a defined window. The exact cutoff (30/60/90 days) is a business decision, not a fixed rule.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">SELECT customer_id
+FROM customers c
+WHERE NOT EXISTS (
+  SELECT 1 FROM orders o
+  WHERE o.customer_id = c.customer_id AND o.order_date >= CURRENT_DATE - INTERVAL '90 days'
+);</div>
+            <div class="wk-result">Customers with no order in the last 90 days — a working churn definition, ready to be refined by business input.</div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Funnel Analysis <span class="lvl lvl-A">A</span></h4>
+          <p>Counting users through sequential stages, and the drop-off between each — usually built with conditional aggregation across stage-flag columns.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">SELECT
+  COUNT(DISTINCT customer_id) AS total_customers,
+  COUNT(DISTINCT CASE WHEN stage >= 'contacted' THEN customer_id END) AS contacted,
+  COUNT(DISTINCT CASE WHEN stage >= 'demo' THEN customer_id END) AS demo,
+  COUNT(DISTINCT CASE WHEN stage >= 'closed' THEN customer_id END) AS closed
+FROM funnel_events;</div>
+            <div class="wk-result">One row showing the count at each funnel stage — drop-off rate at each step = 1 − (next_stage/prev_stage).</div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Your CV</b><span>The 80% query-coverage claim at Hero Electronics implies a funnel of query types handled vs. not — this pattern builds that view.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>Conditional Aggregation &amp; Pivot/Unpivot <span class="lvl lvl-B">B</span></h4>
+          <p>Turning long-format rows into wide-format columns using CASE inside aggregates (portable across engines) or native PIVOT (engine-specific).</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">SELECT region,
+  SUM(CASE WHEN category='Electronics' THEN amount ELSE 0 END) AS electronics_rev,
+  SUM(CASE WHEN category='Apparel' THEN amount ELSE 0 END) AS apparel_rev
+FROM orders o JOIN order_items oi ON o.order_id=oi.order_id JOIN products p ON oi.product_id=p.product_id
+GROUP BY region;</div>
+            <div class="wk-result">One row per region, one column per category — a pivoted table built with plain, portable SQL.</div>
+          </div>
+        </div>
+        <div class="card concept">
+          <h4>Deduplication &amp; Data Quality <span class="lvl lvl-A">A</span></h4>
+          <p>Removing duplicate rows using ROW_NUMBER() partitioned by the natural key, keeping only rn=1 — safer and more controllable than DISTINCT for row-level deduplication with tie-breaking logic.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">WITH ranked AS (
+  SELECT *, ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY signup_date DESC) AS rn
+  FROM customers_raw
+)
+SELECT * FROM ranked WHERE rn = 1;</div>
+            <div class="wk-result">Keeps exactly one row per customer_id — the most recent record — discarding older duplicates.</div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Your CV</b><span>Client-name variants and duplicate records across NanoCloud's data exports are a real-world version of exactly this.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="perf">
+      <div class="sec-head">
+        <div class="num">07</div>
+        <h2>Execution Order, Query Plans &amp; Performance</h2>
+      </div>
+      <div class="concept-grid">
+        <div class="card concept">
+          <h4>Logical Execution Order <span class="lvl lvl-A">A</span></h4>
+          <p>SQL is written FROM→WHERE→GROUP BY→HAVING→SELECT→ORDER BY→LIMIT, but that's not the order it <i>runs</i> in.</p>
+          <div class="worked">
+            <div class="wk-label">Actual logical order</div>
+            <div class="codeblock">1. FROM / JOIN   2. WHERE   3. GROUP BY   4. HAVING
+5. SELECT        6. ORDER BY  7. LIMIT</div>
+            <div class="wk-result">This is exactly why WHERE can't use a SELECT alias (step 2 runs before step 5), and why HAVING can reference an aggregate (step 4 runs after step 3).</div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Interview</b><span>Almost every "why doesn't this query work" debugging question traces back to this exact ordering.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>Query Plans &amp; Indexes <span class="lvl lvl-B">B</span></h4>
+          <p>EXPLAIN shows how the database will actually execute a query — whether it uses an index (fast lookup) or a full table scan (checks every row). An index on a frequently-filtered/joined column can turn a full scan into a fast lookup.</p>
+          <div class="worked">
+            <div class="wk-label">Worked example</div>
+            <div class="codeblock">EXPLAIN SELECT * FROM orders WHERE customer_id = 4821;
+-- "Seq Scan on orders" (no index) vs "Index Scan using idx_customer_id" (indexed)</div>
+            <div class="wk-result">The indexed version reads a small number of rows via the index structure instead of scanning the entire table — the difference between milliseconds and minutes on a large table.</div>
+          </div>
+          <div class="exstrip"><div class="ex"><b>Interview trap</b><span>Indexes speed up reads but slow down writes (every insert/update must also update the index) — not a free upgrade to add everywhere.</span></div></div>
+        </div>
+        <div class="card concept">
+          <h4>Partitioning &amp; Large-Table Strategies <span class="lvl lvl-C">C</span></h4>
+          <p>Splitting a huge table (e.g. by date) so queries filtering on the partition key only scan the relevant slice, not the whole table — the same underlying idea behind Databricks' partitioning, covered again in Stage 5.</p>
+          <div class="exstrip"><div class="ex"><b>Your CV</b><span>Any large-scale query against Axtria's full call/order history almost certainly benefits from date-based partitioning — worth naming even without deep DBA-level detail.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="redflags">
+      <div class="sec-head">
+        <div class="num">08</div>
+        <h2>Red Flags</h2>
+      </div>
+      <div class="redflag"><b>"SELECT * is fine, I'll just filter what I need in the app."</b> — Wastes I/O and network bandwidth, and silently breaks if columns are added/reordered upstream. Select only needed columns in production code.</div>
+      <div class="redflag"><b>"I used a subquery in WHERE with = but there could be multiple rows."</b> — Use IN or a correlated EXISTS, or the query throws a runtime error on more than one matching row.</div>
+      <div class="redflag"><b>"COUNT(column) and COUNT(*) are the same thing."</b> — COUNT(*) counts all rows; COUNT(column) skips NULLs in that column. Easy to silently under-count.</div>
+      <div class="redflag"><b>"I joined and then summed — the total looked right so I moved on."</b> — Classic join-duplication bug (see Joins section); "looks right" isn't the same as verified against a known total.</div>
+      <div class="redflag"><b>"GROUP BY just needs the columns I'm aggregating."</b> — Every non-aggregated column in SELECT must appear in GROUP BY, or the query is ambiguous (and some engines silently pick an arbitrary row instead of erroring).</div>
+    </section>
+
+    <section id="problems">
+      <div class="sec-head">
+        <div class="num">09</div>
+        <h2>50 Progressive SQL Problems</h2>
+        <p>All against the NorthStar Retail schema above, ordered easy → expert. Click to reveal the solution.</p>
+      </div>
+      <div class="filterbar">
+        <button class="active" data-f="all">All (50)</button>
+        <button data-f="easy">Easy (1–15)</button>
+        <button data-f="med">Medium (16–30)</button>
+        <button data-f="hard">Hard (31–42)</button>
+        <button data-f="expert">Expert (43–50)</button>
+      </div>
+      <div class="probgrid" id="probList"></div>
+    </section>
+
+    <section id="questions">
+      <div class="sec-head">
+        <div class="num">10</div>
+        <h2>100-Question Interview Bank</h2>
+        <p>Conceptual questions with model answers — distinct from the solved problems above. Click to reveal each answer.</p>
+      </div>
+      <div class="card qbank" id="qbankList"></div>
+    </section>
+
+    <section id="bridge">
+      <div class="sec-head">
+        <div class="num">11</div>
+        <h2>How This Connects to Your CV</h2>
+      </div>
+      <div class="card bridge-flow">
+        <span class="node">SQL extraction &amp; joins</span><span class="arrow">→</span>
+        <span class="node">Rep/cost-per-call aggregation</span><span class="arrow">→</span>
+        <span class="node">Feature set for XGBoost/LogReg model</span><span class="arrow">→</span>
+        <span class="node">~60-rep allocation</span><span class="arrow">→</span>
+        <span class="node">$10M outcome</span>
+      </div>
+      <div class="card bridge-flow" style="margin-top:12px">
+        <span class="node">Window functions (ranking, rolling avg)</span><span class="arrow">→</span>
+        <span class="node">Self-service decision-support tool</span><span class="arrow">→</span>
+        <span class="node">Client generates forecasts independently</span>
+      </div>
+      <div class="card" style="padding:20px 24px;margin-top:12px">
+        <p style="margin:0"><b>"Did YOU actually write these queries?"</b> — honest framing: "yes — extraction, joins, and the rep/cost-per-call aggregations behind the allocation model were queries I wrote directly; more complex pipeline orchestration was a shared responsibility with the data engineering side." Adjust to your real involvement.</p>
+      </div>
+    </section>
+
+    <section id="mastery">
+      <div class="sec-head">
+        <div class="num">12</div>
+        <h2>Mastery Checklist</h2>
+      </div>
+      <div class="card checklist" id="masteryList"></div>
+    </section>
+  </main>
+</div>
+
+<button class="backtop" id="backtop" title="Back to top" aria-label="Back to top">↑</button>
+
+<script>
+(function(){
+  var btn = document.getElementById('backtop');
+  window.addEventListener('scroll', function(){ btn.classList.toggle('show', window.scrollY > 500); });
+  btn.addEventListener('click', function(){ window.scrollTo({top:0, behavior:'smooth'}); });
+
+  // ---- 50 progressive problems ----
+  var problems = [
+    ["easy","List all customers in the 'West' region.","SELECT * FROM customers WHERE region = 'West';"],
+    ["easy","Find all orders with amount greater than $500.","SELECT * FROM orders WHERE amount > 500;"],
+    ["easy","Get the distinct list of product categories.","SELECT DISTINCT category FROM products;"],
+    ["easy","Count the total number of customers.","SELECT COUNT(*) FROM customers;"],
+    ["easy","Find the average order amount.","SELECT AVG(amount) FROM orders;"],
+    ["easy","List customers sorted by signup date, newest first.","SELECT * FROM customers ORDER BY signup_date DESC;"],
+    ["easy","Find customers who have never placed an order.","SELECT c.* FROM customers c LEFT JOIN orders o ON c.customer_id=o.customer_id WHERE o.order_id IS NULL;"],
+    ["easy","Get total revenue per region.","SELECT c.region, SUM(o.amount) AS revenue FROM customers c JOIN orders o ON c.customer_id=o.customer_id GROUP BY c.region;"],
+    ["easy","Find the top 5 highest-value orders.","SELECT * FROM orders ORDER BY amount DESC LIMIT 5;"],
+    ["easy","Count orders by status.","SELECT status, COUNT(*) FROM orders GROUP BY status;"],
+    ["easy","Find all reps hired after 2023-01-01.","SELECT * FROM reps WHERE hire_date > '2023-01-01';"],
+    ["easy","List products in the 'Electronics' category.","SELECT * FROM products WHERE category = 'Electronics';"],
+    ["easy","Find customers whose name starts with 'A'.","SELECT * FROM customers WHERE name LIKE 'A%';"],
+    ["easy","Get the earliest and latest order date.","SELECT MIN(order_date), MAX(order_date) FROM orders;"],
+    ["easy","Find orders with a NULL status.","SELECT * FROM orders WHERE status IS NULL;"],
+    ["med","Find the top 3 customers by total spend.","SELECT customer_id, SUM(amount) AS total_spend FROM orders GROUP BY customer_id ORDER BY total_spend DESC LIMIT 3;"],
+    ["med","Find regions where average order value exceeds the overall average.","SELECT region, AVG(o.amount) AS avg_amt FROM customers c JOIN orders o ON c.customer_id=o.customer_id GROUP BY region HAVING AVG(o.amount) > (SELECT AVG(amount) FROM orders);"],
+    ["med","For each customer, find their most recent order date.","SELECT customer_id, MAX(order_date) AS last_order FROM orders GROUP BY customer_id;"],
+    ["med","Find reps who made more than 50 calls in a month.","SELECT rep_id, DATE_TRUNC('month',call_date) AS mo, COUNT(*) AS calls FROM calls GROUP BY 1,2 HAVING COUNT(*) > 50;"],
+    ["med","Rank customers within each region by total spend.","SELECT customer_id, region, total_spend, RANK() OVER (PARTITION BY region ORDER BY total_spend DESC) AS rnk FROM customer_totals;"],
+    ["med","Find the month-over-month change in total revenue.","WITH m AS (SELECT DATE_TRUNC('month',order_date) mo, SUM(amount) rev FROM orders GROUP BY 1) SELECT mo, rev, rev-LAG(rev) OVER (ORDER BY mo) AS mom_change FROM m;"],
+    ["med","Find the second-highest order amount.","SELECT amount FROM (SELECT amount, DENSE_RANK() OVER (ORDER BY amount DESC) rnk FROM orders) t WHERE rnk=2 LIMIT 1;"],
+    ["med","Find customers who ordered every product category.","SELECT customer_id FROM (SELECT o.customer_id, COUNT(DISTINCT p.category) cats FROM orders o JOIN order_items oi ON o.order_id=oi.order_id JOIN products p ON oi.product_id=p.product_id GROUP BY o.customer_id) t WHERE cats = (SELECT COUNT(DISTINCT category) FROM products);"],
+    ["med","Find the running total of revenue by month.","SELECT mo, rev, SUM(rev) OVER (ORDER BY mo ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_total FROM monthly_revenue;"],
+    ["med","Find duplicate customer records by name+region.","SELECT name, region, COUNT(*) FROM customers GROUP BY name, region HAVING COUNT(*) > 1;"],
+    ["med","Calculate each rep's conversion rate.","SELECT rep_id, SUM(CASE WHEN outcome='Converted' THEN 1 ELSE 0 END)*1.0/COUNT(*) AS conv_rate FROM calls GROUP BY rep_id;"],
+    ["med","Find the 3-month rolling average of revenue.","SELECT mo, AVG(rev) OVER (ORDER BY mo ROWS BETWEEN 2 PRECEDING AND CURRENT ROW) AS rolling_avg FROM monthly_revenue;"],
+    ["med","Find customers active in both Jan and Feb 2026.","SELECT customer_id FROM orders WHERE DATE_TRUNC('month',order_date)='2026-01-01' INTERSECT SELECT customer_id FROM orders WHERE DATE_TRUNC('month',order_date)='2026-02-01';"],
+    ["med","Find the percentage each region contributes to total revenue.","SELECT region, SUM(amount)*100.0/SUM(SUM(amount)) OVER () AS pct_of_total FROM orders o JOIN customers c ON o.customer_id=c.customer_id GROUP BY region;"],
+    ["med","List the first order date for every customer, alongside every order row.","SELECT *, FIRST_VALUE(order_date) OVER (PARTITION BY customer_id ORDER BY order_date) AS first_order FROM orders;"],
+    ["hard","Find customers whose spend in 2026 exceeds their 2025 spend.","WITH y AS (SELECT customer_id, EXTRACT(YEAR FROM order_date) yr, SUM(amount) rev FROM orders GROUP BY 1,2) SELECT a.customer_id FROM y a JOIN y b ON a.customer_id=b.customer_id AND a.yr=2026 AND b.yr=2025 WHERE a.rev > b.rev;"],
+    ["hard","Find the median order amount (no MEDIAN function assumed).","SELECT PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY amount) FROM orders;"],
+    ["hard","Find each customer's longest gap between consecutive orders.","WITH gaps AS (SELECT customer_id, order_date, order_date - LAG(order_date) OVER (PARTITION BY customer_id ORDER BY order_date) AS gap FROM orders) SELECT customer_id, MAX(gap) AS longest_gap FROM gaps GROUP BY customer_id;"],
+    ["hard","Build a month-by-cohort retention table.","-- see full cohort worked example in §06 Analytics Patterns above"],
+    ["hard","Find products frequently bought together (basic market-basket pairing).","SELECT a.product_id, b.product_id, COUNT(*) FROM order_items a JOIN order_items b ON a.order_id=b.order_id AND a.product_id<b.product_id GROUP BY 1,2 ORDER BY 3 DESC;"],
+    ["hard","Identify reps whose efficiency declined for 3 consecutive months.","WITH m AS (SELECT rep_id, DATE_TRUNC('month',call_date) mo, AVG(duration_min) avg_dur, LAG(AVG(duration_min),1) OVER (PARTITION BY rep_id ORDER BY DATE_TRUNC('month',call_date)) prev1, LAG(AVG(duration_min),2) OVER (PARTITION BY rep_id ORDER BY DATE_TRUNC('month',call_date)) prev2 FROM calls GROUP BY rep_id, DATE_TRUNC('month',call_date)) SELECT rep_id, mo FROM m WHERE avg_dur < prev1 AND prev1 < prev2;"],
+    ["hard","Deduplicate customer records, keeping the most complete row.","WITH ranked AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY (region IS NOT NULL)::int + (tier IS NOT NULL)::int DESC) rn FROM customers_raw) SELECT * FROM ranked WHERE rn=1;"],
+    ["hard","Find the customer with the highest spend in each of the last 6 months.","WITH m AS (SELECT customer_id, DATE_TRUNC('month',order_date) mo, SUM(amount) rev, ROW_NUMBER() OVER (PARTITION BY DATE_TRUNC('month',order_date) ORDER BY SUM(amount) DESC) rn FROM orders GROUP BY 1,2) SELECT * FROM m WHERE rn=1 AND mo >= CURRENT_DATE - INTERVAL '6 months';"],
+    ["hard","Compute year-to-date revenue as of each order date.","SELECT order_date, amount, SUM(amount) OVER (PARTITION BY EXTRACT(YEAR FROM order_date) ORDER BY order_date ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS ytd FROM orders;"],
+    ["hard","Find customers who churned (no order in 90 days) but were previously high-value (top 20% spend).","-- combine the churn NOT EXISTS pattern (§06) with an NTILE(5) filter for top quintile spend"],
+    ["hard","Detect a Sample Ratio Mismatch in an A/B test table.","SELECT variant, COUNT(*), COUNT(*)*1.0/SUM(COUNT(*)) OVER () AS pct FROM ab_assignments GROUP BY variant; -- compare pct to intended split, e.g. 50/50"],
+    ["hard","Find the region with the most consistent (lowest variance) rep performance.","SELECT region, STDDEV(total_revenue) AS rev_stddev FROM rep_revenue GROUP BY region ORDER BY rev_stddev ASC LIMIT 1;"],
+    ["expert","Build a full funnel with per-stage conversion rate using a single query.","WITH f AS (SELECT customer_id, MAX(CASE WHEN stage='contacted' THEN 1 ELSE 0 END) c, MAX(CASE WHEN stage='demo' THEN 1 ELSE 0 END) d, MAX(CASE WHEN stage='closed' THEN 1 ELSE 0 END) cl FROM funnel_events GROUP BY customer_id) SELECT SUM(c) contacted, SUM(d) demo, SUM(cl) closed, SUM(d)*1.0/NULLIF(SUM(c),0) AS contact_to_demo, SUM(cl)*1.0/NULLIF(SUM(d),0) AS demo_to_close FROM f;"],
+    ["expert","Find the longest streak of consecutive days a rep made at least one call.","WITH days AS (SELECT DISTINCT rep_id, call_date::date d FROM calls), grp AS (SELECT rep_id, d, d - (ROW_NUMBER() OVER (PARTITION BY rep_id ORDER BY d))::int AS grp_key FROM days) SELECT rep_id, COUNT(*) AS streak_len, MIN(d) start_d, MAX(d) end_d FROM grp GROUP BY rep_id, grp_key ORDER BY streak_len DESC LIMIT 1;"],
+    ["expert","Allocate a fixed budget of 60 reps to regions proportional to revenue, using SQL only.","WITH region_rev AS (SELECT region, SUM(amount) rev FROM orders o JOIN customers c ON o.customer_id=c.customer_id GROUP BY region) SELECT region, ROUND(60 * rev / SUM(rev) OVER ()) AS reps_allocated FROM region_rev;"],
+    ["expert","Compute a 7-day trailing conversion rate time series.","SELECT call_date, SUM(CASE WHEN outcome='Converted' THEN 1 ELSE 0 END) OVER (ORDER BY call_date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW)*1.0 / COUNT(*) OVER (ORDER BY call_date ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) AS trailing_7d_rate FROM calls;"],
+    ["expert","Identify Simpson's Paradox: find a metric that improves in every subgroup but declines overall.","-- compute the metric per subgroup (e.g. region) year-over-year, then compute it pooled overall; compare directions — a classic case study query, not a single canonical SQL pattern"],
+    ["expert","Write a query that flags rows likely to be duplicates via fuzzy name matching (same region, similar signup date, similar name prefix).","SELECT a.customer_id, b.customer_id FROM customers a JOIN customers b ON a.region=b.region AND LEFT(a.name,3)=LEFT(b.name,3) AND ABS(a.signup_date - b.signup_date) <= 3 AND a.customer_id < b.customer_id;"],
+    ["expert","Build a pivoted month × region revenue matrix using only portable SQL (no PIVOT keyword).","SELECT region, SUM(CASE WHEN mo='2026-01' THEN rev END) AS jan, SUM(CASE WHEN mo='2026-02' THEN rev END) AS feb FROM monthly_region_revenue GROUP BY region;"],
+    ["expert","Design and query a slowly-changing dimension (SCD Type 2) to find a customer's tier as of a historical date.","SELECT tier FROM customer_tier_history WHERE customer_id = 4821 AND effective_date <= '2025-06-01' AND (end_date IS NULL OR end_date > '2025-06-01');"]
+  ];
+  var probList = document.getElementById('probList');
+  var diffLabel = {easy:'Easy', med:'Medium', hard:'Hard', expert:'Expert'};
+  probList.innerHTML = problems.map(function(p, i){
+    return '<details class="prob" data-diff="'+p[0]+'"><summary><span class="pnum">#'+(i+1)+'</span><span class="pdiff '+p[0]+'">'+diffLabel[p[0]]+'</span>'+p[1]+'</summary><div class="prob-body"><div class="codeblock">'+p[2].replace(/</g,'&lt;')+'</div></div></details>';
+  }).join('');
+  document.querySelectorAll('.filterbar button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.filterbar button').forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      var f = b.getAttribute('data-f');
+      document.querySelectorAll('.prob').forEach(function(pr){
+        pr.style.display = (f==='all' || pr.getAttribute('data-diff')===f) ? '' : 'none';
+      });
+    });
+  });
+
+  // ---- 100 question bank ----
+  var qas = [
+    ["What's the difference between WHERE and HAVING?","WHERE filters individual rows before grouping; HAVING filters groups after aggregation. WHERE can't reference an aggregate function; HAVING can."],
+    ["Why does WHERE run before SELECT logically?","SQL's logical execution order is FROM→WHERE→GROUP BY→HAVING→SELECT→ORDER BY — filtering happens on raw rows before the final output list is computed, which is also why WHERE can't use a SELECT alias."],
+    ["Explain the difference between INNER JOIN and LEFT JOIN.","INNER JOIN keeps only rows matching in both tables; LEFT JOIN keeps every row from the left table regardless of a match, filling unmatched right-side columns with NULL."],
+    ["How do you find rows in table A with no match in table B?","LEFT JOIN A to B, then filter WHERE B.key IS NULL — the classic 'anti-join' pattern."],
+    ["What's a self join, and when would you use one?","Joining a table to itself via aliases, typically to compare rows within the same table — hierarchies (manager/employee) or pairwise comparisons."],
+    ["What causes a query's row count to unexpectedly multiply after a join?","Joining a one-to-many or many-to-many relationship without aggregating the 'many' side first — each match creates a separate output row."],
+    ["Difference between UNION and UNION ALL?","UNION removes duplicate rows across the combined result (implicit dedup, costs performance); UNION ALL keeps all rows including duplicates and is faster."],
+    ["What does COALESCE do?","Returns the first non-NULL value from a list of arguments — commonly used to substitute a default value for NULLs."],
+    ["Why is `column = NULL` always false, even for NULL rows?","NULL represents 'unknown' — comparing unknown to anything, including NULL itself, yields NULL (not true), so the row is excluded. Use IS NULL instead."],
+    ["What's the difference between COUNT(*) and COUNT(column)?","COUNT(*) counts all rows regardless of NULLs; COUNT(column) counts only rows where that column is non-NULL."],
+    ["Explain a CTE and why you'd prefer it over a nested subquery.","A CTE (WITH clause) is a named, temporary result set readable top-to-bottom and reusable multiple times in the same query — improves readability over deeply nested subqueries, especially with multiple steps."],
+    ["What's a correlated subquery, and why can it be slow?","A subquery referencing a column from the outer query, re-evaluated once per outer row — potentially slow on large tables since it's not a single set-based operation; often rewritable as a JOIN or window function."],
+    ["Difference between RANK and DENSE_RANK?","Both give ties the same rank; RANK skips subsequent rank numbers after a tie (1,1,3), DENSE_RANK doesn't (1,1,2)."],
+    ["When would you use ROW_NUMBER over RANK?","When you need a unique, tie-broken number per row regardless of ties — e.g. picking exactly one 'top' row per group even if there's a value tie."],
+    ["What does PARTITION BY do in a window function?","Divides the result set into groups (like GROUP BY) but without collapsing rows — the window function computes within each partition while all original rows remain."],
+    ["How do you compute a running total in SQL?","SUM(column) OVER (ORDER BY sort_column ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW)."],
+    ["What's the difference between LAG and a self-join for period-over-period comparison?","LAG accesses a prior row's value within an ordered window in one pass without a join; a self-join achieves the same conceptually but usually with more verbose, less performant SQL."],
+    ["Explain the purpose of NTILE.","Splits ordered rows into N roughly equal-sized buckets — e.g. NTILE(4) assigns each row a quartile number, useful for percentile-style bucketing."],
+    ["What's the difference between a scalar subquery and a table subquery?","A scalar subquery returns exactly one value (usable in SELECT/WHERE with =); a table subquery returns multiple rows/columns, usable in FROM or with IN/EXISTS."],
+    ["When would you use EXISTS instead of IN?","EXISTS is often preferred for correlated existence checks and can be more efficient since it stops at the first match; IN materializes the full subquery list, which can be costly with large or NULL-containing sets."],
+    ["Why can IN break with NULLs in the subquery result?","If the subquery returns any NULL, `NOT IN` can unexpectedly return no rows at all, because comparing to NULL yields unknown rather than false — a classic SQL gotcha."],
+    ["What is a Cartesian product / cross join, and how does it happen accidentally?","Every row of table A paired with every row of table B. Happens accidentally from a missing or incorrect JOIN condition, or a JOIN condition that matches many-to-many unexpectedly."],
+    ["How would you find the second-highest value in a column?","DENSE_RANK() OVER (ORDER BY column DESC), filter WHERE rank=2 — more robust than OFFSET/LIMIT if there are ties for first."],
+    ["What's the difference between DATE_TRUNC and EXTRACT?","DATE_TRUNC rounds a timestamp down to a specified precision (e.g. start of month), returning a date/timestamp; EXTRACT pulls out a specific numeric component (e.g. just the month number)."],
+    ["How do you calculate someone's tenure in days using SQL?","CURRENT_DATE - hire_date (date subtraction), or DATEDIFF depending on the SQL dialect."],
+    ["What's the danger of using SELECT * in production code?","Breaks silently if upstream columns are added, removed, or reordered; also pulls unnecessary data, hurting performance and clarity."],
+    ["Explain GROUP BY's rule about non-aggregated columns.","Every column in SELECT that isn't wrapped in an aggregate function must appear in GROUP BY, or the query is ambiguous about which row's value to show."],
+    ["What is conditional aggregation, and why use it?","Using CASE WHEN inside an aggregate function (e.g. SUM(CASE WHEN … THEN 1 ELSE 0 END)) to count/sum conditionally within a single pass, instead of multiple queries or a self-join."],
+    ["How would you pivot rows into columns without a native PIVOT keyword?","Conditional aggregation: SUM(CASE WHEN category='X' THEN amount ELSE 0 END) AS x_total, repeated per desired column."],
+    ["What's the difference between a table and a view?","A table stores data physically; a view is a saved, named query that computes its result on demand each time it's referenced (unless materialized)."],
+    ["What's a materialized view, and why would you use one?","A view whose result is physically stored and periodically refreshed, trading data freshness for query speed on expensive aggregations."],
+    ["Explain the difference between an index and a primary key.","A primary key uniquely identifies each row and typically has an index automatically; an index can be created on any column(s) to speed up lookups, and doesn't have to be unique."],
+    ["Why might adding an index slow down writes?","Every INSERT/UPDATE/DELETE must also update the index structure — more indexes mean more write overhead, a tradeoff against faster reads."],
+    ["What does EXPLAIN (or EXPLAIN ANALYZE) show you?","The database's actual (or estimated) execution plan — whether it uses an index scan or full table scan, join order, and estimated/actual cost — used to diagnose slow queries."],
+    ["What's a full table scan, and when is it actually fine?","Reading every row in a table because no useful index exists for the filter. Fine for small tables or queries that genuinely need most of the data; a problem at scale for selective filters."],
+    ["How would you find duplicate rows in a table?","GROUP BY the columns that define a duplicate, HAVING COUNT(*) > 1 — or ROW_NUMBER() OVER (PARTITION BY key ORDER BY …) to both find and rank them for removal."],
+    ["What's the safest way to delete duplicates while keeping one copy?","ROW_NUMBER() OVER (PARTITION BY natural_key ORDER BY tiebreaker) in a CTE, then DELETE/SELECT WHERE rn > 1 (or rn=1 to keep) — more controllable than DISTINCT-based approaches."],
+    ["Explain a window frame clause like ROWS BETWEEN 2 PRECEDING AND CURRENT ROW.","Defines exactly which rows within the ordered partition the window function considers — here, the current row plus the two before it, i.e. a 3-row rolling window."],
+    ["What's the difference between RANGE and ROWS frame types in window functions?","ROWS counts a fixed number of physical rows; RANGE considers logical value ranges (e.g. all rows with the same ORDER BY value are treated as one peer group) — subtle but can change results with ties."],
+    ["How would you compute month-over-month percentage growth in SQL?","(current_month_revenue - LAG(revenue) OVER (ORDER BY month)) / LAG(revenue) OVER (ORDER BY month) * 100."],
+    ["What's the difference between UNION and JOIN?","JOIN combines columns from two tables side by side based on a matching condition; UNION stacks rows from two queries with the same column structure on top of each other."],
+    ["How do you handle a many-to-many relationship in a relational schema?","A junction/bridge table holding foreign keys to both sides — e.g. order_items connecting orders and products."],
+    ["What's a foreign key, and what does it enforce?","A column (or set of columns) referencing a primary key in another table, enforcing referential integrity — you can't insert a row referencing a non-existent parent record."],
+    ["Explain the difference between OLTP and OLAP systems.","OLTP (transactional) systems are optimized for many small, fast reads/writes (e.g. an order being placed); OLAP (analytical) systems are optimized for large aggregate queries over historical data (e.g. a BI dashboard) — often different underlying architectures."],
+    ["What's denormalization, and when would you deliberately do it?","Duplicating data or pre-computing joins/aggregates to speed up read-heavy analytical queries, at the cost of storage and update complexity — common in analytics/reporting layers built on top of a normalized transactional schema."],
+    ["How would you find the top N rows per group?","ROW_NUMBER() OVER (PARTITION BY group_col ORDER BY metric DESC) in a CTE/subquery, then filter WHERE rn <= N."],
+    ["What's the risk of using LIMIT without ORDER BY?","Row order isn't guaranteed without an explicit ORDER BY — LIMIT could return a different, essentially arbitrary set of rows on different runs."],
+    ["How would you calculate a customer's lifetime value in SQL?","SUM(amount) grouped by customer_id across their full order history — potentially combined with a time-based or predictive adjustment depending on the LTV definition used."],
+    ["What's the difference between an inner and outer subquery in a correlated subquery?","The inner (subquery) references a column from the outer query and is logically re-evaluated for each outer row; a non-correlated subquery runs once independently."],
+    ["How do you handle time zones in a date/timestamp column?","Store timestamps in UTC (TIMESTAMP WITH TIME ZONE where supported) and convert to local time only at the presentation layer, to avoid ambiguity across regions."],
+    ["What does NULLIF do, and why is it useful?","Returns NULL if two expressions are equal, otherwise returns the first — commonly used to avoid divide-by-zero errors: amount / NULLIF(count, 0)."],
+    ["What's the difference between HAVING COUNT(*) > 1 and WHERE COUNT(*) > 1?","WHERE can't reference an aggregate at all — COUNT(*) doesn't exist yet when WHERE executes. Any aggregate-based filter must use HAVING."],
+    ["How would you find gaps in a sequence of dates (missing days with no activity)?","Generate a full calendar date series (via a recursive CTE or a date-dimension table), then LEFT JOIN actual activity onto it and find WHERE the activity is NULL."],
+    ["Explain what a recursive CTE is, with a use case.","A CTE that references itself to build hierarchical or sequential data, e.g. traversing an org chart of manager→report relationships, or generating a date series."],
+    ["What's the difference between LEFT JOIN ... WHERE x IS NULL and NOT EXISTS for anti-joins?","Functionally similar for finding non-matches, but NOT EXISTS is often clearer intent and can be more efficient since it can short-circuit on the first match; LEFT JOIN+IS NULL materializes the join first."],
+    ["How would you detect an accidental many-to-many join blow-up?","Compare row counts before and after the join against expected cardinality, or check SUM() of a known total before and after to see if it inflated."],
+    ["What's a surrogate key vs a natural key?","A surrogate key is a system-generated unique identifier (e.g. an auto-incrementing ID) with no business meaning; a natural key is derived from real-world data (e.g. an email address) that could theoretically repeat or change."],
+    ["Why might you avoid using a natural key as a primary key?","Natural keys can change (an email gets updated) or aren't guaranteed unique across all edge cases — a surrogate key is stable and simpler to reference from other tables."],
+    ["What is a Slowly Changing Dimension (SCD), and what's Type 2?","A dimension table whose attribute values change over time (e.g. a customer's tier). Type 2 preserves history by adding a new row with effective/end dates each time a value changes, rather than overwriting."],
+    ["How would you query 'as of' a historical date against an SCD Type 2 table?","WHERE effective_date <= '<date>' AND (end_date IS NULL OR end_date > '<date>') — picks the row that was active on that specific date."],
+    ["What's the difference between a clustered and non-clustered index (conceptually)?","A clustered index determines the physical storage order of the table's rows (one per table); a non-clustered index is a separate structure pointing back to the row locations, and a table can have many."],
+    ["How would you optimize a slow query that filters on a non-indexed column?","Add an index on that column if it's frequently filtered/joined on, or rewrite the filter to use an existing index — verified by comparing EXPLAIN plans before and after."],
+    ["What's query result caching, and when does it help vs. mislead?","Reusing a previous identical query's result instead of re-executing — helps performance for repeated identical queries, but can serve stale data if the underlying tables changed since the cache was populated."],
+    ["Explain the N+1 query problem.","Running one query to get a list, then a separate query per item in that list (N additional queries) instead of one JOIN/batched query — a common performance antipattern in application code calling SQL in a loop."],
+    ["What's the difference between INTERSECT and an INNER JOIN?","INTERSECT compares whole rows between two result sets with the same structure and returns rows present in both; INNER JOIN combines columns from two tables based on a specific matching condition — different tools for different questions."],
+    ["How would you find customers who bought Product A but not Product B?","Customers with Product A (via a subquery/EXISTS) EXCEPT (or WHERE NOT EXISTS) customers with Product B."],
+    ["What's the purpose of the WITH RECURSIVE / recursive CTE syntax difference across engines?","Syntax varies (e.g. Postgres uses WITH RECURSIVE, SQL Server just WITH) but the concept is identical — a base case UNION ALL'd with a recursive term referencing the CTE itself."],
+    ["How would you calculate percent of total within each group (e.g. % of regional revenue per product)?","amount * 100.0 / SUM(amount) OVER (PARTITION BY region) — a window function division, no self-join needed."],
+    ["What's the difference between STDDEV_POP and STDDEV_SAMP in SQL?","STDDEV_POP divides by n (population formula); STDDEV_SAMP divides by n−1 (sample formula, Bessel's correction) — mirrors the same population-vs-sample distinction from Stage 2's Statistics module."],
+    ["How would you find the mode (most frequent value) of a column in SQL?","GROUP BY the column, COUNT(*), ORDER BY count DESC LIMIT 1 — there's rarely a built-in MODE() function across all engines, so this pattern is the portable approach."],
+    ["What's the risk of using a non-deterministic function (like NOW()) inside a WHERE clause across a long-running query?","The value can change between evaluations within the same query in some engines, or simply doesn't reflect a consistent snapshot — safer to compute it once into a variable/CTE."],
+    ["How would you safely test a DELETE before running it?","Run the equivalent SELECT with the same WHERE clause first, verify the row count/content, then convert to DELETE — never run an unverified DELETE directly on production data."],
+    ["What's a common gotcha with BETWEEN and date ranges?","BETWEEN is inclusive on both ends — `BETWEEN '2026-01-01' AND '2026-01-31'` on a timestamp column can miss same-day timestamps after midnight on Jan 31; using `>= '2026-01-01' AND < '2026-02-01'` avoids the ambiguity."],
+    ["Explain window function evaluation order relative to WHERE/GROUP BY.","Window functions are evaluated after WHERE, GROUP BY, and HAVING, but before the final SELECT list/ORDER BY are fully resolved — which is why you can't filter directly on a window function's result in WHERE; you need a subquery or CTE wrapper."],
+    ["How would you filter on a window function's output (e.g. keep only rn=1)?","Wrap the windowed query in a CTE or subquery, then filter in the outer query's WHERE clause — window functions can't be referenced in the same-level WHERE."],
+    ["What does the term 'idempotent' mean in the context of a data pipeline's SQL?","Running the same query/load multiple times produces the same result without creating duplicates — e.g. using MERGE/UPSERT logic instead of blind INSERT on a re-run."],
+    ["How would you implement an UPSERT (insert or update) in SQL?","MERGE (or engine-specific INSERT … ON CONFLICT / ON DUPLICATE KEY UPDATE) — insert a new row if the key doesn't exist, update it if it does, in one atomic statement."],
+    ["What's a common mistake when aggregating percentages across groups?","Averaging pre-computed percentages instead of recomputing from the underlying counts — this silently weights small and large groups equally, which is usually wrong."],
+    ["How would you compute a weighted average in SQL?","SUM(value * weight) / SUM(weight), not AVG(value) — a plain average ignores the weighting entirely."],
+    ["What's the difference between INNER JOIN ... ON and a WHERE-clause join (old-style implicit join)?","Functionally similar for simple cases, but explicit JOIN...ON syntax is clearer, less error-prone with multiple tables, and separates join logic from filter logic — the WHERE-style implicit join is considered outdated practice."],
+    ["Why might two people get different results running 'the same' aggregate query?","Different filters on inactive/test/duplicate records, different date range boundaries (inclusive vs exclusive), different handling of NULLs, or different join paths through the schema."],
+    ["What's a common reason a JOIN returns fewer rows than expected?","An INNER JOIN dropping rows that don't match, when a LEFT JOIN was actually needed to preserve all rows from one side."],
+    ["How would you find the average time between a customer's orders?","AVG(order_date - LAG(order_date) OVER (PARTITION BY customer_id ORDER BY order_date)), grouped or averaged appropriately across customers."],
+    ["What's the difference between TRUNCATE and DELETE?","DELETE removes rows (optionally filtered by WHERE) and can be rolled back within a transaction; TRUNCATE resets the whole table instantly, is typically non-transactional/non-filterable, and doesn't fire row-level triggers."],
+    ["Why would a query with a LEFT JOIN sometimes behave like an INNER JOIN unintentionally?","If a filter on the right-side table is placed in WHERE instead of the ON clause, it implicitly excludes NULL (unmatched) rows, turning the LEFT JOIN into an effective INNER JOIN."],
+    ["How would you keep a LEFT JOIN truly 'left' while still filtering the right-side table?","Move the filter condition into the JOIN's ON clause instead of WHERE, so it only restricts what counts as a 'match,' not whether the left row survives at all."],
+    ["What's the purpose of a WINDOW clause reused across multiple functions?","Define the window once (e.g. WINDOW w AS (PARTITION BY region ORDER BY revenue)) and reference it (OVER w) in multiple functions in the same query, avoiding repetition."],
+    ["How would you compute a customer's rank that updates live as new orders come in, without recomputing from scratch?","In practice this typically shifts to an incremental/streaming architecture rather than a single recomputed batch query — worth naming as a limitation of pure batch SQL for this use case."],
+    ["What's the difference between a fact table and a dimension table in a star schema?","A fact table holds quantitative, transactional measures (e.g. order amount) at a fine grain; dimension tables hold descriptive attributes (e.g. customer, product, region) that the facts are analyzed by — foreshadowing Stage 11's Power BI data modeling."],
+    ["Why is grain (the level of detail) important to define before writing an aggregate query?","If you don't know exactly what one row represents (one order? one order line? one customer-day?), joins and aggregates can silently double-count or undercount."],
+    ["How would you find the largest single-day drop in revenue?","WITH daily AS (SELECT date, SUM(amount) rev FROM orders GROUP BY date) SELECT date, rev - LAG(rev) OVER (ORDER BY date) AS change FROM daily ORDER BY change ASC LIMIT 1."],
+    ["What's the difference between explicit and implicit type casting in SQL, and why does it matter for performance?","Implicit casting (e.g. comparing a string column to a number) can silently prevent index usage, forcing a full scan; explicit CAST is more predictable and lets you verify what's actually being compared."],
+    ["How would you write a query to validate that a supposed primary key column actually has no duplicates?","SELECT key_col, COUNT(*) FROM table GROUP BY key_col HAVING COUNT(*) > 1 — any returned rows disprove uniqueness."],
+    ["What's a common reason an aggregate query runs correctly but produces a subtly wrong business number?","Double-counting from an unaggregated one-to-many join, wrong date-range boundaries, silently dropped NULLs, or including test/duplicate/cancelled records that should have been filtered."],
+    ["How would you explain a window function to someone who only knows GROUP BY?","GROUP BY collapses many rows into one summary row per group; a window function computes the same kind of aggregate per group but keeps every original row visible alongside it."],
+    ["What's the tradeoff of adding many indexes to a heavily-written table?","Faster reads on indexed columns, but each write (insert/update/delete) now has to maintain every index too — for write-heavy tables this can meaningfully slow down throughput."],
+    ["How would you find the customer with the most consistent (least variable) order amounts?","GROUP BY customer_id, ORDER BY STDDEV(amount) ASC LIMIT 1 — lowest standard deviation of order amount, direct callback to Stage 2's variance/SD concept."],
+    ["What's the difference between a snapshot table and an event/log table in a data warehouse?","A snapshot table stores the state of an entity at a point in time (e.g. daily customer balance); an event/log table stores every individual transaction/action as it happens — different grains for different analytical needs."],
+    ["How would you write a query that's safe to re-run without creating duplicate rows (idempotent load)?","Use MERGE/UPSERT keyed on a natural or business key, or DELETE the target date range then INSERT fresh — both avoid blindly appending duplicate rows on a re-run."],
+    ["What's the first thing you'd check if a dashboard's number doesn't match a manual spot-check?","The underlying SQL's filters (date range, status/exclusion filters), join type (inner vs left, possible row inflation), and whether the dashboard and the manual check are using the same definition of the metric."]
+  ];
+  var qbank = document.getElementById('qbankList');
+  qbank.innerHTML = qas.map(function(qa){
+    return '<details class="qa"><summary>'+qa[0]+'</summary><div class="qa-a">'+qa[1]+'</div></details>';
+  }).join('');
+
+  // ---- mastery checklist ----
+  var items = [
+    "Write a query using every join type from memory, including when each is appropriate",
+    "Explain and demonstrate the join-duplication bug and its fix",
+    "Write ROW_NUMBER/RANK/DENSE_RANK from memory and explain the tie-breaking difference",
+    "Build a running total and a rolling average using window frames",
+    "Write a cohort-retention query from scratch",
+    "Explain SQL's logical execution order and why WHERE can't use a SELECT alias",
+    "Read an EXPLAIN plan and identify a full table scan vs. an index scan",
+    "Solve at least 40 of the 50 progressive problems without checking the solution first",
+    "Connect a rolling-average or ranking query directly to your Axtria CV story"
+  ];
+  var STORE = 'stage3_mastery_v1';
+  var saved = {};
+  try{ saved = JSON.parse(localStorage.getItem(STORE) || '{}'); }catch(e){}
+  var ml = document.getElementById('masteryList');
+  ml.innerHTML = items.map(function(t,i){
+    var done = saved[i] ? 'done' : '';
+    return '<div class="cl-item '+(saved[i]?'checked':'')+'"><span class="box '+done+'" data-i="'+i+'"></span><span class="txt">'+t+'</span></div>';
+  }).join('');
+  ml.querySelectorAll('.box').forEach(function(box){
+    box.addEventListener('click', function(){
+      var i = box.getAttribute('data-i');
+      var isDone = box.classList.toggle('done');
+      box.parentElement.classList.toggle('checked', isDone);
+      saved[i] = isDone;
+      try{ localStorage.setItem(STORE, JSON.stringify(saved)); }catch(e){}
+    });
+  });
+})();
+</script>
