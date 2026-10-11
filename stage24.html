@@ -155,6 +155,28 @@
   .synth-box{ margin-top:20px; padding:15px 18px; background:var(--accent-soft); border-radius:8px; border-left:4px solid var(--accent); }
   .synth-box h5{ color:var(--accent-ink); }
   .synth-box p{ color:var(--ink); font-weight:500; }
+  /* ===== Casebook-style transcript + solution-sheet (IIM-A Consult Club format) ===== */
+  .tx-sec{ margin-top:20px; }
+  .tx-sec h5{ font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-ink); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+  .tx-sec h5::before{ content:""; width:14px; height:2px; background:var(--accent); display:inline-block; }
+  .solsheet{ margin-top:22px; background:var(--paper-sunken); border:1px solid var(--line); border-top:3px solid var(--ink); border-radius:12px; padding:18px 20px 20px; }
+  .solsheet .sstag{ font-family:"IBM Plex Mono"; font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; font-weight:700; color:var(--paper); background:var(--ink); display:inline-block; padding:4px 11px; border-radius:5px; margin-bottom:16px; }
+  .solsheet .cols{ display:grid; grid-template-columns:1fr 1fr 1.3fr; gap:20px; align-items:start; }
+  @media (max-width:760px){ .solsheet .cols{ grid-template-columns:1fr; } }
+  .solsheet .col h6{ font-family:"IBM Plex Mono"; font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--ink); margin:0 0 9px; border-bottom:1px solid var(--line-strong); padding-bottom:6px; }
+  .solsheet .col ul{ margin:0; padding-left:17px; }
+  .solsheet .col li{ font-size:.85rem; color:var(--ink-soft); margin-bottom:7px; line-height:1.5; }
+  .solsheet .fullwidth{ grid-column:1/-1; margin-top:18px; padding-top:15px; border-top:1px dashed var(--line-strong); }
+  .solsheet .fullwidth h6{ font-family:"IBM Plex Mono"; font-size:.68rem; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--ink); margin:0 0 9px; }
+  .solsheet .fullwidth ul{ margin:0; padding-left:19px; }
+  .solsheet .fullwidth li{ font-size:.87rem; color:var(--ink-soft); margin-bottom:6px; line-height:1.55; }
+  .solsheet .leadin{ font-size:.89rem; color:var(--ink); margin:0 0 9px; font-style:italic; line-height:1.55; }
+  .stree{ font-size:.84rem; line-height:1.55; }
+  .stree .root{ font-weight:700; color:var(--ink); background:var(--paper-raised); border:1px solid var(--line-strong); border-radius:8px; padding:9px 12px; margin-bottom:9px; }
+  .stree .node{ border-left:2px solid var(--line-strong); padding:5px 0 5px 12px; margin-bottom:5px; color:var(--ink-soft); }
+  .stree .node.l2{ margin-left:18px; border-left-color:var(--line); }
+  .stree .node b{ color:var(--accent-ink); font-family:"IBM Plex Mono"; font-size:.7rem; text-transform:uppercase; margin-right:7px; }
+
 </style>
 
 <div class="shell">
@@ -716,6 +738,56 @@ try {
 try {
   var diffLabel = {easy:"Easier", med:"Medium", hard:"Hard", expert:"Expert"};
 
+  // ===== Casebook-style helpers (IIM-A Consult Club format) =====
+  function flatten(s){ return String(s||'').replace(/\s+/g,' ').trim(); }
+  function truncate(s, n){
+    s = flatten(s);
+    if(s.length<=n) return s;
+    var cut = s.slice(0,n);
+    var sp = cut.lastIndexOf(' ');
+    return cut.slice(0, sp>0?sp:n) + '\u2026';
+  }
+  function splitBullets(text){
+    var t = String(text||'');
+    var parts = t.split(/\s*\(\d+\)\s*/).map(function(s){return flatten(s);}).filter(Boolean);
+    if(parts.length > 1) return parts;
+    parts = t.split(/\n+/).map(function(s){return flatten(s);}).filter(Boolean);
+    return parts.length ? parts : [flatten(t)];
+  }
+  function dataLines(text){
+    var t = String(text||'');
+    return t.split(/\n+/).map(function(s){ return s.replace(/^\s*[-\u2022]?\s*/,'').trim(); })
+      .filter(function(s){ return s && !/^[A-Za-z0-9 \/&()'-]{2,42}:$/.test(s); });
+  }
+  function centralQ(mece){
+    var m = String(mece||'').match(/Central question:\s*([^\n]+)/i);
+    return m ? flatten(m[1]) : null;
+  }
+  function buildTree(meceText){
+    var blocks = String(meceText||'').split(/\n\s*\n/).map(function(b){ return flatten(b); }).filter(Boolean);
+    var html = '';
+    var rootDone = false;
+    blocks.forEach(function(b){
+      var cqm = b.match(/^Central question:\s*(.*)$/i);
+      if(cqm && !rootDone){
+        html += '<div class="root">' + esc(cqm[1]) + '</div>';
+        rootDone = true;
+        return;
+      }
+      var isL2 = /^L2/i.test(b);
+      var label = '';
+      var rest = b;
+      var m = b.match(/^(L1|L2)([^:]*):\s*(.*)$/i);
+      if(m){
+        label = m[1].toUpperCase() + (m[2] ? m[2] : '');
+        rest = m[3];
+      }
+      html += '<div class="node' + (isL2 ? ' l2' : '') + '">' + (label ? '<b>' + esc(label) + '</b>' : '') + esc(rest) + '</div>';
+    });
+    if(html===''){ html = '<div class="node">' + esc(flatten(meceText)) + '</div>'; }
+    return '<div class="stree">' + html + '</div>';
+  }
+
   function renderCases(list){
     var wrap = document.getElementById('caselist');
     wrap.innerHTML = '';
@@ -724,15 +796,53 @@ try {
       det.className = 'case';
       det.id = 'case-' + (i+1);
 
-      var clarifyHtml = c.clarify.map(function(qa){
-        return '<div class="qa-pair"><div class="q">Q: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
-      }).join('');
+      // ---- Part A: Interview Transcript (one question at a time, data revealed only when asked) ----
+      var tx = '';
+      tx += '<div class="qa-pair"><div class="q">Interviewer:</div><div class="a">' + esc(c.prompt) + '</div></div>';
+      c.clarify.forEach(function(qa){
+        tx += '<div class="qa-pair"><div class="q">You:</div><div class="a">' + esc(qa.q) + '</div></div>';
+        tx += '<div class="qa-pair"><div class="q">Interviewer:</div><div class="a">' + esc(qa.a) + '</div></div>';
+      });
+      var cq = centralQ(c.mece);
+      tx += '<div class="qa-pair"><div class="q">You:</div><div class="a">Given that' + (cq ? ', the real question is ' + esc(cq) + '.' : '.') + ' I\'d like to break this into a few testable buckets and work through them in order \u2014 does that sound okay?</div></div>';
+      tx += '<div class="qa-pair"><div class="q">Interviewer:</div><div class="a">Sounds reasonable. Go ahead.</div></div>';
+      tx += '<div class="qa-pair"><div class="q">You:</div><div class="a">My working hypothesis: ' + esc(truncate(c.hypothesis, 260)) + '</div></div>';
+      tx += '<div class="qa-pair"><div class="q">You:</div><div class="a">Could I get the relevant numbers so I can test that?</div></div>';
+      tx += '<div class="qa-pair"><div class="q">Interviewer:</div><div class="a">' + esc(truncate(c.data.replace(/^(Financial )?[Dd]ata:\s*/,''), 320)) + '</div></div>';
+      if(c.cross && c.cross.length){
+        tx += '<div class="qa-pair"><div class="q">Interviewer:</div><div class="a">' + esc(c.cross[0].q) + '</div></div>';
+        tx += '<div class="qa-pair"><div class="q">You:</div><div class="a">' + esc(c.cross[0].a) + '</div></div>';
+      }
+      var recBullets = splitBullets(c.recommendation);
+      tx += '<div class="qa-pair"><div class="q">You:</div><div class="a">So here\'s where I\'d land:<ol style="margin:6px 0 0;padding-left:18px;">' + recBullets.map(function(r){ return '<li>' + esc(r) + '</li>'; }).join('') + '</ol></div></div>';
+      if(c.cross && c.cross.length>1){
+        tx += '<div class="qa-pair"><div class="q">Interviewer:</div><div class="a">' + esc(c.cross[1].q) + '</div></div>';
+        tx += '<div class="qa-pair"><div class="q">You:</div><div class="a">' + esc(c.cross[1].a) + '</div></div>';
+      }
 
-      var risksHtml = '<ul>' + c.risks.map(function(r){ return '<li>' + esc(r) + '</li>'; }).join('') + '</ul>';
+      // ---- Part B: Solution Sheet ----
+      var notes = [];
+      notes.push(/\d/.test(c.data) ? 'Quantitative case \u2014 a real calculation is expected.' : 'Largely qualitative \u2014 prioritize structure over arithmetic.');
+      if(cq) notes.push('Anchor on: ' + truncate(cq, 110));
+      if(c.risks && c.risks[0]) notes.push('Risk to flag early: ' + truncate(c.risks[0], 110));
+      notes.push('Industry: ' + c.industry + ' \u00b7 Difficulty: ' + diffLabel[c.diff]);
 
-      var crossHtml = c.cross.map(function(qa){
-        return '<div class="qa-pair"><div class="q">Interviewer: ' + esc(qa.q) + '</div><div class="a">' + esc(qa.a) + '</div></div>';
-      }).join('');
+      var factBullets = dataLines(c.data);
+      var treeHtml = buildTree(c.mece);
+      var recoLead = truncate(c.insight, 200);
+      var recoBullets = splitBullets(c.recommendation);
+      var obsBullets = (c.risks || []).slice(0,2).concat([truncate(c.synthesis, 200)]);
+
+      var sol = '<div class="solsheet"><span class="sstag">Solution Sheet</span>' +
+        '<div class="cols">' +
+          '<div class="col"><h6>Interviewee Notes</h6><ul>' + notes.map(function(n){ return '<li>' + esc(n) + '</li>'; }).join('') + '</ul></div>' +
+          '<div class="col"><h6>Case Facts / Assumptions</h6><ul>' + factBullets.map(function(n){ return '<li>' + esc(n) + '</li>'; }).join('') + '</ul></div>' +
+          '<div class="col"><h6>Approach / Framework</h6>' + treeHtml + '</div>' +
+        '</div>' +
+        '<div class="fullwidth"><h6>Key Calculation</h6><div class="calc-block">' + esc(c.calc) + '</div></div>' +
+        '<div class="fullwidth"><h6>Recommendations</h6><p class="leadin">' + esc(recoLead) + '</p><ul>' + recoBullets.map(function(n){ return '<li>' + esc(n) + '</li>'; }).join('') + '</ul></div>' +
+        '<div class="fullwidth"><h6>Observations / Suggestions</h6><ul>' + obsBullets.map(function(n){ return '<li>' + esc(n) + '</li>'; }).join('') + '</ul></div>' +
+      '</div>';
 
       det.innerHTML =
         '<summary><span class="cnum">Case ' + (i+1) + '</span>' +
@@ -740,23 +850,14 @@ try {
         '<span class="cind">' + esc(c.industry) + '</span>' +
         '<span class="ctitle">' + esc(c.title) + '</span></summary>' +
         '<div class="case-body">' +
-          '<div class="case-prompt">"' + esc(c.prompt) + '"</div>' +
-          '<div class="case-sec"><h5>Clarifying Questions &amp; Answers</h5>' + clarifyHtml + '</div>' +
-          '<div class="case-sec"><h5>MECE Structure</h5><div class="calc-block">' + esc(c.mece) + '</div></div>' +
-          '<div class="case-sec"><h5>Hypothesis</h5><p>' + esc(c.hypothesis) + '</p></div>' +
-          '<div class="case-sec"><h5>Data &amp; Exhibits</h5><div class="calc-block">' + esc(c.data) + '</div></div>' +
-          '<div class="case-sec"><h5>Calculation</h5><div class="calc-block">' + esc(c.calc) + '</div></div>' +
-          '<div class="case-sec"><h5>Insight</h5><p>' + esc(c.insight) + '</p></div>' +
-          '<div class="case-sec"><h5>Recommendation</h5><p>' + esc(c.recommendation) + '</p></div>' +
-          '<div class="case-sec"><h5>Risks &amp; Caveats</h5>' + risksHtml + '</div>' +
-          '<div class="case-sec"><h5>Interviewer Cross-Questions</h5>' + crossHtml + '</div>' +
-          '<div class="synth-box"><h5>Synthesis</h5><p>' + esc(c.synthesis) + '</p></div>' +
+          '<div class="tx-sec"><h5>Interview Transcript</h5>' + tx + '</div>' +
+          sol +
         '</div>';
       wrap.appendChild(det);
     });
   }
 
-  renderCases(cases);
+  renderCases(cases);renderCases(cases);
 
   document.getElementById('casefilter').addEventListener('click', function(e){
     var btn = e.target.closest('button');
